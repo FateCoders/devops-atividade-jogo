@@ -17,7 +17,21 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
 - Aseprite.
 
 ### Audio
-- FlStudio.
+- FL Studio.
+
+## Padrões e Boas Práticas
+### Commits
+- `:sparkles:` :sparkles: -> features;
+- `:bug:` :bug: -> correções;
+- `:recycle:` :recycle: -> refatorações;
+- `:art:` :art: -> estilização;
+- `:fire:` :fire: -> exclusões;
+- `:book:` :book: -> adição de arquivos.
+
+#### Exemplo de uso:
+- :sparkles: adicionando mecanica de dano;
+- :bug: arrumando erro de colisao do mapa;
+- :art: adicionando UI. 
 
 
 ## Integrantes
