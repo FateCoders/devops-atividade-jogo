@@ -21,12 +21,12 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
 
 ## Padrões e Boas Práticas
 ### Commits
-- `:sparkles:` :sparkles: -> features;
-- `:bug:` :bug: -> correções;
-- `:recycle:` :recycle: -> refatorações;
-- `:art:` :art: -> estilização;
-- `:fire:` :fire: -> exclusões;
-- `:book:` :book: -> adição de arquivos.
+- `:sparkles:`   :sparkles: ->   features;
+- `:bug:`        :bug:      ->   correções;
+- `:recycle:`    :recycle:  ->   refatorações;
+- `:art:`        :art:      ->   estilização;
+- `:fire:`       :fire:     ->   exclusões;
+- `:book:`       :book:     ->   adição de arquivos.
 
 #### Exemplo de uso:
 - :sparkles: adicionando mecanica de dano;
@@ -38,7 +38,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
   <table>
     <tr>
       <td align="center">
-        <a href="https://github.com/mygk-bea" title="defina o título do link">
+        <a href="https://github.com/mygk-bea" title="Acessar perfil de Beatriz">
           <img src="https://avatars.githubusercontent.com/u/100007869?v=4" width="100px;" alt="Foto de Beatriz Meyagusko no GitHub"/><br>
           <sub>
             <b>Beatriz</b>
@@ -46,7 +46,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/nogueirafnd7" title="defina o título do link">
+        <a href="https://github.com/nogueirafnd7" title="Acessar perfil de Bruno">
           <img src="https://avatars.githubusercontent.com/u/155416552?v=4" width="100px;" alt="Foto do Bruno Nogueira no GitHub"/><br>
           <sub>
             <b>Bruno</b>
@@ -54,7 +54,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/Kits93" title="defina o título do link">
+        <a href="https://github.com/Kits93" title="Acessar perfil de João">
           <img src="https://avatars.githubusercontent.com/u/126159386?v=4" width="100px;" alt="Foto de João Victor no GitHub"/><br>
           <sub>
             <b>João</b>
@@ -62,7 +62,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/liabueno" title="defina o título do link">
+        <a href="https://github.com/liabueno" title="Acessar perfil de Júlia">
           <img src="https://avatars.githubusercontent.com/u/117865464?v=4" width="100px;" alt="Foto de Júlia Bueno no GitHub"/><br>
           <sub>
             <b>Júlia</b>
@@ -70,7 +70,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/luizfiuzaa" title="defina o título do link">
+        <a href="https://github.com/luizfiuzaa" title="Acessar perfil de Luiz">
           <img src="https://avatars.githubusercontent.com/u/96220499?v=4" width="100px;" alt="Foto de Luiz Fiuza no GitHub"/><br>
           <sub>
             <b>Luiz</b>
@@ -78,7 +78,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/MarlonVBP" title="defina o título do link">
+        <a href="https://github.com/MarlonVBP" title="Acessar perfil de Marlon">
           <img src="https://avatars.githubusercontent.com/u/101027484?v=4" width="100px;" alt="Foto de Marlon Passos no GitHub"/><br>
           <sub>
             <b>Marlon</b>
@@ -86,7 +86,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/sousa-p" title="defina o título do link">
+        <a href="https://github.com/sousa-p" title="Acessar perfil de Pedro">
           <img src="https://avatars.githubusercontent.com/u/97417230?v=4" width="100px;" alt="Foto de Pedro Menck no GitHub"/><br>
           <sub>
             <b>Pedro</b>
@@ -94,7 +94,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/RaphaelSantos01" title="defina o título do link">
+        <a href="https://github.com/RaphaelSantos01" title="Acessar perfil de Raphael">
           <img src="https://avatars.githubusercontent.com/u/125563006?v=4" width="100px;" alt="Foto de Raphael Santos no GitHub"/><br>
           <sub>
             <b>Raphael</b>
@@ -102,7 +102,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/thayM" title="defina o título do link">
+        <a href="https://github.com/thayM" title="Acessar perfil de Thayná">
           <img src="https://avatars.githubusercontent.com/u/116041441?v=4" width="100px;" alt="Foto de Thayná Marostica no GitHub"/><br>
           <sub>
             <b>Thayná</b>
@@ -110,7 +110,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/vhfantes-Dev" title="defina o título do link">
+        <a href="https://github.com/vhfantes-Dev" title="Acessar perfil de Vitor">
           <img src="https://avatars.githubusercontent.com/u/167342932?v=4" width="100px;" alt="Foto de Vitor Fantes no GitHub"/><br>
           <sub>
             <b>Vitor</b>
