@@ -1,4 +1,5 @@
 # Terra de Libertos
+
 ## Sobre o Jogo
 Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania de Pernambuco. O líder quilombola Zumbi dos Palmares ao lado de sua esposa guerreira Dandara lidam com as tensões com os senhores de engenho: envio de bandeirantes para resgate de fugitivos escravizados e ameaças aos quilombolas. O líder deve tomar decisões para garantir a paz no quilombo.
 
@@ -11,7 +12,7 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
 - GitHub Actions;
 - Git;
 - Docker;
-- sonarQube.
+- SonarQube.
 
 ### Arte Visual
 - Aseprite.
@@ -21,18 +22,60 @@ Em um Brasil colonial, um quilombo se inicia em meio a uma floresta na Capitania
 
 ## Padrões e Boas Práticas
 ### Commits
-- `:sparkles:`   :sparkles: ->   features;
-- `:bug:`        :bug:      ->   correções;
-- `:recycle:`    :recycle:  ->   refatorações;
-- `:art:`        :art:      ->   estilização;
-- `:fire:`       :fire:     ->   exclusões;
-- `:book:`       :book:     ->   adição de arquivos.
+- `:sparkles:` :sparkles: -> features;
+- `:bug:` :bug: -> correções;
+- `:recycle:` :recycle: -> refatorações;
+- `:art:` :art: -> estilização;
+- `:fire:` :fire: -> exclusões;
+- `:book:` :book: -> adição de arquivos.
 
 #### Exemplo de uso:
-- :sparkles: adicionando mecanica de dano;
-- :bug: arrumando erro de colisao do mapa;
-- :art: adicionando UI. 
+- ✨ adicionando mecanica de dano;
+- 🐛 arrumando erro de colisao do mapa;
+- 🎨 adicionando UI.
+- ♻️ refatorando o script do jogador para separar a lógica de movimento.
+- 🔥 excluindo assets de prototipagem não utilizados.
+- 📖 adicionando documentação sobre o sistema de inventário.
 
+
+## Estrutura de Diretórios
+A organização das pastas do projeto segue o padrão abaixo para facilitar a manutenção e localização de arquivos.
+
+- **📁 Assets/**
+  - **Função:** Armazena todos os recursos visuais e sonoros do jogo.
+  - **Subpastas:**
+    - `Sprites/`: Imagens de personagens, inimigos, objetos, itens, etc.
+    - `Audio/`: Efeitos sonoros (.wav, .ogg) e trilhas musicais.
+    - `Fonts/`: Fontes personalizadas usadas em HUDs e menus.
+    - `Tilesets/`: Conjuntos de tiles utilizados na criação dos mapas.
+
+- **📁 Scenes/**
+  - **Função:** Guarda todas as cenas do jogo. Cada cena é um elemento jogável, tela ou parte reutilizável.
+  - **Subpastas:**
+    - `Main/`: Cena principal do jogo, que controla o fluxo entre menus, fases, HUD etc.
+    - `UI/`: Telas como Menu Principal, HUD, Pause, Game Over.
+    - `Levels/`: Cenas dos níveis/fases jogáveis.
+    - `Characters/`: Cena do jogador, inimigos, NPCs, etc.
+    - `Misc/`: Cenas auxiliares, como animações de transição ou efeitos.
+
+- **📁 Scripts/**
+  - **Função:** Guarda os scripts GDScript (`.gd`) organizados por tipo.
+  - **Subpastas:**
+    - `Characters/`: Scripts de comportamento do jogador, inimigos, NPCs.
+    - `UI/`: Scripts de botões, menus, HUD.
+    - `Levels/`: Scripts de lógica de fases, carregamento de cenas, etc.
+
+- **📁 Autoload/**
+  - **Função:** Contém scripts globais que ficam disponíveis em todo o jogo.
+  - **Exemplo:**
+    - `Globals.gd`: Guarda pontuação, nome do jogador, fase atual, dados de save etc.
+    - *Esse script deve ser registrado em Project → Project Settings → Autoload.*
+
+- **📁 Resources/**
+  - **Função:** Armazena arquivos de configuração, dados e temas reutilizáveis.
+  - **Subpastas:**
+    - `Themes/`: Arquivos `.tres` de temas visuais para menus, HUDs, etc.
+    - `Data/`: Arquivos JSON, CSV ou customizados com dados de inimigos, itens, textos, etc.
 
 ## Integrantes
   <table>
