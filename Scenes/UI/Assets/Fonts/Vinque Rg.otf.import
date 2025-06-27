@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dcabkpfkiyymj"
-path="res://.godot/imported/Vinque Rg.otf-108fc88e6ae32af1f1f7379853523a48.fontdata"
+path="res://.godot/imported/Vinque Rg.otf-07bf53391a63663fd3865cc17137e187.fontdata"
 
 [deps]
 
-source_file="res://Assets/Fonts/Vinque Rg.otf"
-dest_files=["res://.godot/imported/Vinque Rg.otf-108fc88e6ae32af1f1f7379853523a48.fontdata"]
+source_file="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf"
+dest_files=["res://.godot/imported/Vinque Rg.otf-07bf53391a63663fd3865cc17137e187.fontdata"]
 
 [params]
 
