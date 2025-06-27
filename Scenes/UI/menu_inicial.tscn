@@ -1,10 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://d3iw8vt6yv34f"]
+[gd_scene load_steps=6 format=3 uid="uid://d3iw8vt6yv34f"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_he3hw"]
+[ext_resource type="Script" uid="uid://cbi3nx4kxkfdf" path="res://Scripts/UI/menu_inicial.gd" id="1_ogbwj"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ogbwj"]
 font = ExtResource("1_he3hw")
-font_size = 96
+font_size = 75
 shadow_size = 4
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 4)
@@ -14,7 +15,7 @@ shadow_offset = Vector2(0, 4)
 [sub_resource type="LabelSettings" id="LabelSettings_he3hw"]
 font = ExtResource("1_he3hw")
 font_size = 32
-font_color = Color(0, 0, 0, 1)
+font_color = Color(0.237539, 0.237539, 0.237539, 1)
 
 [node name="Menu-inicial" type="Control"]
 layout_mode = 3
@@ -23,44 +24,49 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ogbwj")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -3.0
+offset_right = -5.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0941176, 0.486275, 0.427451, 1)
 
-[node name="Title" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -189.0
-offset_top = -58.5
-offset_right = 189.0
-offset_bottom = 58.5
+offset_left = -285.0
+offset_top = -123.5
+offset_right = 285.0
+offset_bottom = 123.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Stranded"
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Terra de Libertos"
 label_settings = SubResource("LabelSettings_ogbwj")
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -156.0
-offset_right = 150.0
-offset_bottom = -4.0
-grow_vertical = 0
-
-[node name="NewGame" type="Button" parent="ButtonsContainer" groups=["button"]]
+[node name="ButtonsContainer" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="NewGame" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -69,7 +75,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Novo jogo"
 flat = true
 
-[node name="Shadow" type="Label" parent="ButtonsContainer/NewGame"]
+[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/NewGame"]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 8
@@ -86,8 +92,9 @@ grow_vertical = 2
 text = "Novo jogo"
 label_settings = SubResource("LabelSettings_he3hw")
 
-[node name="Continue" type="Button" parent="ButtonsContainer" groups=["button"]]
+[node name="Continue" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -96,7 +103,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Continuar"
 flat = true
 
-[node name="Shadow" type="Label" parent="ButtonsContainer/Continue"]
+[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/Continue"]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 8
@@ -113,9 +120,9 @@ grow_vertical = 2
 text = "Continuar"
 label_settings = SubResource("LabelSettings_he3hw")
 
-[node name="Quit" type="Button" parent="ButtonsContainer" groups=["button"]]
+[node name="Quit" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -124,16 +131,34 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Sair"
 flat = true
 
-[node name="Shadow" type="Label" parent="ButtonsContainer/Quit"]
+[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/Quit"]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 5.0
-offset_top = -17.0
+offset_top = -18.0
 offset_right = 146.0
-offset_bottom = 23.0
+offset_bottom = 22.0
 grow_vertical = 2
 text = "Sair"
+label_settings = SubResource("LabelSettings_he3hw")
+
+[node name="Version" type="Label" parent="."]
+show_behind_parent = true
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -169.0
+offset_top = -56.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Version 1.0"
 label_settings = SubResource("LabelSettings_he3hw")
