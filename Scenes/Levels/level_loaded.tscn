@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtr1kc2onifb1"]
+
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_verxq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_eopak"]
+font = ExtResource("1_verxq")
+font_size = 80
+
+[node name="LevelLoaded" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0.286275, 0.729412, 0.380392, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -194.5
+offset_top = -48.5
+offset_right = 194.5
+offset_bottom = 48.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="Background/VBoxContainer"]
+layout_mode = 2
+text = "Nível carregado"
+label_settings = SubResource("LabelSettings_eopak")

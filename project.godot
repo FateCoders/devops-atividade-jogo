@@ -11,5 +11,12 @@ config_version=5
 [application]
 
 config/name="desenvolvimento-do-app"
+run/main_scene="uid://d3iw8vt6yv34f"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
