@@ -8,8 +8,9 @@
 font = ExtResource("1_f1n8c")
 font_size = 80
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("_hud")]
 script = ExtResource("1_yjxcc")
+_hud = NodePath("HUD")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -47,3 +48,5 @@ label_settings = SubResource("LabelSettings_7x7pb")
 
 [node name="pause_menu" parent="." instance=ExtResource("3_yjxcc")]
 visible = false
+
+[node name="HUD" type="CanvasLayer" parent="."]
