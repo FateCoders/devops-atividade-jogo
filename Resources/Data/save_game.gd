@@ -17,7 +17,6 @@ const SAVE_GAME_BASE_PATH := "user://save"
 # Use this to detect old player saves and update their data.
 export var version := 1
 
-
 # The next three functions are just to keep the save API inside of the SaveGame resource.
 # Note that this has safety issues if players download savegame files from the 
 # web. Please see the README and check out the dedicated video.
