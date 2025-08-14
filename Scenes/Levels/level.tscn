@@ -1,15 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cff3r2qnlh6g1"]
+[gd_scene load_steps=5 format=3 uid="uid://cff3r2qnlh6g1"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_f1n8c"]
+[ext_resource type="Script" uid="uid://qys5wnkxmb5u" path="res://Scripts/Levels/level.gd" id="1_yjxcc"]
+[ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="3_yjxcc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_7x7pb"]
 font = ExtResource("1_f1n8c")
 font_size = 80
 
 [node name="Level" type="Node2D"]
+script = ExtResource("1_yjxcc")
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 1280.0
@@ -41,3 +44,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Novo Nível"
 label_settings = SubResource("LabelSettings_7x7pb")
+
+[node name="pause_menu" parent="." instance=ExtResource("3_yjxcc")]
+visible = false

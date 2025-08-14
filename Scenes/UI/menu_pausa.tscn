@@ -1,0 +1,109 @@
+[gd_scene load_steps=6 format=3 uid="uid://dimug5k6koccy"]
+
+[ext_resource type="Script" uid="uid://bpwbv6cv3mqyk" path="res://Scripts/UI/menu_pausa.gd" id="1_6me4n"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_gi0rv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_d2gud"]
+font = ExtResource("2_gi0rv")
+font_size = 75
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vdjc5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_w1vkx"]
+font = ExtResource("2_gi0rv")
+font_size = 32
+font_color = Color(0.237539, 0.237539, 0.237539, 1)
+
+[node name="menu_pausa" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6me4n")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.203922)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.5
+offset_top = -46.5
+offset_right = 62.5
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Jogo Pausado"
+label_settings = SubResource("LabelSettings_d2gud")
+
+[node name="ResumeButton" type="Button" parent="VBoxContainer" groups=["button"]]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gi0rv")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vdjc5")
+text = "Retomar"
+flat = true
+
+[node name="Shadow" type="Label" parent="VBoxContainer/ResumeButton"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -18.0
+offset_right = 70.5
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Retomar"
+label_settings = SubResource("LabelSettings_w1vkx")
+
+[node name="MenuButton" type="Button" parent="VBoxContainer" groups=["button"]]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gi0rv")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vdjc5")
+text = "Menu inicial"
+flat = true
+
+[node name="Shadow" type="Label" parent="VBoxContainer/MenuButton"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -18.0
+offset_right = 70.5
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Menu inicial"
+label_settings = SubResource("LabelSettings_w1vkx")

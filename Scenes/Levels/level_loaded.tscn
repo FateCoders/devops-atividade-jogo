@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtr1kc2onifb1"]
+[gd_scene load_steps=4 format=3 uid="uid://dtr1kc2onifb1"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_verxq"]
+[ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="2_eopak"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_eopak"]
 font = ExtResource("1_verxq")
@@ -9,7 +10,7 @@ font_size = 80
 [node name="LevelLoaded" type="Node2D"]
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 1280.0
@@ -40,3 +41,5 @@ size_flags_vertical = 4
 layout_mode = 2
 text = "Nível carregado"
 label_settings = SubResource("LabelSettings_eopak")
+
+[node name="pause_menu" parent="." instance=ExtResource("2_eopak")]
