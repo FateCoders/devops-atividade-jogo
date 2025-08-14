@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_f1n8c"]
 [ext_resource type="Script" uid="uid://qys5wnkxmb5u" path="res://Scripts/Levels/level.gd" id="1_yjxcc"]
-[ext_resource type="PackedScene" uid="uid://dimug5k6koccy" path="res://Scenes/UI/menu_pausa.tscn" id="3_lkqqh"]
+[ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="3_yjxcc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_7x7pb"]
 font = ExtResource("1_f1n8c")
@@ -45,6 +45,5 @@ size_flags_horizontal = 4
 text = "Novo Nível"
 label_settings = SubResource("LabelSettings_7x7pb")
 
-[node name="menu_pausa" parent="." instance=ExtResource("3_lkqqh")]
-size_flags_horizontal = 4
-size_flags_vertical = 4
+[node name="pause_menu" parent="." instance=ExtResource("3_yjxcc")]
+visible = false

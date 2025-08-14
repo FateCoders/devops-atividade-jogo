@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dtr1kc2onifb1"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_verxq"]
-[ext_resource type="PackedScene" uid="uid://dimug5k6koccy" path="res://Scenes/UI/menu_pausa.tscn" id="2_eopak"]
+[ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="2_eopak"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_eopak"]
 font = ExtResource("1_verxq")
@@ -42,4 +42,4 @@ layout_mode = 2
 text = "Nível carregado"
 label_settings = SubResource("LabelSettings_eopak")
 
-[node name="menu_pausa" parent="." instance=ExtResource("2_eopak")]
+[node name="pause_menu" parent="." instance=ExtResource("2_eopak")]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://d3iw8vt6yv34f"]
+[gd_scene load_steps=7 format=3 uid="uid://d3iw8vt6yv34f"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_he3hw"]
 [ext_resource type="Script" uid="uid://cbi3nx4kxkfdf" path="res://Scripts/UI/menu_inicial.gd" id="1_ogbwj"]
+[ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="3_e412q"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ogbwj"]
 font = ExtResource("1_he3hw")
@@ -67,6 +68,7 @@ size_flags_vertical = 4
 [node name="NewGame" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("3_e412q")
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -74,27 +76,11 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Novo jogo"
 flat = true
-
-[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/NewGame"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -70.5
-offset_top = -18.0
-offset_right = 70.5
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Novo jogo"
-label_settings = SubResource("LabelSettings_he3hw")
 
 [node name="Continue" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("3_e412q")
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -102,27 +88,11 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Continuar"
 flat = true
-
-[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/Continue"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -70.5
-offset_top = -18.0
-offset_right = 70.5
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Continuar"
-label_settings = SubResource("LabelSettings_he3hw")
 
 [node name="Quit" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("3_e412q")
 theme_override_colors/font_hover_color = Color(1, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_he3hw")
@@ -130,20 +100,6 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Sair"
 flat = true
-
-[node name="Shadow" type="Label" parent="VBoxContainer/ButtonsContainer/Quit"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 5.0
-offset_top = -18.0
-offset_right = 146.0
-offset_bottom = 22.0
-grow_vertical = 2
-text = "Sair"
-label_settings = SubResource("LabelSettings_he3hw")
 
 [node name="Version" type="Label" parent="."]
 show_behind_parent = true
