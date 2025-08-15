@@ -8,9 +8,9 @@
 
 config_version=5
 
-[.1[application]config]
+[.1[application]
 
-name="desenvolvimento-do-app"
+"config]name"="desenvolvimento-do-app"
 
 [application]
 
