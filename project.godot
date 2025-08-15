@@ -14,6 +14,7 @@ config_version=5
 
 [application]
 
+config/name="desenvolvimento-do-app"
 config/features=PackedStringArray("4.4")
 
 [config]
