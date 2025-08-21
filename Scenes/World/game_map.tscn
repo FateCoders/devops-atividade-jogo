@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://cd3ma6bfcc1us"]
+
+[ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_2bfar"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k1h17"]
+texture = ExtResource("1_2bfar")
+0:0/size_in_atlas = Vector2i(10, 10)
+0:0/0 = 0
+10:0/size_in_atlas = Vector2i(10, 10)
+10:0/0 = 0
+20:0/size_in_atlas = Vector2i(10, 10)
+20:0/0 = 0
+0:10/size_in_atlas = Vector2i(10, 10)
+0:10/0 = 0
+10:10/size_in_atlas = Vector2i(10, 10)
+10:10/0 = 0
+20:10/size_in_atlas = Vector2i(10, 10)
+20:10/0 = 0
+10:20/size_in_atlas = Vector2i(10, 10)
+10:20/0 = 0
+0:20/size_in_atlas = Vector2i(10, 10)
+0:20/0 = 0
+20:20/size_in_atlas = Vector2i(10, 10)
+20:20/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_huiyj"]
+sources/0 = SubResource("TileSetAtlasSource_k1h17")
+
+[node name="GameMap" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_huiyj")
+format = 2
