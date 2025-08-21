@@ -1,13 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckogvhs1gjgg0"]
+[gd_scene load_steps=8 format=3 uid="uid://ckogvhs1gjgg0"]
 
-[ext_resource type="Script" uid="uid://d08wjxjld1s8b" path="res://personagem_2d.gd" id="1_dc5lp"]
+[ext_resource type="Script" uid="uid://d08wjxjld1s8b" path="res://Scripts/Characters/personagem_2d.gd" id="1_dc5lp"]
 [ext_resource type="Texture2D" uid="uid://crnfcn6p3r3ig" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01-sprite-sheet.png" id="2_dc5lp"]
+[ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="2_y3i7a"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dc5lp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3i7a"]
 atlas = ExtResource("2_dc5lp")
 region = Rect2(0, 0, 168, 220)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y3i7a"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_lx0wd"]
 atlas = ExtResource("2_dc5lp")
 region = Rect2(168, 0, 168, 220)
 
@@ -15,7 +16,7 @@ region = Rect2(168, 0, 168, 220)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dc5lp")
+"texture": ExtResource("2_y3i7a")
 }],
 "loop": true,
 "name": &"idle",
@@ -24,10 +25,13 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_y3i7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lx0wd")
 }],
 "loop": true,
 "name": &"walk",
-"speed": 5.0
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
