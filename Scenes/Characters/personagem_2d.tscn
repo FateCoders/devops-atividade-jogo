@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://ckogvhs1gjgg0"]
+[gd_scene load_steps=8 format=3 uid="uid://dluby7fyvwkqi"]
 
-[ext_resource type="Script" uid="uid://d08wjxjld1s8b" path="res://Scripts/Characters/personagem_2d.gd" id="1_dc5lp"]
+[ext_resource type="Script" path="res://Scripts/Characters/personagem_2d.gd" id="1_dc5lp"]
 [ext_resource type="Texture2D" uid="uid://crnfcn6p3r3ig" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01-sprite-sheet.png" id="2_dc5lp"]
 [ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="2_y3i7a"]
 
@@ -41,6 +41,7 @@ size = Vector2(111, 34.5)
 script = ExtResource("1_dc5lp")
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
+z_index = 2
 position = Vector2(-1, -98)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"idle"
