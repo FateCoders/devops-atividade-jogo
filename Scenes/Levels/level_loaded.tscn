@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_verxq"]
 [ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="2_eopak"]
-[ext_resource type="PackedScene" uid="uid://ckogvhs1gjgg0" path="res://Scenes/Characters/personagem_2d.tscn" id="3_j14ny"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/personagem_2d.tscn" id="3_j14ny"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_eopak"]
 font = ExtResource("1_verxq")
