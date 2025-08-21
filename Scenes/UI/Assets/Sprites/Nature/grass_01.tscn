@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://367ecnnfa75c"]
+
+[ext_resource type="Texture2D" uid="uid://bf8nt0xjfgcok" path="res://Assets/Sprites/Exported/Props/Nature/Grass/grass-prop-01.png" id="1_jyl6e"]
+
+[node name="Grass01" type="Node2D"]
+
+[node name="Grass-prop-01" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(81, 82)
+texture = ExtResource("1_jyl6e")
+
+[node name="CharacterBody2D" type="StaticBody2D" parent="."]
