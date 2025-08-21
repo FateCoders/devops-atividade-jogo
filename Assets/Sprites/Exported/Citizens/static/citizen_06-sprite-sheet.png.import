@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dw4ragxdnjfsu"
-path="res://.godot/imported/citizen_08.png-564f89ef902c842d91008c6387df34ab.ctex"
+uid="uid://wpaywgi2it0f"
+path="res://.godot/imported/citizen_06-sprite-sheet.png-20afba4d7047b43d05b0d43a5f12cb2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Citizens/static/citizen_08.png"
-dest_files=["res://.godot/imported/citizen_08.png-564f89ef902c842d91008c6387df34ab.ctex"]
+source_file="res://Assets/Sprites/Exported/Citizens/static/citizen_06-sprite-sheet.png"
+dest_files=["res://.godot/imported/citizen_06-sprite-sheet.png-20afba4d7047b43d05b0d43a5f12cb2f.ctex"]
 
 [params]
 
