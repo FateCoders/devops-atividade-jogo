@@ -1,12 +1,18 @@
-[gd_scene load_steps=10 format=3 uid="uid://cd3ma6bfcc1us"]
+[gd_scene load_steps=16 format=3 uid="uid://cd3ma6bfcc1us"]
 
 [ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_2bfar"]
 [ext_resource type="PackedScene" uid="uid://c4kb53eoyky7a" path="res://Scenes/UI/Assets/Sprites/Nature/stone_01.tscn" id="2_huiyj"]
 [ext_resource type="PackedScene" uid="uid://dluby7fyvwkqi" path="res://Scenes/Characters/personagem_2d.tscn" id="2_k1h17"]
-[ext_resource type="PackedScene" uid="uid://enqfi23esptx" path="res://Scenes/UI/Assets/Sprites/Nature/grass_01.tscn" id="4_6f0ds"]
+[ext_resource type="PackedScene" uid="uid://367ecnnfa75c" path="res://Scenes/UI/Assets/Sprites/Nature/grass_01.tscn" id="4_6f0ds"]
 [ext_resource type="PackedScene" uid="uid://33o6ojenpsl3" path="res://Scenes/UI/Assets/Sprites/Nature/stone_02.tscn" id="5_aulgi"]
 [ext_resource type="PackedScene" uid="uid://c7jfgit3ykgb7" path="res://Scenes/UI/Assets/Sprites/Nature/stone_03.tscn" id="6_ydoxf"]
 [ext_resource type="PackedScene" uid="uid://cpd80ta33v5r6" path="res://Scenes/UI/Assets/Sprites/Nature/flower_01.tscn" id="7_p2af5"]
+[ext_resource type="Script" uid="uid://bi2agvatio3kw" path="res://Scripts/Levels/world_camera.gd" id="8_aulgi"]
+[ext_resource type="PackedScene" uid="uid://b82asxdh2mah1" path="res://Scenes/Characters/personagem_2d-dance2.tscn" id="9_eys2d"]
+[ext_resource type="PackedScene" uid="uid://du6i1qpqc8ahw" path="res://Scenes/Characters/personagem_2d-dance.tscn" id="10_sj02e"]
+[ext_resource type="PackedScene" uid="uid://38ut0jaqpp0i" path="res://Scenes/Characters/personagem_2d-dance4.tscn" id="11_c5b1o"]
+[ext_resource type="PackedScene" uid="uid://ckmbpfwdytb6g" path="res://Scenes/Characters/personagem_2d-dance3.tscn" id="12_idcrv"]
+[ext_resource type="PackedScene" uid="uid://crns310gb4aew" path="res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn" id="13_sj02e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k1h17"]
 texture = ExtResource("1_2bfar")
@@ -54,6 +60,60 @@ layer_0/tile_data = PackedInt32Array(262148, 0, 20, 917508, 655360, 10, 983044, 
 [node name="Stone01" parent="." instance=ExtResource("2_huiyj")]
 position = Vector2(782, 290)
 
+[node name="Stone01" parent="Stone01" instance=ExtResource("2_huiyj")]
+position = Vector2(55, 720)
+
+[node name="Grass01" parent="Stone01" instance=ExtResource("4_6f0ds")]
+position = Vector2(-286, 926)
+
+[node name="Grass02" parent="Stone01" instance=ExtResource("4_6f0ds")]
+position = Vector2(-528, 855)
+
+[node name="Stone02" parent="Stone01" instance=ExtResource("5_aulgi")]
+position = Vector2(-511, 550)
+
+[node name="Stone03" parent="Stone01" instance=ExtResource("6_ydoxf")]
+position = Vector2(124, 667)
+
+[node name="Grass03" parent="Stone01" instance=ExtResource("4_6f0ds")]
+position = Vector2(153, 725)
+
+[node name="Flower01" parent="Stone01" instance=ExtResource("7_p2af5")]
+position = Vector2(-97, 909)
+
+[node name="Flower02" parent="Stone01" instance=ExtResource("7_p2af5")]
+position = Vector2(-264, 466)
+
+[node name="Flower03" parent="Stone01" instance=ExtResource("7_p2af5")]
+position = Vector2(-595, 687)
+
+[node name="Stone01" parent="Stone01/Flower03" instance=ExtResource("2_huiyj")]
+position = Vector2(1626, -596)
+
+[node name="Grass01" parent="Stone01/Flower03" instance=ExtResource("4_6f0ds")]
+position = Vector2(1285, -390)
+
+[node name="Grass02" parent="Stone01/Flower03" instance=ExtResource("4_6f0ds")]
+position = Vector2(1043, -461)
+
+[node name="Stone02" parent="Stone01/Flower03" instance=ExtResource("5_aulgi")]
+position = Vector2(1060, -766)
+
+[node name="Stone03" parent="Stone01/Flower03" instance=ExtResource("6_ydoxf")]
+position = Vector2(1695, -649)
+
+[node name="Grass03" parent="Stone01/Flower03" instance=ExtResource("4_6f0ds")]
+position = Vector2(1724, -591)
+
+[node name="Flower01" parent="Stone01/Flower03" instance=ExtResource("7_p2af5")]
+position = Vector2(1474, -407)
+
+[node name="Flower02" parent="Stone01/Flower03" instance=ExtResource("7_p2af5")]
+position = Vector2(1307, -850)
+
+[node name="Flower03" parent="Stone01/Flower03" instance=ExtResource("7_p2af5")]
+position = Vector2(976, -629)
+
 [node name="Personagem_2D" parent="." instance=ExtResource("2_k1h17")]
 z_index = 1
 position = Vector2(656, 386)
@@ -81,3 +141,44 @@ position = Vector2(463, 36)
 
 [node name="Flower03" parent="." instance=ExtResource("7_p2af5")]
 position = Vector2(132, 257)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("8_aulgi")
+world_limits = Rect2(0, 0, 2000, 1800)
+
+[node name="Personagem_2D2" parent="." instance=ExtResource("9_eys2d")]
+z_index = 3
+position = Vector2(1800, 1272)
+
+[node name="Personagem_2D3" parent="." instance=ExtResource("10_sj02e")]
+z_index = 4
+position = Vector2(1306, 919)
+
+[node name="Stone01" parent="Personagem_2D3" instance=ExtResource("2_huiyj")]
+position = Vector2(573, 31)
+
+[node name="Grass02" parent="Personagem_2D3" instance=ExtResource("4_6f0ds")]
+position = Vector2(-10, 166)
+
+[node name="Stone02" parent="Personagem_2D3" instance=ExtResource("5_aulgi")]
+position = Vector2(-366, -274)
+
+[node name="Stone03" parent="Personagem_2D3" instance=ExtResource("6_ydoxf")]
+position = Vector2(642, -22)
+
+[node name="Grass03" parent="Personagem_2D3" instance=ExtResource("4_6f0ds")]
+position = Vector2(671, 36)
+
+[node name="Flower01" parent="Personagem_2D3" instance=ExtResource("7_p2af5")]
+position = Vector2(187, 277)
+
+[node name="Personagem_2D4" parent="." instance=ExtResource("11_c5b1o")]
+z_index = 3
+position = Vector2(1779, 901)
+
+[node name="Personagem_2D5" parent="." instance=ExtResource("12_idcrv")]
+z_index = 5
+position = Vector2(1333, 1234)
+
+[node name="Bonfire" parent="." instance=ExtResource("13_sj02e")]
+position = Vector2(1565, 1021)
