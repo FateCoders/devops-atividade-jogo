@@ -21,9 +21,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	# A lógica de zoom com a roda do mouse permanece a mesma.
 	if event is InputEventMouseButton:
 		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			zoom -= Vector2(zoom_speed, zoom_speed)
-		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			zoom += Vector2(zoom_speed, zoom_speed)
+		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			zoom -= Vector2(zoom_speed, zoom_speed)
 		
 		zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
