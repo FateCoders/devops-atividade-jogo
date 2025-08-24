@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnsunn3lmjfl"]
+
+[ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
+size = Vector2(1732, 1292)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_ooq57")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-24, 9)
+shape = SubResource("RectangleShape2D_m5062")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+texture = ExtResource("1_dc8wa")
