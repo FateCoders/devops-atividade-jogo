@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_verxq"]
 [ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="2_eopak"]
-[ext_resource type="PackedScene" uid="uid://ckogvhs1gjgg0" path="res://Scenes/Characters/personagem_2d.tscn" id="3_j14ny"]
+[ext_resource type="PackedScene" uid="uid://dluby7fyvwkqi" path="res://Scenes/Characters/personagem_2d.tscn" id="3_j14ny"]
 [ext_resource type="PackedScene" uid="uid://du6i1qpqc8ahw" path="res://Scenes/Characters/personagem_2d-dance.tscn" id="4_kxq87"]
 [ext_resource type="PackedScene" uid="uid://b82asxdh2mah1" path="res://Scenes/Characters/personagem_2d-dance2.tscn" id="5_yqydr"]
 [ext_resource type="PackedScene" uid="uid://ckmbpfwdytb6g" path="res://Scenes/Characters/personagem_2d-dance3.tscn" id="6_sgiy6"]
