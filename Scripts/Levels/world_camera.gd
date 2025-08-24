@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 	# --- NOVA LÓGICA DE MOVIMENTO COM TECLADO ---
 	
 	# Pega a direção das teclas (W,A,S,D e setas) em um vetor normalizado.
-	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	
 	# Aplica o movimento à posição da câmera.
 	position += direction * pan_speed * delta
