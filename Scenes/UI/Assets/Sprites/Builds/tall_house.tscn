@@ -1,19 +1,33 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnsunn3lmjfl"]
+[gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
 
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
+[ext_resource type="Script" uid="uid://bhnkm4fht6pxv" path="res://Scripts/Builds/zona_de_entrada.gd" id="2_7sg2r"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
+size = Vector2(1740, 1310)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1732, 1292)
+size = Vector2(458, 405)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-24, 9)
-shape = SubResource("RectangleShape2D_m5062")
+[node name="MurosCollision" type="CollisionShape2D" parent="."]
+position = Vector2(-22, -6)
+shape = SubResource("RectangleShape2D_dc8wa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -4)
 texture = ExtResource("1_dc8wa")
+
+[node name="ZonaDeEntrada" type="Area2D" parent="."]
+script = ExtResource("2_7sg2r")
+
+[node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
+position = Vector2(-323, 484.5)
+shape = SubResource("RectangleShape2D_m5062")
+
+[connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
+[connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]

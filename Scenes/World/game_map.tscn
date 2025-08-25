@@ -52,13 +52,14 @@ physics_layer_0/collision_layer = 3
 sources/0 = SubResource("TileSetAtlasSource_k1h17")
 
 [node name="GameMap" type="Node2D"]
+position = Vector2(-2589, -553)
 
 [node name="Personagem_2D" parent="." instance=ExtResource("2_k1h17")]
 z_index = 1
 position = Vector2(3236, 1125)
 
 [node name="Ground" type="TileMap" parent="."]
-position = Vector2(43, -104)
+position = Vector2(-18, -112)
 scale = Vector2(1.01884, 1.26431)
 tile_set = SubResource("TileSet_huiyj")
 format = 2
@@ -183,11 +184,12 @@ z_index = 5
 position = Vector2(1333, 1234)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2590, 555)
 script = ExtResource("8_aulgi")
-world_limits = Rect2(0, 0, 2000, 1800)
+tilemap_node = NodePath("../Ground")
 
-[node name="StaticBody2D" parent="." instance=ExtResource("14_idcrv")]
-position = Vector2(4714, -110)
+[node name="StaticBody2D" parent="." instance=ExtResource("15_n7gpi")]
+position = Vector2(3248, -63)
 
-[node name="StaticBody2D" parent="StaticBody2D" instance=ExtResource("15_n7gpi")]
-position = Vector2(-1775, 36)
+[node name="StaticBody2D2" parent="." instance=ExtResource("14_idcrv")]
+position = Vector2(4881, -63)
