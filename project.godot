@@ -10,10 +10,13 @@ config_version=5
 
 [application]
 
-config/name="desenvolvimento-do-app"
 run/main_scene="uid://d3iw8vt6yv34f"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SaveManager="*res://Autoload/SaveManager.gd"
 
 [display]
 
