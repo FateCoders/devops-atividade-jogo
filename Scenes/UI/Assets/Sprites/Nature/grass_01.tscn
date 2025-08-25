@@ -8,5 +8,3 @@
 z_index = 1
 position = Vector2(81, 82)
 texture = ExtResource("1_jyl6e")
-
-[node name="CharacterBody2D" type="StaticBody2D" parent="."]
