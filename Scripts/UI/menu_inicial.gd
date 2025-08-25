@@ -17,7 +17,7 @@ func _on_button_pressed(_button: Button) -> void:
 			get_tree().change_scene_to_file("res://Scenes/Levels/level.tscn")
 			
 		"Continue":
-			get_tree().change_scene_to_file("res://Scenes/Levels/level_loaded.tscn")
+			get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
 			
 		"Quit":
 			get_tree().quit()
