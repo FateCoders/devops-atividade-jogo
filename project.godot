@@ -19,6 +19,10 @@ run/main_scene="uid://cd6tvbboto7yw"
 config/features=PackedStringArray("4.4")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SaveManager="*res://Autoload/SaveManager.gd"
+
 [config]
 
 features=PackedStringArray("4.4", "Forward Plus")
