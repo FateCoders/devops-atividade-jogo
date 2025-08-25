@@ -50,6 +50,10 @@ sources/0 = SubResource("TileSetAtlasSource_k1h17")
 [node name="GameMap" type="Node2D"]
 position = Vector2(-2589, -553)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2590, 555)
+script = ExtResource("8_aulgi")
+
 [node name="Personagem_2D" parent="." instance=ExtResource("2_k1h17")]
 z_index = 1
 position = Vector2(3236, 1125)
