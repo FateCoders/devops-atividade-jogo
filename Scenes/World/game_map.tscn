@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cd3ma6bfcc1us"]
+[gd_scene load_steps=15 format=3 uid="uid://cd3ma6bfcc1us"]
 
 [ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_2bfar"]
 [ext_resource type="PackedScene" uid="uid://c4kb53eoyky7a" path="res://Scenes/UI/Assets/Sprites/Nature/stone_01.tscn" id="2_huiyj"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c7jfgit3ykgb7" path="res://Scenes/UI/Assets/Sprites/Nature/stone_03.tscn" id="6_ydoxf"]
 [ext_resource type="PackedScene" uid="uid://cpd80ta33v5r6" path="res://Scenes/UI/Assets/Sprites/Nature/flower_01.tscn" id="7_p2af5"]
 [ext_resource type="Script" uid="uid://bi2agvatio3kw" path="res://Scripts/Levels/world_camera.gd" id="8_aulgi"]
+[ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="12_eys2d"]
 [ext_resource type="PackedScene" uid="uid://crns310gb4aew" path="res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn" id="13_sj02e"]
 [ext_resource type="PackedScene" uid="uid://bnsunn3lmjfl" path="res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn" id="14_idcrv"]
 [ext_resource type="PackedScene" uid="uid://bcsjw0emawgsl" path="res://Scenes/UI/Assets/Sprites/Builds/tiny_house.tscn" id="15_n7gpi"]
@@ -53,6 +54,7 @@ position = Vector2(-2589, -553)
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(2590, 555)
 script = ExtResource("8_aulgi")
+tilemap_node = NodePath("../Ground")
 
 [node name="Personagem_2D" parent="." instance=ExtResource("2_k1h17")]
 z_index = 1
@@ -167,7 +169,7 @@ position = Vector2(1493, 1196)
 [node name="Bonfire" parent="." instance=ExtResource("13_sj02e")]
 position = Vector2(1565, 1021)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D2" type="Camera2D" parent="."]
 position = Vector2(2590, 555)
 script = ExtResource("8_aulgi")
 tilemap_node = NodePath("../Ground")
@@ -177,3 +179,5 @@ position = Vector2(3248, -63)
 
 [node name="StaticBody2D2" parent="." instance=ExtResource("14_idcrv")]
 position = Vector2(4881, -63)
+
+[node name="pause_menu" parent="." instance=ExtResource("12_eys2d")]

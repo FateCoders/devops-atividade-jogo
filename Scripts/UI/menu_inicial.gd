@@ -27,7 +27,7 @@ func _on_button_pressed(button: Button) -> void:
 			# Não criamos um save aqui. O primeiro save será feito pelo jogador dentro do jogo.
 			# Se quiser, pode deletar um save antigo ao iniciar um novo jogo.
 			# SaveManager.delete_save() # -> Função opcional para criar no SaveManager
-			get_tree().change_scene_to_file("res://Scenes/Levels/level.tscn")
+			get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
 			
 		"Continue":
 			get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
