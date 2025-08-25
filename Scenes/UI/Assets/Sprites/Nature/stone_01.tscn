@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4kb53eoyky7a"]
+
+[ext_resource type="Texture2D" uid="uid://cgqpv64fcqjlh" path="res://Assets/Sprites/Exported/Props/Nature/Stones/stone-01.png" id="1_jntda"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r5p02"]
+size = Vector2(90, 58)
+
+[node name="Stone01" type="Node2D"]
+
+[node name="Stone-01" type="Sprite2D" parent="."]
+position = Vector2(81, 82)
+texture = ExtResource("1_jntda")
+
+[node name="CharacterBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+visible = false
+position = Vector2(87, 83)
+shape = SubResource("RectangleShape2D_r5p02")

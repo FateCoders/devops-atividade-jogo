@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7jfgit3ykgb7"]
+
+[ext_resource type="Texture2D" uid="uid://684u0q2fnkc3" path="res://Assets/Sprites/Exported/Props/Nature/Stones/stone-03.png" id="1_3lkph"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pneer"]
+size = Vector2(100, 124)
+
+[node name="Stone03" type="Node2D"]
+
+[node name="Stone-03" type="Sprite2D" parent="."]
+position = Vector2(81, 82)
+texture = ExtResource("1_3lkph")
+
+[node name="CharacterBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+visible = false
+position = Vector2(79, 93)
+shape = SubResource("RectangleShape2D_pneer")
