@@ -54,6 +54,10 @@ sources/0 = SubResource("TileSetAtlasSource_k1h17")
 [node name="GameMap" type="Node2D"]
 position = Vector2(-2589, -553)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2590, 555)
+script = ExtResource("8_aulgi")
+
 [node name="Personagem_2D" parent="." instance=ExtResource("2_k1h17")]
 z_index = 1
 position = Vector2(3236, 1125)
@@ -182,11 +186,6 @@ position = Vector2(1779, 901)
 [node name="Personagem_2D5" parent="." instance=ExtResource("12_idcrv")]
 z_index = 5
 position = Vector2(1333, 1234)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(2590, 555)
-script = ExtResource("8_aulgi")
-tilemap_node = NodePath("../Ground")
 
 [node name="StaticBody2D" parent="." instance=ExtResource("15_n7gpi")]
 position = Vector2(3248, -63)
