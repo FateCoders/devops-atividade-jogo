@@ -125,3 +125,25 @@ func _change_state(new_state: State):
 			_wander()
 		State.EM_CASA:
 			pass # Nenhuma ação de movimento necessária
+
+## Coleta todos os dados importantes deste nó e os retorna em um dicionário.
+## O SaveManager vai chamar esta função quando for salvar o jogo.
+func get_save_data() -> Dictionary:
+	return {
+		"pos_x": position.x,
+		"pos_y": position.y,
+		# Adicione aqui outras variáveis que você queira salvar
+		# "health": health,
+		# "score": score,
+	}
+## Recebe um dicionário com dados e os aplica a este nó.
+## O SaveManager vai chamar esta função quando for carregar um jogo.
+func load_data(data: Dictionary):
+	# Usamos .get() com um valor padrão para evitar erros se o dado não existir no save.
+	var loaded_pos_x = data.get("pos_x", position.x)
+	var loaded_pos_y = data.get("pos_y", position.y)
+	position = Vector2(loaded_pos_x, loaded_pos_y)
+
+	# Carregue as outras variáveis que você salvou
+	# health = data.get("health", 100)
+	# score = data.get("score", 0)

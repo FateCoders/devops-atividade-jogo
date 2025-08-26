@@ -5,5 +5,3 @@
 [node name="Main" type="Node"]
 
 [node name="Menu-inicial" parent="." instance=ExtResource("1_1r6ip")]
-
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
