@@ -5,7 +5,7 @@ extends Node
 signal period_changed(period_name: String)
 
 ## A duração de um dia completo no jogo, em segundos reais.
-@export var day_length_in_seconds: float = 120.0 # 2 minutos para um dia completo
+@export var day_length_in_seconds: float = 30.0 # 2 minutos para um dia completo
 
 ## A hora em que a noite começa (formato 24h).
 @export var night_starts_at: float = 20.0 # 8 PM

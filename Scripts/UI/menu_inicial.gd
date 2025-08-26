@@ -23,10 +23,7 @@ func _ready() -> void:
 func _on_button_pressed(button: Button) -> void:
 	match button.name:
 		"NewGame":
-			# AÇÃO: Apenas inicia um novo jogo.
-			# Não criamos um save aqui. O primeiro save será feito pelo jogador dentro do jogo.
-			# Se quiser, pode deletar um save antigo ao iniciar um novo jogo.
-			# SaveManager.delete_save() # -> Função opcional para criar no SaveManager
+			# SaveManager.delete_save()
 			get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
 			
 		"Continue":

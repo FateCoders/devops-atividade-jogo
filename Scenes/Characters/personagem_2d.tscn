@@ -39,6 +39,9 @@ size = Vector2(111, 34.5)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens"]]
 script = ExtResource("1_dc5lp")
+home_position = Vector2(650, 0)
+outside_position = Vector2(650, 650)
+wander_range = 0.0
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
 z_index = 2
@@ -50,3 +53,5 @@ animation = &"idle"
 show_behind_parent = true
 position = Vector2(0, -15.75)
 shape = SubResource("RectangleShape2D_lx0wd")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
