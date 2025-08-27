@@ -90,16 +90,16 @@ texture = ExtResource("4_vadfg")
 texture_region_size = Vector2i(160, 85)
 0:0/0 = 0
 0:0/0/terrain_set = 0
-0:0/0/terrain = 1
+0:0/0/terrain = 2
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-79.3086, -42.9, -80.4375, 42.3355, 77.6152, 42.3355, 78.1796, -41.7711)
-0:0/0/terrains_peering_bit/right_side = 0
-0:0/0/terrains_peering_bit/bottom_right_corner = 0
-0:0/0/terrains_peering_bit/bottom_side = 0
-0:0/0/terrains_peering_bit/bottom_left_corner = 0
-0:0/0/terrains_peering_bit/left_side = 0
-0:0/0/terrains_peering_bit/top_left_corner = 0
-0:0/0/terrains_peering_bit/top_side = 0
-0:0/0/terrains_peering_bit/top_right_corner = 0
+0:0/0/terrains_peering_bit/right_side = 2
+0:0/0/terrains_peering_bit/bottom_right_corner = 2
+0:0/0/terrains_peering_bit/bottom_side = 2
+0:0/0/terrains_peering_bit/bottom_left_corner = 2
+0:0/0/terrains_peering_bit/left_side = 2
+0:0/0/terrains_peering_bit/top_left_corner = 2
+0:0/0/terrains_peering_bit/top_side = 2
+0:0/0/terrains_peering_bit/top_right_corner = 2
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 1
@@ -114,16 +114,16 @@ texture_region_size = Vector2i(160, 85)
 1:0/0/terrains_peering_bit/top_right_corner = 1
 2:0/0 = 0
 2:0/0/terrain_set = 0
-2:0/0/terrain = 1
+2:0/0/terrain = 0
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(38.102, -42.3355, 36.973, 40.6421, -4.79802, 41.2066, -4.79802, -42.9)
-2:0/0/terrains_peering_bit/right_side = 2
-2:0/0/terrains_peering_bit/bottom_right_corner = 2
-2:0/0/terrains_peering_bit/bottom_side = 2
-2:0/0/terrains_peering_bit/bottom_left_corner = 2
-2:0/0/terrains_peering_bit/left_side = 2
-2:0/0/terrains_peering_bit/top_left_corner = 2
-2:0/0/terrains_peering_bit/top_side = 2
-2:0/0/terrains_peering_bit/top_right_corner = 2
+2:0/0/terrains_peering_bit/right_side = 0
+2:0/0/terrains_peering_bit/bottom_right_corner = 0
+2:0/0/terrains_peering_bit/bottom_side = 0
+2:0/0/terrains_peering_bit/bottom_left_corner = 0
+2:0/0/terrains_peering_bit/left_side = 0
+2:0/0/terrains_peering_bit/top_left_corner = 0
+2:0/0/terrains_peering_bit/top_side = 0
+2:0/0/terrains_peering_bit/top_right_corner = 0
 
 [sub_resource type="TileSet" id="TileSet_vadfg"]
 physics_layer_0/collision_layer = 1
@@ -154,12 +154,15 @@ tile_map_data = PackedByteArray("AAAAAP//AgACAAIAAAAAAAAAAgACAAIAAAAAAAEAAgACAAI
 tile_set = ExtResource("1_t1gg8")
 
 [node name="sand" type="TileMapLayer" parent="gameTileMap"]
+tile_map_data = PackedByteArray("AAD/////AAABAAIAAAD//wAAAAABAAIAAAD//wEAAAABAAIAAAD//wIAAAABAAIAAAD//wMAAAABAAIAAAD//wQAAAABAAIAAAD//wUAAAABAAIAAAD//wYAAAABAAIAAAD//wcAAAABAAIAAAD//wgAAAABAAIAAAD//wkAAAABAAIAAAD//woAAAABAAIAAAD//wsAAAABAAIAAAD//wwAAAABAAIAAAD//w0AAAABAAIAAAAAAA0AAAABAAIAAAABAA0AAAABAAIAAAACAA0AAAABAAIAAAADAA0AAAABAAIAAAAEAA0AAAABAAIAAAAFAA0AAAABAAIAAAAGAA0AAAABAAIAAAAHAA0AAAABAAIAAAAIAA0AAAABAAIAAAAJAA0AAAABAAIAAAAKAA0AAAABAAIAAAALAA0AAAABAAIAAAAMAA0AAAABAAIAAAANAA0AAAABAAIAAAAOAA0AAAABAAIAAAAPAA0AAAABAAIAAAAQAA0AAAABAAIAAAARAA0AAAABAAIAAAASAA0AAAABAAIAAAATAA0AAAABAAIAAAAUAA0AAAABAAIAAAAVAA0AAAABAAIAAAAWAA0AAAABAAIAAAAXAA0AAAABAAIAAAAYAA0AAAABAAIAAAAZAA0AAAABAAIAAAAZAAwAAAABAAIAAAAZAAsAAAABAAIAAAAZAAoAAAABAAIAAAAZAAkAAAABAAIAAAAZAAgAAAABAAIAAAAZAAcAAAABAAIAAAAZAAYAAAABAAIAAAAZAAUAAAABAAIAAAAZAAQAAAABAAIAAAAZAAMAAAABAAIAAAAZAAIAAAABAAIAAAAZAAEAAAABAAIAAAAZAAAAAAABAAIAAAAZAP//AAABAAIAAAAZAP7/AAABAAIAAAAYAP7/AAABAAIAAAAXAP7/AAABAAIAAAAWAP7/AAABAAIAAAAVAP7/AAABAAIAAAAUAP7/AAABAAIAAAATAP7/AAABAAIAAAASAP7/AAABAAIAAAARAP7/AAABAAIAAAAQAP7/AAABAAIAAAAPAP7/AAABAAIAAAAOAP7/AAABAAIAAAANAP7/AAABAAIAAAAMAP7/AAABAAIAAAALAP7/AAABAAIAAAAKAP7/AAABAAIAAAAJAP7/AAABAAIAAAAIAP7/AAABAAIAAAAHAP7/AAABAAIAAAAGAP7/AAABAAIAAAAFAP7/AAABAAIAAAAEAP7/AAABAAIAAAADAP7/AAABAAIAAAACAP7/AAABAAIAAAABAP7/AAABAAIAAAAAAP7/AAABAAIAAAD///7/AAABAAIAAAA=")
 tile_set = ExtResource("1_t1gg8")
 
 [node name="nature" type="TileMapLayer" parent="gameTileMap"]
 position = Vector2(154, -72)
+tile_map_data = PackedByteArray("AAAPAAoAAAAAAAAAAABJAGwAAAAAAAAAAAAYAHMAAAAAAAAAAAAVAE4AAAAAAAAAAABoAEEAAAAAAAAAAAC7AGkAAAAAAAAAAABqAGoAAAABAAAAAAA4ADsAAAABAAAAAAAGACQAAAABAAAAAABOABMAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_l1hd3")
 
 [node name="nature-collision" type="TileMapLayer" parent="gameTileMap"]
 position = Vector2(-3, 0)
+tile_map_data = PackedByteArray("AADIAHEAAAAAAAAAAAAdAFUAAAAAAAAAAAAsABMAAAABAAAAAABkAGoAAAACAAAAAAA=")
 tile_set = SubResource("TileSet_vadfg")
