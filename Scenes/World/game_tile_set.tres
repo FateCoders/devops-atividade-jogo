@@ -1,0 +1,85 @@
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://c6cvb7ix3k63a"]
+
+[ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_7v26i"]
+[ext_resource type="Texture2D" uid="uid://dxqr1pveiek1y" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand-sheet.png" id="1_si36a"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_j0i6i"]
+vertices = PackedVector2Array(80, 80, -80, 80, -80, -80, 80, -80)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-80, -80, -80, 80, 80, 80, 80, -80)])
+agent_radius = 0.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0i6i"]
+texture = ExtResource("1_si36a")
+texture_region_size = Vector2i(160, 160)
+1:2/0 = 0
+1:2/0/terrain_set = 0
+1:2/0/terrain = 1
+1:2/0/terrains_peering_bit/right_side = 1
+1:2/0/terrains_peering_bit/bottom_right_corner = 1
+1:2/0/terrains_peering_bit/bottom_side = 1
+1:2/0/terrains_peering_bit/bottom_left_corner = 1
+1:2/0/terrains_peering_bit/left_side = 1
+1:2/0/terrains_peering_bit/top_left_corner = 1
+1:2/0/terrains_peering_bit/top_side = 1
+1:2/0/terrains_peering_bit/top_right_corner = 1
+1:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_j0i6i")
+0:1/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:0/0 = 0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_si36a"]
+vertices = PackedVector2Array(80, 80, -80, 80, -80, -80, 80, -80)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-80, 80, -80, -80, 80, -80, 80, 80)])
+agent_radius = 0.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7v26i"]
+texture = ExtResource("1_7v26i")
+texture_region_size = Vector2i(160, 160)
+10:0/0 = 0
+20:0/0 = 0
+0:10/0 = 0
+10:10/0 = 0
+20:10/0 = 0
+0:20/0 = 0
+10:20/0 = 0
+20:20/0 = 0
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, -80, -80, -67, 66.5, -70, 65.5, 80, 80, 80, 80, -80)
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+2:2/0/terrain_set = 0
+2:2/0/terrain = 0
+2:2/0/terrains_peering_bit/right_side = 0
+2:2/0/terrains_peering_bit/bottom_right_corner = 0
+2:2/0/terrains_peering_bit/bottom_side = 0
+2:2/0/terrains_peering_bit/bottom_left_corner = 0
+2:2/0/terrains_peering_bit/left_side = 0
+2:2/0/terrains_peering_bit/top_left_corner = 0
+2:2/0/terrains_peering_bit/top_side = 0
+2:2/0/terrains_peering_bit/top_right_corner = 0
+2:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_si36a")
+
+[resource]
+tile_size = Vector2i(160, 160)
+physics_layer_0/collision_layer = 1
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "grass terrain"
+terrain_set_0/terrain_0/color = Color(0, 0.8, 0, 1)
+terrain_set_0/terrain_1/name = "sand terrain"
+terrain_set_0/terrain_1/color = Color(0.901961, 0.705882, 0.0901961, 1)
+terrain_set_0/terrain_2/name = "Terrain 2"
+terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
+navigation_layer_0/layers = 1
+sources/2 = SubResource("TileSetAtlasSource_7v26i")
+sources/0 = SubResource("TileSetAtlasSource_j0i6i")
