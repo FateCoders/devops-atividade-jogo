@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://y28gf4appb6r"]
+
+[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_l6nub"]
+[ext_resource type="Texture2D" uid="uid://dw4ragxdnjfsu" path="res://Assets/Sprites/Exported/Citizens/static/citizen_08.png" id="2_l6nub"]
+[ext_resource type="Texture2D" uid="uid://bryl76pqbrhd1" path="res://Assets/Sprites/Exported/Citizens/static/citizen_08-sprite-sheet.png" id="3_nv471"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6653"]
+atlas = ExtResource("3_nv471")
+region = Rect2(0, 0, 163, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8bo7"]
+atlas = ExtResource("3_nv471")
+region = Rect2(163, 0, 163, 220)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lx0wd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_l6nub")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6653")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i8bo7")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
+size = Vector2(111, 34.5)
+
+[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
+script = ExtResource("1_l6nub")
+
+[node name="Texture" type="AnimatedSprite2D" parent="."]
+z_index = 1
+position = Vector2(8, -107)
+sprite_frames = SubResource("SpriteFrames_lx0wd")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+position = Vector2(0, -15.75)
+shape = SubResource("RectangleShape2D_lx0wd")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WorkTurnTimer" type="Timer" parent="."]

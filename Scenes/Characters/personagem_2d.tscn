@@ -38,9 +38,14 @@ animations = [{
 size = Vector2(121.5, 42)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
+position = Vector2(2, 1)
+collision_layer = 129
+collision_mask = 255
 script = ExtResource("1_dc5lp")
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
+z_index = 1
+position = Vector2(8, -107)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"walk"
 
@@ -50,3 +55,5 @@ position = Vector2(-5.25, -12)
 shape = SubResource("RectangleShape2D_lx0wd")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WorkTurnTimer" type="Timer" parent="."]

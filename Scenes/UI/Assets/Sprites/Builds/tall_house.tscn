@@ -6,7 +6,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1740, 1310)
+size = Vector2(1740, 579)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
 size = Vector2(458, 405)
@@ -15,7 +15,7 @@ size = Vector2(458, 405)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-22, -6)
+position = Vector2(-22, 359.5)
 shape = SubResource("RectangleShape2D_dc8wa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
