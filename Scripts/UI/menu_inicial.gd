@@ -2,6 +2,7 @@ extends Control
 class_name MainMenu
 
 func _ready() -> void:
+	
 	if not SaveManager.save_exists():
 		var continue_button = $VBoxContainer/ButtonsContainer/Continue
 		continue_button.disabled = true
@@ -9,6 +10,8 @@ func _ready() -> void:
 		var shadow_node = continue_button.find_child("Shadow", false)
 		if shadow_node:
 			shadow_node.hide()
+	
+	MusicManager.play_menu_music()
 	
 	for button in get_tree().get_nodes_in_group("button"):
 		button.pressed.connect(_on_button_pressed.bind(button))

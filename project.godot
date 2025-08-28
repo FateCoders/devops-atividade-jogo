@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 SaveManager="*res://Autoload/SaveManager.gd"
+MusicManager="*res://Scenes/Music/music_manager.tscn"
 WorldTimeManager="*res://Autoload/WorldTimeManager.gd"
 
 [config]
