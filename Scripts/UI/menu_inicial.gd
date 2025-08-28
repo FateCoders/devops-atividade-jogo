@@ -6,7 +6,7 @@ func _ready() -> void:
 		var continue_button = $VBoxContainer/ButtonsContainer/Continue
 		continue_button.disabled = true
 		
-		var shadow_node = continue_button.find_child("Shadow", false) # O 'false' impede a busca recursiva
+		var shadow_node = continue_button.find_child("Shadow", false)
 		if shadow_node:
 			shadow_node.hide()
 	
@@ -17,11 +17,11 @@ func _ready() -> void:
 func _on_button_pressed(button: Button) -> void:
 	match button.name:
 		"NewGame":
-			get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
+			get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
 			
 		"Continue":
 			if SaveManager.load_game():
-				get_tree().change_scene_to_file("res://Scenes/World/game_map.tscn")
+				get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
 			else:
 				print("Falha ao carregar o jogo a partir do menu.")
 				
