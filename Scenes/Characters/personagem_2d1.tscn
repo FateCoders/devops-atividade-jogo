@@ -52,3 +52,5 @@ position = Vector2(0, -15.75)
 shape = SubResource("RectangleShape2D_lx0wd")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WorkTurnTimer" type="Timer" parent="."]
