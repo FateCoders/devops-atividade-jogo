@@ -89,7 +89,6 @@ func _physics_process(delta):
 	move_and_slide()
 	_update_animation()
 
-
 func _change_state(new_state: State):
 	if current_state == new_state: return
 
