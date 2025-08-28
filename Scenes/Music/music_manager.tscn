@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=3 uid="uid://dub3kj7ss45vf"]
+
+[ext_resource type="Script" uid="uid://d3y34dko4c48" path="res://Autoload/MusicManager.gd" id="1_5nsp2"]
+[ext_resource type="AudioStream" uid="uid://bfghje1rxeidt" path="res://Assets/Audio/decisionsong(demo).mp3" id="2_8f76m"]
+[ext_resource type="AudioStream" uid="uid://bbshxbwakf53v" path="res://Assets/Audio/mapsong.mp3" id="3_dw8b5"]
+[ext_resource type="AudioStream" uid="uid://pntu8v04jt25" path="res://Assets/Audio/actionsong.mp3" id="4_3t4bf"]
+
+[sub_resource type="AudioStream" id="AudioStream_dw8b5"]
+
+[node name="MusicManager" type="Node"]
+script = ExtResource("1_5nsp2")
+menu_music = ExtResource("2_8f76m")
+day_music = ExtResource("3_dw8b5")
+night_music = ExtResource("4_3t4bf")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStream_dw8b5")
+autoplay = true
+playback_type = 1

@@ -1,5 +1,6 @@
-[gd_scene load_steps=24 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=25 format=4 uid="uid://bofjyi7d5qug8"]
 
+[ext_resource type="Script" uid="uid://cghxvxhbj6tn3" path="res://Scripts/UI/world.gd" id="1_dr8i3"]
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
 [ext_resource type="Texture2D" uid="uid://baphvn6xkhi6h" path="res://Assets/Sprites/Exported/Props/Nature/Grass/grass-flower-sheet.png" id="2_3rhlx"]
 [ext_resource type="Texture2D" uid="uid://17pv5tk7p18b" path="res://Assets/Sprites/Exported/Props/Nature/Stones/stone-props.png" id="2_yp2ti"]
@@ -213,6 +214,7 @@ polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7), Pa
 outlines = Array[PackedVector2Array]([PackedVector2Array(629, 755, 787, 697, 933, 642, 1025, 642, 1117, 642, 1202, 752, 1423, 905, 1520, 997, 1698, 1052, 1851, 1101, 2071, 1235, 2309, 1345, 2432, 1437, 2560, 1596, 2872, 1614, 3056, 1578, 3404, 1584, 3863, 1602, 4083, 1578, 4236, 1504, 4175, 1266, 4267, 1156, 4150, 1101, 3893, 1107, 3747, 1119, 3698, 1064, 3686, 917, 3722, 807, 3533, 813, 3386, 825, 3166, 825, 3111, 825, 3074, 978, 2982, 1070, 2866, 1082, 2780, 972, 2689, 770, 2713, 495, 2450, 403, 2303, 385, 2101, 367, 1771, 367, 1624, 367, 1478, 385, 1111, 385, 912, 365, 860, 238, 574, 171, 458, 49), PackedVector2Array(445, 1994, 433, 2286, 2857, 2286, 2929, 1598, 2425, 1430, 2257, 1978), PackedVector2Array(481, 72, 395, -285, -87, -280, -92, -101, -227, -62, -251, 41, -375, 78, -383, 171, -601, 226, -593, 550, -388, 555, -359, 755, -279, 965, -48, 902, 162, 856, 567, 794, 662, 731, 567, 487, 190, 498, 32, 475, 24, 332, 139, 272, 242, 264, 328, 389, 380, 438, 554, 436)])
 
 [node name="world" type="Node2D"]
+script = ExtResource("1_dr8i3")
 
 [node name="gameTileMap" type="Node2D" parent="."]
 
