@@ -1,8 +1,8 @@
 # NPC.gd
 extends CharacterBody2D
 
-# ESTADOS ATUALIZADOS
-enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PARA_O_TRABALHO, TRABALHANDO }
+# ADICIONADO: Novo estado para a interação com o mouse
+enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PARA_O_TRABALHO, TRABALHANDO, REAGINDO_AO_JOGADOR }
 
 @export_category("Comportamento")
 @export var move_speed: float = 50.0
@@ -16,7 +16,6 @@ enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PA
 @export var work_starts_at: float = 8.0  # 8 AM
 @export var work_ends_at: float = 17.0 # 5 PM
 
-# --- LÓGICA DE DANÇA: VARIÁVEIS IMPORTADAS ---
 @export_category("Dança de Trabalho")
 @export var dance_animation_speed: float = 0.7
 @export var shake_intensity: float = 1.5
@@ -25,27 +24,25 @@ enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PA
 
 @export_category("Nós")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
-@onready var animated_sprite: AnimatedSprite2D = $Texture
-# --- LÓGICA DE DANÇA: NOVA REFERÊNCIA DE NÓ ---
+@onready var animated_sprite: AnimatedSprite2D = $Texture 
 @onready var work_turn_timer: Timer = $WorkTurnTimer
 
 var current_state: State = State.EM_CASA
+# ADICIONADO: Variável de "memória" para o NPC
+var _state_before_interaction: State
+
 var _idle_timer = null
 var _schedule_check_timer: Timer
-
-# --- LÓGICA DE DANÇA: NOVAS VARIÁVEIS ---
 var _noise = FastNoiseLite.new()
 var _time_passed: float = 0.0
 
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	# --- LÓGICA DE DANÇA: INICIALIZAÇÃO ---
 	_noise.seed = randi()
 	_noise.frequency = 2.0
 	work_turn_timer.timeout.connect(_on_work_turn_timer_timeout)
 
-	# ... (resto do _ready permanece o mesmo)
 	_schedule_check_timer = Timer.new()
 	_schedule_check_timer.wait_time = 1.0 
 	_schedule_check_timer.timeout.connect(_update_schedule)
@@ -56,28 +53,21 @@ func _ready():
 
 
 func _physics_process(delta):
-	# --- LÓGICA DE DANÇA: EXECUÇÃO ---
-	# Se o estado for TRABALHANDO, executa a lógica da dança.
-	if current_state == State.TRABALHANDO:
-		# Lógica de tremor (shake)
-		_time_passed += delta
-		var offset_x = _noise.get_noise_2d(_time_passed * 5.0, 0) * shake_intensity
-		var offset_y = _noise.get_noise_2d(0, _time_passed * 5.0) * shake_intensity
-		animated_sprite.position = Vector2(offset_x, offset_y)
-		
-		# Garante que o NPC não se mova enquanto dança
+	# MODIFICADO: A dança (seja do trabalho ou da interação) agora tem prioridade.
+	if current_state == State.TRABALHANDO or current_state == State.REAGINDO_AO_JOGADOR:
+		_perform_dance_shake(delta)
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	# Estados "parados"
+	# Outros estados "parados"
 	if current_state in [State.OCIOSO, State.EM_CASA]:
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
 		move_and_slide()
 		_update_animation()
 		return
 
-	# Lógica de chegada e movimento (inalterada)
+	# Lógica de movimento para os estados restantes
 	var final_destination = nav_agent.get_final_position()
 	if global_position.distance_to(final_destination) < arrival_distance:
 		_on_target_reached()
@@ -89,65 +79,87 @@ func _physics_process(delta):
 	move_and_slide()
 	_update_animation()
 
+
 func _change_state(new_state: State):
 	if current_state == new_state: return
 
-	# --- LÓGICA DE DANÇA: DESLIGAR ---
-	# Se o estado anterior era TRABALHANDO, paramos a dança.
-	if current_state == State.TRABALHANDO:
+	# MODIFICADO: Limpa os efeitos da dança ao sair de QUALQUER estado de dança
+	if current_state == State.TRABALHANDO or current_state == State.REAGINDO_AO_JOGADOR:
 		work_turn_timer.stop()
-		animated_sprite.position = Vector2.ZERO # Reseta a posição do sprite
-		animated_sprite.speed_scale = 1.0 # Volta a velocidade da animação ao normal
+		animated_sprite.position = Vector2.ZERO
+		animated_sprite.speed_scale = 1.0
 
 	_cancel_idle_timer()
 	print(self.name, " mudou do estado ", State.keys()[current_state], " para ", State.keys()[new_state])
 	current_state = new_state
 	
 	match current_state:
-		# ... (outros estados)
-		State.INDO_PARA_O_TRABALHO:
-			show() 
-			nav_agent.target_position = work_position
-		
-		# --- LÓGICA DE DANÇA: LIGAR ---
 		State.TRABALHANDO:
-			# Ao chegar no trabalho, começa a dançar.
-			animated_sprite.play("walk") # Ou "dance", se você tiver essa animação
+			animated_sprite.play("walk") # Ou "dance_work"
 			animated_sprite.speed_scale = dance_animation_speed
-			_on_work_turn_timer_timeout() # Chama uma vez para definir a direção inicial
+			_on_work_turn_timer_timeout()
 
-		State.EM_CASA:
-			hide()
+		# ADICIONADO: Lógica para o novo estado de interação
+		State.REAGINDO_AO_JOGADOR:
+			# Crie uma animação chamada "dance" no seu AnimatedSprite2D
+			animated_sprite.play("dance")
+			animated_sprite.speed_scale = dance_animation_speed
+			_on_work_turn_timer_timeout() # Reutiliza o timer para virar
+
 		# ... (o resto dos estados permanece o mesmo)
 		State.SAINDO_DE_CASA:
-			global_position = home_position
-			show()
-			nav_agent.target_position = outside_position
+			global_position = home_position; show(); nav_agent.target_position = outside_position
 		State.INDO_PARA_CASA:
 			nav_agent.target_position = home_position
+		State.INDO_PARA_O_TRABALHO:
+			show(); nav_agent.target_position = work_position
 		State.PASSEANDO:
 			_wander()
 		State.OCIOSO:
-			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
-			_idle_timer.timeout.connect(_on_idle_timeout)
+			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0)); _idle_timer.timeout.connect(_on_idle_timeout)
+		State.EM_CASA:
+			hide()
 
 
-# --- LÓGICA DE DANÇA: NOVAS FUNÇÕES ---
-func _on_work_turn_timer_timeout() -> void:
-	# Lógica para virar o personagem aleatoriamente
-	var random_direction = randi() % 2
-	if random_direction == 0:
-		animated_sprite.flip_h = true
-	else:
-		animated_sprite.flip_h = false
-	work_turn_timer.wait_time = randf_range(min_turn_time, max_turn_time)
-	work_turn_timer.start()
+# --- FUNÇÕES DE INTERAÇÃO (PREENCHIDAS) ---
+
+func _on_area_2d_mouse_entered():
+	# Não interrompe o NPC se ele estiver ocupado indo para casa ou já em casa
+	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
+		return
+		
+	# Guarda na "memória" o que o NPC estava fazendo
+	_state_before_interaction = current_state
+	# Muda para o novo estado de reação
+	_change_state(State.REAGINDO_AO_JOGADOR)
+
+
+func _on_area_2d_mouse_exited():
+	# Só faz algo se o NPC estiver no estado de reação
+	if current_state == State.REAGINDO_AO_JOGADOR:
+		# Volta a fazer o que estava fazendo antes
+		_change_state(_state_before_interaction)
+
+
+# --- LÓGICA DE DANÇA EXTRAÍDA PARA UMA FUNÇÃO PRÓPRIA ---
+func _perform_dance_shake(delta):
+	_time_passed += delta
+	var offset_x = _noise.get_noise_2d(_time_passed * 5.0, 0) * shake_intensity
+	var offset_y = _noise.get_noise_2d(0, _time_passed * 5.0) * shake_intensity
+	animated_sprite.position = Vector2(offset_x, offset_y)
 
 
 # --- O resto das funções permanece o mesmo ---
-# (Cole aqui as suas funções _update_schedule, _on_target_reached, _update_animation,
-# _wander, _on_idle_timeout, _cancel_idle_timer e as de save/load)
+func _on_work_turn_timer_timeout():
+	var random_direction = randi() % 2
+	if random_direction == 0: animated_sprite.flip_h = true
+	else: animated_sprite.flip_h = false
+	work_turn_timer.wait_time = randf_range(min_turn_time, max_turn_time)
+	work_turn_timer.start()
 func _update_schedule():
+	# IMPORTANTE: Não deixa a rotina automática interromper a interação do jogador
+	if current_state == State.REAGINDO_AO_JOGADOR:
+		return
 	var current_hour = WorldTimeManager.get_current_hour()
 	if WorldTimeManager.is_night():
 		if current_state != State.EM_CASA and current_state != State.INDO_PARA_CASA: _change_state(State.INDO_PARA_CASA)

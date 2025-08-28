@@ -1,13 +1,7 @@
-[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://c6cvb7ix3k63a"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://c6cvb7ix3k63a"]
 
 [ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_7v26i"]
 [ext_resource type="Texture2D" uid="uid://dxqr1pveiek1y" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand-sheet.png" id="1_si36a"]
-
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_j0i6i"]
-vertices = PackedVector2Array(80, 80, -80, 80, -80, -80, 80, -80)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-80, -80, -80, 80, 80, 80, 80, -80)])
-agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0i6i"]
 texture = ExtResource("1_si36a")
@@ -23,7 +17,6 @@ texture_region_size = Vector2i(160, 160)
 1:2/0/terrains_peering_bit/top_left_corner = 1
 1:2/0/terrains_peering_bit/top_side = 1
 1:2/0/terrains_peering_bit/top_right_corner = 1
-1:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_j0i6i")
 0:1/0 = 0
 2:1/0 = 0
 1:1/0 = 0
@@ -32,12 +25,6 @@ texture_region_size = Vector2i(160, 160)
 2:0/0 = 0
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(70, -80, 80, -80, 80, 80, 69.5, 80)
 0:0/0 = 0
-
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_si36a"]
-vertices = PackedVector2Array(80, 80, -80, 80, -80, -80, 80, -80)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-80, 80, -80, -80, 80, -80, 80, 80)])
-agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7v26i"]
 texture = ExtResource("1_7v26i")
@@ -77,7 +64,6 @@ texture_region_size = Vector2i(160, 160)
 2:2/0/terrains_peering_bit/top_left_corner = 0
 2:2/0/terrains_peering_bit/top_side = 0
 2:2/0/terrains_peering_bit/top_right_corner = 0
-2:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_si36a")
 
 [resource]
 tile_size = Vector2i(160, 160)
