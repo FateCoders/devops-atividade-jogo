@@ -41,10 +41,8 @@ size = Vector2(121.5, 42)
 script = ExtResource("1_dc5lp")
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
-z_index = 2
-position = Vector2(-1, -98)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
-animation = &"idle"
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 show_behind_parent = true
@@ -52,4 +50,3 @@ position = Vector2(-5.25, -12)
 shape = SubResource("RectangleShape2D_lx0wd")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-target_desired_distance = 20.0

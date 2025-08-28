@@ -9,7 +9,8 @@ extends Camera2D
 @export var max_zoom: float = 3.5
 
 @export_category("Limites do Mundo")
-@export var tilemap_node: NodePath
+## Arraste e solte o seu nó TileMapLayer aqui.
+@export var tilemap_layer_node: NodePath
 
 var world_limits: Rect2
 
@@ -18,14 +19,36 @@ func _ready() -> void:
 	zoom = Vector2(min_zoom, min_zoom)
 	await owner.ready
 	
-	var map: TileMap = get_node_or_null(tilemap_node)
-	var used_rect: Rect2i = map.get_used_rect()
-	var tile_size: Vector2i = map.tile_set.tile_size
+	# --- LÓGICA ATUALIZADA ---
 	
+	# 1. Pega o nó TileMapLayer a partir do caminho que você definiu no Editor.
+	var layer: TileMapLayer = get_node_or_null(tilemap_layer_node)
+	
+	# Verificação de segurança: garante que a camada foi atribuída.
+	if not layer:
+		printerr("Câmera 2D: O nó TileMapLayer não foi atribuído no Inspetor!")
+		return
+
+	# 2. Pega o nó TileMap pai para acessar o TileSet.
+	var tilemap: TileMap = layer.get_parent() as TileMap
+
+	# Verificação de segurança: garante que a camada é filha de um TileMap.
+	if not tilemap:
+		printerr("Câmera 2D: A camada atribuída não é filha de um nó TileMap!")
+		return
+
+	# 3. get_used_rect() é chamado diretamente na CAMADA (layer).
+	var used_rect: Rect2i = layer.get_used_rect()
+	
+	# 4. O tile_size é pego a partir do TileSet do PAI (tilemap).
+	var tile_size: Vector2i = tilemap.tile_set.tile_size
+	
+	# O cálculo final permanece o mesmo.
 	world_limits = Rect2(
 		used_rect.position * tile_size,
 		used_rect.size * tile_size
 	)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -35,6 +58,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			zoom -= Vector2(zoom_speed, zoom_speed)
 		
 		zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+
 
 func _process(delta: float) -> void:
 	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
