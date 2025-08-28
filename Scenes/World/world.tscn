@@ -245,6 +245,7 @@ work_position = Vector2(0, 400)
 
 [node name="Personagem_2D2" parent="." instance=ExtResource("7_pvt60")]
 position = Vector2(3463, 988)
+move_speed = 200.0
 home_position = Vector2(3500, 850)
 outside_position = Vector2(3500, 1000)
 work_position = Vector2(0, 550)
@@ -271,18 +272,21 @@ navigation_polygon = SubResource("NavigationPolygon_pvt60")
 
 [node name="Personagem_2D3" parent="." instance=ExtResource("13_4pv6w")]
 position = Vector2(2566, 1268)
+move_speed = 200.0
 home_position = Vector2(3500, 850)
 outside_position = Vector2(3500, 1000)
 work_position = Vector2(200, 250)
 
 [node name="Personagem_2D4" parent="." instance=ExtResource("14_dr8i3")]
 position = Vector2(2123, 716)
+move_speed = 200.0
 home_position = Vector2(3500, 850)
 outside_position = Vector2(3500, 1000)
 work_position = Vector2(50, 450)
 
 [node name="Personagem_2D5" parent="." instance=ExtResource("15_7aaxd")]
 position = Vector2(1861, 902)
+move_speed = 200.0
 home_position = Vector2(3500, 850)
 outside_position = Vector2(3500, 1000)
 work_position = Vector2(350, 400)
