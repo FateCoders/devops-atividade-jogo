@@ -1,44 +1,49 @@
 extends Camera2D
 
 @export_category("Movimento (Pan)")
-## A velocidade com que a câmera se move ao usar as teclas W, A, S, D.
 @export var pan_speed: float = 500.0
 
 @export_category("Zoom")
-## A "força" do zoom. Valores menores dão um zoom mais suave.
 @export var zoom_speed: float = 0.1
-## O nível máximo de zoom para dentro (números menores = mais perto).
 @export var min_zoom: float = 0.5
-## O nível máximo de zoom para fora (números maiores = mais longe).
-@export var max_zoom: float = 3.0
+@export var max_zoom: float = 3.5
 
 @export_category("Limites do Mundo")
-## Arraste e solte o seu nó TileMap aqui para que a câmera possa calcular os limites automaticamente.
-@export var tilemap_node: NodePath
+## Arraste e solte o seu nó TileMapLayer aqui.
+@export var tilemap_layer_node: NodePath
 
-# Esta variável não é mais exportada. Será calculada no _ready().
 var world_limits: Rect2
 
 
 func _ready() -> void:
-	# --- NOVA LÓGICA PARA DEFINIR LIMITES AUTOMATICAMENTE ---
-	
-	# Espera até que o dono do nó (a cena principal) esteja pronto.
-	# Isso garante que o TileMap já exista na árvore de cena.
+	zoom = Vector2(min_zoom, min_zoom)
 	await owner.ready
 	
-	# Pega o nó TileMap a partir do caminho que você definiu no Editor.
-	var map: TileMap = get_node_or_null(tilemap_node)
+	# --- LÓGICA ATUALIZADA ---
 	
-	# Verifica se o TileMap foi encontrado.
+	# 1. Pega o nó TileMapLayer a partir do caminho que você definiu no Editor.
+	var layer: TileMapLayer = get_node_or_null(tilemap_layer_node)
 	
-	# get_used_rect() retorna um retângulo com as células usadas no TileMap.
-	var used_rect: Rect2i = map.get_used_rect()
+	# Verificação de segurança: garante que a camada foi atribuída.
+	if not layer:
+		printerr("Câmera 2D: O nó TileMapLayer não foi atribuído no Inspetor!")
+		return
+
+	# 2. Pega o nó TileMap pai para acessar o TileSet.
+	var tilemap: TileMap = layer.get_parent() as TileMap
+
+	# Verificação de segurança: garante que a camada é filha de um TileMap.
+	if not tilemap:
+		printerr("Câmera 2D: A camada atribuída não é filha de um nó TileMap!")
+		return
+
+	# 3. get_used_rect() é chamado diretamente na CAMADA (layer).
+	var used_rect: Rect2i = layer.get_used_rect()
 	
-	# Pega o tamanho de cada tile (célula) do TileSet.
-	var tile_size: Vector2i = map.tile_set.tile_size
+	# 4. O tile_size é pego a partir do TileSet do PAI (tilemap).
+	var tile_size: Vector2i = tilemap.tile_set.tile_size
 	
-	# Calcula o retângulo de limites do mundo em pixels.
+	# O cálculo final permanece o mesmo.
 	world_limits = Rect2(
 		used_rect.position * tile_size,
 		used_rect.size * tile_size
@@ -46,7 +51,6 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# A lógica de zoom com a roda do mouse permanece a mesma.
 	if event is InputEventMouseButton:
 		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			zoom += Vector2(zoom_speed, zoom_speed)
@@ -57,17 +61,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
-	# --- LÓGICA DE MOVIMENTO COM TECLADO (permanece a mesma) ---
+	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	
-	# Pega a direção das teclas (W,A,S,D e setas) em um vetor normalizado.
-	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s") # Nota: Corrigi para os inputs padrão.
-	
-	# Aplica o movimento à posição da câmera.
 	position += direction * pan_speed * delta
 	
-	# --- LÓGICA DE LIMITES DO MUNDO (agora usa os limites dinâmicos) ---
-	
-	# Só aplica os limites se eles foram calculados com sucesso.
 	if world_limits:
 		var viewport_rect = get_viewport_rect()
 		var viewport_half_size = viewport_rect.size * zoom / 2.0

@@ -37,12 +37,12 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
 size = Vector2(111, 34.5)
 
-[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens"]]
+[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 script = ExtResource("1_dc5lp")
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
-z_index = 2
-position = Vector2(-1, -98)
+z_index = 1
+position = Vector2(8, -107)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"idle"
 
@@ -50,3 +50,5 @@ animation = &"idle"
 show_behind_parent = true
 position = Vector2(0, -15.75)
 shape = SubResource("RectangleShape2D_lx0wd")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
