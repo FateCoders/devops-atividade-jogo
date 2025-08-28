@@ -14,5 +14,6 @@ func _on_button_pressed(_button: Button) -> void:
 			hide()
 			
 		"MenuButton":
+			SaveManager.save_game()
 			get_tree().paused = false
 			get_tree().change_scene_to_file("res://Scenes/UI/main_menu.tscn")
