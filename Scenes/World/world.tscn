@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=24 format=4 uid="uid://bofjyi7d5qug8"]
 
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
 [ext_resource type="Texture2D" uid="uid://baphvn6xkhi6h" path="res://Assets/Sprites/Exported/Props/Nature/Grass/grass-flower-sheet.png" id="2_3rhlx"]
@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://crns310gb4aew" path="res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn" id="7_y0d6x"]
 [ext_resource type="Script" uid="uid://bi2agvatio3kw" path="res://Scripts/Levels/world_camera.gd" id="10_ugf0j"]
 [ext_resource type="Script" uid="uid://cajh6ojms2bej" path="res://Scripts/UI/canvas_modulate.gd" id="11_0ph6x"]
+[ext_resource type="PackedScene" uid="uid://b0esqp3bh0flb" path="res://Scenes/Characters/personagem_2d2.tscn" id="13_4pv6w"]
+[ext_resource type="PackedScene" uid="uid://q4ipb21urp0b" path="res://Scenes/Characters/personagem_2d4.tscn" id="14_dr8i3"]
+[ext_resource type="PackedScene" uid="uid://cq15gt6ql8jr" path="res://Scenes/Characters/personagem_2d3.tscn" id="15_7aaxd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vadfg"]
 texture = ExtResource("2_3rhlx")
@@ -241,11 +244,10 @@ outside_position = Vector2(750, 2300)
 work_position = Vector2(0, 400)
 
 [node name="Personagem_2D2" parent="." instance=ExtResource("7_pvt60")]
-position = Vector2(3457, 1269)
-move_speed = 200.0
-home_position = Vector2(3500, 860)
+position = Vector2(3463, 988)
+home_position = Vector2(3500, 850)
 outside_position = Vector2(3500, 1000)
-work_position = Vector2(350, 450)
+work_position = Vector2(0, 550)
 
 [node name="StaticBody2D" parent="." instance=ExtResource("5_7staa")]
 position = Vector2(1316, 1319)
@@ -266,3 +268,21 @@ script = ExtResource("11_0ph6x")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 position = Vector2(0, 17)
 navigation_polygon = SubResource("NavigationPolygon_pvt60")
+
+[node name="Personagem_2D3" parent="." instance=ExtResource("13_4pv6w")]
+position = Vector2(2566, 1268)
+home_position = Vector2(3500, 850)
+outside_position = Vector2(3500, 1000)
+work_position = Vector2(200, 250)
+
+[node name="Personagem_2D4" parent="." instance=ExtResource("14_dr8i3")]
+position = Vector2(2123, 716)
+home_position = Vector2(3500, 850)
+outside_position = Vector2(3500, 1000)
+work_position = Vector2(50, 450)
+
+[node name="Personagem_2D5" parent="." instance=ExtResource("15_7aaxd")]
+position = Vector2(1861, 902)
+home_position = Vector2(3500, 850)
+outside_position = Vector2(3500, 1000)
+work_position = Vector2(350, 400)
