@@ -2,41 +2,48 @@ extends Node
 
 signal period_changed(period_name: String)
 
-@export var day_length_in_seconds: float = 120.0 # 120 segundos para um dia completo
+@export var day_length_in_seconds: float = 120.0 # Tempo para um dia completo (em segundos)
 
-@export var night_starts_at: float = 20.0 # 8 PM
-@export var day_starts_at: float = 6.0  # 6 AM
+@export var day_starts_at: float = 6.0    # 06:00
+@export var evening_starts_at: float = 17.0 # 17:00
+@export var night_starts_at: float = 20.0  # 20:00
 
-var _current_hour: float = 12.0 # Começa ao meio-dia
+var _current_hour: float = 16.0 # Começa ao meio-dia
 var _current_period: String = "DAY"
 
 
-# Em WorldTimeManager.gd
+func _process(delta: float) -> void:
+	var time_speed := 24.0 / day_length_in_seconds
+	_current_hour = fmod(_current_hour + delta * time_speed, 24.0)
 
-func _process(delta: float):
-	var time_speed = 24.0 / day_length_in_seconds
-	
-	_current_hour += delta * time_speed
-	
-	_current_hour = fmod(_current_hour, 24.0)
-	
-	var previous_period = _current_period
-	if _current_hour >= night_starts_at or _current_hour < day_starts_at:
-		_current_period = "NIGHT"
-	else:
-		_current_period = "DAY"
-		
+	var previous_period := _current_period
+	_current_period = _determine_period(_current_hour)
+
 	if _current_period != previous_period:
-		# --- ADICIONADO: O ESPIÃO DO RELÓGIO ---
-		print("!!! RELÓGIO MUNDIAL: Enviando sinal de '", _current_period, "' na hora ", _current_hour)
+		print("⏰ RELÓGIO MUNDIAL: Mudança para '", _current_period, "' às ", snapped(_current_hour, 0.01))
 		period_changed.emit(_current_period)
+
+
+func _determine_period(hour: float) -> String:
+	if hour >= night_starts_at or hour < day_starts_at:
+		return "NIGHT"
+	elif hour >= evening_starts_at:
+		return "EVENING"
+	else:
+		return "DAY"
 
 
 func get_current_hour() -> float:
 	return _current_hour
 
+
 func is_day() -> bool:
 	return _current_period == "DAY"
+
+
+func is_evening() -> bool:
+	return _current_period == "EVENING"
+
 
 func is_night() -> bool:
 	return _current_period == "NIGHT"
