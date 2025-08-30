@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://b5j8ot3nywmad"
-path="res://.godot/imported/galhos.mp3-6c4ab37bd436268302eb01380d6e1c16.mp3str"
+path="res://.godot/imported/galhos.mp3-e198f5780c6baa7265bce1cd3e2ae63a.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/galhos.mp3"
-dest_files=["res://.godot/imported/galhos.mp3-6c4ab37bd436268302eb01380d6e1c16.mp3str"]
+source_file="res://Assets/Audio/SFX/galhos.mp3"
+dest_files=["res://.godot/imported/galhos.mp3-e198f5780c6baa7265bce1cd3e2ae63a.mp3str"]
 
 [params]
 

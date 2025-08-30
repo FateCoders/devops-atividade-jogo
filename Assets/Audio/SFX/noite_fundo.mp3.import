@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://ct6ir5fca2h31"
-path="res://.godot/imported/noite_fundo.mp3-859eb9c1c22f7d6274393e8ac628967d.mp3str"
+path="res://.godot/imported/noite_fundo.mp3-78d0862c562b1c470cdc93ebc46689af.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/noite_fundo.mp3"
-dest_files=["res://.godot/imported/noite_fundo.mp3-859eb9c1c22f7d6274393e8ac628967d.mp3str"]
+source_file="res://Assets/Audio/SFX/noite_fundo.mp3"
+dest_files=["res://.godot/imported/noite_fundo.mp3-78d0862c562b1c470cdc93ebc46689af.mp3str"]
 
 [params]
 
