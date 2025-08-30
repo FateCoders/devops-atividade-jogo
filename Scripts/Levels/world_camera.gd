@@ -1,49 +1,42 @@
 extends Camera2D
 
 @export_category("Movimento (Pan)")
-@export var pan_speed: float = 500.0
+@export var pan_speed: float = 2000
+@export var mouse_speed_multiplier: int = 8
 
 @export_category("Zoom")
-@export var zoom_speed: float = 0.1
-@export var min_zoom: float = 0.5
-@export var max_zoom: float = 3.5
+@export var zoom_speed: float = 0.05
+@export var min_zoom: float = 0.01
+@export var max_zoom: float = 3
+@export var initial_zoom: float = 0.3
 
 @export_category("Limites do Mundo")
-## Arraste e solte o seu nó TileMapLayer aqui.
 @export var tilemap_layer_node: NodePath
 
 var world_limits: Rect2
 
 
+# Variáveis para controle do "arrastar com mouse"
+var dragging: bool = false
+var last_mouse_position: Vector2
+
 func _ready() -> void:
-	zoom = Vector2(min_zoom, min_zoom)
+	zoom = Vector2(initial_zoom, initial_zoom)
 	await owner.ready
-	
-	# --- LÓGICA ATUALIZADA ---
-	
-	# 1. Pega o nó TileMapLayer a partir do caminho que você definiu no Editor.
+
 	var layer: TileMapLayer = get_node_or_null(tilemap_layer_node)
-	
-	# Verificação de segurança: garante que a camada foi atribuída.
 	if not layer:
 		printerr("Câmera 2D: O nó TileMapLayer não foi atribuído no Inspetor!")
 		return
 
-	# 2. Pega o nó TileMap pai para acessar o TileSet.
 	var tilemap: TileMap = layer.get_parent() as TileMap
-
-	# Verificação de segurança: garante que a camada é filha de um TileMap.
 	if not tilemap:
 		printerr("Câmera 2D: A camada atribuída não é filha de um nó TileMap!")
 		return
 
-	# 3. get_used_rect() é chamado diretamente na CAMADA (layer).
 	var used_rect: Rect2i = layer.get_used_rect()
-	
-	# 4. O tile_size é pego a partir do TileSet do PAI (tilemap).
 	var tile_size: Vector2i = tilemap.tile_set.tile_size
-	
-	# O cálculo final permanece o mesmo.
+
 	world_limits = Rect2(
 		used_rect.position * tile_size,
 		used_rect.size * tile_size
@@ -51,20 +44,32 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Zoom com scroll
 	if event is InputEventMouseButton:
-		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			zoom += Vector2(zoom_speed, zoom_speed)
-		if event.is_pressed() and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			zoom -= Vector2(zoom_speed, zoom_speed)
-		
+		if event.is_pressed():
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				zoom += Vector2(zoom_speed, zoom_speed)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				zoom -= Vector2(zoom_speed, zoom_speed)
 		zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
+		# Início do arraste com botão esquerdo
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.is_pressed()
+			last_mouse_position = get_viewport().get_mouse_position()
 
+	# Durante o arraste
+	if event is InputEventMouseMotion and dragging:
+		var mouse_delta = event.relative
+		position -= mouse_delta * zoom * mouse_speed_multiplier  # multiplica pelo zoom para ter sensação de "mundo"
+	
 func _process(delta: float) -> void:
+	# Movimento com teclado
+
 	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
-	
 	position += direction * pan_speed * delta
-	
+
+	# Limites do mundo
 	if world_limits:
 		var viewport_rect = get_viewport_rect()
 		var viewport_half_size = viewport_rect.size * zoom / 2.0

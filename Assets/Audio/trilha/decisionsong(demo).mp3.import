@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bfghje1rxeidt"
-path="res://.godot/imported/decisionsong(demo).mp3-1fa5b23275ddf2dad1e6944adf5b8949.mp3str"
+path="res://.godot/imported/decisionsong(demo).mp3-ff633a9d03421ba58f773ec4ae82b43f.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/decisionsong(demo).mp3"
-dest_files=["res://.godot/imported/decisionsong(demo).mp3-1fa5b23275ddf2dad1e6944adf5b8949.mp3str"]
+source_file="res://Assets/Audio/trilha/decisionsong(demo).mp3"
+dest_files=["res://.godot/imported/decisionsong(demo).mp3-ff633a9d03421ba58f773ec4ae82b43f.mp3str"]
 
 [params]
 
