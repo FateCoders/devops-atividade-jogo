@@ -98,4 +98,4 @@ color = Color(1, 0.440904, 0.34387, 1)
 energy = 1.5
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_dh50r")
-texture_scale = 4.0
+texture_scale = 6.0
