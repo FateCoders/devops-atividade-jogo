@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bb1v7lq8egjws"
-path="res://.godot/imported/ganhar.mp3-2ff8f2f19b3e5a5cf3ea38e76d22774e.mp3str"
+path="res://.godot/imported/ganhar.mp3-4bc10662de73f8001e5d6bb42a2d980d.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/ganhar.mp3"
-dest_files=["res://.godot/imported/ganhar.mp3-2ff8f2f19b3e5a5cf3ea38e76d22774e.mp3str"]
+source_file="res://Assets/Audio/SFX/ganhar.mp3"
+dest_files=["res://.godot/imported/ganhar.mp3-4bc10662de73f8001e5d6bb42a2d980d.mp3str"]
 
 [params]
 

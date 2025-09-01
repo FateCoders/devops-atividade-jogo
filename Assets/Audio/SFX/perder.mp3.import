@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bjke0b2qu7k3h"
-path="res://.godot/imported/perder.mp3-2fe8f78c067cae0b2190e0a1b63d983c.mp3str"
+path="res://.godot/imported/perder.mp3-21793cb00f9ea16e2850a8762da4f180.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/perder.mp3"
-dest_files=["res://.godot/imported/perder.mp3-2fe8f78c067cae0b2190e0a1b63d983c.mp3str"]
+source_file="res://Assets/Audio/SFX/perder.mp3"
+dest_files=["res://.godot/imported/perder.mp3-21793cb00f9ea16e2850a8762da4f180.mp3str"]
 
 [params]
 

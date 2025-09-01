@@ -254,8 +254,10 @@ position = Vector2(3534, 191)
 position = Vector2(182, 385)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(2590, 555)
+position = Vector2(2612, 694)
 script = ExtResource("10_ugf0j")
+initial_zoom = 1.0
+world_limits = Rect2(-1000, -700, 5500, 3000)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 script = ExtResource("11_0ph6x")
