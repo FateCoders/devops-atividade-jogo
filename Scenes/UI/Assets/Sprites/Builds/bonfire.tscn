@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://crns310gb4aew"]
+[gd_scene load_steps=15 format=3 uid="uid://crns310gb4aew"]
 
 [ext_resource type="Script" uid="uid://bj5s1nss6m4qc" path="res://Scripts/Builds/builds.gd" id="1_n1q47"]
 [ext_resource type="Texture2D" uid="uid://d4kvdk2510a4v" path="res://Assets/Sprites/Exported/Props/Builds/Bonfires/bonfire-01.png" id="2_dh50r"]
@@ -70,6 +70,15 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Gradient" id="Gradient_n1q47"]
+offsets = PackedFloat32Array(0, 0.701299, 0.727273)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dh50r"]
+gradient = SubResource("Gradient_n1q47")
+fill = 1
+fill_from = Vector2(0.504587, 0.522936)
+
 [node name="Node2D" type="Area2D"]
 script = ExtResource("1_n1q47")
 
@@ -81,3 +90,12 @@ shape = SubResource("RectangleShape2D_i7jju")
 sprite_frames = SubResource("SpriteFrames_wd02g")
 animation = &"lit"
 frame_progress = 0.0883456
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(2, 10)
+scale = Vector2(1, 0.78125)
+color = Color(1, 0.440904, 0.34387, 1)
+energy = 1.5
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_dh50r")
+texture_scale = 4.0

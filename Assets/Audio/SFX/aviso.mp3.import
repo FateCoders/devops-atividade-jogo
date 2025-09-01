@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://7yiib75ekeu8"
-path="res://.godot/imported/aviso.mp3-fa0af3b4d112a566503558a84610619d.mp3str"
+path="res://.godot/imported/aviso.mp3-9d63017e20321bdf032bdc77b18c7aea.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/aviso.mp3"
-dest_files=["res://.godot/imported/aviso.mp3-fa0af3b4d112a566503558a84610619d.mp3str"]
+source_file="res://Assets/Audio/SFX/aviso.mp3"
+dest_files=["res://.godot/imported/aviso.mp3-9d63017e20321bdf032bdc77b18c7aea.mp3str"]
 
 [params]
 

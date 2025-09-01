@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://ffh5f43qoqvd"
-path="res://.godot/imported/andar.mp3-307eef7ee0a3aaa7d8ffce0ddf69ce0a.mp3str"
+path="res://.godot/imported/andar.mp3-41c89e84713b9285e9c7e5eb4a31c8c3.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/andar.mp3"
-dest_files=["res://.godot/imported/andar.mp3-307eef7ee0a3aaa7d8ffce0ddf69ce0a.mp3str"]
+source_file="res://Assets/Audio/SFX/andar.mp3"
+dest_files=["res://.godot/imported/andar.mp3-41c89e84713b9285e9c7e5eb4a31c8c3.mp3str"]
 
 [params]
 

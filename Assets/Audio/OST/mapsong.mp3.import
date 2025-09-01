@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bbshxbwakf53v"
-path="res://.godot/imported/mapsong.mp3-758c268c3c177611385d77ab12bdfdd2.mp3str"
+path="res://.godot/imported/mapsong.mp3-e8ebe7d77d59d9c7fa55fa7e4196768c.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/trilha/mapsong.mp3"
-dest_files=["res://.godot/imported/mapsong.mp3-758c268c3c177611385d77ab12bdfdd2.mp3str"]
+source_file="res://Assets/Audio/OST/mapsong.mp3"
+dest_files=["res://.godot/imported/mapsong.mp3-e8ebe7d77d59d9c7fa55fa7e4196768c.mp3str"]
 
 [params]
 
