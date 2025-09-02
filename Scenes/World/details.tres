@@ -42,6 +42,18 @@ texture = ExtResource("2_6i1b7")
 20:48/0/terrains_peering_bit/top_left_corner = 4
 20:48/0/terrains_peering_bit/top_side = 4
 20:48/0/terrains_peering_bit/top_right_corner = 4
+25:66/size_in_atlas = Vector2i(7, 10)
+25:66/0 = 0
+25:66/0/terrain_set = 2
+25:66/0/terrain = 5
+25:66/0/terrains_peering_bit/right_side = 5
+25:66/0/terrains_peering_bit/bottom_right_corner = 5
+25:66/0/terrains_peering_bit/bottom_side = 5
+25:66/0/terrains_peering_bit/bottom_left_corner = 5
+25:66/0/terrains_peering_bit/left_side = 5
+25:66/0/terrains_peering_bit/top_left_corner = 5
+25:66/0/terrains_peering_bit/top_side = 5
+25:66/0/terrains_peering_bit/top_right_corner = 5
 
 [resource]
 physics_layer_0/collision_layer = 1

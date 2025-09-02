@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://dldw0tvmu5lqa"]
+
+[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_0ao5h"]
+[ext_resource type="Texture2D" uid="uid://coyrlfi73no8l" path="res://Assets/Sprites/Exported/Citizens/static/citizen_09.png" id="2_0ao5h"]
+[ext_resource type="Texture2D" uid="uid://b3s2ijhoxv206" path="res://Assets/Sprites/Exported/Citizens/static/citizen_09-sprite-sheet.png" id="3_op7hw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wim6"]
+atlas = ExtResource("2_0ao5h")
+region = Rect2(0, 0, 170, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8hxp"]
+atlas = ExtResource("3_op7hw")
+region = Rect2(0, 0, 165, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asjev"]
+atlas = ExtResource("3_op7hw")
+region = Rect2(165, 0, 165, 220)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lx0wd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wim6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8hxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_asjev")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
+size = Vector2(119, 53)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
+size = Vector2(58.3874, 60)
+
+[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
+z_index = 1
+position = Vector2(2, 1)
+collision_layer = 129
+collision_mask = 255
+script = ExtResource("1_0ao5h")
+
+[node name="Texture" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, -107)
+sprite_frames = SubResource("SpriteFrames_lx0wd")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+position = Vector2(6.5, -30.5)
+shape = SubResource("RectangleShape2D_lx0wd")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WorkTurnTimer" type="Timer" parent="."]
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(6, -30)
+scale = Vector2(2.158, 1)
+shape = SubResource("RectangleShape2D_y3i7a")
+debug_color = Color(0, 0.632905, 0.446382, 0.42)
+
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]
