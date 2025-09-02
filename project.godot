@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 SaveManager="*res://Autoload/SaveManager.gd"
 MusicManager="*res://Scenes/Music/music_manager.tscn"
 WorldTimeManager="*res://Autoload/WorldTimeManager.gd"
+QuilomboManager="*res://Autoload/QuilomboManager.gd"
 
 [config]
 

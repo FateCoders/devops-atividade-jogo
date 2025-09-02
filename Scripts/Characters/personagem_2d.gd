@@ -1,20 +1,13 @@
 # NPC.gd
 extends CharacterBody2D
+class_name NPC 
 
-# ADICIONADO: Novo estado para a interação com o mouse
 enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PARA_O_TRABALHO, TRABALHANDO, REAGINDO_AO_JOGADOR }
 
-@export_category("Comportamento")
+@export_category("Comportamento Geral")
 @export var move_speed: float = 50.0
-@export var home_position: Vector2
-@export var outside_position: Vector2
 @export var wander_range: float = 200.0
 @export var arrival_distance: float = 5.0
-
-@export_category("Trabalho")
-@export var work_position: Vector2
-@export var work_starts_at: float = 8.0  # 8 AM
-@export var work_ends_at: float = 17.0 # 5 PM
 
 @export_category("Dança de Trabalho")
 @export var dance_animation_speed: float = 0.7
@@ -24,18 +17,19 @@ enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PA
 
 @export_category("Nós")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
-@onready var animated_sprite: AnimatedSprite2D = $Texture 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var work_turn_timer: Timer = $WorkTurnTimer
 
-var current_state: State = State.EM_CASA
-# ADICIONADO: Variável de "memória" para o NPC
-var _state_before_interaction: State
+# Variáveis dinâmicas (atribuídas pelo QuilomboManager)
+var house_node: House
+var work_node: Node 
 
+var current_state: State = State.EM_CASA
+var _state_before_interaction: State
 var _idle_timer = null
 var _schedule_check_timer: Timer
 var _noise = FastNoiseLite.new()
 var _time_passed: float = 0.0
-
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -48,26 +42,23 @@ func _ready():
 	_schedule_check_timer.timeout.connect(_update_schedule)
 	add_child(_schedule_check_timer)
 	_schedule_check_timer.start()
+
 	await get_tree().physics_frame
 	_update_schedule()
 
-
 func _physics_process(delta):
-	# MODIFICADO: A dança (seja do trabalho ou da interação) agora tem prioridade.
-	if current_state == State.TRABALHANDO or current_state == State.REAGINDO_AO_JOGADOR:
+	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		_perform_dance_shake(delta)
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	# Outros estados "parados"
 	if current_state in [State.OCIOSO, State.EM_CASA]:
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
 		move_and_slide()
 		_update_animation()
 		return
 
-	# Lógica de movimento para os estados restantes
 	var final_destination = nav_agent.get_final_position()
 	if global_position.distance_to(final_destination) < arrival_distance:
 		_on_target_reached()
@@ -83,8 +74,7 @@ func _physics_process(delta):
 func _change_state(new_state: State):
 	if current_state == new_state: return
 
-	# MODIFICADO: Limpa os efeitos da dança ao sair de QUALQUER estado de dança
-	if current_state == State.TRABALHANDO or current_state == State.REAGINDO_AO_JOGADOR:
+	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
 		animated_sprite.speed_scale = 1.0
@@ -94,87 +84,94 @@ func _change_state(new_state: State):
 	current_state = new_state
 	
 	match current_state:
-		State.TRABALHANDO:
-			animated_sprite.play("walk") # Ou "dance_work"
-			animated_sprite.speed_scale = dance_animation_speed
-			_on_work_turn_timer_timeout()
-
-		# ADICIONADO: Lógica para o novo estado de interação
-		State.REAGINDO_AO_JOGADOR:
-			# Crie uma animação chamada "dance" no seu AnimatedSprite2D
-			animated_sprite.play("dance")
-			animated_sprite.speed_scale = dance_animation_speed
-			_on_work_turn_timer_timeout() # Reutiliza o timer para virar
-
-		# ... (o resto dos estados permanece o mesmo)
 		State.SAINDO_DE_CASA:
-			global_position = home_position; show(); nav_agent.target_position = outside_position
+			if house_node:
+				global_position = house_node.get_door_position()
+				show()
+				nav_agent.target_position = house_node.get_door_position() + Vector2(0, 50)
 		State.INDO_PARA_CASA:
-			nav_agent.target_position = home_position
+			if house_node:
+				nav_agent.target_position = house_node.get_door_position()
 		State.INDO_PARA_O_TRABALHO:
-			show(); nav_agent.target_position = work_position
+			if work_node:
+				show()
+				nav_agent.target_position = work_node.get_available_work_position()
 		State.PASSEANDO:
 			_wander()
+		State.TRABALHANDO:
+			animated_sprite.play("walk")
+			animated_sprite.speed_scale = dance_animation_speed
+			_on_work_turn_timer_timeout()
+		State.REAGINDO_AO_JOGADOR:
+			animated_sprite.play("dance")
+			animated_sprite.speed_scale = dance_animation_speed
+			_on_work_turn_timer_timeout()
 		State.OCIOSO:
-			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0)); _idle_timer.timeout.connect(_on_idle_timeout)
+			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
+			_idle_timer.timeout.connect(_on_idle_timeout)
 		State.EM_CASA:
+			if house_node:
+				global_position = house_node.get_door_position()
 			hide()
 
 
-# --- FUNÇÕES DE INTERAÇÃO (PREENCHIDAS) ---
-
+# --- FUNÇÕES DE INTERAÇÃO ---
 func _on_area_2d_mouse_entered():
-	# Não interrompe o NPC se ele estiver ocupado indo para casa ou já em casa
-	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
-		return
-		
-	# Guarda na "memória" o que o NPC estava fazendo
+	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]: return
 	_state_before_interaction = current_state
-	# Muda para o novo estado de reação
 	_change_state(State.REAGINDO_AO_JOGADOR)
 
-
 func _on_area_2d_mouse_exited():
-	# Só faz algo se o NPC estiver no estado de reação
 	if current_state == State.REAGINDO_AO_JOGADOR:
-		# Volta a fazer o que estava fazendo antes
 		_change_state(_state_before_interaction)
 
-
-# --- LÓGICA DE DANÇA EXTRAÍDA PARA UMA FUNÇÃO PRÓPRIA ---
+# --- FUNÇÕES DE COMPORTAMENTO E AUXILIARES ---
 func _perform_dance_shake(delta):
 	_time_passed += delta
 	var offset_x = _noise.get_noise_2d(_time_passed * 5.0, 0) * shake_intensity
 	var offset_y = _noise.get_noise_2d(0, _time_passed * 5.0) * shake_intensity
 	animated_sprite.position = Vector2(offset_x, offset_y)
 
-
-# --- O resto das funções permanece o mesmo ---
 func _on_work_turn_timer_timeout():
 	var random_direction = randi() % 2
 	if random_direction == 0: animated_sprite.flip_h = true
 	else: animated_sprite.flip_h = false
 	work_turn_timer.wait_time = randf_range(min_turn_time, max_turn_time)
 	work_turn_timer.start()
+
 func _update_schedule():
-	# IMPORTANTE: Não deixa a rotina automática interromper a interação do jogador
-	if current_state == State.REAGINDO_AO_JOGADOR:
+	if current_state == State.REAGINDO_AO_JOGADOR: return
+	if not house_node or not work_node:
+		_change_state(State.OCIOSO)
 		return
+
 	var current_hour = WorldTimeManager.get_current_hour()
+	
 	if WorldTimeManager.is_night():
-		if current_state != State.EM_CASA and current_state != State.INDO_PARA_CASA: _change_state(State.INDO_PARA_CASA)
+		if current_state not in [State.EM_CASA, State.INDO_PARA_CASA]:
+			_change_state(State.INDO_PARA_CASA)
 		return
-	if current_hour >= work_starts_at and current_hour < work_ends_at:
-		if current_state != State.TRABALHANDO and current_state != State.INDO_PARA_O_TRABALHO: _change_state(State.INDO_PARA_O_TRABALHO)
-		return
-	if current_state == State.EM_CASA: _change_state(State.SAINDO_DE_CASA)
-	elif current_state == State.TRABALHANDO: _change_state(State.PASSEANDO)
+
+	# Aqui, assumimos que as variáveis de horário de trabalho vêm do nó 'work_node'
+	if work_node.has_method("get_work_schedule"):
+		var schedule = work_node.get_work_schedule() # Exemplo
+		if current_hour >= schedule.start and current_hour < schedule.end:
+			if current_state not in [State.TRABALHANDO, State.INDO_PARA_O_TRABALHO]:
+				_change_state(State.INDO_PARA_O_TRABALHO)
+			return
+	
+	if current_state == State.EM_CASA:
+		_change_state(State.SAINDO_DE_CASA)
+	elif current_state == State.TRABALHANDO:
+		_change_state(State.PASSEANDO)
+
 func _on_target_reached():
 	match current_state:
 		State.PASSEANDO: _change_state(State.OCIOSO)
 		State.INDO_PARA_CASA: _change_state(State.EM_CASA)
 		State.SAINDO_DE_CASA: _change_state(State.PASSEANDO)
 		State.INDO_PARA_O_TRABALHO: _change_state(State.TRABALHANDO)
+
 func _update_animation():
 	if velocity.length() < 10:
 		if animated_sprite.animation != "idle": animated_sprite.play("idle")
@@ -182,18 +179,25 @@ func _update_animation():
 		if animated_sprite.animation != "walk": animated_sprite.play("walk")
 		if velocity.x < 0: animated_sprite.flip_h = true
 		elif velocity.x > 0: animated_sprite.flip_h = false
+
 func _wander():
-	if current_state != State.PASSEANDO: return
+	if current_state != State.PASSEANDO or not house_node: return
+	var wander_base_pos = house_node.get_door_position() + Vector2(0, 50)
 	var random_offset = Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
-	nav_agent.target_position = outside_position + random_offset
+	nav_agent.target_position = wander_base_pos + random_offset
+
 func _on_idle_timeout():
-	if current_state == State.OCIOSO: _change_state(State.PASSEANDO)
+	if current_state == State.OCIOSO:
+		_change_state(State.PASSEANDO)
+
 func _cancel_idle_timer():
 	if _idle_timer != null:
 		_idle_timer.timeout.disconnect(_on_idle_timeout)
 		_idle_timer = null
+
 func get_save_data() -> Dictionary:
 	return {"pos_x": position.x, "pos_y": position.y}
+
 func load_data(data: Dictionary):
 	var loaded_pos_x = data.get("pos_x", position.x)
 	var loaded_pos_y = data.get("pos_y", position.y)

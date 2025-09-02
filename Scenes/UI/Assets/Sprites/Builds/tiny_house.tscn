@@ -11,7 +11,7 @@ size = Vector2(1118.5, 620)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
 size = Vector2(436, 396.5)
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="tiny_house" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]

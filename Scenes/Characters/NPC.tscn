@@ -42,10 +42,9 @@ size = Vector2(55.6089, 42)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
-position = Vector2(2, 1)
 script = ExtResource("1_dc5lp")
 
-[node name="Texture" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
 position = Vector2(8, -107)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
