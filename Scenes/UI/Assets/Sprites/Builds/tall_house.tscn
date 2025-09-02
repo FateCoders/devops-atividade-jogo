@@ -12,6 +12,8 @@ size = Vector2(1740, 579)
 size = Vector2(458, 405)
 
 [node name="StaticBody2D" type="StaticBody2D"]
+z_index = 1
+position = Vector2(-26, 19)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]

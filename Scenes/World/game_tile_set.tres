@@ -1,7 +1,8 @@
-[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://c6cvb7ix3k63a"]
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://c6cvb7ix3k63a"]
 
 [ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_7v26i"]
 [ext_resource type="Texture2D" uid="uid://dxqr1pveiek1y" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand-sheet.png" id="1_si36a"]
+[ext_resource type="Texture2D" uid="uid://bh61wt732te7s" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-tileset.png" id="3_j0i6i"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0i6i"]
 texture = ExtResource("1_si36a")
@@ -65,6 +66,21 @@ texture_region_size = Vector2i(160, 160)
 2:2/0/terrains_peering_bit/top_side = 0
 2:2/0/terrains_peering_bit/top_right_corner = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nw7by"]
+texture = ExtResource("3_j0i6i")
+texture_region_size = Vector2i(160, 160)
+1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 2
+1:1/0/terrains_peering_bit/right_side = 2
+1:1/0/terrains_peering_bit/bottom_right_corner = 2
+1:1/0/terrains_peering_bit/bottom_side = 2
+1:1/0/terrains_peering_bit/bottom_left_corner = 2
+1:1/0/terrains_peering_bit/left_side = 2
+1:1/0/terrains_peering_bit/top_left_corner = 2
+1:1/0/terrains_peering_bit/top_side = 2
+1:1/0/terrains_peering_bit/top_right_corner = 2
+
 [resource]
 tile_size = Vector2i(160, 160)
 physics_layer_0/collision_layer = 1
@@ -78,3 +94,4 @@ terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
 navigation_layer_0/layers = 1
 sources/2 = SubResource("TileSetAtlasSource_7v26i")
 sources/0 = SubResource("TileSetAtlasSource_j0i6i")
+sources/3 = SubResource("TileSetAtlasSource_nw7by")
