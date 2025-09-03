@@ -6,27 +6,42 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1118.5, 620)
+size = Vector2(1121, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(436, 396.5)
+size = Vector2(382, 367)
 
 [node name="StaticBody2D" type="StaticBody2D"]
+scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
-[node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-5.75, 330)
-shape = SubResource("RectangleShape2D_m5062")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite" type="Node2D" parent="."]
 position = Vector2(-9, -4)
+
+[node name="Top" type="Sprite2D" parent="Sprite"]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(0, -316)
 texture = ExtResource("1_f6tn5")
+region_enabled = true
+region_rect = Rect2(0, 0, 1280, 520.4)
+
+[node name="Bottom" type="Sprite2D" parent="Sprite"]
+y_sort_enabled = true
+position = Vector2(0, 323)
+texture = ExtResource("1_f6tn5")
+region_enabled = true
+region_rect = Rect2(0, 521.14, 1280, 758.86)
+
+[node name="MurosCollision" type="CollisionShape2D" parent="."]
+position = Vector2(-8.5, 320)
+shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 script = ExtResource("2_8dv00")
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-17, 470.75)
+position = Vector2(-9, 538.5)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
