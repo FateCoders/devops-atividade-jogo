@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://csgomn55c602"
-path="res://.godot/imported/correr.mp3-aba51d72e403825cc38e79951bc6b259.mp3str"
+path="res://.godot/imported/correr.mp3-7879fc2810e5a94047c38244c0868696.mp3str"
 
 [deps]
 
-source_file="res://Assets/Audio/efeitos/correr.mp3"
-dest_files=["res://.godot/imported/correr.mp3-aba51d72e403825cc38e79951bc6b259.mp3str"]
+source_file="res://Assets/Audio/SFX/correr.mp3"
+dest_files=["res://.godot/imported/correr.mp3-7879fc2810e5a94047c38244c0868696.mp3str"]
 
 [params]
 
