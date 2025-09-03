@@ -8,13 +8,14 @@
 size = Vector2(1721, 562)
 
 [node name="StaticBody2D" type="StaticBody2D"]
+scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(0, -183)
 
 [node name="Top" type="Sprite2D" parent="Sprite"]
-z_index = 1
+z_index = 2
 y_sort_enabled = true
 position = Vector2(1, -283)
 texture = ExtResource("1_dc8wa")
