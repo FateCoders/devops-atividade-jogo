@@ -5,7 +5,6 @@ var all_houses: Array[House] = []
 var all_npcs: Array[Node] = []
 
 # --- FUNÇÃO DE LIMPEZA ---
-## Limpa todos os dados do quilombo atual. Deve ser chamada ao sair para o menu.
 func reset_quilombo_state():
 	print("[QUILOMBO MANAGER] Resetando o estado. Limpando listas de casas e NPCs.")
 	all_houses.clear()

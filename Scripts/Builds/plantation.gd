@@ -5,21 +5,15 @@ class_name Plantation
 @export var npc_scene_to_spawn: PackedScene
 @export var npc_count: int = 2
 
+@export_category("Horário de Trabalho")
+@export var work_starts_at: float = 8.0  # 8 AM
+@export var work_ends_at: float = 17.0 # 5 PM
+
 var workers: Array[Node] = []
 @onready var work_spots: Array[Marker2D] = _get_work_spots()
 
-# --- ADICIONADO: FUNÇÃO DE AUTO-RELATÓRIO ---
 func _ready():
-	print("--- RELATÓRIO DA PLANTAÇÃO ---")
-	print("Eu sou: ", self.name)
-	print("Meu script é: ", get_script().resource_path)
-	if npc_scene_to_spawn:
-		print("Minha cena de NPC para gerar é: ", npc_scene_to_spawn.resource_path)
-	else:
-		print("Minha cena de NPC para gerar é: NULA (VAZIA)")
-	
-	print("Minha contagem de NPCs é: ", npc_count)
-	print("---------------------------------")
+	print("Plantação '", self.name, "' pronta.")
 
 
 func _get_work_spots() -> Array[Marker2D]:

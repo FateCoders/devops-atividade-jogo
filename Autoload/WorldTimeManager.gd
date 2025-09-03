@@ -8,7 +8,7 @@ signal period_changed(period_name: String)
 @export var evening_starts_at: float = 17.0 # 17:00
 @export var night_starts_at: float = 20.0  # 20:00
 
-var _current_hour: float = 16.0 # Começa ao meio-dia
+var _current_hour: float = 6.0 # Começa ao meio-dia
 var _current_period: String = "DAY"
 
 

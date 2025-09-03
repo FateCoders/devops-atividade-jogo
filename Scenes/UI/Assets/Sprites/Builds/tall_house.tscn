@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnsunn3lmjfl"]
+[gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
 
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
 [ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_o6fod"]
@@ -6,7 +6,10 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7sg2r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1560, 550)
+size = Vector2(1721, 527)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
+size = Vector2(407.5, 384.5)
 
 [node name="House" type="StaticBody2D"]
 z_index = 1
@@ -18,8 +21,17 @@ position = Vector2(0, -4)
 texture = ExtResource("1_dc8wa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-21, 345)
+position = Vector2(-17.5, 337.5)
 shape = SubResource("RectangleShape2D_dc8wa")
+
+[node name="EntranceArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
+position = Vector2(-317, 474)
+shape = SubResource("RectangleShape2D_7sg2r")
+debug_color = Color(1.44392e-06, 0.620305, 0.563467, 0.42)
 
 [node name="DoorPosition" type="Marker2D" parent="."]
 position = Vector2(-314, 627)
+
+[connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
