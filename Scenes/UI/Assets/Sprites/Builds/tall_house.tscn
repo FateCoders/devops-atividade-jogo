@@ -1,37 +1,47 @@
-[gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
+[gd_scene load_steps=5 format=3 uid="uid://bnsunn3lmjfl"]
 
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
-[ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_o6fod"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7sg2r"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1718, 559)
+size = Vector2(1721, 562)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(393.75, 382.25)
+size = Vector2(355.21, 363.261)
 
 [node name="House" type="StaticBody2D"]
-z_index = 1
-physics_material_override = SubResource("PhysicsMaterial_7sg2r")
-script = ExtResource("1_o6fod")
+scale = Vector2(0.745267, 0.745267)
+physics_material_override = SubResource("PhysicsMaterial_ooq57")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-19, 353.5)
-shape = SubResource("RectangleShape2D_dc8wa")
+[node name="Sprite" type="Node2D" parent="."]
+position = Vector2(0, -183)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -4)
+[node name="Top" type="Sprite2D" parent="Sprite"]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(1, -283)
 texture = ExtResource("1_dc8wa")
+region_enabled = true
+region_rect = Rect2(0, 0, 1760, 721.303)
+
+[node name="Bottom" type="Sprite2D" parent="Sprite"]
+y_sort_enabled = true
+position = Vector2(1, 355)
+texture = ExtResource("1_dc8wa")
+region_enabled = true
+region_rect = Rect2(0, 722.518, 1760, 557.482)
+
+[node name="MurosCollision" type="CollisionShape2D" parent="."]
+z_as_relative = false
+position = Vector2(-19.5, 171)
+shape = SubResource("RectangleShape2D_dc8wa")
 
 [node name="EntranceArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-323.875, 475.125)
+position = Vector2(-317.152, 298.367)
 shape = SubResource("RectangleShape2D_7sg2r")
-debug_color = Color(1.44392e-06, 0.620305, 0.563467, 0.42)
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-322, 647)
-
-[connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
+position = Vector2(-318, 452)
