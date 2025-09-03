@@ -93,7 +93,7 @@ animation = &"lit"
 frame_progress = 0.0883456
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(2, 10)
+position = Vector2(-5, 10)
 scale = Vector2(1, 0.78125)
 color = Color(1, 0.440904, 0.34387, 1)
 energy = 1.5

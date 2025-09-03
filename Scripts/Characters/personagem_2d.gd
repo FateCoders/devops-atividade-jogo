@@ -36,6 +36,13 @@ var _schedule_check_timer: Timer
 var _noise = FastNoiseLite.new()
 var _time_passed: float = 0.0
 
+# Novas variáveis para recalcular o caminho
+var _repath_timer: Timer
+var _stuck_check_position: Vector2 = Vector2.ZERO
+var _stuck_time: float = 0.0
+const STUCK_THRESHOLD: float = 0.5 # Meio segundo parado é considerado "preso"
+var _is_unstucking: bool = false # Nova variável de controle
+
 #-----------------------------------------------------------------------------
 # FUNÇÕES PRINCIPAIS (INICIALIZAÇÃO E LOOP)
 #-----------------------------------------------------------------------------
@@ -53,42 +60,70 @@ func _ready():
 	add_child(_schedule_check_timer)
 	_schedule_check_timer.start()
 
+	# Timer que força o NPC a recalcular seu caminho periodicamente
+	_repath_timer = Timer.new()
+	_repath_timer.wait_time = 1.0 # Recalcula a cada 1 segundo
+	_repath_timer.autostart = true
+	_repath_timer.timeout.connect(_on_repath_timer_timeout)
+	add_child(_repath_timer)
+
 	await get_tree().physics_frame
 	_update_schedule()
 
 func _physics_process(delta):
-	# Estados "parados" ou com lógica especial (dança) têm prioridade
+	# Se o NPC está em um estado "parado", ele não deve se mover.
 	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+		_stuck_time = 0.0 # Reseta o detector de "preso"
 		if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 			_perform_dance_shake(delta)
-		
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
-		move_and_slide()
-		_update_animation()
-		return
-
-	# Lógica para todos os estados de movimento
-	# Se a navegação terminou (chegou ao destino), processa a chegada.
-	if nav_agent.is_navigation_finished():
-		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
-		_on_target_reached()
+	
+	# Se o NPC está em um estado de movimento...
 	else:
-		# Se não chegou, continua se movendo na direção do próximo ponto do caminho.
-		var next_path_position = nav_agent.get_next_path_position()
-		var direction = global_position.direction_to(next_path_position)
-		velocity = direction.normalized() * move_speed
+		# PRIMEIRO, verifica se ele está preso e se precisa de um teletransporte.
+		var just_unstuck = _check_if_stuck(delta)
+		
+		# SE ele acabou de ser teletransportado, zera a velocidade para "fixar" a nova posição.
+		if just_unstuck:
+			velocity = Vector2.ZERO
+		# SENÃO, continua o movimento normal.
+		elif nav_agent.is_navigation_finished():
+			velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
+			_on_target_reached()
+		else:
+			var next_path_position = nav_agent.get_next_path_position()
+			var direction = global_position.direction_to(next_path_position)
+			velocity = direction.normalized() * move_speed
+	
+	move_and_slide()
+	_update_animation()
+	# Estados "parados" ou com lógica especial têm prioridade
+	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+		_stuck_time = 0.0 # Reseta o detector de "preso"
+		if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+			_perform_dance_shake(delta)
+		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
+	# Lógica para todos os estados de movimento
+	else:
+		if nav_agent.is_navigation_finished():
+			velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
+			_on_target_reached()
+		else:
+			_check_if_stuck(delta) # Verifica se o NPC está preso
+			var next_path_position = nav_agent.get_next_path_position()
+			var direction = global_position.direction_to(next_path_position)
+			velocity = direction.normalized() * move_speed
 	
 	move_and_slide()
 	_update_animation()
 
 #-----------------------------------------------------------------------------
-# LÓGICA DE ESTADOS E DECISÃO
+# LÓGICA DE ESTADOS E NAVEGAÇÃO DINÂMICA
 #-----------------------------------------------------------------------------
 
-## O "CÉREBRO": Chamado a cada segundo para decidir o que fazer.
 func _update_schedule():
 	if current_state == State.REAGINDO_AO_JOGADOR: return
-	if not house_node or not work_node: 
+	if not house_node or not work_node:
 		if current_state != State.OCIOSO: _change_state(State.OCIOSO)
 		return
 
@@ -99,29 +134,27 @@ func _update_schedule():
 			_change_state(State.INDO_PARA_CASA)
 		return
 
-	# --- CORREÇÃO APLICADA AQUI ---
-	# Acessa as propriedades diretamente, sem usar .get() com valor padrão.
-	# Isso assume que seu script do local de trabalho (ex: Plantation.gd)
-	# tem as variáveis work_starts_at e work_ends_at.
-	if current_hour >= work_node.work_starts_at and current_hour < work_node.work_ends_at:
+	var work_starts = work_node.work_starts_at
+	var work_ends = work_node.work_ends_at
+	
+	if current_hour >= work_starts and current_hour < work_ends:
 		if current_state not in [State.TRABALHANDO, State.INDO_PARA_O_TRABALHO]:
 			_change_state(State.INDO_PARA_O_TRABALHO)
 		return
-
+		
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
 		_change_state(State.PASSEANDO)
-## Gerencia a transição entre todos os estados.
+
 func _change_state(new_state: State):
 	if current_state == new_state: return
-
-	# Limpa os efeitos de dança ao sair dos estados relevantes
+	
 	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
 		animated_sprite.speed_scale = 1.0
-
+		
 	_cancel_idle_timer()
 	print(self.name, " mudou do estado ", State.keys()[current_state], " para ", State.keys()[new_state])
 	current_state = new_state
@@ -155,23 +188,54 @@ func _change_state(new_state: State):
 		State.EM_CASA:
 			hide()
 
-## Chamado quando o NPC chega a um destino (exceto sua casa).
 func _on_target_reached():
 	match current_state:
-		State.PASSEANDO: 
-			_change_state(State.OCIOSO)
-		State.INDO_PARA_CASA: # Backup caso a Area2D da casa falhe
-			_change_state(State.EM_CASA)
-		State.SAINDO_DE_CASA: 
-			_change_state(State.PASSEANDO)
-		State.INDO_PARA_O_TRABALHO: 
-			_change_state(State.TRABALHANDO)
+		State.PASSEANDO: _change_state(State.OCIOSO)
+		State.INDO_PARA_CASA: _change_state(State.EM_CASA)
+		State.SAINDO_DE_CASA: _change_state(State.PASSEANDO)
+		State.INDO_PARA_O_TRABALHO: _change_state(State.TRABALHANDO)
 
 ## Comando recebido da casa para entrar.
 func enter_house():
 	if current_state == State.INDO_PARA_CASA:
 		_change_state(State.EM_CASA)
 
+# --- FUNÇÕES PARA CAMINHO DINÂMICO ---
+
+func _on_repath_timer_timeout():
+	if not nav_agent.is_navigation_finished() and current_state not in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+		nav_agent.target_position = nav_agent.get_final_position()
+
+# Em NPC.gd
+
+func _check_if_stuck(delta) -> bool:
+	# Se já estamos no cooldown, avisa que nada aconteceu e para.
+	if _is_unstucking:
+		return false # <-- CORREÇÃO APLICADA AQUI
+
+	if global_position.distance_to(_stuck_check_position) < 1.0:
+		_stuck_time += delta
+	else:
+		_stuck_time = 0.0
+		_stuck_check_position = global_position
+	
+	if _stuck_time > STUCK_THRESHOLD:
+		print(self.name, " está preso! Forçando um recálculo e reposicionamento...")
+		_stuck_time = 0.0
+		_is_unstucking = true
+
+		var nav_map = get_tree().get_root().get_world_2d().navigation_map
+		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, global_position)
+		
+		global_position = safe_pos
+		
+		_on_repath_timer_timeout()
+		
+		get_tree().create_timer(1.0).timeout.connect(func(): _is_unstucking = false)
+		
+		return true
+
+	return false
 #-----------------------------------------------------------------------------
 # FUNÇÕES DE INTERAÇÃO, ANIMAÇÃO E COMPORTAMENTO
 #-----------------------------------------------------------------------------
