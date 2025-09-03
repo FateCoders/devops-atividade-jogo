@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dv0ja7k5oimj4"]
+
+[ext_resource type="Texture2D" uid="uid://b6l7lq78fukf1" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat.png" id="1_74nrb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_74nrb"]
+texture = ExtResource("1_74nrb")
+texture_region_size = Vector2i(160, 160)
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/terrains_peering_bit/bottom_right_corner = 0
+0:0/0/terrains_peering_bit/bottom_side = 0
+0:0/0/terrains_peering_bit/bottom_left_corner = 0
+0:0/0/terrains_peering_bit/left_side = 0
+0:0/0/terrains_peering_bit/top_left_corner = 0
+0:0/0/terrains_peering_bit/top_side = 0
+0:0/0/terrains_peering_bit/top_right_corner = 0
+
+[resource]
+physics_layer_0/collision_layer = 1
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "grass 0"
+terrain_set_0/terrain_0/color = Color(0, 0.476524, 0.183743, 1)
+sources/1 = SubResource("TileSetAtlasSource_74nrb")

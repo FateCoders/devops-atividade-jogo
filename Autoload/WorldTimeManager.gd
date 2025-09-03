@@ -2,7 +2,7 @@ extends Node
 
 signal period_changed(period_name: String)
 
-@export var day_length_in_seconds: float = 120.0 # Tempo para um dia completo (em segundos)
+@export var day_length_in_seconds: float = 30.0 # Tempo para um dia completo (em segundos)
 
 @export var day_starts_at: float = 6.0    # 06:00
 @export var evening_starts_at: float = 17.0 # 17:00
