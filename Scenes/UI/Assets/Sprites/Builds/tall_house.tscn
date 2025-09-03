@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
 size = Vector2(1560, 550)
 
-[node name="tall_house" type="StaticBody2D"]
+[node name="House" type="StaticBody2D"]
 z_index = 1
 physics_material_override = SubResource("PhysicsMaterial_7sg2r")
 script = ExtResource("1_o6fod")
@@ -17,9 +17,9 @@ script = ExtResource("1_o6fod")
 position = Vector2(0, -4)
 texture = ExtResource("1_dc8wa")
 
-[node name="MurosCollision" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-21, 345)
 shape = SubResource("RectangleShape2D_dc8wa")
 
-[node name="Marker2D" type="Marker2D" parent="."]
+[node name="DoorPosition" type="Marker2D" parent="."]
 position = Vector2(-314, 627)

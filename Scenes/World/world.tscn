@@ -241,7 +241,6 @@ position = Vector2(182, 385)
 visible = false
 position = Vector2(2612, 694)
 script = ExtResource("10_ugf0j")
-initial_zoom = 1.0
 world_limits = Rect2(-1000, -700, 5500, 3000)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
