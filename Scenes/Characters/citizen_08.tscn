@@ -46,12 +46,11 @@ size = Vector2(58.3874, 60)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
-position = Vector2(2, 1)
 collision_layer = 129
 collision_mask = 255
 script = ExtResource("1_awjts")
 
-[node name="Texture" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -107)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"idle"
