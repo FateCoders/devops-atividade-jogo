@@ -15,7 +15,6 @@ var workers: Array[Node] = []
 func _ready():
 	print("Plantação '", self.name, "' pronta.")
 
-
 func _get_work_spots() -> Array[Marker2D]:
 	var spots: Array[Marker2D] = []
 	for child in get_children():
