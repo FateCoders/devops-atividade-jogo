@@ -1,33 +1,49 @@
 [gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
 
+[ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_7sg2r"]
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
-[ext_resource type="Script" uid="uid://bhnkm4fht6pxv" path="res://Scripts/Builds/zona_de_entrada.gd" id="2_7sg2r"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1740, 579)
+size = Vector2(1721, 562)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(458, 405)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
+size = Vector2(355.21, 363.261)
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="House" type="StaticBody2D"]
+scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
+script = ExtResource("1_7sg2r")
 
-[node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-22, 359.5)
+[node name="Sprite" type="Node2D" parent="."]
+position = Vector2(0, -183)
+
+[node name="Top" type="Sprite2D" parent="Sprite"]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(1, -283)
+texture = ExtResource("1_dc8wa")
+region_enabled = true
+region_rect = Rect2(0, 0, 1760, 721.303)
+
+[node name="Bottom" type="Sprite2D" parent="Sprite"]
+y_sort_enabled = true
+position = Vector2(1, 355)
+texture = ExtResource("1_dc8wa")
+region_enabled = true
+region_rect = Rect2(0, 722.518, 1760, 557.482)
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="."]
+z_as_relative = false
+position = Vector2(-19.5, 171)
 shape = SubResource("RectangleShape2D_dc8wa")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -4)
-texture = ExtResource("1_dc8wa")
+[node name="EntranceArea" type="Area2D" parent="."]
 
-[node name="ZonaDeEntrada" type="Area2D" parent="."]
-script = ExtResource("2_7sg2r")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
+position = Vector2(-317.152, 298.367)
+shape = SubResource("RectangleShape2D_7sg2r")
 
-[node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-323, 484.5)
-shape = SubResource("RectangleShape2D_m5062")
-
-[connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
-[connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[node name="DoorPosition" type="Marker2D" parent="."]
+position = Vector2(-312.64, 460.238)

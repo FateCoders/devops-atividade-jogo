@@ -21,12 +21,7 @@ var _current_music: AudioStream = null
 
 
 func _ready():
-	# Conecta ao sinal do relógio mundial, se ele existir
-	if Engine.has_singleton("WorldTimeManager"):
-		WorldTimeManager.period_changed.connect(_on_world_period_changed)
-	else:
-		# Um aviso amigável caso você rode uma cena sem o WorldTimeManager
-		print("MusicManager: WorldTimeManager não encontrado. A música não mudará com o tempo.")
+	WorldTimeManager.period_changed.connect(_on_world_period_changed)
 
 
 # --- FUNÇÕES PÚBLICAS (para chamar de outros scripts) ---

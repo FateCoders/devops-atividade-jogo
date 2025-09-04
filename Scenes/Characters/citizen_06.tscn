@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://b60nxbwb1jqnk"]
+
+[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_dvkj5"]
+[ext_resource type="Texture2D" uid="uid://cl8w6w4bag3ky" path="res://Assets/Sprites/Exported/Citizens/static/citizen_06.png" id="2_dvkj5"]
+[ext_resource type="Texture2D" uid="uid://wpaywgi2it0f" path="res://Assets/Sprites/Exported/Citizens/static/citizen_06-sprite-sheet.png" id="3_f8ucu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qoump"]
+atlas = ExtResource("2_dvkj5")
+region = Rect2(0, 0, 170, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ablmc"]
+atlas = ExtResource("3_f8ucu")
+region = Rect2(0, 0, 164, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ytcof"]
+atlas = ExtResource("3_f8ucu")
+region = Rect2(164, 0, 164, 220)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lx0wd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qoump")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ablmc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ytcof")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
+size = Vector2(119, 53)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
+size = Vector2(58.3874, 60)
+
+[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
+z_index = 1
+collision_layer = 129
+collision_mask = 255
+script = ExtResource("1_dvkj5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, -107)
+sprite_frames = SubResource("SpriteFrames_lx0wd")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+position = Vector2(6.5, -30.5)
+shape = SubResource("RectangleShape2D_lx0wd")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WorkTurnTimer" type="Timer" parent="."]
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(6, -30)
+scale = Vector2(2.158, 1)
+shape = SubResource("RectangleShape2D_y3i7a")
+debug_color = Color(0, 0.632905, 0.446382, 0.42)
+
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

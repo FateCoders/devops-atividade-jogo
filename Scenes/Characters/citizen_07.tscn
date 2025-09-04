@@ -1,22 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://bhwrbf2df7o75"]
+[gd_scene load_steps=10 format=3 uid="uid://dpf2yyepe8oxn"]
 
-[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_6lqiy"]
-[ext_resource type="Texture2D" uid="uid://b8kkisswbnhyy" path="res://Assets/Sprites/Exported/Citizens/static/citizen_02.png" id="2_6lqiy"]
-[ext_resource type="Texture2D" uid="uid://o1rimiy1j1lm" path="res://Assets/Sprites/Exported/Citizens/static/citizen_02-sprite-sheet.png" id="3_o6uyu"]
+[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_g0dii"]
+[ext_resource type="Texture2D" uid="uid://b64ul6kydj7bs" path="res://Assets/Sprites/Exported/Citizens/static/citizen_07.png" id="2_g0dii"]
+[ext_resource type="Texture2D" uid="uid://brcdwbcay2ihl" path="res://Assets/Sprites/Exported/Citizens/static/citizen_07-sprite-sheet.png" id="3_el7mg"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0m2tk"]
-atlas = ExtResource("3_o6uyu")
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8bn1"]
+atlas = ExtResource("2_g0dii")
+region = Rect2(0, 0, 170, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0wxll"]
+atlas = ExtResource("3_el7mg")
 region = Rect2(0, 0, 169, 220)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xt64u"]
-atlas = ExtResource("3_o6uyu")
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vhqa"]
+atlas = ExtResource("3_el7mg")
 region = Rect2(169, 0, 169, 220)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lx0wd"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6lqiy")
+"texture": SubResource("AtlasTexture_i8bn1")
 }],
 "loop": true,
 "name": &"idle",
@@ -24,10 +28,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0m2tk")
+"texture": SubResource("AtlasTexture_0wxll")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xt64u")
+"texture": SubResource("AtlasTexture_5vhqa")
 }],
 "loop": true,
 "name": &"walk",
@@ -35,26 +39,25 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
-size = Vector2(121.5, 42)
+size = Vector2(119, 53)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
-size = Vector2(55.6089, 42)
+size = Vector2(58.3874, 60)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
-position = Vector2(2, 1)
+z_index = 1
 collision_layer = 129
 collision_mask = 255
-script = ExtResource("1_6lqiy")
+script = ExtResource("1_g0dii")
 
-[node name="Texture" type="AnimatedSprite2D" parent="."]
-z_index = 1
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -107)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 show_behind_parent = true
-position = Vector2(-5.25, -12)
+position = Vector2(6.5, -30.5)
 shape = SubResource("RectangleShape2D_lx0wd")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
@@ -64,9 +67,10 @@ shape = SubResource("RectangleShape2D_lx0wd")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-5.99799, -11)
+position = Vector2(6, -30)
 scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
+debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

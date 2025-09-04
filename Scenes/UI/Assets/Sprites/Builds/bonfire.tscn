@@ -3,9 +3,6 @@
 [ext_resource type="Script" uid="uid://bj5s1nss6m4qc" path="res://Scripts/Builds/builds.gd" id="1_n1q47"]
 [ext_resource type="Texture2D" uid="uid://d4kvdk2510a4v" path="res://Assets/Sprites/Exported/Props/Builds/Bonfires/bonfire-01.png" id="2_dh50r"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i7jju"]
-size = Vector2(161, 51)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ukda2"]
 atlas = ExtResource("2_dh50r")
 region = Rect2(0, 0, 160, 160)
@@ -70,7 +67,11 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i7jju"]
+size = Vector2(173, 68)
+
 [sub_resource type="Gradient" id="Gradient_n1q47"]
+interpolation_mode = 2
 offsets = PackedFloat32Array(0, 0.701299, 0.727273)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
 
@@ -79,20 +80,22 @@ gradient = SubResource("Gradient_n1q47")
 fill = 1
 fill_from = Vector2(0.504587, 0.522936)
 
-[node name="Node2D" type="Area2D"]
+[node name="Bonfire" type="Area2D"]
+z_index = 1
+y_sort_enabled = true
 script = ExtResource("1_n1q47")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 25.5)
-shape = SubResource("RectangleShape2D_i7jju")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_wd02g")
 animation = &"lit"
 frame_progress = 0.0883456
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 25)
+shape = SubResource("RectangleShape2D_i7jju")
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(2, 10)
+position = Vector2(-5, 10)
 scale = Vector2(1, 0.78125)
 color = Color(1, 0.440904, 0.34387, 1)
 energy = 1.5
