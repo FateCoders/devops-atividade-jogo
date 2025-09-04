@@ -157,6 +157,11 @@ func _change_state(new_state: State):
 		
 	_cancel_idle_timer()
 	print(self.name, " mudou do estado ", State.keys()[current_state], " para ", State.keys()[new_state])
+	
+	if current_state == State.TRABALHANDO and new_state == State.PASSEANDO:
+		StatusManager.mudar_status("dinheiro", 10)
+		print(self.name, " terminou o trabalho e ganhou 10 de dinheiro.")
+	
 	current_state = new_state
 	
 	match current_state:

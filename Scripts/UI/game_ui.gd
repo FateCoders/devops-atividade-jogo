@@ -27,10 +27,10 @@ func _unhandled_input(event: InputEvent):
 		if _check_valid_placement():
 			var build_pos = ghost_building.global_position
 			
-			# --- LÓGICA ATUALIZADA ---
 			# Verifica o tipo de construção e chama a função correta
 			if build_type == "house":
 				QuilomboManager.build_house(building_to_place_scene, build_pos)
+				StatusManager.mudar_status("seguranca", 5) 
 			elif build_type == "workplace":
 				QuilomboManager.build_workplace(building_to_place_scene, build_pos)
 			

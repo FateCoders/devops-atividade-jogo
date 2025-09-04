@@ -1,31 +1,29 @@
 [gd_resource type="TileSet" load_steps=7 format=3 uid="uid://c6cvb7ix3k63a"]
 
 [ext_resource type="Texture2D" uid="uid://cyjxckc4sx5l6" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass_tileset.png" id="1_7v26i"]
-[ext_resource type="Texture2D" uid="uid://dxqr1pveiek1y" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand-sheet.png" id="1_si36a"]
+[ext_resource type="Texture2D" uid="uid://dnsnel4rbkkf1" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand01-tileset.png" id="2_nw7by"]
 [ext_resource type="Texture2D" uid="uid://bh61wt732te7s" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-tileset.png" id="3_j0i6i"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0i6i"]
-texture = ExtResource("1_si36a")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xmpc5"]
+texture = ExtResource("2_nw7by")
 texture_region_size = Vector2i(160, 160)
-1:2/0 = 0
-1:2/0/terrain_set = 0
-1:2/0/terrain = 1
-1:2/0/terrains_peering_bit/right_side = 1
-1:2/0/terrains_peering_bit/bottom_right_corner = 1
-1:2/0/terrains_peering_bit/bottom_side = 1
-1:2/0/terrains_peering_bit/bottom_left_corner = 1
-1:2/0/terrains_peering_bit/left_side = 1
-1:2/0/terrains_peering_bit/top_left_corner = 1
-1:2/0/terrains_peering_bit/top_side = 1
-1:2/0/terrains_peering_bit/top_right_corner = 1
-0:1/0 = 0
-2:1/0 = 0
-1:1/0 = 0
-1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, -80, 80, -80, 80, -70, -80, -70)
-2:0/0 = 0
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(70, -80, 80, -80, 80, 80, 69.5, 80)
 0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, 80, -80, -80, 80, -80, 80, -70.5, -70.5, -70.5, -70.5, 80)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, -70, 80, -70, 80, -80, -80, -80)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, -70, 70, -70, 70, 80, 80, 80, 80, -80, -80, -80)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-70.5, -80, -70.5, 80, -80, 80, -80, -80)
+1:1/0 = 0
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(70, -80, 70, 80, 80, 80, 80, -80)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-70.5, -80, -70.5, 0.5, 80, 0.5, 80, 80, -80, 80, -80, -80)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, 0, 80, 0, 80, 80, -80, 80)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-80, 0, 70, 0, 70, -80, 80, -80, 80, 80, -80, 80)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7v26i"]
 texture = ExtResource("1_7v26i")
@@ -93,5 +91,5 @@ terrain_set_0/terrain_2/name = "Terrain 2"
 terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
 navigation_layer_0/layers = 1
 sources/2 = SubResource("TileSetAtlasSource_7v26i")
-sources/0 = SubResource("TileSetAtlasSource_j0i6i")
 sources/3 = SubResource("TileSetAtlasSource_nw7by")
+sources/1 = SubResource("TileSetAtlasSource_xmpc5")
