@@ -255,3 +255,4 @@ navigation_layers = 65535
 visible = false
 
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]
+process_mode = 3
