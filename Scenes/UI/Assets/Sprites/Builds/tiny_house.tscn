@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bcsjw0emawgsl"]
 
+[ext_resource type="Script" uid="uid://lgtl42n4frkk" path="res://Scripts/Builds/house.gd" id="1_8dv00"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="1_f6tn5"]
-[ext_resource type="Script" uid="uid://bhnkm4fht6pxv" path="res://Scripts/Builds/zona_de_entrada.gd" id="2_8dv00"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
@@ -14,6 +14,7 @@ size = Vector2(382, 367)
 [node name="StaticBody2D" type="StaticBody2D"]
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
+script = ExtResource("1_8dv00")
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(-9, -4)
@@ -38,11 +39,12 @@ position = Vector2(-8.5, 320)
 shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
-script = ExtResource("2_8dv00")
+position = Vector2(-5.32842, 704.684)
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-9, 538.5)
+position = Vector2(-1.33211, -165.181)
 shape = SubResource("RectangleShape2D_otsq3")
 
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
