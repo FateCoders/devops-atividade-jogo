@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cqadgleg81hl"]
+[gd_scene load_steps=7 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
