@@ -38,6 +38,24 @@ animations = [{
 size = Vector2(119, 53)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
+<<<<<<<< HEAD:Scenes/Characters/NPC.tscn
+size = Vector2(62.0945, 50)
+
+[node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
+z_index = 1
+script = ExtResource("1_dc5lp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_lx0wd")
+animation = &"walk"
+frame = 1
+frame_progress = 0.116582
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+show_behind_parent = true
+position = Vector2(-5, 80)
+========
 size = Vector2(58.3874, 60)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
@@ -54,6 +72,7 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 show_behind_parent = true
 position = Vector2(6.5, -30.5)
+>>>>>>>> develop:Scenes/Characters/citizen_01.tscn
 shape = SubResource("RectangleShape2D_lx0wd")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
@@ -63,10 +82,17 @@ shape = SubResource("RectangleShape2D_lx0wd")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+<<<<<<<< HEAD:Scenes/Characters/NPC.tscn
+position = Vector2(-4, 80)
+scale = Vector2(2.158, 1)
+shape = SubResource("RectangleShape2D_y3i7a")
+debug_color = Color(0, 0.625861, 0.516401, 0.42)
+========
 position = Vector2(6, -30)
 scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
+>>>>>>>> develop:Scenes/Characters/citizen_01.tscn
 
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

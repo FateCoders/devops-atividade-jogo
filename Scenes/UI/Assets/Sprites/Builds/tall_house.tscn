@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnsunn3lmjfl"]
+[gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
 
+[ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_7sg2r"]
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
@@ -13,6 +14,7 @@ size = Vector2(355.21, 363.261)
 [node name="House" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
+script = ExtResource("1_7sg2r")
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(0, -183)
@@ -32,7 +34,7 @@ texture = ExtResource("1_dc8wa")
 region_enabled = true
 region_rect = Rect2(0, 722.518, 1760, 557.482)
 
-[node name="MurosCollision" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2d" type="CollisionShape2D" parent="."]
 z_as_relative = false
 position = Vector2(-19.5, 171)
 shape = SubResource("RectangleShape2D_dc8wa")
@@ -44,4 +46,4 @@ position = Vector2(-317.152, 298.367)
 shape = SubResource("RectangleShape2D_7sg2r")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-318, 452)
+position = Vector2(-312.64, 460.238)

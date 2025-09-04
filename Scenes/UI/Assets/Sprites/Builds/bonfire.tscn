@@ -71,6 +71,7 @@ animations = [{
 size = Vector2(173, 68)
 
 [sub_resource type="Gradient" id="Gradient_n1q47"]
+interpolation_mode = 2
 offsets = PackedFloat32Array(0, 0.701299, 0.727273)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
 
@@ -94,7 +95,7 @@ position = Vector2(0.5, 25)
 shape = SubResource("RectangleShape2D_i7jju")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(2, 10)
+position = Vector2(-5, 10)
 scale = Vector2(1, 0.78125)
 color = Color(1, 0.440904, 0.34387, 1)
 energy = 1.5
