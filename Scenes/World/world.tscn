@@ -1,15 +1,11 @@
-[gd_scene load_steps=19 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=15 format=4 uid="uid://bofjyi7d5qug8"]
 
 [ext_resource type="Script" uid="uid://cghxvxhbj6tn3" path="res://Scripts/UI/world.gd" id="1_dr8i3"]
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
 [ext_resource type="Texture2D" uid="uid://baphvn6xkhi6h" path="res://Assets/Sprites/Exported/Props/Nature/Grass/grass-flower-sheet.png" id="2_3rhlx"]
 [ext_resource type="TileSet" uid="uid://cyqwtkln0j14o" path="res://Scenes/World/nature_collision.tres" id="4_dbvd7"]
 [ext_resource type="TileSet" uid="uid://b7lakbxncorsp" path="res://Scenes/World/details.tres" id="4_vbhkl"]
-[ext_resource type="PackedScene" uid="uid://bnsunn3lmjfl" path="res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn" id="5_7staa"]
-[ext_resource type="PackedScene" uid="uid://bx5sd7qqtkm6h" path="res://Scenes/Characters/citizen_01.tscn" id="5_fcotr"]
-[ext_resource type="PackedScene" uid="uid://bcsjw0emawgsl" path="res://Scenes/UI/Assets/Sprites/Builds/tiny_house.tscn" id="6_fcotr"]
 [ext_resource type="PackedScene" uid="uid://crns310gb4aew" path="res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn" id="7_y0d6x"]
-[ext_resource type="PackedScene" uid="uid://748hyj07y8rd" path="res://Scenes/Characters/citizen_02.tscn" id="9_xatfh"]
 [ext_resource type="Script" uid="uid://bi2agvatio3kw" path="res://Scripts/Levels/world_camera.gd" id="10_ugf0j"]
 [ext_resource type="Script" uid="uid://cajh6ojms2bej" path="res://Scripts/UI/canvas_modulate.gd" id="11_0ph6x"]
 [ext_resource type="PackedScene" uid="uid://ykryehy8psip" path="res://Scenes/UI/game_ui.tscn" id="11_pvt60"]
@@ -87,17 +83,11 @@ position = Vector2(154, -72)
 tile_map_data = PackedByteArray("AAAPAAoAAAAAAAAAAAC7AGkAAAAAAAAAAAAGACQAAAABAAAAAADc/y0AAAAAAAAAAACkAIgAAAAAAAAAAADlAHgAAAABAAAAAAALAEcAAAAAAAAAAABtABkAAAAAAAAAAAAKAH8AAAAAAAAAAAAvAH8AAAABAAAAAAA6AH8AAAABAAAAAABLAIkAAAAAAAAAAABYAO3/AAABAAAAAAAhAPH/AAABAAAAAAAzANr/AAABAAAAAAA4AOL/AAAAAAAAAAAwAPz/AAAAAAAAAABaAAcAAAAAAAAAAABZAOD/AAAAAAAAAAA4ADsAAAABAAAAAABoAEEAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_l1hd3")
 
-[node name="House" parent="." instance=ExtResource("5_7staa")]
-position = Vector2(1825, 1587)
-
 [node name="nature-collision" type="TileMapLayer" parent="."]
 position = Vector2(-1, 0)
 scale = Vector2(1.00799, 1)
 tile_map_data = PackedByteArray("AADh/ywAAAACAAAAAACCAPX/AAABAAAAAADsADwAAgAAAAAAAAD1ADwAAgABAAAAAAD+ADwAAgAAAAAAAAADAR8AAgACAAAAAAADASIAAgACAAAAAAADASUAAgACAAAAAAADASgAAgACAAAAAAADASsAAgACAAAAAAADAS4AAgACAAAAAAADATEAAgACAAAAAAADATQAAgACAAAAAAADATcAAgACAAAAAAADAToAAgACAAAAAACzADcAAgACAAAAAACzADoAAgACAAAAAACzABwAAgACAAAAAACzAB8AAgACAAAAAACzACIAAgACAAAAAACzACUAAgACAAAAAACzACgAAgACAAAAAACzACsAAgACAAAAAACzAC4AAgACAAAAAACzADEAAgACAAAAAACzADQAAgACAAAAAACzAAQAAgACAAAAAACzAAcAAgACAAAAAACzAAoAAgACAAAAAACzAA0AAgACAAAAAACzABAAAgACAAAAAACzABMAAgACAAAAAACzABYAAgACAAAAAACzABkAAgACAAAAAAC5AAMAAgABAAAAAADCAAMAAgAAAAAAAADLAAMAAgABAAAAAADUAAMAAgAAAAAAAADdAAMAAgABAAAAAADmAAMAAgAAAAAAAADvAAMAAgABAAAAAAD0AAMAAgACAAAAAAAyANv/CwABAC4AAABvAO//CwAUADAAAAAKAD8ACwAAAAYAAADAAGsAAAAAAAAAAADDAGgAAAACAAAAAADEAGgAAAACAAAAAADaAHkACwAAAAYAAAChAPX/CwAAAAYAAABcAPX/AAAAAAAAAABWAOn/AAACAAAAAABXAOn/AAACAAAAAABHAOv/AAAAAAAAAABCAPb/AAABAAAAAAAGAGkAAAABAAAAAAADAGsAAAAAAAAAAAALAHYACwABAC4AAAC8AH0ACwABAC4AAABSANr/CwABAC4AAAC9AIIACwARACIAAAA=")
 tile_set = ExtResource("4_dbvd7")
-
-[node name="Personagem_2D" parent="." instance=ExtResource("9_xatfh")]
-position = Vector2(1808, 1297)
 
 [node name="nature-details" type="TileMapLayer" parent="."]
 z_index = 2
@@ -127,9 +117,3 @@ navigation_layers = 65535
 visible = false
 
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]
-
-[node name="Personagem_2D2" parent="." instance=ExtResource("5_fcotr")]
-position = Vector2(3171, 1980)
-
-[node name="StaticBody2D" parent="." instance=ExtResource("6_fcotr")]
-position = Vector2(3477, 153)

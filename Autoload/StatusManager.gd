@@ -6,8 +6,8 @@ signal status_updated
 var dinheiro = 0
 var saude = 100
 var fome = 100
-var seguranca = 100
-var relacoes = 100
+var seguranca = 0
+var relacoes = 0
 
 func _ready():
 	emit_signal("status_updated")
