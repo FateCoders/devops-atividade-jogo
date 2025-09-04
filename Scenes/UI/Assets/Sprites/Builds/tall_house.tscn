@@ -46,4 +46,4 @@ position = Vector2(-317.152, 298.367)
 shape = SubResource("RectangleShape2D_7sg2r")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-312.64, 460.238)
+position = Vector2(-322.032, 440.111)

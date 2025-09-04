@@ -4,15 +4,11 @@ extends Node
 var all_houses: Array[House] = []
 var all_npcs: Array[Node] = []
 
-# --- FUNÇÃO DE LIMPEZA ---
 ## Limpa todos os dados do quilombo atual. Deve ser chamada ao sair para o menu.
 func reset_quilombo_state():
 	print("[QUILOMBO MANAGER] Resetando o estado. Limpando listas de casas e NPCs.")
 	all_houses.clear()
 	all_npcs.clear()
-
-
-# --- FUNÇÕES DE REGISTRO E BUSCA ---
 
 ## As casas se registram aqui quando são criadas em suas funções _ready().
 func register_house(house_node: House):
@@ -58,12 +54,8 @@ func build_workplace(workplace_scene: PackedScene, build_position: Vector2):
 	new_workplace.global_position = build_position
 	print("--> Construindo ", new_workplace.name, " (Local de Trabalho) em ", build_position)
 
-	# Agenda a função de geração de NPCs para ser executada de forma segura,
-	# garantindo que a construção esteja 100% pronta.
+	# Agenda a função de geração de NPCs para ser executada de forma segura.
 	call_deferred("_spawn_npcs_for_workplace", new_workplace)
-
-
-# --- LÓGICA DE GERAÇÃO DE NPCS ---
 
 ## Esta função é chamada de forma segura pelo call_deferred.
 func _spawn_npcs_for_workplace(workplace_node):
@@ -81,14 +73,30 @@ func _spawn_npcs_for_workplace(workplace_node):
 	var current_scene = get_tree().current_scene
 	var nav_map = get_tree().get_root().get_world_2d().navigation_map
 	
-	# Gera os NPCs
 	for i in npc_count_to_spawn:
 		var new_npc = npc_scene_to_spawn.instantiate()
 		current_scene.add_child(new_npc)
 		
-		# Lógica de Geração Segura para evitar que nasçam em locais inválidos
+		# Lógica de Geração Segura
 		var desired_spawn_pos = workplace_node.global_position + Vector2(randf_range(-30, 30), randf_range(50, 80))
 		var safe_spawn_pos = NavigationServer2D.map_get_closest_point(nav_map, desired_spawn_pos)
+		
+		# --- ADICIONADO: MARCADORES VISUAIS DE DEPURAÇÃO ---
+		# Cria um quadrado vermelho no ponto desejado
+		var debug_marker_desired = ColorRect.new()
+		debug_marker_desired.color = Color.RED
+		debug_marker_desired.size = Vector2(10, 10)
+		debug_marker_desired.global_position = desired_spawn_pos - debug_marker_desired.size / 2
+		current_scene.add_child(debug_marker_desired)
+
+		# Cria um quadrado verde no ponto seguro
+		var debug_marker_safe = ColorRect.new()
+		debug_marker_safe.color = Color.GREEN
+		debug_marker_safe.size = Vector2(10, 10)
+		debug_marker_safe.global_position = safe_spawn_pos - debug_marker_safe.size / 2
+		current_scene.add_child(debug_marker_safe)
+		# --- FIM DA ADIÇÃO ---
+
 		new_npc.global_position = safe_spawn_pos
 		print("--> NPC #%d gerado em posição segura: %s" % [i + 1, safe_spawn_pos])
 

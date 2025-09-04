@@ -28,7 +28,6 @@ enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PA
 var house_node: House
 var work_node: Node 
 
-# Variáveis internas
 var current_state: State = State.EM_CASA
 var _state_before_interaction: State
 var _idle_timer = null
@@ -36,16 +35,11 @@ var _schedule_check_timer: Timer
 var _noise = FastNoiseLite.new()
 var _time_passed: float = 0.0
 
-# Novas variáveis para recalcular o caminho
 var _repath_timer: Timer
 var _stuck_check_position: Vector2 = Vector2.ZERO
 var _stuck_time: float = 0.0
-const STUCK_THRESHOLD: float = 0.5 # Meio segundo parado é considerado "preso"
-var _is_unstucking: bool = false # Nova variável de controle
-
-#-----------------------------------------------------------------------------
-# FUNÇÕES PRINCIPAIS (INICIALIZAÇÃO E LOOP)
-#-----------------------------------------------------------------------------
+const STUCK_THRESHOLD: float = 0.5
+var _is_unstucking: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -53,16 +47,14 @@ func _ready():
 	_noise.frequency = 2.0
 	work_turn_timer.timeout.connect(_on_work_turn_timer_timeout)
 
-	# Timer que funciona como o "cérebro", checando a rotina a cada segundo
 	_schedule_check_timer = Timer.new()
 	_schedule_check_timer.wait_time = 1.0 
 	_schedule_check_timer.timeout.connect(_update_schedule)
 	add_child(_schedule_check_timer)
 	_schedule_check_timer.start()
 
-	# Timer que força o NPC a recalcular seu caminho periodicamente
 	_repath_timer = Timer.new()
-	_repath_timer.wait_time = 1.0 # Recalcula a cada 1 segundo
+	_repath_timer.wait_time = 1.0
 	_repath_timer.autostart = true
 	_repath_timer.timeout.connect(_on_repath_timer_timeout)
 	add_child(_repath_timer)
@@ -71,22 +63,17 @@ func _ready():
 	_update_schedule()
 
 func _physics_process(delta):
-	# Se o NPC está em um estado "parado", ele não deve se mover.
 	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
-		_stuck_time = 0.0 # Reseta o detector de "preso"
+		_stuck_time = 0.0
 		if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 			_perform_dance_shake(delta)
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
 	
-	# Se o NPC está em um estado de movimento...
 	else:
-		# PRIMEIRO, verifica se ele está preso e se precisa de um teletransporte.
 		var just_unstuck = _check_if_stuck(delta)
 		
-		# SE ele acabou de ser teletransportado, zera a velocidade para "fixar" a nova posição.
 		if just_unstuck:
 			velocity = Vector2.ZERO
-		# SENÃO, continua o movimento normal.
 		elif nav_agent.is_navigation_finished():
 			velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
 			_on_target_reached()
@@ -97,29 +84,23 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	_update_animation()
-	# Estados "parados" ou com lógica especial têm prioridade
 	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
-		_stuck_time = 0.0 # Reseta o detector de "preso"
+		_stuck_time = 0.0
 		if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 			_perform_dance_shake(delta)
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
-	# Lógica para todos os estados de movimento
 	else:
 		if nav_agent.is_navigation_finished():
 			velocity = velocity.move_toward(Vector2.ZERO, move_speed * delta)
 			_on_target_reached()
 		else:
-			_check_if_stuck(delta) # Verifica se o NPC está preso
+			_check_if_stuck(delta)
 			var next_path_position = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_path_position)
 			velocity = direction.normalized() * move_speed
 	
 	move_and_slide()
 	_update_animation()
-
-#-----------------------------------------------------------------------------
-# LÓGICA DE ESTADOS E NAVEGAÇÃO DINÂMICA
-#-----------------------------------------------------------------------------
 
 func _update_schedule():
 	if current_state == State.REAGINDO_AO_JOGADOR: return
@@ -195,29 +176,22 @@ func _on_target_reached():
 		State.SAINDO_DE_CASA: _change_state(State.PASSEANDO)
 		State.INDO_PARA_O_TRABALHO: _change_state(State.TRABALHANDO)
 
-## Comando recebido da casa para entrar.
 func enter_house():
 	if current_state == State.INDO_PARA_CASA:
 		_change_state(State.EM_CASA)
-
-# --- FUNÇÕES PARA CAMINHO DINÂMICO ---
 
 func _on_repath_timer_timeout():
 	if not nav_agent.is_navigation_finished() and current_state not in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		nav_agent.target_position = nav_agent.get_final_position()
 
-# Em NPC.gd
-
-func _check_if_stuck(delta) -> bool:
-	# Se já estamos no cooldown, avisa que nada aconteceu e para.
+func _check_if_stuck(delta):
 	if _is_unstucking:
-		return false # <-- CORREÇÃO APLICADA AQUI
+		return false
 
-	if global_position.distance_to(_stuck_check_position) < 1.0:
+	if velocity.length() < 1.0:
 		_stuck_time += delta
 	else:
 		_stuck_time = 0.0
-		_stuck_check_position = global_position
 	
 	if _stuck_time > STUCK_THRESHOLD:
 		print(self.name, " está preso! Forçando um recálculo e reposicionamento...")
@@ -236,9 +210,6 @@ func _check_if_stuck(delta) -> bool:
 		return true
 
 	return false
-#-----------------------------------------------------------------------------
-# FUNÇÕES DE INTERAÇÃO, ANIMAÇÃO E COMPORTAMENTO
-#-----------------------------------------------------------------------------
 
 func _on_area_2d_mouse_entered():
 	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]: return
@@ -285,10 +256,6 @@ func _cancel_idle_timer():
 	if _idle_timer != null:
 		_idle_timer.timeout.disconnect(_on_idle_timeout)
 		_idle_timer = null
-
-#-----------------------------------------------------------------------------
-# FUNÇÕES DE SAVE/LOAD
-#-----------------------------------------------------------------------------
 
 func get_save_data() -> Dictionary:
 	return {"pos_x": position.x, "pos_y": position.y}
