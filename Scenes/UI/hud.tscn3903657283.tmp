@@ -1,0 +1,89 @@
+[gd_scene load_steps=3 format=3 uid="uid://ixvmmog1grra"]
+
+[ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_ny26j"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -80.0
+offset_bottom = -370.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sprlj")
+
+[node name="TextureRect" type="NinePatchRect" parent="."]
+layout_mode = 2
+anchor_right = 0.933
+anchor_bottom = 0.659
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 81.4
+offset_bottom = 118.35
+texture = ExtResource("2_ny26j")
+region_rect = Rect2(0, 0, 720, 720)
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="StatusPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 743.0
+offset_top = 90.0
+offset_right = 1108.0
+offset_bottom = 261.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StatusPanel"]
+layout_mode = 2
+
+[node name="MoneyContainer" type="HBoxContainer" parent="StatusPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MoneyLabel" type="Label" parent="StatusPanel/VBoxContainer/MoneyContainer"]
+layout_mode = 2
+text = "Dinheiro"
+
+[node name="HealthContainer" type="HBoxContainer" parent="StatusPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="StatusPanel/VBoxContainer/HealthContainer"]
+layout_mode = 2
+text = "Saúde"
+
+[node name="ProgressBar" type="ProgressBar" parent="StatusPanel/VBoxContainer/HealthContainer"]
+layout_mode = 2
+value = 100.0
+
+[node name="HungerContainer" type="HBoxContainer" parent="StatusPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HungerLabel" type="Label" parent="StatusPanel/VBoxContainer/HungerContainer"]
+layout_mode = 2
+text = "Fome"
+
+[node name="ProgressBar" type="ProgressBar" parent="StatusPanel/VBoxContainer/HungerContainer"]
+layout_mode = 2
+value = 100.0
+
+[node name="SecurityContainer" type="HBoxContainer" parent="StatusPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SecurityLabel" type="Label" parent="StatusPanel/VBoxContainer/SecurityContainer"]
+layout_mode = 2
+text = "Segurança"
+
+[node name="ProgressBar" type="ProgressBar" parent="StatusPanel/VBoxContainer/SecurityContainer"]
+layout_mode = 2
+
+[node name="RelationsContainer" type="HBoxContainer" parent="StatusPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="RelationsLabel" type="Label" parent="StatusPanel/VBoxContainer/RelationsContainer"]
+layout_mode = 2
+text = "Relações"
+
+[node name="ProgressBar" type="ProgressBar" parent="StatusPanel/VBoxContainer/RelationsContainer"]
+layout_mode = 2
