@@ -2,6 +2,12 @@
 extends Control
 class_name DialogScreen
 
+@export_category("Interação do Cursor")
+@export var interaction_cursor: Texture2D
+@export var cursor_hotspot: Vector2 = Vector2.ZERO
+@export var default_cursor: Texture2D
+@export var default_hotspot: Vector2 = Vector2.ZERO
+
 @export_category("Objects")
 @export var _name: Label = null
 @export var _dialog: RichTextLabel = null
@@ -23,6 +29,7 @@ func _ready() -> void:
 	pass
 	
 func _process(_delta: float) -> void:
+	Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	# Se o jogador apertar o botão de ação e o texto ainda está aparecendo...
 	if Input.is_action_just_pressed("ui_accept") and _dialog.visible_ratio < 1:
 		# ...termina a animação de texto instantaneamente.
@@ -45,6 +52,7 @@ func _process(_delta: float) -> void:
 func _initialize_dialog() -> void:
 	# Verificação de segurança para garantir que os dados existem antes de usar
 	if not data.has(_id):
+		Input.set_custom_mouse_cursor(default_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 		print("Índice de diálogo inválido: ", _id)
 		queue_free()
 		return

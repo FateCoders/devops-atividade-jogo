@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d3iw8vt6yv34f"]
+[gd_scene load_steps=8 format=3 uid="uid://d3iw8vt6yv34f"]
 
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_he3hw"]
 [ext_resource type="Script" uid="uid://cbi3nx4kxkfdf" path="res://Scripts/UI/menu_inicial.gd" id="1_ogbwj"]
+[ext_resource type="Texture2D" uid="uid://bfwipt4dftc0k" path="res://Assets/Sprites/Exported/HUD/Cursors/pointer_cursor-menor.png" id="2_5e2pd"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="3_e412q"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ogbwj"]
@@ -26,6 +27,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ogbwj")
+interaction_cursor = ExtResource("2_5e2pd")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1

@@ -26,6 +26,7 @@ MusicManager="*res://Scenes/Music/music_manager.tscn"
 WorldTimeManager="*res://Autoload/WorldTimeManager.gd"
 StatusManager="*res://Autoload/StatusManager.gd"
 QuilomboManager="*res://Autoload/QuilomboManager.gd"
+CursorManager="*res://Autoload/CursorManager.gd"
 
 [config]
 
