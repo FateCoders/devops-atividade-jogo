@@ -21,10 +21,12 @@ night_sfx = Array[AudioStream]([ExtResource("5_4nlss"), ExtResource("6_msu8p"), 
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStream_dw8b5")
+volume_db = -5.0
 autoplay = true
 playback_type = 1
 
 [node name="AmbientSFXPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStream_4nlss")
+volume_db = -10.0
 
 [node name="AmbientTimer" type="Timer" parent="."]
