@@ -27,6 +27,7 @@ enum State { OCIOSO, PASSEANDO, INDO_PARA_CASA, EM_CASA, SAINDO_DE_CASA, INDO_PA
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var work_turn_timer: Timer = $WorkTurnTimer
+@onready var status_bubble = $StatusBubbleAnchor/StatusBubble
 
 # Variáveis dinâmicas (atribuídas pelo QuilomboManager)
 var house_node: House
@@ -52,6 +53,8 @@ var _is_unstucking: bool = false # Nova variável de controle
 #-----------------------------------------------------------------------------
 
 func _ready():
+	status_bubble.hide()
+	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_noise.seed = randi()
 	_noise.frequency = 2.0
@@ -154,6 +157,9 @@ func _update_schedule():
 func _change_state(new_state: State):
 	if current_state == new_state: return
 	
+	current_state = new_state
+	# status_bubble.update_status(current_state)
+	
 	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
@@ -250,6 +256,9 @@ func _check_if_stuck(delta) -> bool:
 #-----------------------------------------------------------------------------
 
 func _on_area_2d_mouse_entered():
+	print('mostrando balão')
+	status_bubble.update_status(current_state)
+	
 	if interaction_cursor:
 		Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	
@@ -258,6 +267,7 @@ func _on_area_2d_mouse_entered():
 	_change_state(State.REAGINDO_AO_JOGADOR)
 
 func _on_area_2d_mouse_exited():
+	status_bubble.hide()
 		# Reseta o cursor para o padrão do sistema.
 	Input.set_custom_mouse_cursor(null)
 	
