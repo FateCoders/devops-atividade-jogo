@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://boh7y5cx37ols"]
 
-[ext_resource type="Script" path="res://Scripts/UI/dialog.gd" id="1_0rfuu"]
+[ext_resource type="Script" uid="uid://2bk5jyc46b3o" path="res://Scripts/UI/dialog.gd" id="1_0rfuu"]
 [ext_resource type="Texture2D" uid="uid://b752vhoy7oy7a" path="res://Scenes/UI/Assets/Sprites/paladin_faceset.png" id="1_ga0ek"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="2_0rfuu"]
 
