@@ -1,6 +1,13 @@
 # GameUI.gd
 extends CanvasLayer
 
+@export_category("Interação do Cursor")
+@export var interaction_cursor: Texture2D
+@export var cursor_hotspot: Vector2 = Vector2.ZERO
+
+@export var default_cursor: Texture2D
+@export var default_hotspot: Vector2 = Vector2.ZERO
+
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
 
@@ -69,6 +76,10 @@ func _ready():
 	visible = false
 
 func _process(delta: float):
+	if  visible: 
+		Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
+	else:
+		Input.set_custom_mouse_cursor(default_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	if not is_in_build_mode or not ghost_building: return
 	ghost_building.global_position = get_viewport().get_canvas_transform().affine_inverse() * get_viewport().get_mouse_position()
 	var is_valid_position = _check_valid_placement()
@@ -80,6 +91,7 @@ func _process(delta: float):
 func _unhandled_input(event: InputEvent):
 	
 	if Input.is_action_just_pressed("ui_enter"):
+			
 		visible = not visible
 		get_tree().paused = visible
 		if not visible and is_in_build_mode:

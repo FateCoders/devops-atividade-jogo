@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=9 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
+[ext_resource type="Texture2D" uid="uid://d2masrfvp7cqt" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png" id="2_tig4k"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
 [ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="3_5b8pf"]
 [ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="3_6w80a"]
+[ext_resource type="Texture2D" uid="uid://db5nee7j2dml4" path="res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png" id="3_plf53"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="5_lolt2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
@@ -13,6 +15,8 @@ font_size = 70
 [node name="GameUI" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_3fiko")
+interaction_cursor = ExtResource("2_tig4k")
+default_cursor = ExtResource("3_plf53")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = 22.0

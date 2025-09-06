@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cs5omdseayc8w"]
+[gd_scene load_steps=11 format=3 uid="uid://cs5omdseayc8w"]
 
 [ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_awjts"]
 [ext_resource type="Texture2D" uid="uid://dw4ragxdnjfsu" path="res://Assets/Sprites/Exported/Citizens/static/citizen_08.png" id="2_awjts"]
+[ext_resource type="Texture2D" uid="uid://p1jkmn2fklfk" path="res://Assets/Sprites/Exported/HUD/Cursors/info_cursor-menor.png" id="2_k12tx"]
 [ext_resource type="Texture2D" uid="uid://bryl76pqbrhd1" path="res://Assets/Sprites/Exported/Citizens/static/citizen_08-sprite-sheet.png" id="3_k12tx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2lotf"]
@@ -49,6 +50,7 @@ z_index = 1
 collision_layer = 129
 collision_mask = 255
 script = ExtResource("1_awjts")
+interaction_cursor = ExtResource("2_k12tx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -107)
