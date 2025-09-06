@@ -148,12 +148,14 @@ func _update_schedule():
 		_change_state(State.PASSEANDO)
 
 func _change_state(new_state: State):
+	if current_state == State.TRABALHANDO:
+		StatusManager.mudar_status('dinheiro', 10)
 	if current_state == new_state: return
 	
 	current_state = new_state
 	# status_bubble.update_status(current_state)
 	
-	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+	if current_state in [State.TRABALHANDO]:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
 		animated_sprite.speed_scale = 1.0
@@ -178,10 +180,6 @@ func _change_state(new_state: State):
 			_set_new_random_destination()
 		State.TRABALHANDO:
 			animated_sprite.play("walk")
-			animated_sprite.speed_scale = dance_animation_speed
-			_on_work_turn_timer_timeout()
-		State.REAGINDO_AO_JOGADOR:
-			animated_sprite.play("dance")
 			animated_sprite.speed_scale = dance_animation_speed
 			_on_work_turn_timer_timeout()
 		State.OCIOSO:
@@ -239,7 +237,6 @@ func _on_area_2d_mouse_entered():
 	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
 		return
 		
-	print('mostrando balão')
 	status_bubble.update_status(current_state)
 	
 	if interaction_cursor:
@@ -247,15 +244,11 @@ func _on_area_2d_mouse_entered():
 	
 	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]: return
 	_state_before_interaction = current_state
-	_change_state(State.REAGINDO_AO_JOGADOR)
 
 func _on_area_2d_mouse_exited():
 	status_bubble.hide()
 		# Reseta o cursor para o padrão do sistema.
 	Input.set_custom_mouse_cursor(null)
-	
-	if current_state == State.REAGINDO_AO_JOGADOR:
-		_change_state(_state_before_interaction)
 
 func _perform_dance_shake(delta):
 	_time_passed += delta
