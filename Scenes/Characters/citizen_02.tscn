@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://748hyj07y8rd"]
+[gd_scene load_steps=11 format=3 uid="uid://748hyj07y8rd"]
 
 [ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_a0kkr"]
+[ext_resource type="Texture2D" uid="uid://p1jkmn2fklfk" path="res://Assets/Sprites/Exported/HUD/Cursors/info_cursor-menor.png" id="2_1sbc7"]
 [ext_resource type="Texture2D" uid="uid://b8kkisswbnhyy" path="res://Assets/Sprites/Exported/Citizens/static/citizen_02.png" id="2_a0kkr"]
 [ext_resource type="Texture2D" uid="uid://o1rimiy1j1lm" path="res://Assets/Sprites/Exported/Citizens/static/citizen_02-sprite-sheet.png" id="3_1sbc7"]
 
@@ -49,6 +50,7 @@ z_index = 1
 collision_layer = 129
 collision_mask = 255
 script = ExtResource("1_a0kkr")
+interaction_cursor = ExtResource("2_1sbc7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -107)

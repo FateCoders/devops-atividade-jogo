@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://r81tceg8r6oj"]
+[gd_scene load_steps=6 format=3 uid="uid://r81tceg8r6oj"]
 
 [ext_resource type="Script" uid="uid://bfsgxmm3j62m8" path="res://Scripts/UI/game_over.gd" id="1_jqelu"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="1_jxkuk"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_wpaxx"]
+[ext_resource type="Texture2D" uid="uid://bfwipt4dftc0k" path="res://Assets/Sprites/Exported/HUD/Cursors/pointer_cursor-menor.png" id="2_w88jv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jqelu"]
 font = ExtResource("1_wpaxx")
@@ -10,6 +11,7 @@ font_size = 75
 
 [node name="game_over" type="CanvasLayer"]
 script = ExtResource("1_jqelu")
+interaction_cursor = ExtResource("2_w88jv")
 
 [node name="bg_overlay" type="ColorRect" parent="."]
 anchors_preset = 15

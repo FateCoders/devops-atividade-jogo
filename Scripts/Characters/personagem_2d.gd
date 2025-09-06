@@ -26,10 +26,15 @@ enum State {
 @export var min_turn_time: float = 1.5
 @export var max_turn_time: float = 4.0
 
+@export_category("Interação do Cursor")
+@export var interaction_cursor: Texture2D
+@export var cursor_hotspot: Vector2 = Vector2.ZERO
+
 @export_category("Nós")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var work_turn_timer: Timer = $WorkTurnTimer
+@onready var status_bubble = $StatusBubbleAnchor/StatusBubble
 
 # Referências externas
 var house_node: House
@@ -58,6 +63,8 @@ var _time_passed: float = 0.0
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
 func _ready():
+	status_bubble.hide()
+	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_noise.seed = randi()
 	_noise.frequency = 2.0
@@ -141,9 +148,16 @@ func _update_schedule():
 		_change_state(State.PASSEANDO)
 
 func _change_state(new_state: State):
-	if current_state == new_state:
-		return
-
+	if current_state == new_state: return
+	
+	current_state = new_state
+	# status_bubble.update_status(current_state)
+	
+	if current_state in [State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
+		work_turn_timer.stop()
+		animated_sprite.position = Vector2.ZERO
+		animated_sprite.speed_scale = 1.0
+		
 	_cancel_idle_timer()
 	current_state = new_state
 
@@ -224,10 +238,22 @@ func _check_if_stuck(delta) -> bool:
 func _on_area_2d_mouse_entered():
 	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
 		return
+		
+	print('mostrando balão')
+	status_bubble.update_status(current_state)
+	
+	if interaction_cursor:
+		Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
+	
+	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]: return
 	_state_before_interaction = current_state
 	_change_state(State.REAGINDO_AO_JOGADOR)
 
 func _on_area_2d_mouse_exited():
+	status_bubble.hide()
+		# Reseta o cursor para o padrão do sistema.
+	Input.set_custom_mouse_cursor(null)
+	
 	if current_state == State.REAGINDO_AO_JOGADOR:
 		_change_state(_state_before_interaction)
 

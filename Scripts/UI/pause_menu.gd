@@ -1,5 +1,11 @@
 extends CanvasLayer
 
+@export_category("Interação do Cursor")
+@export var interaction_cursor: Texture2D
+@export var cursor_hotspot: Vector2 = Vector2.ZERO
+
+@export var default_cursor: Texture2D
+@export var default_hotspot: Vector2 = Vector2.ZERO
 @onready var resume_button = $menu_holder/resume_button
 
 func _ready() -> void:

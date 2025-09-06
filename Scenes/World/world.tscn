@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=16 format=4 uid="uid://bofjyi7d5qug8"]
 
 [ext_resource type="Script" uid="uid://cghxvxhbj6tn3" path="res://Scripts/UI/world.gd" id="1_dr8i3"]
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
 [ext_resource type="Texture2D" uid="uid://baphvn6xkhi6h" path="res://Assets/Sprites/Exported/Props/Nature/Grass/grass-flower-sheet.png" id="2_3rhlx"]
+[ext_resource type="Texture2D" uid="uid://db5nee7j2dml4" path="res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png" id="2_pvt60"]
 [ext_resource type="TileSet" uid="uid://cyqwtkln0j14o" path="res://Scenes/World/nature_collision.tres" id="4_dbvd7"]
 [ext_resource type="TileSet" uid="uid://b7lakbxncorsp" path="res://Scenes/World/details.tres" id="4_vbhkl"]
 [ext_resource type="PackedScene" uid="uid://crns310gb4aew" path="res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn" id="7_y0d6x"]
@@ -54,6 +55,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(629, 755, 787, 697, 933
 [node name="world" type="Node2D"]
 position = Vector2(3441, 4248)
 script = ExtResource("1_dr8i3")
+interaction_cursor = ExtResource("2_pvt60")
 
 [node name="gameTileMap" type="Node2D" parent="."]
 
@@ -98,6 +100,7 @@ position = Vector2(6351, -4196)
 [node name="Camera2D" type="Camera2D" parent="."]
 visible = false
 position = Vector2(2612, 694)
+scale = Vector2(1.07503, 1.03969)
 script = ExtResource("10_ugf0j")
 world_limits = Rect2(-1000, -700, 5500, 3000)
 
