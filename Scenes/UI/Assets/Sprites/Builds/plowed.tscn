@@ -127,3 +127,8 @@ position = Vector2(351, 114)
 
 [node name="WorkSport2" type="Marker2D" parent="."]
 position = Vector2(0, 114)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+position = Vector2(196, -109)
+scale = Vector2(2.26984, 0.620759)
+radius = 95.0

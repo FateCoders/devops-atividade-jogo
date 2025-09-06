@@ -47,3 +47,7 @@ shape = SubResource("RectangleShape2D_7sg2r")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
 position = Vector2(-312.64, 460.238)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+position = Vector2(-330.083, -59.0392)
+radius = 500.0

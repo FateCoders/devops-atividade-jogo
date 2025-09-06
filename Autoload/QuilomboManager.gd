@@ -102,3 +102,4 @@ func _spawn_npcs_for_workplace(workplace_node):
 			available_house.add_resident(new_npc)
 		else:
 			print("AVISO: Nenhum lar disponível para o novo NPC #", i + 1)
+			

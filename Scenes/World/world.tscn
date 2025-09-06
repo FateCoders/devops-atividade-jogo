@@ -55,18 +55,6 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(629, 755, 787, 697, 933
 position = Vector2(3441, 4248)
 script = ExtResource("1_dr8i3")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Hud" parent="CanvasLayer" instance=ExtResource("18_7ubof")]
-anchor_left = 0.0648438
-anchor_top = -0.230556
-anchor_right = 0.414844
-anchor_bottom = 0.601389
-offset_left = 813.0
-offset_top = 644.0
-offset_right = 742.0
-offset_bottom = 278.0
-
 [node name="gameTileMap" type="Node2D" parent="."]
 
 [node name="grass" type="TileMapLayer" parent="gameTileMap"]
@@ -83,6 +71,10 @@ tile_set = ExtResource("1_t1gg8")
 position = Vector2(-1, 0)
 tile_map_data = PackedByteArray("AAAk/1oAAAAAAAAAAABT/w0AAAAAAAAAAAAwALMAAAAAAAAAAABz/7cAAAAAAAAAAAATAS4AAAAAAAAAAADRAL0AAAAAAAAAAABpAOf/AAAAAAAAAADH//H+AAAAAAAAAAAU/8n+AAAAAAAAAAAXAcr/AAAAAAAAAAAYAcr/AAAAAAAAAADEAHgAAAAAAAAAAAC2AN3/AAAAAAAAAAB4AGb/AAAAAAAAAABl/zn/AAAAAAAAAAAoAFP/AAAAAAAAAACSAKP/AAAAAAAAAABCAYYAAAAAAAAAAABdATIAAAAAAAAAAACWABIAAAAAAAAAAAAVAckAAAAAAAAAAADOAPsAAAAAAAAAAABfAF4AAAAAAAAAAADG/6MAAAAAAAAAAAC9/1oAAAAAAAAAAAAJAHEAAAAAAAAAAAA9/7j/AAAAAAAAAAAa/yn/AAAAAAAAAACn/7n/AAAAAAAAAABs//b+AAAAAAAAAAD2APD/AAAAAAAAAAAe/2oAAAABAAAAAABD/1n/AAABAAAAAACNALQAAAABAAAAAACGAQwAAAABAAAAAADdAKr/AAABAAAAAACYAIX/AAABAAAAAAAKABz/AAABAAAAAACz/yf/AAABAAAAAABD/+7+AAABAAAAAADgAFEAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_l1hd3")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_4pv6w")
+navigation_layers = 65535
 
 [node name="nature-collision" type="TileMapLayer" parent="."]
 position = Vector2(-1, 0)
@@ -113,9 +105,17 @@ world_limits = Rect2(-1000, -700, 5500, 3000)
 position = Vector2(-1, 1)
 script = ExtResource("11_0ph6x")
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-navigation_polygon = SubResource("NavigationPolygon_4pv6w")
-navigation_layers = 65535
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Hud" parent="CanvasLayer" instance=ExtResource("18_7ubof")]
+anchor_left = 0.0648438
+anchor_top = -0.230556
+anchor_right = 0.414844
+anchor_bottom = 0.601389
+offset_left = 813.0
+offset_top = 644.0
+offset_right = 742.0
+offset_bottom = 278.0
 
 [node name="pause_menu" parent="." instance=ExtResource("16_dr8i3")]
 visible = false
