@@ -99,7 +99,9 @@ func _unhandled_input(event: InputEvent):
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
 				var build_pos = ghost_building.global_position
-				if build_type == "house": QuilomboManager.build_house(building_to_place_scene, build_pos)
+				if build_type == "house": 
+					QuilomboManager.build_house(building_to_place_scene, build_pos)
+					StatusManager.mudar_status("seguranca", 5)
 				elif build_type == "workplace": QuilomboManager.build_workplace(building_to_place_scene, build_pos)
 				_exit_build_mode()
 		
@@ -115,7 +117,6 @@ func _on_build_plantation_button_pressed():
 
 func _on_build_house_button_pressed():
 	enter_build_mode(HouseScene, "house")
-	StatusManager.mudar_status("seguranca", 5) 
 
 func enter_build_mode(building_scene: PackedScene, type: String):
 	if is_in_build_mode: return
