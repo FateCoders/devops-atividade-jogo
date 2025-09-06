@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://boh7y5cx37ols"]
+
+[ext_resource type="Script" uid="uid://2bk5jyc46b3o" path="res://Scripts/UI/dialog.gd" id="1_0rfuu"]
+[ext_resource type="Texture2D" uid="uid://b752vhoy7oy7a" path="res://Scenes/UI/Assets/Sprites/paladin_faceset.png" id="1_ga0ek"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="2_0rfuu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kesuh"]
+line_spacing = 0.0
+font = ExtResource("2_0rfuu")
+font_size = 32
+shadow_color = Color(0, 0, 0, 0.6)
+
+[node name="DialogScreen" type="Control" node_paths=PackedStringArray("_name", "_dialog", "_faceset")]
+custom_minimum_size = Vector2(320, 80)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -80.0
+offset_right = 320.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0rfuu")
+_name = NodePath("bg/HContainer/VContainer/Name")
+_dialog = NodePath("bg/HContainer/VContainer/Dialog")
+_faceset = NodePath("bg/HContainer/Border/Faceset")
+
+[node name="bg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.596078)
+
+[node name="HContainer" type="HBoxContainer" parent="bg"]
+custom_minimum_size = Vector2(620, 140)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -70.0
+offset_right = 300.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Border" type="ColorRect" parent="bg/HContainer"]
+custom_minimum_size = Vector2(144, 0)
+layout_mode = 2
+
+[node name="Faceset" type="TextureRect" parent="bg/HContainer/Border"]
+custom_minimum_size = Vector2(130, 135)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.5
+offset_top = -67.5
+offset_right = 67.5
+offset_bottom = 67.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_ga0ek")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VContainer" type="VBoxContainer" parent="bg/HContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+
+[node name="Name" type="Label" parent="bg/HContainer/VContainer"]
+layout_mode = 2
+text = "Soldier"
+label_settings = SubResource("LabelSettings_kesuh")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Dialog" type="RichTextLabel" parent="bg/HContainer/VContainer"]
+custom_minimum_size = Vector2(450, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = 1
+theme_override_fonts/normal_font = ExtResource("2_0rfuu")
+theme_override_font_sizes/normal_font_size = 32
+text = "Jesus eu te amo"

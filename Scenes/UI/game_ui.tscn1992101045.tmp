@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=7 format=3 uid="uid://cqadgleg81hl"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
@@ -11,7 +11,6 @@ font = ExtResource("5_lolt2")
 font_size = 70
 
 [node name="GameUI" type="CanvasLayer"]
-process_mode = 3
 script = ExtResource("1_3fiko")
 
 [node name="ColorRect" type="ColorRect" parent="."]
