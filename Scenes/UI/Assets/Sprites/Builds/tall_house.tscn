@@ -15,6 +15,7 @@ size = Vector2(355.21, 363.261)
 scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_7sg2r")
+capacity = null
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(0, -183)
