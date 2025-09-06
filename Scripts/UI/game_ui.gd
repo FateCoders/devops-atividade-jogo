@@ -115,6 +115,7 @@ func _on_build_plantation_button_pressed():
 
 func _on_build_house_button_pressed():
 	enter_build_mode(HouseScene, "house")
+	StatusManager.mudar_status("seguranca", 5) 
 
 func enter_build_mode(building_scene: PackedScene, type: String):
 	if is_in_build_mode: return
