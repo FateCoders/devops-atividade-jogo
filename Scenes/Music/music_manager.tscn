@@ -1,19 +1,32 @@
-[gd_scene load_steps=6 format=3 uid="uid://dub3kj7ss45vf"]
+[gd_scene load_steps=10 format=3 uid="uid://dub3kj7ss45vf"]
 
 [ext_resource type="Script" uid="uid://d3y34dko4c48" path="res://Autoload/MusicManager.gd" id="1_5nsp2"]
-[ext_resource type="AudioStream" uid="uid://bfghje1rxeidt" path="res://Assets/Audio/decisionsong(demo).mp3" id="2_8f76m"]
-[ext_resource type="AudioStream" uid="uid://bbshxbwakf53v" path="res://Assets/Audio/mapsong.mp3" id="3_dw8b5"]
-[ext_resource type="AudioStream" uid="uid://pntu8v04jt25" path="res://Assets/Audio/actionsong.mp3" id="4_3t4bf"]
+[ext_resource type="AudioStream" uid="uid://dxhgrv8kq7p6f" path="res://Assets/Audio/OST/thememenusong.mp3" id="2_dw8b5"]
+[ext_resource type="AudioStream" uid="uid://bbshxbwakf53v" path="res://Assets/Audio/OST/mapsong.mp3" id="3_dw8b5"]
+[ext_resource type="AudioStream" uid="uid://ct6ir5fca2h31" path="res://Assets/Audio/SFX/noite_fundo.mp3" id="4_3t4bf"]
+[ext_resource type="AudioStream" uid="uid://cql6nr8v2x4xu" path="res://Assets/Audio/SFX/coruja.mp3" id="5_4nlss"]
+[ext_resource type="AudioStream" uid="uid://b5j8ot3nywmad" path="res://Assets/Audio/SFX/galhos.mp3" id="6_msu8p"]
+[ext_resource type="AudioStream" uid="uid://cph0x27r07ir5" path="res://Assets/Audio/SFX/chuva.mp3" id="7_5dklf"]
 
 [sub_resource type="AudioStream" id="AudioStream_dw8b5"]
 
+[sub_resource type="AudioStream" id="AudioStream_4nlss"]
+
 [node name="MusicManager" type="Node"]
 script = ExtResource("1_5nsp2")
-menu_music = ExtResource("2_8f76m")
+menu_music = ExtResource("2_dw8b5")
 day_music = ExtResource("3_dw8b5")
 night_music = ExtResource("4_3t4bf")
+night_sfx = Array[AudioStream]([ExtResource("5_4nlss"), ExtResource("6_msu8p"), ExtResource("7_5dklf")])
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStream_dw8b5")
+volume_db = -5.0
 autoplay = true
 playback_type = 1
+
+[node name="AmbientSFXPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStream_4nlss")
+volume_db = -10.0
+
+[node name="AmbientTimer" type="Timer" parent="."]

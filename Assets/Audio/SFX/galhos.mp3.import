@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/galhos.mp3-e198f5780c6baa7265bce1cd3e2ae63a.m
 [params]
 
 loop=false
-loop_offset=0
-bpm=0
+loop_offset=0.0
+bpm=0.0
 beat_count=0
 bar_beats=4

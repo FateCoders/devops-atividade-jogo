@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://crns310gb4aew"]
+[gd_scene load_steps=16 format=3 uid="uid://crns310gb4aew"]
 
 [ext_resource type="Script" uid="uid://bj5s1nss6m4qc" path="res://Scripts/Builds/builds.gd" id="1_n1q47"]
 [ext_resource type="Texture2D" uid="uid://d4kvdk2510a4v" path="res://Assets/Sprites/Exported/Props/Builds/Bonfires/bonfire-01.png" id="2_dh50r"]
+[ext_resource type="AudioStream" uid="uid://2ifq61bb2xf0" path="res://Assets/Audio/SFX/fogo.mp3" id="3_dh50r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ukda2"]
 atlas = ExtResource("2_dh50r")
@@ -86,6 +87,7 @@ y_sort_enabled = true
 script = ExtResource("1_n1q47")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1)
 sprite_frames = SubResource("SpriteFrames_wd02g")
 animation = &"lit"
 frame_progress = 0.0883456
@@ -102,3 +104,8 @@ energy = 1.5
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_dh50r")
 texture_scale = 6.0
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_dh50r")
+autoplay = true
+max_distance = 300.0
