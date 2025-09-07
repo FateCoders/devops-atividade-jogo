@@ -10,22 +10,42 @@ class_name Plantation
 @export var work_ends_at: float = 17.0 # 5 PM
 
 var workers: Array[Node] = []
-@onready var work_spots: Array[Marker2D] = _get_work_spots()
+var all_work_spots: Array[Marker2D] = []
+# ADICIONADO: Uma lista separada apenas para os locais que estão livres.
+var available_work_spots: Array[Marker2D] = []
 
 func _ready():
-	print("Plantação '", self.name, "' pronta.")
-
-func _get_work_spots() -> Array[Marker2D]:
-	var spots: Array[Marker2D] = []
+	print("Plantação '%s' pronta." % self.name)
+	# Pega todos os work_spots da cena.
 	for child in get_children():
 		if child is Marker2D:
-			spots.append(child)
-	return spots
+			all_work_spots.append(child)
+	
+	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
+	available_work_spots = all_work_spots.duplicate()
 
-func get_available_work_position() -> Vector2:
-	if not work_spots.is_empty():
-		return work_spots.pick_random().global_position
-	return global_position
+# MODIFICADO: Esta função agora "reserva" um local e o retorna.
+func claim_available_work_spot() -> Marker2D:
+	# Se não houver locais disponíveis, retorna nulo.
+	if available_work_spots.is_empty():
+		return null
+	
+	# Pega um local aleatório da lista de DISPONÍVEIS.
+	var spot = available_work_spots.pick_random()
+	# Remove o local escolhido da lista de disponíveis para que ninguém mais o pegue.
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado. Locais restantes: %d" % [spot.name, available_work_spots.size()])
+	return spot
+
+# ADICIONADO: Uma função para que o NPC "devolva" o local quando terminar.
+func release_work_spot(spot: Marker2D):
+	if is_instance_valid(spot) and not available_work_spots.has(spot):
+		available_work_spots.append(spot)
+		print("Local '%s' foi devolvido. Locais disponíveis: %d" % [spot.name, available_work_spots.size()])
 
 func add_worker(npc: Node):
 	workers.append(npc)
+
+# A função get_available_work_position() não é mais necessária, pois foi substituída
+# pela lógica mais inteligente de claim_available_work_spot().

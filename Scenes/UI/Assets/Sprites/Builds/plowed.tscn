@@ -123,7 +123,14 @@ tile_map_data = PackedByteArray("AAD8/wIAAAAAAAAAAAD8//n/AQAAAAAAAAD8/+//AgAAAAA
 tile_set = SubResource("TileSet_p6app")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(351, 114)
+position = Vector2(438, 39)
+gizmo_extents = 130.0
 
 [node name="WorkSport2" type="Marker2D" parent="."]
-position = Vector2(0, 114)
+position = Vector2(-68, 30)
+gizmo_extents = 130.0
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+position = Vector2(196, -109)
+scale = Vector2(2.26984, 0.620759)
+radius = 95.0

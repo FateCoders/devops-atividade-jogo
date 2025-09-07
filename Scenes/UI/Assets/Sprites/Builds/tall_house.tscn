@@ -6,10 +6,10 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1721, 562)
+size = Vector2(1721, 539.376)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(355.21, 363.261)
+size = Vector2(682.977, 590.392)
 
 [node name="House" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
@@ -36,14 +36,24 @@ region_rect = Rect2(0, 722.518, 1760, 557.482)
 
 [node name="CollisionShape2d" type="CollisionShape2D" parent="."]
 z_as_relative = false
-position = Vector2(-19.5, 171)
+position = Vector2(-19.5, 159.688)
 shape = SubResource("RectangleShape2D_dc8wa")
+
+[node name="DoorPosition" type="Marker2D" parent="."]
+position = Vector2(-323.374, 523.302)
+gizmo_extents = 48.5
 
 [node name="EntranceArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-317.152, 298.367)
+position = Vector2(-321.361, 277.753)
 shape = SubResource("RectangleShape2D_7sg2r")
 
-[node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-312.64, 460.238)
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+z_index = 3
+y_sort_enabled = true
+position = Vector2(-326.058, -111.369)
+radius = 500.0
+
+[connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
+[connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]
