@@ -5,7 +5,7 @@ class_name NPC
 # CONSTANTES
 #-----------------------------------------------------------------------------
 const MIN_VELOCITY_FOR_WALK: float = 10.0
-const EXIT_DISTANCE: float = 50.0
+const EXIT_DISTANCE: float = 100.0
 const STUCK_THRESHOLD: float = 0.5
 
 #-----------------------------------------------------------------------------
@@ -48,6 +48,7 @@ enum State {
 var house_node: House
 var work_node: Node
 var assigned_work_spot: Marker2D = null
+var house: House = null  # Referência à casa atual do NPC
 
 # Estado atual do NPC
 # MODIFICADO: O estado inicial agora é definido dinamicamente na função _ready
@@ -113,37 +114,31 @@ func _initialize_state_and_position():
 	var work_starts = work_node.work_starts_at
 	var work_ends = work_node.work_ends_at
 
-	# 1. Prioridade: Verificar se é horário de trabalho.
-	if current_hour >= work_starts and current_hour < work_ends:
-		print("'%s' está nascendo no trabalho." % name)
-		
-		# --- LÓGICA ATUALIZADA ---
-		# Acessa a lista de postos de trabalho diretamente do nó de trabalho.
-		var work_spots = work_node.get("work_spots")
-		if work_spots and not work_spots.is_empty():
-			# Escolhe um posto de trabalho aleatório e pega sua posição.
-			global_position = work_spots.pick_random().global_position
-		else:
-			# Se não houver postos definidos, usa a posição do próprio local de trabalho como fallback.
-			global_position = work_node.global_position
-		
-		# Define o estado para TRABALHANDO.
-		_change_state(State.TRABALHANDO)
-		
-	# 2. Se não, verificar se é noite.
-	elif WorldTimeManager.is_night():
-		print("'%s' está nascendo em casa (noite)." % name)
-		# Define o estado para EM_CASA (o que o fará ficar invisível).
-		_change_state(State.EM_CASA)
-		
-	# 3. Se não for nenhum dos acima, é dia e hora de passear.
-	else:
-		print("'%s' está nascendo fora de casa (passeando)." % name)
-		# Posiciona o NPC do lado de fora da sua casa.
-		global_position = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
-		# Define o estado para PASSEANDO.
-		_change_state(State.PASSEANDO)
+	# --- LÓGICA DE NASCIMENTO REESCRITA ---
 
+	# Primeiro, lida com o caso especial da noite.
+	if WorldTimeManager.is_night():
+		print("'%s' está nascendo em casa (noite)." % name)
+		# O estado EM_CASA já cuida de esconder o NPC na posição correta.
+		_change_state(State.EM_CASA)
+	
+	# Para QUALQUER outro caso (se for dia), ele sempre nascerá na frente da casa.
+	else:
+		print("'%s' está nascendo do lado de fora da casa." % name)
+		# 1. Define a posição inicial na porta da casa.
+		global_position = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
+		
+		# 2. Agora, decide qual é a PRIMEIRA TAREFA do dia.
+		# Se for horário de trabalho...
+		if current_hour >= work_starts and current_hour < work_ends:
+			# ...a tarefa é ir para o trabalho.
+			print("--> É hora de trabalhar, então o estado inicial será INDO_PARA_O_TRABALHO.")
+			_change_state(State.INDO_PARA_O_TRABALHO)
+		# Se não for horário de trabalho...
+		else:
+			# ...a tarefa é sair de casa para passear.
+			print("--> É tempo livre, então o estado inicial será SAINDO_DE_CASA.")
+			_change_state(State.SAINDO_DE_CASA)
 
 #-----------------------------------------------------------------------------
 # LOOP PRINCIPAL
@@ -285,8 +280,7 @@ func _change_state(new_state: State):
 		State.SAINDO_DE_CASA:
 			if is_instance_valid(house_node):
 				# MODIFICADO: Garante que o NPC volte a ter um corpo físico ao sair
-				if collision_shape:
-					collision_shape.disabled = false
+				collision_shape.disabled = false
 				
 				show()
 				global_position = house_node.get_door_position()
@@ -295,6 +289,7 @@ func _change_state(new_state: State):
 
 		State.INDO_PARA_CASA:
 			if is_instance_valid(house_node):
+				collision_shape.disabled = false
 				show()
 				var door_position = house_node.get_door_position()
 				var random_offset = Vector2(randf_range(-25.0, 25.0), 0) 
@@ -321,19 +316,28 @@ func _change_state(new_state: State):
 			_set_new_random_destination()
 
 		State.TRABALHANDO:
+			if collision_shape:
+				collision_shape.disabled = false
 			animated_sprite.play("walk")
 			_on_work_turn_timer_timeout()
 
 		State.OCIOSO:
+			if collision_shape:
+				collision_shape.disabled = false
 			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
 			_idle_timer.timeout.connect(_on_idle_timeout)
 
 		State.EM_CASA:
 			velocity = Vector2.ZERO
-			hide()
 			# MODIFICADO: Desabilita a colisão, tornando o NPC um "fantasma"
-			if collision_shape:
-				collision_shape.disabled = true
+			print('NPC fantasma')
+			print('NPC fantasma')
+			print('NPC fantasma')
+			print(collision_shape.disabled)
+			collision_shape.disabled = true
+			print(collision_shape.disabled)
+			hide()			
+
 
 func _on_target_reached():
 	match current_state:
@@ -348,12 +352,13 @@ func _on_target_reached():
 func enter_house():
 	if current_state == State.INDO_PARA_CASA:
 		print("'%s' está entrando na casa." % name)
+		# Esconde o NPC
+		hide()
+		# Desativa a colisão para não bloquear a entrada
+		if collision_shape:
+			collision_shape.disabled = true
 		_change_state(State.EM_CASA)
 
-func exit_house_complete():
-	if current_state == State.SAINDO_DE_CASA:
-		print("'%s' completou a saída da casa." % name)
-		_change_state(State.PASSEANDO)
 #=============================================================================
 
 #-----------------------------------------------------------------------------
@@ -388,6 +393,8 @@ func _check_if_stuck(delta) -> bool:
 func _perform_unstuck():
 	if _is_unstucking or State in [State.EM_CASA, State.SAINDO_DE_CASA]: return
 	
+	collision_shape.disabled = true
+	
 	_is_unstucking = true
 	print("'%s' está preso! Iniciando procedimento para destravar." % self.name)
 	_stuck_time = 0.0
@@ -407,6 +414,7 @@ func _perform_unstuck():
 
 	get_tree().create_timer(1.0).timeout.connect(func():
 		print("--> Procedimento de destravar para '%s' finalizado." % self.name)
+		collision_shape.disabled = false
 		_is_unstucking = false
 	)
 
@@ -463,6 +471,35 @@ func _on_idle_timeout():
 func _cancel_idle_timer():
 	if _idle_timer != null and not _idle_timer.is_queued_for_deletion():
 		_idle_timer = null
+
+# --- NPC PEDINDO PARA SAIR ---
+func request_exit_house():
+	if house: # referência para a casa atual do NPC
+		house.request_exit(self) # adiciona o NPC à fila de saída
+
+
+# --- NPC RECEBE AUTORIZAÇÃO PARA SAIR ---
+func start_exit():
+	# Coloca o estado correto
+	current_state = State.SAINDO_DE_CASA
+	
+	# Define o destino como a porta da casa
+	if house:
+		nav_agent.target_position = house.get_door_position()
+	
+	print("%s está saindo da casa..." % name)
+
+
+# --- NPC TERMINA A SAÍDA ---
+func exit_house_complete():
+	current_state = State.PASSEANDO
+	
+	# Informa à casa que terminou de sair para liberar o próximo
+	if house:
+		house.notify_exit_done()
+	
+	print("%s terminou de sair da casa." % name)
+
 
 #-----------------------------------------------------------------------------
 # FUNÇÕES DE SAVE/LOAD

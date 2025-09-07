@@ -51,7 +51,6 @@ z_index = 1
 collision_layer = 129
 collision_mask = 255
 script = ExtResource("1_0ao5h")
-wander_range = 50.0
 interaction_cursor = ExtResource("2_op7hw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
