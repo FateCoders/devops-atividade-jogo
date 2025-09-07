@@ -21,16 +21,18 @@ gradient = SubResource("Gradient_vaxuf")
 
 [node name="StatusBubble" type="Control"]
 layout_mode = 3
-anchor_right = 0.219
-anchor_bottom = 0.082
-offset_right = -280.32
-offset_bottom = -59.04
+anchor_right = 0.28
+anchor_bottom = 0.081
+offset_right = -358.4
+offset_bottom = -58.32
+scale = Vector2(1.16334, 1.35974)
 script = ExtResource("1_vaxuf")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 layout_mode = 0
 offset_right = 357.0
 offset_bottom = 64.0
+scale = Vector2(2.02488, 2.02488)
 texture = ExtResource("2_78qeo")
 
 [node name="StatusIcon" type="TextureRect" parent="NinePatchRect"]
@@ -41,6 +43,7 @@ offset_top = 13.0
 offset_right = 60.0
 offset_bottom = 51.0
 grow_vertical = 2
+scale = Vector2(0.848764, 0.997907)
 texture = ExtResource("3_gjnvj")
 
 [node name="StatusLabel" type="Label" parent="NinePatchRect"]
@@ -57,7 +60,7 @@ label_settings = SubResource("LabelSettings_gjnvj")
 
 [node name="PointLight2D" type="PointLight2D" parent="NinePatchRect"]
 position = Vector2(178.5, 30.5)
-scale = Vector2(5.14063, 0.859375)
+scale = Vector2(5.14063, 0.573908)
 energy = 2.0
 blend_mode = 2
 texture = SubResource("GradientTexture2D_78qeo")

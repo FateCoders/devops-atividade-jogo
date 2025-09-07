@@ -77,6 +77,7 @@ shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
 [node name="StatusBubbleAnchor" type="Node2D" parent="."]
+scale = Vector2(1.03413, 1)
 
 [node name="StatusBubble" parent="StatusBubbleAnchor" instance=ExtResource("5_5wim6")]
 
