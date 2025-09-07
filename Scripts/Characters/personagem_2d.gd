@@ -42,6 +42,8 @@ enum State {
 @onready var work_turn_timer: Timer = $WorkTurnTimer
 @onready var status_bubble = $StatusBubbleAnchor/StatusBubble
 
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+
 # Referências externas
 var house_node: House
 var work_node: Node
@@ -197,6 +199,7 @@ func _change_state(new_state: State):
 	
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()
+		animated_sprite.position = Vector2.ZERO
 		animated_sprite.speed_scale = 1.0
 		
 	_cancel_idle_timer()
@@ -204,6 +207,10 @@ func _change_state(new_state: State):
 	match current_state:
 		State.SAINDO_DE_CASA:
 			if is_instance_valid(house_node):
+				# MODIFICADO: Garante que o NPC volte a ter um corpo físico ao sair
+				if collision_shape:
+					collision_shape.disabled = false
+				
 				show()
 				global_position = house_node.get_door_position()
 				var exit_point = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
@@ -212,7 +219,9 @@ func _change_state(new_state: State):
 		State.INDO_PARA_CASA:
 			if is_instance_valid(house_node):
 				show()
-				nav_agent.target_position = house_node.get_door_position()
+				var door_position = house_node.get_door_position()
+				var random_offset = Vector2(randf_range(-25.0, 25.0), 0) 
+				nav_agent.target_position = door_position + random_offset
 
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
@@ -220,6 +229,9 @@ func _change_state(new_state: State):
 				nav_agent.target_position = work_node.get_available_work_position()
 
 		State.PASSEANDO:
+			# MODIFICADO: Garante que o NPC tenha colisão ao passear (caso spawne nesse estado)
+			if collision_shape:
+				collision_shape.disabled = false
 			_set_new_random_destination()
 
 		State.TRABALHANDO:
@@ -233,6 +245,9 @@ func _change_state(new_state: State):
 		State.EM_CASA:
 			velocity = Vector2.ZERO
 			hide()
+			# MODIFICADO: Desabilita a colisão, tornando o NPC um "fantasma"
+			if collision_shape:
+				collision_shape.disabled = true
 
 func _on_target_reached():
 	match current_state:

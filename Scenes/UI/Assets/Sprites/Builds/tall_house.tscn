@@ -6,10 +6,10 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1721, 562)
+size = Vector2(1721, 539.376)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(729.94, 506.346)
+size = Vector2(831.917, 465.605)
 
 [node name="House" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
@@ -36,21 +36,21 @@ region_rect = Rect2(0, 722.518, 1760, 557.482)
 
 [node name="CollisionShape2d" type="CollisionShape2D" parent="."]
 z_as_relative = false
-position = Vector2(-19.5, 171)
+position = Vector2(-19.5, 159.688)
 shape = SubResource("RectangleShape2D_dc8wa")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-324.716, 460.238)
-
-[node name="EntranceArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-312.64, 406.993)
-shape = SubResource("RectangleShape2D_7sg2r")
+position = Vector2(-320.69, 476.339)
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
 position = Vector2(-330.083, -59.0392)
 radius = 500.0
+
+[node name="EntranceArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
+position = Vector2(-318.007, 318.007)
+shape = SubResource("RectangleShape2D_7sg2r")
 
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
 [connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]
