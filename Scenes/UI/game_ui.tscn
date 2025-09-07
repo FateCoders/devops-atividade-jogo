@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=10 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Texture2D" uid="uid://d2masrfvp7cqt" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png" id="2_tig4k"]
@@ -11,6 +11,14 @@
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
 font = ExtResource("5_lolt2")
 font_size = 70
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_plf53"]
+font = ExtResource("5_lolt2")
+font_size = 45
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
 
 [node name="GameUI" type="CanvasLayer"]
 process_mode = 3
@@ -50,7 +58,7 @@ theme = ExtResource("2_vo2tu")
 text = "Construir casa grande"
 icon = ExtResource("3_5b8pf")
 
-[node name="Label" type="Label" parent="."]
+[node name="HeaderText" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -60,6 +68,12 @@ offset_bottom = 85.0
 grow_horizontal = 2
 text = "Modo Construção"
 label_settings = SubResource("LabelSettings_tig4k")
+
+[node name="DayLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Dia 01"
+label_settings = SubResource("LabelSettings_plf53")
 
 [connection signal="pressed" from="VBoxContainer/BuildPlantetionButton" to="." method="_on_build_plantation_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BuildHouseButton" to="." method="_on_build_house_button_pressed"]

@@ -8,6 +8,8 @@ extends CanvasLayer
 @export var default_cursor: Texture2D
 @export var default_hotspot: Vector2 = Vector2.ZERO
 
+@onready var day_label: Label = $DayLabel
+
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
 
@@ -25,6 +27,9 @@ var build_type: String = ""
 
 func _ready():
 	visible = false
+	
+	WorldTimeManager.day_passed.connect(_on_day_passed)
+	_on_day_passed(WorldTimeManager.current_day)
 
 func _process(delta: float):
 	if visible: 
@@ -76,6 +81,9 @@ func _unhandled_input(event: InputEvent):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if is_in_build_mode:
 			_exit_build_mode()
+
+func _on_day_passed(new_day: int):
+	day_label.text = "Dia: %d" % new_day
 
 func _on_build_plantation_button_pressed():
 	enter_build_mode(PlantationScene, "workplace")

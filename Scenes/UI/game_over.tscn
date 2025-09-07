@@ -44,6 +44,7 @@ text = "Fim de Jogo"
 label_settings = SubResource("LabelSettings_jqelu")
 
 [node name="quit_button" type="Button" parent="VBoxContainer"]
+process_mode = 3
 layout_mode = 2
 theme = ExtResource("1_jxkuk")
 text = "Quit game"
