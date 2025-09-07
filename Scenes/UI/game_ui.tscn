@@ -1,11 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=8 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
-[ext_resource type="Texture2D" uid="uid://d2masrfvp7cqt" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png" id="2_tig4k"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
 [ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="3_5b8pf"]
 [ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="3_6w80a"]
-[ext_resource type="Texture2D" uid="uid://db5nee7j2dml4" path="res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png" id="3_plf53"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="5_lolt2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
@@ -23,13 +21,11 @@ outline_color = Color(0, 0, 0, 1)
 [node name="GameUI" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_3fiko")
-interaction_cursor = ExtResource("2_tig4k")
-default_cursor = ExtResource("3_plf53")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = 22.0
-offset_top = 597.0
-offset_right = 406.0
+offset_top = 372.0
+offset_right = 546.0
 offset_bottom = 707.0
 color = Color(0, 0, 0, 0.392157)
 
@@ -58,6 +54,41 @@ theme = ExtResource("2_vo2tu")
 text = "Construir casa grande"
 icon = ExtResource("3_5b8pf")
 
+[node name="BuildHidingPlaceButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_vo2tu")
+text = "Construir esconderijo"
+icon = ExtResource("3_5b8pf")
+
+[node name="BuildInfirmaryButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_vo2tu")
+text = "Construir enfermaria"
+icon = ExtResource("3_5b8pf")
+
+[node name="BuildTrainingAreaButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_vo2tu")
+text = "Construir área de treinamento"
+icon = ExtResource("3_5b8pf")
+
+[node name="BuildChurchButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_vo2tu")
+text = "Construir centro espiritual"
+icon = ExtResource("3_5b8pf")
+
+[node name="BuildLeadersHouseButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_vo2tu")
+text = "Construir casa do líder"
+icon = ExtResource("3_5b8pf")
+
 [node name="HeaderText" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
@@ -75,5 +106,9 @@ offset_bottom = 23.0
 text = "Dia 01"
 label_settings = SubResource("LabelSettings_plf53")
 
-[connection signal="pressed" from="VBoxContainer/BuildPlantetionButton" to="." method="_on_build_plantation_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BuildHouseButton" to="." method="_on_build_house_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BuildHidingPlaceButton" to="." method="_on_build_hiding_place_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BuildInfirmaryButton" to="." method="_on_build_infirmary_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BuildTrainingAreaButton" to="." method="_on_build_training_area_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BuildChurchButton" to="." method="_on_build_church_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BuildLeadersHouseButton" to="." method="_on_build_leaders_house_button_pressed"]

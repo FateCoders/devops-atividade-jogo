@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://tuggivakc5ta"]
+
+[ext_resource type="Script" uid="uid://ccmaxq5us7qps" path="res://Scripts/Builds/church.gd" id="1_mpu7n"]
+[ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_0fuy5"]
+[ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="2_khm82"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
+size = Vector2(1121, 760)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
+size = Vector2(382, 367)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+modulate = Color(0, 1, 0.8, 1)
+scale = Vector2(0.750691, 0.750691)
+physics_material_override = SubResource("PhysicsMaterial_ooq57")
+script = ExtResource("1_mpu7n")
+npc_scene_to_spawn = ExtResource("2_khm82")
+
+[node name="Sprite" type="Node2D" parent="."]
+position = Vector2(-9, -4)
+
+[node name="Top" type="Sprite2D" parent="Sprite"]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(0, -316)
+texture = ExtResource("2_0fuy5")
+region_enabled = true
+region_rect = Rect2(0, 0, 1280, 520.4)
+
+[node name="Bottom" type="Sprite2D" parent="Sprite"]
+y_sort_enabled = true
+position = Vector2(0, 323)
+texture = ExtResource("2_0fuy5")
+region_enabled = true
+region_rect = Rect2(0, 521.14, 1280, 758.86)
+
+[node name="MurosCollision" type="CollisionShape2D" parent="."]
+position = Vector2(-8.5, 320)
+shape = SubResource("RectangleShape2D_m5062")
+
+[node name="ZonaDeEntrada" type="Area2D" parent="."]
+position = Vector2(-5.32842, 704.684)
+
+[node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
+position = Vector2(-1.33211, -165.181)
+shape = SubResource("RectangleShape2D_otsq3")
+
+[node name="WorkSpot1" type="Marker2D" parent="."]
+position = Vector2(-6.66046, 725.998)
+gizmo_extents = 130.0
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
+[connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]

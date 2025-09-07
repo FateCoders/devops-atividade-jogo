@@ -21,6 +21,21 @@ func register_npc(npc: NPC):
 		all_npcs.append(npc)
 
 # --- CONSTRUÇÃO ---
+func build_structure(structure_scene: PackedScene, build_position: Vector2):
+	if not structure_scene:
+		printerr("Tentativa de construir uma estrutura sem cena válida!")
+		return
+
+	var new_structure = structure_scene.instantiate()
+	get_tree().current_scene.add_child(new_structure)
+	new_structure.global_position = build_position
+	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
+
+	# Se a estrutura for uma casa, ela se registrará sozinha.
+	# Se for um local de trabalho, vamos gerar os NPCs para ela.
+	if not new_structure is House:
+		_spawn_npcs_for_workplace(new_structure)
+
 func build_house(house_scene: PackedScene, build_position: Vector2):
 	if not house_scene:
 		printerr("Tentativa de construir casa sem cena válida!")
@@ -41,18 +56,28 @@ func build_workplace(workplace_scene: PackedScene, build_position: Vector2):
 	new_workplace.global_position = build_position
 	print("--> Construído local '%s' em %s" % [new_workplace.name, build_position])
 
-	# Spawna NPCs depois que o nó já está pronto
-	call_deferred("_spawn_npcs_for_workplace", new_workplace)
+	_spawn_npcs_for_workplace(new_workplace)
 
 # --- NPCs ---
 func _spawn_npcs_for_workplace(workplace_node):
 	print("--> Verificando NPCs para '%s'" % workplace_node.name)
 
+	# MODIFICADO: A verificação de npc_count agora vem PRIMEIRO.
+	# Todas as suas construções têm a variável npc_count, então esta linha é segura.
 	var npc_count = workplace_node.npc_count
+	
+	# Se a construção não gera NPCs (npc_count == 0), nós paramos aqui.
+	if npc_count == 0:
+		print("--> Nenhum NPC será gerado para esta construção.")
+		return
+
+	# Se chegamos até aqui, significa que npc_count > 0.
+	# Agora sim é seguro acessar a variável npc_scene_to_spawn.
 	var npc_scene = workplace_node.npc_scene_to_spawn
 
-	if npc_count == 0 or not npc_scene:
-		print("--> Nenhum NPC será gerado.")
+	# Verificação de segurança extra caso a cena não tenha sido definida no inspetor.
+	if not npc_scene:
+		printerr("--> ERRO: '%s' deveria gerar %d NPCs, mas a cena do NPC não foi definida!" % [workplace_node.name, npc_count])
 		return
 
 	var current_scene = get_tree().current_scene
@@ -62,16 +87,13 @@ func _spawn_npcs_for_workplace(workplace_node):
 		var npc = npc_scene.instantiate()
 		current_scene.add_child(npc)
 
-		# Posição segura
 		var desired_pos = workplace_node.global_position + Vector2(randf_range(-30, 30), randf_range(50, 80))
 		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, desired_pos)
 		npc.global_position = safe_pos
 		print("--> NPC #%d gerado em %s" % [i + 1, safe_pos])
 
-		# Liga ao trabalho
 		npc.work_node = workplace_node
 
-		# Liga a uma casa se houver disponível
 		var house = _find_house_with_space()
 		if house:
 			npc.house_node = house

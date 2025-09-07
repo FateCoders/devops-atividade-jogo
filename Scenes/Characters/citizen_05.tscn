@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://c20c71vq4h2ik"]
+[gd_scene load_steps=12 format=3 uid="uid://c20c71vq4h2ik"]
 
 [ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_3hg3t"]
 [ext_resource type="Texture2D" uid="uid://cv54p6cswcteo" path="res://Assets/Sprites/Exported/Citizens/static/citizen_05.png" id="2_3hg3t"]
 [ext_resource type="Texture2D" uid="uid://p1jkmn2fklfk" path="res://Assets/Sprites/Exported/HUD/Cursors/info_cursor-menor.png" id="2_w7cbd"]
 [ext_resource type="Texture2D" uid="uid://bnd047yviedps" path="res://Assets/Sprites/Exported/Citizens/static/citizen_05-sprite-sheet.png" id="3_w7cbd"]
+[ext_resource type="PackedScene" uid="uid://bm7553cnw05kc" path="res://Scenes/UI/status_bubble.tscn" id="5_y5j4c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y5j4c"]
 atlas = ExtResource("2_3hg3t")
@@ -73,6 +74,8 @@ position = Vector2(6, -30)
 scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
+
+[node name="StatusBubbleAnchor" parent="." instance=ExtResource("5_y5j4c")]
 
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

@@ -1,0 +1,42 @@
+# SpiritualCenter.gd
+extends Node2D
+class_name SpiritualCenter
+
+@export var npc_count: int = 1
+@export var npc_scene_to_spawn: PackedScene
+
+@export_category("Horário de Trabalho")
+@export var work_starts_at: float = 10.0
+@export var work_ends_at: float = 16.0
+
+# ADICIONADO: Variáveis para gerenciar os locais de trabalho.
+var all_work_spots: Array[Marker2D] = []
+var available_work_spots: Array[Marker2D] = []
+
+func _ready():
+	# ADICIONADO: Lógica para encontrar e inicializar os work_spots.
+	for child in get_children():
+		if child is Marker2D:
+			all_work_spots.append(child)
+	available_work_spots = all_work_spots.duplicate()
+
+	StatusManager.mudar_status("relacoes", 10)
+	StatusManager.mudar_status("saude", 5)
+	print("Centro Espiritual '%s' pronto. Locais de trabalho encontrados: %d" % [self.name, all_work_spots.size()])
+
+# ADICIONADO: Função para que NPCs reivindiquem um local.
+func claim_available_work_spot() -> Marker2D:
+	if available_work_spots.is_empty():
+		return null
+	
+	var spot = available_work_spots.pick_random()
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	return spot
+
+# ADICIONADO: Função para que NPCs devolvam um local.
+func release_work_spot(spot: Marker2D):
+	if is_instance_valid(spot) and not available_work_spots.has(spot):
+		available_work_spots.append(spot)
+		print("Local '%s' foi devolvido para '%s'. Locais disponíveis: %d" % [spot.name, self.name, available_work_spots.size()])
