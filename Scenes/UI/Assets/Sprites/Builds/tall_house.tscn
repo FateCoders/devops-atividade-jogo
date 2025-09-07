@@ -9,7 +9,7 @@
 size = Vector2(1721, 539.376)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(831.917, 465.605)
+size = Vector2(1011.72, 565.569)
 
 [node name="House" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
@@ -49,7 +49,7 @@ radius = 500.0
 [node name="EntranceArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-318.007, 318.007)
+position = Vector2(-296.538, 367.989)
 shape = SubResource("RectangleShape2D_7sg2r")
 
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]

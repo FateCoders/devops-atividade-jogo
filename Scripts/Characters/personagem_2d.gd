@@ -116,15 +116,26 @@ func _initialize_state_and_position():
 	# 1. Prioridade: Verificar se é horário de trabalho.
 	if current_hour >= work_starts and current_hour < work_ends:
 		print("'%s' está nascendo no trabalho." % name)
-		# Posiciona o NPC diretamente no local de trabalho.
-		global_position = work_node.get_available_work_position()
+		
+		# --- LÓGICA ATUALIZADA ---
+		# Acessa a lista de postos de trabalho diretamente do nó de trabalho.
+		var work_spots = work_node.get("work_spots")
+		if work_spots and not work_spots.is_empty():
+			# Escolhe um posto de trabalho aleatório e pega sua posição.
+			global_position = work_spots.pick_random().global_position
+		else:
+			# Se não houver postos definidos, usa a posição do próprio local de trabalho como fallback.
+			global_position = work_node.global_position
+		
 		# Define o estado para TRABALHANDO.
 		_change_state(State.TRABALHANDO)
+		
 	# 2. Se não, verificar se é noite.
 	elif WorldTimeManager.is_night():
 		print("'%s' está nascendo em casa (noite)." % name)
 		# Define o estado para EM_CASA (o que o fará ficar invisível).
 		_change_state(State.EM_CASA)
+		
 	# 3. Se não for nenhum dos acima, é dia e hora de passear.
 	else:
 		print("'%s' está nascendo fora de casa (passeando)." % name)
@@ -197,7 +208,7 @@ func request_to_yield_path():
 	# MODIFICADO: A nova regra é muito mais flexível.
 	# Um NPC só vai recusar o pedido se ele estiver se movendo para algum lugar.
 	# Se ele estiver parado (trabalhando, ocioso, etc), ele vai ceder a passagem.
-	if is_yielding:
+	if is_yielding or State.EM_CASA:
 		# Se já estou cedendo OU se minha velocidade não é zero, eu recuso.
 		return
 	
@@ -375,7 +386,7 @@ func _check_if_stuck(delta) -> bool:
 	return false
 
 func _perform_unstuck():
-	if _is_unstucking: return
+	if _is_unstucking or State in [State.EM_CASA, State.SAINDO_DE_CASA]: return
 	
 	_is_unstucking = true
 	print("'%s' está preso! Iniciando procedimento para destravar." % self.name)

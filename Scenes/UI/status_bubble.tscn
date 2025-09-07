@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://bm7553cnw05kc"]
 
-[ext_resource type="Script" uid="uid://b0vb36drd13rr" path="res://Scripts/UI/statusBubble.gd" id="1_vaxuf"]
+[ext_resource type="Script" path="res://Scripts/UI/statusBubble.gd" id="1_vaxuf"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_78qeo"]
 [ext_resource type="Texture2D" uid="uid://cg1cx1s7uvn5p" path="res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png" id="3_gjnvj"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="4_78qeo"]
