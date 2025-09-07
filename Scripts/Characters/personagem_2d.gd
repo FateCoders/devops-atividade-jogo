@@ -47,6 +47,7 @@ enum State {
 # Referências externas
 var house_node: House
 var work_node: Node
+var assigned_work_spot: Marker2D = null
 
 # Estado atual do NPC
 # MODIFICADO: O estado inicial agora é definido dinamicamente na função _ready
@@ -186,6 +187,10 @@ func _update_schedule():
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
+		if is_instance_valid(work_node) and is_instance_valid(assigned_work_spot):
+			work_node.release_work_spot(assigned_work_spot)
+			assigned_work_spot = null # Limpa a referência
+		
 		_change_state(State.PASSEANDO)
 
 func _change_state(new_state: State):
@@ -226,7 +231,16 @@ func _change_state(new_state: State):
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
 				show()
-				nav_agent.target_position = work_node.get_available_work_position()
+				# MODIFICADO: O NPC agora pede um local de trabalho vago.
+				assigned_work_spot = work_node.claim_available_work_spot()
+				
+				# Se conseguiu um local, vai para lá.
+				if is_instance_valid(assigned_work_spot):
+					nav_agent.target_position = assigned_work_spot.global_position
+				else:
+					# Se não conseguiu (lotação máxima), ele fica ocioso por um tempo.
+					print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
+					_change_state(State.OCIOSO)
 
 		State.PASSEANDO:
 			# MODIFICADO: Garante que o NPC tenha colisão ao passear (caso spawne nesse estado)
