@@ -1,62 +1,46 @@
 # MusicManager.gd
 extends Node
 
-# --- EXPORTE AS MÚSICAS AQUI ---
-# Arraste seus arquivos de áudio (MP3 ou OGG) para estes campos no Inspetor.
 @export_category("Trilhas Sonoras")
 @export var menu_music: AudioStream
 @export var day_music: AudioStream
 @export var night_music: AudioStream
 
+# --- NOVA CATEGORIA PARA SONS AMBIENTES ---
+@export_category("Sons Ambientes da Noite")
+## Arraste aqui todos os sons que podem tocar aleatoriamente à noite (corujas, grilos, etc).
+@export var night_sfx: Array[AudioStream]
+## O tempo mínimo (em segundos) entre cada som ambiente.
+@export var min_sfx_interval: float = 10.0
+## O tempo máximo (em segundos) entre cada som ambiente.
+@export var max_sfx_interval: float = 30.0
+
 @export_category("Configurações")
-@export var fade_duration: float = 2.0 # Duração da transição em segundos
+@export var fade_duration: float = 2.0
 
-# --- NÓS INTERNOS ---
-# Garante que o nó filho se chame "MusicPlayer" na sua cena MusicManager.tscn
+# --- NOVAS REFERÊNCIAS DE NÓS ---
 @onready var music_player: AudioStreamPlayer = $MusicPlayer
+@onready var ambient_sfx_player: AudioStreamPlayer = $AmbientSFXPlayer
+@onready var ambient_timer: Timer = $AmbientTimer
 
-# --- CONTROLE INTERNO ---
 var _is_fading: bool = false
 var _current_music: AudioStream = null
 
 
 func _ready():
+	# Conecta ao relógio mundial
 	WorldTimeManager.period_changed.connect(_on_world_period_changed)
+	
+	# --- NOVA CONEXÃO DE SINAL ---
+	# Conecta o sinal de timeout do nosso novo timer a uma função.
+	ambient_timer.timeout.connect(_on_ambient_timer_timeout)
 
 
-# --- FUNÇÕES PÚBLICAS (para chamar de outros scripts) ---
-
-## Toca a música do menu principal
-func play_menu_music():
-	_fade_to_music(menu_music)
-
-## Toca a música de jogo correta (dia ou noite)
-func play_game_music():
-	# Verifica a hora atual para decidir qual música tocar
-	if WorldTimeManager.is_day():
-		_fade_to_music(day_music)
-	else:
-		# Se não houver WorldTimeManager, assume que é noite como padrão
-		_fade_to_music(night_music)
-
-## Para a música completamente
-func stop_music():
-	_fade_to_music(null)
-
-
-# --- FUNÇÕES INTERNAS (reações e lógica) ---
-
-# Chamada AUTOMATICAMENTE quando o dia vira noite ou vice-versa
-func _on_world_period_changed(_period_name: String):
-	# Só troca a música se já estivermos no "modo jogo"
-	if _current_music == day_music or _current_music == night_music:
-		play_game_music()
+# --- Funções públicas (play_menu_music, etc.) não mudam ---
 
 
 # A função principal que gerencia as transições
 # Em MusicManager.gd
-
-# Em MusicManager.gd, substitua a função inteira
 
 func _fade_to_music(new_stream: AudioStream):
 	# Impede múltiplas transições ao mesmo tempo ou tocar a mesma música de novo
@@ -66,34 +50,65 @@ func _fade_to_music(new_stream: AudioStream):
 	_is_fading = true
 	_current_music = new_stream
 	
-	# O Tween é a ferramenta do Godot para animar propriedades ao longo do tempo
+	# Se a nova música NÃO for a da noite, para os sons ambientes.
+	if new_stream != night_music:
+		ambient_timer.stop()
+
+	# Cria um Tween para gerenciar toda a sequência
 	var tween = create_tween()
-	# Adicionamos uma propriedade para que o tween não seja morto se a cena mudar
+	# Garante que o tween não morra se a cena mudar
 	tween.set_parallel(true)
 	
-	# 1. FAZ O FADE-OUT da música atual (se estiver tocando)
-	# Esta é a primeira parte da nossa sequência.
+	# 1. FAZ O FADE-OUT (se houver música tocando)
 	if music_player.playing:
 		tween.tween_property(music_player, "volume_db", -80.0, fade_duration)
 
-	# 2. TROCA A MÚSICA
-	# Esta função será chamada APÓS o fade-out terminar.
+	# 2. TROCA A MÚSICA (será executado após o fade-out)
 	tween.tween_callback(func():
 		music_player.stream = new_stream
 		if new_stream:
 			music_player.play()
+			# Se a nova música for a da noite, inicia o sistema de sons ambientes.
+			if new_stream == night_music:
+				_on_ambient_timer_timeout() # Toca o primeiro som imediatamente
 		else:
 			music_player.stop()
 	)
 	
-	# 3. FAZ O FADE-IN da nova música (se houver uma)
-	# Esta etapa será executada em paralelo com o passo 2 se não houver fade-out,
-	# ou em sequência se houver. O tween gerencia isso.
+	# 3. FAZ O FADE-IN (se houver uma nova música para tocar)
 	if new_stream:
 		tween.tween_property(music_player, "volume_db", 0.0, fade_duration)
 		
-	# 4. FINALIZAÇÃO
-	# Esta função será chamada no final de TODA a sequência.
+	# 4. FINALIZAÇÃO (será executado no final de toda a sequência)
 	tween.tween_callback(func():
 		_is_fading = false
 	)
+
+# --- NOVA FUNÇÃO PARA TOCAR SONS AMBIENTES ---
+# Chamada quando o AmbientTimer termina sua contagem.
+func _on_ambient_timer_timeout():
+	# Garante que temos sons para tocar e que ainda é noite.
+	if not night_sfx.is_empty() and _current_music == night_music:
+		# Escolhe um som aleatório da nossa lista
+		ambient_sfx_player.stream = night_sfx.pick_random()
+		ambient_sfx_player.play()
+		
+		# Define o PRÓXIMO intervalo de tempo aleatório para o timer
+		ambient_timer.wait_time = randf_range(min_sfx_interval, max_sfx_interval)
+		ambient_timer.start()
+
+
+# --- O resto do seu código (play_music, _on_world_period_changed, etc.) ---
+func play_menu_music():
+	_fade_to_music(menu_music)
+func play_game_music():
+	if WorldTimeManager.is_day() or WorldTimeManager.is_evening():
+		_fade_to_music(day_music)
+	else:
+		_fade_to_music(night_music)
+		
+func stop_music():
+	_fade_to_music(null)
+func _on_world_period_changed(period_name: String):
+	if _current_music == day_music or _current_music == night_music:
+		play_game_music()
