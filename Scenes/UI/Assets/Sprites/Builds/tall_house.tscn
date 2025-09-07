@@ -9,13 +9,12 @@
 size = Vector2(1721, 562)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(355.21, 363.261)
+size = Vector2(729.94, 506.346)
 
 [node name="House" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_7sg2r")
-capacity = null
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(0, -183)
@@ -40,15 +39,18 @@ z_as_relative = false
 position = Vector2(-19.5, 171)
 shape = SubResource("RectangleShape2D_dc8wa")
 
+[node name="DoorPosition" type="Marker2D" parent="."]
+position = Vector2(-324.716, 460.238)
+
 [node name="EntranceArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-317.152, 298.367)
+position = Vector2(-312.64, 406.993)
 shape = SubResource("RectangleShape2D_7sg2r")
-
-[node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-312.64, 460.238)
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
 position = Vector2(-330.083, -59.0392)
 radius = 500.0
+
+[connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
+[connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]

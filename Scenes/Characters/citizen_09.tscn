@@ -44,13 +44,14 @@ animations = [{
 size = Vector2(119, 53)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
-size = Vector2(58.3874, 60)
+size = Vector2(51.8999, 48)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
 collision_layer = 129
 collision_mask = 255
 script = ExtResource("1_0ao5h")
+wander_range = 50.0
 interaction_cursor = ExtResource("2_op7hw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -70,7 +71,7 @@ shape = SubResource("RectangleShape2D_lx0wd")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(6, -30)
+position = Vector2(6, -29)
 scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
