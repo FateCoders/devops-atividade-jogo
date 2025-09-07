@@ -68,6 +68,12 @@ var _is_unstucking: bool = false
 var _noise = FastNoiseLite.new()
 var _time_passed: float = 0.0
 
+# ADICIONADO: Variáveis para a mecânica de ceder passagem
+const STUCK_ON_NPC_YIELD_TIME: float = 2.0 # Segundos até pedir para passar
+var is_yielding: bool = false # O NPC está cedendo passagem no momento?
+var _stuck_on_npc: NPC = null # Em qual NPC estamos presos?
+var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
+
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
@@ -149,6 +155,61 @@ func _physics_process(delta):
 
 	move_and_slide()
 	_update_animation()
+	_handle_npc_collision(delta)
+
+func _handle_npc_collision(delta: float):
+	# Se o NPC está parado por vontade própria, não faz nada.
+	if velocity.is_zero_approx():
+		_stuck_on_npc = null
+		_stuck_on_npc_timer = 0.0
+		return
+
+	var collision = get_last_slide_collision()
+	
+	# Se não houve colisão, ou se o que colidimos não for um NPC, resetamos.
+	if not collision or not collision.get_collider() is NPC:
+		_stuck_on_npc = null
+		_stuck_on_npc_timer = 0.0
+		return
+	
+	var other_npc: NPC = collision.get_collider()
+
+	# Se estamos colidindo com o mesmo NPC de antes, incrementamos o timer.
+	if other_npc == _stuck_on_npc:
+		_stuck_on_npc_timer += delta
+	else:
+		# Se é um novo NPC, começamos a contar do zero.
+		_stuck_on_npc = other_npc
+		_stuck_on_npc_timer = 0.0
+	
+	# Se o tempo de colisão exceder o limite, pedimos para o outro NPC ceder.
+	if _stuck_on_npc_timer >= STUCK_ON_NPC_YIELD_TIME:
+		print("'%s' está preso em '%s' por %.1f segundos. Pedindo passagem..." % [self.name, other_npc.name, _stuck_on_npc_timer])
+		# Chamamos a função no OUTRO NPC.
+		other_npc.request_to_yield_path()
+		# Resetamos o timer para não ficar pedindo toda hora.
+		_stuck_on_npc_timer = 0.0
+
+
+## PARTE 2: Lógica do NPC que está PARADO (o obstáculo).
+## Esta função é chamada por OUTRO NPC que quer passar.
+func request_to_yield_path():
+	# MODIFICADO: A nova regra é muito mais flexível.
+	# Um NPC só vai recusar o pedido se ele estiver se movendo para algum lugar.
+	# Se ele estiver parado (trabalhando, ocioso, etc), ele vai ceder a passagem.
+	if is_yielding:
+		# Se já estou cedendo OU se minha velocidade não é zero, eu recuso.
+		return
+	
+	print("--> '%s' ACEITOU o pedido e está cedendo a passagem!" % self.name)
+	is_yielding = true
+	collision_shape.disabled = true
+	
+	get_tree().create_timer(1.5).timeout.connect(func():
+		print("'%s' voltou a ser sólido." % self.name)
+		is_yielding = false
+		collision_shape.disabled = false
+	)
 
 # ... (O restante do seu script a partir daqui não precisa de alterações)
 # Cole o resto do seu código (a partir de _handle_idle_states) aqui.
@@ -292,6 +353,9 @@ func _on_repath_timer_timeout():
 		nav_agent.target_position = nav_agent.get_final_position()
 		
 func _check_if_stuck(delta) -> bool:
+	# Adicionado print para depurar o estado da flag _is_unstucking
+	# print("Checando se está preso... _is_unstucking = ", _is_unstucking) 
+	
 	if _is_unstucking or velocity.is_zero_approx():
 		_stuck_time = 0.0 
 		return false
@@ -303,7 +367,9 @@ func _check_if_stuck(delta) -> bool:
 		_stuck_check_position = global_position
 
 	if _stuck_time > STUCK_THRESHOLD:
-		_perform_unstuck()
+		# MODIFICADO: Apenas chama _perform_unstuck se já não estiver em andamento.
+		if not _is_unstucking:
+			_perform_unstuck()
 		return true
 
 	return false
@@ -311,21 +377,27 @@ func _check_if_stuck(delta) -> bool:
 func _perform_unstuck():
 	if _is_unstucking: return
 	
-	print("'%s' está preso! Iniciando procedimento para destravar." % name)
 	_is_unstucking = true
+	print("'%s' está preso! Iniciando procedimento para destravar." % self.name)
 	_stuck_time = 0.0
 
 	_on_repath_timer_timeout()
 
-	await get_tree().physics_frame
+	# MODIFICADO: Lógica de teleporte inteligente.
+	# 1. Calcula uma "posição de fuga" aleatória a até 50 pixels de distância.
+	var escape_target = global_position + Vector2(randf_range(-200, 200), randf_range(-200, 200))
 	
-	if nav_agent.is_navigation_finished():
-		var nav_map = get_world_2d().navigation_map
-		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, global_position)
-		global_position = safe_pos
-		print("'%s' foi teleportado para uma posição segura." % name)
+	# 2. Encontra o ponto de navegação seguro mais próximo DESSE NOVO ALVO.
+	var nav_map = get_world_2d().navigation_map
+	var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, escape_target)
+	
+	print("--> Teleportando '%s' de %s para uma posição de fuga segura em %s" % [self.name, global_position.round(), safe_pos.round()])
+	global_position = safe_pos
 
-	get_tree().create_timer(1.0).timeout.connect(func(): _is_unstucking = false)
+	get_tree().create_timer(1.0).timeout.connect(func():
+		print("--> Procedimento de destravar para '%s' finalizado." % self.name)
+		_is_unstucking = false
+	)
 
 #-----------------------------------------------------------------------------
 # FUNÇÕES DE INTERAÇÃO E ANIMAÇÃO
