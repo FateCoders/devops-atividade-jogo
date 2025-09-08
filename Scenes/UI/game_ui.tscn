@@ -1,10 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=13 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
 [ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="3_5b8pf"]
 [ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="3_6w80a"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="5_lolt2"]
+[ext_resource type="Texture2D" uid="uid://clatgmsxnn0mh" path="res://Assets/Sprites/Exported/Buildings/hidingPlace-icon.png" id="5_tig4k"]
+[ext_resource type="Texture2D" uid="uid://chu3xmb8wgosw" path="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png" id="6_plf53"]
+[ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="7_p8jce"]
+[ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="8_bhxso"]
+[ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="9_0pgsb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
 font = ExtResource("5_lolt2")
@@ -59,35 +64,35 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_vo2tu")
 text = "Construir esconderijo"
-icon = ExtResource("3_5b8pf")
+icon = ExtResource("5_tig4k")
 
 [node name="BuildInfirmaryButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_vo2tu")
 text = "Construir enfermaria"
-icon = ExtResource("3_5b8pf")
+icon = ExtResource("6_plf53")
 
 [node name="BuildTrainingAreaButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_vo2tu")
 text = "Construir área de treinamento"
-icon = ExtResource("3_5b8pf")
+icon = ExtResource("7_p8jce")
 
 [node name="BuildChurchButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_vo2tu")
 text = "Construir centro espiritual"
-icon = ExtResource("3_5b8pf")
+icon = ExtResource("8_bhxso")
 
 [node name="BuildLeadersHouseButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_vo2tu")
 text = "Construir casa do líder"
-icon = ExtResource("3_5b8pf")
+icon = ExtResource("9_0pgsb")
 
 [node name="HeaderText" type="Label" parent="."]
 anchors_preset = 5
