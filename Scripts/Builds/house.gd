@@ -2,6 +2,8 @@
 extends StaticBody2D
 class_name House
 
+@export var npc_count: int = 0
+
 @export var capacity: int = 5
 var residents: Array[NPC] = []
 

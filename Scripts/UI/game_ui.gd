@@ -78,7 +78,27 @@ func _unhandled_input(event: InputEvent):
 # UMA ÚNICA FUNÇÃO para lidar com o clique de QUALQUER botão de construção
 func _on_any_build_button_pressed(scene: PackedScene):
 	if is_in_placement_mode:
-		_exit_placement_mode() # Sai do modo anterior se já estiver em um
+		_exit_placement_mode() # Sai do modo anterior se já estiver em um	
+		return
+	
+	# 1. Criamos uma instância temporária da construção apenas para ler suas propriedades.
+	var temp_instance = scene.instantiate()
+	var npcs_needed = temp_instance.get("npc_count")
+	
+	temp_instance.queue_free()
+	
+	if npcs_needed == null:
+		printerr("AVISO: A cena '%s' não possui a propriedade 'npc_count'. Assumindo 0." % scene.resource_path)
+		npcs_needed = 0 
+
+	if npcs_needed > 0:
+		var available_space = QuilomboManager.get_available_housing_space()
+		
+		if available_space < npcs_needed:
+			print("CASAS INSUFICIENTES! Necessário: %d, Disponível: %d" % [npcs_needed, available_space])
+			# (Opcional) Aqui você pode adicionar uma notificação visual para o jogador
+			# Ex: get_node("NotificationLabel").text = "Casas insuficientes!"
+			return # Impede a entrada no modo de construção
 	
 	is_in_placement_mode = true
 	scene_to_place = scene

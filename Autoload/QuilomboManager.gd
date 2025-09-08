@@ -104,6 +104,16 @@ func _spawn_npcs_for_workplace(workplace_node):
 
 		register_npc(npc)
 
+func get_available_housing_space() -> int:
+	var total_space = 0
+	for house in all_houses:
+		if is_instance_valid(house):
+			# Vagas = Capacidade da casa - número de moradores atuais
+			total_space += house.capacity - house.residents.size()
+	
+	print("[Quilombo Manager] Espaços de moradia disponíveis: %d" % total_space)
+	return total_space
+
 # --- Busca ---
 func _find_house_with_space() -> House:
 	for house in all_houses:
