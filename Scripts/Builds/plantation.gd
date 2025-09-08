@@ -24,6 +24,9 @@ func _ready():
 	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
 	available_work_spots = all_work_spots.duplicate()
 
+func confirm_construction():
+	pass
+
 # MODIFICADO: Esta função agora "reserva" um local e o retorna.
 func claim_available_work_spot() -> Marker2D:
 	# Se não houver locais disponíveis, retorna nulo.

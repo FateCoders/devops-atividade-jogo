@@ -11,6 +11,9 @@ var is_exit_busy: bool = false      # Se TRUE, significa que alguém está saind
 
 func _ready():
 	QuilomboManager.register_house(self)
+	
+func confirm_construction():
+	pass
 
 func is_full() -> bool:
 	return residents.size() >= capacity

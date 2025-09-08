@@ -1,6 +1,9 @@
 # GameUI.gd
 extends CanvasLayer
 
+signal placement_preview_started(bonuses: Dictionary)
+signal placement_preview_ended()
+
 # --- Referências de Cenas (seu método com preload é ótimo!) ---
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
@@ -85,6 +88,15 @@ func _on_any_build_button_pressed(scene: PackedScene):
 	get_tree().current_scene.add_child(placement_preview)
 	
 	_disable_physics(placement_preview) # Desabilita colisões do fantasma
+	
+	var bonuses = {
+		"seguranca": placement_preview.get("security_bonus"),
+		"saude": placement_preview.get("health_bonus"),
+		"fome": placement_preview.get("hunger_bonus"),
+		"relacoes": placement_preview.get("relations_bonus")
+		# Adicione outros bônus que suas construções possam ter
+	}
+	emit_signal("placement_preview_started", bonuses)
 
 func _exit_placement_mode():
 	if is_instance_valid(placement_preview):
@@ -94,6 +106,8 @@ func _exit_placement_mode():
 	scene_to_place = null
 	placement_preview = null
 	print("Modo de construção finalizado.")
+	
+	emit_signal("placement_preview_ended")
 
 # --- Funções Auxiliares ---
 

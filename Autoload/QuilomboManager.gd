@@ -31,8 +31,8 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	new_structure.global_position = build_position
 	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
 
-	# Se a estrutura for uma casa, ela se registrará sozinha.
-	# Se for um local de trabalho, vamos gerar os NPCs para ela.
+	new_structure.confirm_construction()
+
 	if not new_structure is House:
 		_spawn_npcs_for_workplace(new_structure)
 

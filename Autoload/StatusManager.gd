@@ -3,11 +3,11 @@ extends Node
 # Sinal para notificar a HUD sobre mudanças nos status
 signal status_updated
 
-var dinheiro = 0
-var saude = 100
-var fome = 100
-var seguranca = 0
-var relacoes = 0
+var dinheiro = 30
+var saude = 50
+var fome = 50
+var seguranca = 10
+var relacoes = 10
 
 func _ready():
 	emit_signal("status_updated")

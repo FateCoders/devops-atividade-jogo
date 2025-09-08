@@ -8,6 +8,9 @@ class_name LeadersHouse
 func _ready():
 	print("Casa do Líder construída.")
 
+func confirm_construction():
+	pass
+
 # Esta função será chamada por um botão na sua UI para abrir o menu de diplomacia.
 func abrir_menu_interacao_quilombos():
 	print("Abrindo menu para interagir com outros quilombos...")

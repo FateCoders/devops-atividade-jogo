@@ -21,20 +21,22 @@ func _ready():
 		if child is Marker2D:
 			all_work_spots.append(child)
 	available_work_spots = all_work_spots.duplicate()
-	
-	# MODIFICADO: Agora usamos as variáveis de bônus.
-	StatusManager.mudar_status("seguranca", security_bonus)
-	StatusManager.mudar_status("relacoes", relations_bonus)
 	print("Área de Treinamento '%s' pronta. Bônus aplicados." % self.name)
 
+func confirm_construction():
+	# A lógica de mudar os status agora vive aqui!
+	StatusManager.mudar_status("seguranca", security_bonus)
+	StatusManager.mudar_status("relacoes", relations_bonus)
+	print("Área de Treinamento '%s' CONFIRMADA. Bônus aplicados." % self.name)
+
 # ADICIONADO: A função _notification para lidar com eventos do nó.
-func _notification(what):
+#func _notification(what):
 	# Verificamos se a notificação é de que o nó está prestes a ser deletado.
-	if what == NOTIFICATION_PREDELETE:
+#	if what == NOTIFICATION_PREDELETE:
 		# Se for, revertemos os bônus que aplicamos.
-		StatusManager.mudar_status("seguranca", -security_bonus)
-		StatusManager.mudar_status("relacoes", -relations_bonus)
-		print("Área de Treinamento '%s' destruída. Bônus removidos." % self.name)
+#		StatusManager.mudar_status("seguranca", -security_bonus)
+#		StatusManager.mudar_status("relacoes", -relations_bonus)
+#		print("Área de Treinamento '%s' destruída. Bônus removidos." % self.name)
 
 # ADICIONADO: Função para que NPCs reivindiquem um local.
 func claim_available_work_spot() -> Marker2D:

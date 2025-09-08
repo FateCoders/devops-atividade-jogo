@@ -13,6 +13,9 @@ class_name SpiritualCenter
 var all_work_spots: Array[Marker2D] = []
 var available_work_spots: Array[Marker2D] = []
 
+@export var relations_bonus: int = 10
+@export var health_bonus: int = 5
+
 func _ready():
 	# ADICIONADO: Lógica para encontrar e inicializar os work_spots.
 	for child in get_children():
@@ -20,9 +23,11 @@ func _ready():
 			all_work_spots.append(child)
 	available_work_spots = all_work_spots.duplicate()
 
-	StatusManager.mudar_status("relacoes", 10)
-	StatusManager.mudar_status("saude", 5)
-	print("Centro Espiritual '%s' pronto. Locais de trabalho encontrados: %d" % [self.name, all_work_spots.size()])
+func confirm_construction():
+	# A lógica de mudar os status agora vive aqui!
+	StatusManager.mudar_status("relacoes", relations_bonus)
+	StatusManager.mudar_status("saude", health_bonus)
+	print("Igreja '%s' CONFIRMADA. Bônus aplicados." % self.name)
 
 # ADICIONADO: Função para que NPCs reivindiquem um local.
 func claim_available_work_spot() -> Marker2D:
