@@ -2,6 +2,8 @@
 extends Node2D
 class_name Infirmary
 
+@export var max_instances: int = 3
+
 @export var npc_count: int = 1
 @export var npc_scene_to_spawn: PackedScene
 
@@ -10,6 +12,12 @@ class_name Infirmary
 @export var work_ends_at: float = 18.0
 
 @export var health_bonus: int = 20
+
+@export var cost: Dictionary = {
+	"dinheiro": 100,
+}
+
+@onready var status_bubble = $buildingStatusBubble
 
 # ADICIONADO: Variáveis para gerenciar os locais de trabalho.
 var all_work_spots: Array[Marker2D] = []
@@ -42,3 +50,19 @@ func release_work_spot(spot: Marker2D):
 	if is_instance_valid(spot) and not available_work_spots.has(spot):
 		available_work_spots.append(spot)
 		print("Local '%s' foi devolvido para '%s'. Locais disponíveis: %d" % [spot.name, self.name, available_work_spots.size()])
+		
+func get_status_info() -> Dictionary:
+	var workers = [] # Substitua por sua variável de trabalhadores
+	var info = {
+		"name": "Enfermaria", # Você pode exportar uma variável para nomes customizados se quiser
+		"details": "Área da enfermaria",
+	}
+	return info
+
+func _on_interaction_area_mouse_entered() -> void:
+	var info = get_status_info()
+	status_bubble.show_info(info)
+
+
+func _on_interaction_area_mouse_exited() -> void:
+	status_bubble.hide_info()

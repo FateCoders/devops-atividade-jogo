@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://tuggivakc5ta"]
+[gd_scene load_steps=9 format=3 uid="uid://tuggivakc5ta"]
 
 [ext_resource type="Script" uid="uid://ccmaxq5us7qps" path="res://Scripts/Builds/church.gd" id="1_mpu7n"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_0fuy5"]
 [ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="2_khm82"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="4_khm82"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
@@ -11,6 +12,9 @@ size = Vector2(1121, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
 size = Vector2(382, 367)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mlfhm"]
+size = Vector2(1266.83, 1364.08)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 modulate = Color(0, 1, 0.8, 1)
@@ -52,6 +56,18 @@ shape = SubResource("RectangleShape2D_otsq3")
 position = Vector2(-6.66046, 725.998)
 gizmo_extents = 130.0
 
+[node name="buildingStatusBubble" parent="." instance=ExtResource("4_khm82")]
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(3.33033, 83.9226)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_mlfhm")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

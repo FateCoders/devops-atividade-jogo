@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=15 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="7_p8jce"]
 [ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="8_bhxso"]
 [ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="9_0pgsb"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="11_0pgsb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
 font = ExtResource("5_lolt2")
@@ -22,6 +23,10 @@ font = ExtResource("5_lolt2")
 font_size = 45
 outline_size = 7
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q6rob"]
+font = ExtResource("11_0pgsb")
+font_size = 40
 
 [node name="GameUI" type="CanvasLayer"]
 process_mode = 3
@@ -110,6 +115,35 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "Dia 01"
 label_settings = SubResource("LabelSettings_plf53")
+
+[node name="NotificationTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="NotificationContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -598.0
+offset_top = -150.0
+offset_bottom = -97.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="NotificationLabel" type="Label" parent="NotificationContainer"]
+layout_mode = 2
+text = "Não há casa para os NPCs..."
+label_settings = SubResource("LabelSettings_q6rob")
+
+[node name="TimerBar" type="ColorRect" parent="NotificationContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_direction = 2
+layout_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/BuildHouseButton" to="." method="_on_build_house_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BuildHidingPlaceButton" to="." method="_on_build_hiding_place_button_pressed"]

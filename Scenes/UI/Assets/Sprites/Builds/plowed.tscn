@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://dta2iaiuf8luc"]
+[gd_scene load_steps=16 format=4 uid="uid://dta2iaiuf8luc"]
 
 [ext_resource type="Texture2D" uid="uid://bnfj1tkcmlrgo" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-bottom.png" id="1_53kwo"]
 [ext_resource type="Script" uid="uid://qdc18urqj28g" path="res://Scripts/Builds/plantation.gd" id="1_lsrhn"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://roigj5x5uwxd" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-top.png" id="3_sbkyb"]
 [ext_resource type="Texture2D" uid="uid://c2vev2fvexg32" path="res://Assets/Sprites/Exported/Plantation/sugar-cane.png" id="4_msv76"]
 [ext_resource type="Texture2D" uid="uid://yfr1o32o47ps" path="res://Assets/Sprites/Exported/Plantation/cassava.png" id="5_wey6k"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="8_msv76"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x3nle"]
 texture = ExtResource("1_53kwo")
@@ -108,6 +109,9 @@ sources/2 = SubResource("TileSetAtlasSource_ec4md")
 sources/3 = SubResource("TileSetAtlasSource_3myq1")
 sources/4 = SubResource("TileSetAtlasSource_eqaoq")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbkyb"]
+size = Vector2(729, 535)
+
 [node name="plowed" type="Node2D"]
 script = ExtResource("1_lsrhn")
 npc_scene_to_spawn = ExtResource("2_sbkyb")
@@ -134,3 +138,15 @@ gizmo_extents = 130.0
 position = Vector2(196, -109)
 scale = Vector2(2.26984, 0.620759)
 radius = 95.0
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(187.5, -124.5)
+shape = SubResource("RectangleShape2D_sbkyb")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
+[node name="buildingStatusBubble" parent="." instance=ExtResource("8_msv76")]
+
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

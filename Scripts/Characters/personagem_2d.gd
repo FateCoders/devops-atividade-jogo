@@ -480,17 +480,14 @@ func request_exit_house():
 
 # --- NPC RECEBE AUTORIZAÇÃO PARA SAIR ---
 func start_exit():
-	# Coloca o estado correto
 	current_state = State.SAINDO_DE_CASA
 	
-	# Define o destino como a porta da casa
 	if house:
 		nav_agent.target_position = house.get_door_position()
 	
 	print("%s está saindo da casa..." % name)
 
 
-# --- NPC TERMINA A SAÍDA ---
 func exit_house_complete():
 	current_state = State.PASSEANDO
 	

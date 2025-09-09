@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://tth4frm64f4e"]
+[gd_scene load_steps=9 format=3 uid="uid://tth4frm64f4e"]
 
 [ext_resource type="Script" uid="uid://c42e8h71ull5y" path="res://Scripts/Builds/infirmary.gd" id="1_ll14k"]
 [ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="2_7ix0y"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_eh3ja"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="4_l1wna"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
@@ -11,6 +12,9 @@ size = Vector2(1121, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
 size = Vector2(382, 367)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ix0y"]
+size = Vector2(1157.6, 1300.14)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 modulate = Color(1, 0.509804, 0.254902, 1)
@@ -52,6 +56,18 @@ shape = SubResource("RectangleShape2D_otsq3")
 position = Vector2(-5.32843, 703.352)
 gizmo_extents = 130.0
 
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-4.66234, 66.6054)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_7ix0y")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
+[node name="buildingStatusBubble" parent="." instance=ExtResource("4_l1wna")]
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

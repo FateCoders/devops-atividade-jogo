@@ -3,6 +3,7 @@ extends Node
 
 var all_houses: Array[House] = []
 var all_npcs: Array[NPC] = []
+var building_counts: Dictionary = {}
 
 # --- RESET ---
 func reset_quilombo_state():
@@ -20,16 +21,49 @@ func register_npc(npc: NPC):
 	if not all_npcs.has(npc):
 		all_npcs.append(npc)
 
+func register_building(building_node):
+	var type = building_node.get_class() # Pega o tipo do script (ex: "TrainingArea")
+	if not building_counts.has(type):
+		building_counts[type] = 0 # Inicializa o contador se for o primeiro do tipo
+	building_counts[type] += 1
+	print("Censo atualizado: %s agora tem %d instâncias." % [type, building_counts[type]])
+
+# ADICIONADO: Função para remover uma construção do censo.
+func unregister_building(building_node):
+	var type = building_node.get_class()
+	if building_counts.has(type) and building_counts[type] > 0:
+		building_counts[type] -= 1
+		print("Censo atualizado: %s agora tem %d instâncias." % [type, building_counts[type]])
+
+# ADICIONADO: Funções para a UI verificar o limite.
+func get_build_count_for_type(type: String) -> int:
+	return building_counts.get(type, 0) # Retorna 0 se o tipo ainda não existir no censo.
+
 # --- CONSTRUÇÃO ---
 func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	if not structure_scene:
 		printerr("Tentativa de construir uma estrutura sem cena válida!")
 		return
 
+	var temp_instance = structure_scene.instantiate()
+	var build_cost = temp_instance.get("cost")
+	temp_instance.queue_free()
+	
+	if build_cost and not StatusManager.has_enough_resources(build_cost):
+		print("Construção cancelada no último segundo. Recursos se esgotaram.")
+		# Na UI, o jogador não deve ver isso, mas é uma boa segurança.
+		return
+
+	# Se a verificação passou, gasta os recursos e constrói.
+	if build_cost:
+		StatusManager.spend_resources(build_cost)
+
 	var new_structure = structure_scene.instantiate()
 	get_tree().current_scene.add_child(new_structure)
 	new_structure.global_position = build_position
 	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
+	
+	register_building(new_structure)
 
 	new_structure.confirm_construction()
 

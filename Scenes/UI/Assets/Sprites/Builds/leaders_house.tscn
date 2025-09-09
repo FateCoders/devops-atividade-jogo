@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://30xlfh0om2p2"]
+[gd_scene load_steps=8 format=3 uid="uid://30xlfh0om2p2"]
 
 [ext_resource type="Script" uid="uid://bci1bbnicl5un" path="res://Scripts/Builds/leaders_house.gd" id="1_fbne4"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_6yvq3"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="3_6yvq3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
@@ -10,6 +11,9 @@ size = Vector2(1121, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
 size = Vector2(382, 367)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f1rwg"]
+size = Vector2(1126.14, 1274.83)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 modulate = Color(0.435294, 0.729412, 1, 1)
@@ -46,6 +50,17 @@ position = Vector2(-5.32842, 704.684)
 position = Vector2(-1.33211, -165.181)
 shape = SubResource("RectangleShape2D_otsq3")
 
+[node name="buildingStatusBubble" parent="." instance=ExtResource("3_6yvq3")]
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-11.0688, 65.9392)
+shape = SubResource("RectangleShape2D_f1rwg")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

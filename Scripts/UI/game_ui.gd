@@ -18,6 +18,13 @@ var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null # O "fantasma" que segue o mouse
 
+@onready var notification_container: VBoxContainer = $NotificationContainer
+@onready var notification_label: Label = $NotificationContainer/NotificationLabel
+@onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
+@onready var notification_timer: Timer = $NotificationTimer
+
+var _timer_bar_full_width: float = 0.0
+
 # --- Outras Referências ---
 @onready var day_label: Label = $DayLabel
 
@@ -30,6 +37,10 @@ func _ready():
 	$VBoxContainer/BuildTrainingAreaButton.pressed.connect(_on_any_build_button_pressed.bind(TrainingAreaScene))
 	$VBoxContainer/BuildChurchButton.pressed.connect(_on_any_build_button_pressed.bind(ChurchScene))
 	$VBoxContainer/BuildLeadersHouseButton.pressed.connect(_on_any_build_button_pressed.bind(LeadersHouseScene))
+	
+	notification_timer.timeout.connect(_on_notification_timer_timeout)
+	notification_container.modulate.a = 0
+	await get_tree().process_frame 
 
 func _process(delta: float):
 	# Se não estivermos no modo de construção, não faz nada
@@ -46,6 +57,26 @@ func _process(delta: float):
 	else:
 		placement_preview.modulate = Color(1, 0.5, 0.5, 0.7) # Vermelho
 		
+
+func show_notification(message: String, duration: float = 3.0):
+	if notification_timer.time_left > 0:
+		return
+
+	notification_label.text = message
+	notification_timer.wait_time = duration
+	notification_timer.start()
+	
+	# Reseta a barra para o tamanho máximo antes de animar
+	timer_bar.size.x = notification_container.size.x
+
+	var tween = create_tween()
+	tween.tween_property(notification_container, "modulate:a", 1.0, 0.3)
+	tween.tween_property(timer_bar, "size:x", 0, duration)
+
+func _on_notification_timer_timeout():
+	# Anima o container inteiro para desaparecer (fade-out)
+	var tween = create_tween()
+	tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
 
 # ADICIONE ESTA FUNÇÃO COMPLETA NO LUGAR DA _input QUE VOCÊ DELETOU
 func _unhandled_input(event: InputEvent):
@@ -83,7 +114,18 @@ func _on_any_build_button_pressed(scene: PackedScene):
 	
 	# 1. Criamos uma instância temporária da construção apenas para ler suas propriedades.
 	var temp_instance = scene.instantiate()
+	
+	var max_allowed = temp_instance.get("max_instances")
+	if max_allowed != null and max_allowed != -1: # -1 significa ilimitado
+		var current_count = QuilomboManager.get_build_count_for_type(temp_instance.get_class())
+		if current_count >= max_allowed:
+			show_notification("Limite de construções deste tipo atingido!")
+			temp_instance.queue_free() # Limpa a instância temporária
+			return # Impede a entrada no modo de construção
+	
 	var npcs_needed = temp_instance.get("npc_count")
+	var build_cost = temp_instance.get("cost")
+	
 	
 	temp_instance.queue_free()
 	
@@ -97,8 +139,14 @@ func _on_any_build_button_pressed(scene: PackedScene):
 		if available_space < npcs_needed:
 			print("CASAS INSUFICIENTES! Necessário: %d, Disponível: %d" % [npcs_needed, available_space])
 			# (Opcional) Aqui você pode adicionar uma notificação visual para o jogador
-			# Ex: get_node("NotificationLabel").text = "Casas insuficientes!"
+			show_notification("Casas insuficientes para novos moradores!")
 			return # Impede a entrada no modo de construção
+			
+	if build_cost:
+		if not StatusManager.has_enough_resources(build_cost):
+			# Se não tiver recursos, chama a sua snackbar e para a função.
+			show_notification("Recursos insuficientes para construir!")
+			return
 	
 	is_in_placement_mode = true
 	scene_to_place = scene

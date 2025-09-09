@@ -2,10 +2,18 @@
 extends StaticBody2D
 class_name House
 
+@export var max_instances: int = 10;
+
 @export var npc_count: int = 0
 
 @export var capacity: int = 5
 var residents: Array[NPC] = []
+
+@export var cost: Dictionary = {
+	"dinheiro": 50,
+}
+
+@onready var status_bubble = $buildingStatusBubble
 
 # --- FILA DE SAÍDA ---
 var exit_queue: Array = []          # Fila de NPCs aguardando para sair
@@ -83,3 +91,20 @@ func _on_entrance_area_body_exited(body: Node2D):
 	if body is NPC and body in residents:
 		if body.current_state == NPC.State.SAINDO_DE_CASA:
 			body.exit_house_complete()
+
+
+func get_status_info() -> Dictionary:
+	var workers = [] # Substitua por sua variável de trabalhadores
+	var info = {
+		"name": "Casa", # Você pode exportar uma variável para nomes customizados se quiser
+		"details": "Moradores: %d/%d" % [residents.size(), capacity]
+	}
+	return info
+
+func _on_interaction_area_mouse_entered() -> void:
+	var info = get_status_info()
+	status_bubble.show_info(info)
+
+
+func _on_interaction_area_mouse_exited() -> void:
+	status_bubble.hide_info()
