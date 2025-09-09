@@ -13,7 +13,7 @@ signal victory_achieved
 @export var night_starts_at: float = 20.0  # 20:00
 
 # --- NOVO: CONDIÇÃO DE VITÓRIA ---
-@export var victory_day: int = 2
+@export var victory_day: int = 30
 
 # --- VARIÁVEIS DE ESTADO ---
 # ADICIONADO: Contador de dias

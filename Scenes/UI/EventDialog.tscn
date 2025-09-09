@@ -1,29 +1,194 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpj6hsaurwpqq"]
+[gd_scene load_steps=14 format=3 uid="uid://bpj6hsaurwpqq"]
 
 [ext_resource type="Script" uid="uid://dopuggnkcf0dx" path="res://Scripts/UI/event_dialog.gd" id="1_xusqx"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_hl1om"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_dvr84"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="4_0mjiy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0mjiy"]
+texture = ExtResource("2_hl1om")
+texture_margin_left = 120.0
+texture_margin_top = 120.0
+texture_margin_right = 120.0
+texture_margin_bottom = 120.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0mjiy"]
+font = ExtResource("3_dvr84")
+font_size = 40
+outline_size = 4
+outline_color = Color(0.41598, 0.41598, 0.41598, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tagxd"]
+font = ExtResource("3_dvr84")
+font_size = 20
+outline_size = 3
+outline_color = Color(0.509286, 0.509286, 0.509286, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mjiy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tagxd"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmlok"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_owund"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ar3w"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="Theme" id="Theme_vmlok"]
+default_font = ExtResource("4_0mjiy")
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 20
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("4_0mjiy")
+Button/styles/disabled = SubResource("StyleBoxFlat_0mjiy")
+Button/styles/focus = SubResource("StyleBoxFlat_tagxd")
+Button/styles/hover = SubResource("StyleBoxFlat_vmlok")
+Button/styles/normal = SubResource("StyleBoxFlat_owund")
+Button/styles/pressed = SubResource("StyleBoxFlat_8ar3w")
 
 [node name="EventDialog" type="CanvasLayer"]
 script = ExtResource("1_xusqx")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(641, 335)
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.389
+anchor_right = 0.751563
+anchor_bottom = 0.854056
+offset_top = -0.0800171
+offset_right = -1.00006
+offset_bottom = 0.0799561
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
 
-[node name="Panel" type="Panel" parent="ColorRect"]
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 641.0
+offset_bottom = 160.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/Panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="TitleLabel" type="Label" parent="ColorRect/Panel/VBoxContainer"]
+[node name="Panel" type="PanelContainer" parent="ColorRect/CenterContainer"]
+custom_minimum_size = Vector2(641, 335)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_0mjiy")
+metadata/_edit_use_anchors_ = true
 
-[node name="DescriptionLabel" type="Label" parent="ColorRect/Panel/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer/Panel"]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="ChoicesContainer" type="VBoxContainer" parent="ColorRect/Panel/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+text = "Mensagem de exemplo"
+label_settings = SubResource("LabelSettings_0mjiy")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DescriptionLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(404, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "Escravizados refugiados estão vindo, ajude eles..."
+label_settings = SubResource("LabelSettings_tagxd")
+autowrap_mode = 3
+
+[node name="ChoicesContainer" type="HBoxContainer" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.0
+theme = SubResource("Theme_vmlok")
+
+[node name="AcceptButton" type="Button" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Aceitar"
+
+[node name="RejectButton" type="Button" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Negar"

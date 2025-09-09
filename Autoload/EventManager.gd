@@ -23,8 +23,7 @@ const EventDialogScene = preload("res://Scenes/UI/EventDialog.tscn") # !!! AJUST
 
 func _ready():
 	# Conecta este manager ao sinal de "novo dia" do WorldTimeManager.
-	if WorldTimeManager:
-		WorldTimeManager.new_day_started.connect(_on_new_day_started)
+	WorldTimeManager.day_passed.connect(_on_new_day_started)
 	
 	# Conecta este manager ao seu próprio sinal para processar as escolhas.
 	event_choice_made.connect(_on_event_choice_made)
@@ -35,7 +34,7 @@ func _on_new_day_started(day_number):
 	
 	# Lógica para decidir se um evento acontece.
 	# Por enquanto, vamos fazer o evento dos fugitivos acontecer sempre no dia 3 para testar.
-	if day_number == 3:
+	if day_number == 2:
 		trigger_event("fugitives_arrive")
 
 # Função principal que inicia um evento.
