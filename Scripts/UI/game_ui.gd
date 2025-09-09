@@ -78,31 +78,16 @@ func _on_notification_timer_timeout():
 	var tween = create_tween()
 	tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
 
-# ADICIONE ESTA FUNÇÃO COMPLETA NO LUGAR DA _input QUE VOCÊ DELETOU
 func _unhandled_input(event: InputEvent):
-	# Parte 1: Lógica para abrir/fechar a UI com a tecla "Enter"
-	# (Esta é a parte que eu tinha esquecido de incluir)
-	if Input.is_action_just_pressed("ui_enter"):
-		visible = not visible
-		get_tree().paused = visible
-		# Se fecharmos a UI enquanto estamos no modo de construção, cancela a construção.
-		if not visible and is_in_placement_mode:
-			_exit_placement_mode()
-
-	# Parte 2: Lógica do modo de construção
-	# Só executa se estivermos no modo de construção.
 	if is_in_placement_mode:
-		# Clique esquerdo para construir
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
 				var build_pos = placement_preview.global_position
 				QuilomboManager.build_structure(scene_to_place, build_pos)
 				_exit_placement_mode()
 		
-		# Clique direito para cancelar
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			_exit_placement_mode()
-
 
 # --- Funções de Modo de Construção ---
 

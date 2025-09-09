@@ -28,7 +28,7 @@ outline_color = Color(0, 0, 0, 1)
 font = ExtResource("11_0pgsb")
 font_size = 40
 
-[node name="GameUI" type="CanvasLayer"]
+[node name="GameUI" type="CanvasLayer" groups=["game_ui"]]
 process_mode = 3
 script = ExtResource("1_3fiko")
 
