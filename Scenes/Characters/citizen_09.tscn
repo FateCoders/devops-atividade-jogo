@@ -48,8 +48,7 @@ size = Vector2(51.8999, 48)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
-collision_layer = 129
-collision_mask = 255
+collision_layer = 2
 script = ExtResource("1_0ao5h")
 interaction_cursor = ExtResource("2_op7hw")
 
@@ -75,10 +74,7 @@ scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
-[node name="StatusBubbleAnchor" type="Node2D" parent="."]
-scale = Vector2(1.03413, 1)
-
-[node name="StatusBubble" parent="StatusBubbleAnchor" instance=ExtResource("5_5wim6")]
+[node name="StatusBubbleAnchor" parent="." instance=ExtResource("5_5wim6")]
 
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6jpfnor7etw6"]
+[gd_scene load_steps=12 format=3 uid="uid://c6jpfnor7etw6"]
 
 [ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_5ktjt"]
 [ext_resource type="Texture2D" uid="uid://j7p0a00defsr" path="res://Assets/Sprites/Exported/Citizens/static/citizen_03.png" id="2_5ktjt"]
 [ext_resource type="Texture2D" uid="uid://p1jkmn2fklfk" path="res://Assets/Sprites/Exported/HUD/Cursors/info_cursor-menor.png" id="2_iwwc5"]
 [ext_resource type="Texture2D" uid="uid://yxmyhwn1cgpm" path="res://Assets/Sprites/Exported/Citizens/static/citizen_03-sprite-sheet.png" id="3_iwwc5"]
+[ext_resource type="PackedScene" uid="uid://bm7553cnw05kc" path="res://Scenes/UI/status_bubble.tscn" id="5_oac84"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oac84"]
 atlas = ExtResource("2_5ktjt")
@@ -47,8 +48,7 @@ size = Vector2(58.3874, 60)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
-collision_layer = 129
-collision_mask = 255
+collision_layer = 2
 script = ExtResource("1_5ktjt")
 interaction_cursor = ExtResource("2_iwwc5")
 
@@ -73,6 +73,8 @@ position = Vector2(6, -30)
 scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
+
+[node name="StatusBubbleAnchor" parent="." instance=ExtResource("5_oac84")]
 
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

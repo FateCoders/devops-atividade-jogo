@@ -9,6 +9,7 @@ font = ExtResource("3_ge3lp")
 font_size = 75
 
 [node name="victory" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_jd8qn")
 
 [node name="bg_overlay" type="ColorRect" parent="."]

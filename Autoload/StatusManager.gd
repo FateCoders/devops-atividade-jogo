@@ -3,11 +3,11 @@ extends Node
 # Sinal para notificar a HUD sobre mudanças nos status
 signal status_updated
 
-var dinheiro = 0
-var saude = 100
-var fome = 100
-var seguranca = 0
-var relacoes = 0
+var dinheiro = 500
+var saude = 50
+var fome = 50
+var seguranca = 10
+var relacoes = 10
 
 func _ready():
 	emit_signal("status_updated")
@@ -34,4 +34,29 @@ func get_status_value(nome_status):
 
 func mudar_dinheiro(valor):
 	dinheiro += valor
+	emit_signal("status_updated")
+
+# ADICIONADO: Nova função para verificar se temos recursos suficientes.
+func has_enough_resources(costs: Dictionary) -> bool:
+	for resource in costs.keys():
+		var required_amount = costs[resource]
+		
+		var current_amount = get(resource)
+		
+		if current_amount == null or current_amount < required_amount:
+			print("Recurso insuficiente: %s. Necessário: %d, Possui: %d" % [resource, required_amount, current_amount])
+			return false
+	return true
+
+func spend_resources(costs: Dictionary):
+	if not has_enough_resources(costs):
+		printerr("Tentativa de gastar recursos insuficientes!")
+		return
+
+	for resource in costs.keys():
+		var amount_to_spend = costs[resource]
+		var current_value = get(resource)
+		set(resource, current_value - amount_to_spend)
+		print("Gasto: %d de %s." % [amount_to_spend, resource])
+	
 	emit_signal("status_updated")

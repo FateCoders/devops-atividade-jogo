@@ -82,6 +82,11 @@ ui_enter={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="ambiente"
+2d_physics/layer_2="npcs"
+
 [run]
 
 main_scene="uid://d3iw8vt6yv34f"

@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bnsunn3lmjfl"]
+[gd_scene load_steps=8 format=3 uid="uid://bnsunn3lmjfl"]
 
 [ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_7sg2r"]
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="1_dc8wa"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="3_o6fod"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
@@ -11,7 +12,10 @@ size = Vector2(1721, 539.376)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
 size = Vector2(682.977, 590.392)
 
-[node name="House" type="StaticBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t6b2j"]
+size = Vector2(1732.27, 1335.09)
+
+[node name="TallHouse" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_7sg2r")
@@ -44,6 +48,7 @@ position = Vector2(-323.374, 523.302)
 gizmo_extents = 48.5
 
 [node name="EntranceArea" type="Area2D" parent="."]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
 position = Vector2(-321.361, 277.753)
@@ -55,5 +60,20 @@ y_sort_enabled = true
 position = Vector2(-326.058, -111.369)
 radius = 500.0
 
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-43.6085, -164.371)
+shape = SubResource("RectangleShape2D_t6b2j")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
+[node name="buildingStatusBubble" parent="." instance=ExtResource("3_o6fod")]
+offset_left = 181.143
+offset_top = 226.764
+offset_right = 181.143
+offset_bottom = 226.764
+
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
 [connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

@@ -2,12 +2,20 @@
 extends Node2D
 class_name Plantation
 
+@export var max_instances: int = 5
+
 @export var npc_scene_to_spawn: PackedScene
 @export var npc_count: int = 2
 
 @export_category("Horário de Trabalho")
 @export var work_starts_at: float = 8.0  # 8 AM
 @export var work_ends_at: float = 17.0 # 5 PM
+
+@export var cost: Dictionary = {
+	"dinheiro": 20,
+}
+
+@onready var status_bubble = $buildingStatusBubble
 
 var workers: Array[Node] = []
 var all_work_spots: Array[Marker2D] = []
@@ -23,6 +31,9 @@ func _ready():
 	
 	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
 	available_work_spots = all_work_spots.duplicate()
+
+func confirm_construction():
+	pass
 
 # MODIFICADO: Esta função agora "reserva" um local e o retorna.
 func claim_available_work_spot() -> Marker2D:
@@ -47,5 +58,18 @@ func release_work_spot(spot: Marker2D):
 func add_worker(npc: Node):
 	workers.append(npc)
 
-# A função get_available_work_position() não é mais necessária, pois foi substituída
-# pela lógica mais inteligente de claim_available_work_spot().
+func get_status_info() -> Dictionary:
+	var workers = [] # Substitua por sua variável de trabalhadores
+	var info = {
+		"name": "Plantação", # Você pode exportar uma variável para nomes customizados se quiser
+		"details": "Área de plantação",
+	}
+	return info
+
+func _on_interaction_area_mouse_entered() -> void:
+	var info = get_status_info()
+	status_bubble.show_info(info)
+
+
+func _on_interaction_area_mouse_exited() -> void:
+	status_bubble.hide_info()
