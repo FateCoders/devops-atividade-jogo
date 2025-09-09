@@ -1,15 +1,23 @@
-[gd_scene load_steps=22 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=30 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://doh5qhoders1a" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
 [ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_fqivn"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_mqf2c"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_fdl0h"]
+[ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="3_uidm2"]
+[ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="4_8c63k"]
 [ext_resource type="StyleBox" uid="uid://dvvr17qyjcmtl" path="res://Scenes/UI/Assets/Styles/progressbar_health.tres" id="4_8glcj"]
 [ext_resource type="Texture2D" uid="uid://dcjb6j6qseb04" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor.png" id="4_qdh5o"]
+[ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="5_qff6j"]
 [ext_resource type="StyleBox" uid="uid://t580o606lwph" path="res://Scenes/UI/Assets/Styles/progressbar_hunger.tres" id="5_vsu76"]
+[ext_resource type="Texture2D" uid="uid://clatgmsxnn0mh" path="res://Assets/Sprites/Exported/Buildings/hidingPlace-icon.png" id="6_e17ao"]
 [ext_resource type="StyleBox" uid="uid://ccbxlwmk5cknw" path="res://Scenes/UI/Assets/Styles/progressbar_security.tres" id="6_mqf2c"]
+[ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="7_0hfmd"]
 [ext_resource type="StyleBox" uid="uid://bm1w3purx7v5n" path="res://Scenes/UI/Assets/Styles/progressbar_relations.tres" id="7_7wqu8"]
+[ext_resource type="Texture2D" uid="uid://chu3xmb8wgosw" path="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png" id="8_pc4p0"]
+[ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="9_iiebs"]
+[ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="10_n5w8m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
 
@@ -113,10 +121,10 @@ corner_radius_bottom_left = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = -803.0
-offset_bottom = -477.0
+offset_left = 4.0
+offset_top = 13.0
+offset_right = -219.0
+offset_bottom = -466.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 8
@@ -129,19 +137,95 @@ layout_mode = 2
 
 [node name="ButtonsPanel" type="PanelContainer" parent="MainContainer"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
 
-[node name="BuildButton" type="TextureButton" parent="MainContainer/ButtonsPanel"]
+[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/ButtonsPanel"]
+layout_mode = 2
+
+[node name="Col1" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+layout_mode = 2
+
+[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/Col1"]
+layout_mode = 2
+
+[node name="BuildLeadersHouseButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col1/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Casa do Líder"
+icon = ExtResource("4_8c63k")
+
+[node name="BuildHouseButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col1/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Casa Grande"
+icon = ExtResource("5_qff6j")
+
+[node name="BuildHidingPlaceButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col1/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Esconderijo"
+icon = ExtResource("6_e17ao")
+
+[node name="Col2" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+layout_mode = 2
+
+[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/Col2"]
+layout_mode = 2
+
+[node name="BuildPlantetionButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col2/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Plantação"
+icon = ExtResource("7_0hfmd")
+flat = true
+
+[node name="BuildInfirmaryButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col2/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Enfermaria"
+icon = ExtResource("8_pc4p0")
+
+[node name="BuildTrainingAreaButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col2/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Área de Treinamento"
+icon = ExtResource("9_iiebs")
+
+[node name="BuildChurchButton" type="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/Col2/BuildOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_uidm2")
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+text = "Centro Espiritual"
+icon = ExtResource("10_n5w8m")
+
+[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="BuildButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 0
+size_flags_vertical = 8
 texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/BuildButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -159,6 +243,7 @@ stretch_mode = 5
 
 [node name="StatusPanel" type="PanelContainer" parent="MainContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_am52h")
 metadata/_edit_use_anchors_ = true
 
@@ -359,4 +444,4 @@ theme_override_fonts/font = ExtResource("3_fdl0h")
 theme_override_styles/background = SubResource("StyleBoxFlat_cna6x")
 theme_override_styles/fill = SubResource("StyleBoxFlat_am52h")
 
-[connection signal="pressed" from="MainContainer/ButtonsPanel/BuildButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

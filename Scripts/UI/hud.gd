@@ -82,3 +82,4 @@ func _on_button_pressed():
 
 		if game_ui.is_in_placement_mode:
 			game_ui._exit_placement_mode()
+			Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
