@@ -29,15 +29,6 @@ var _timer_bar_full_width: float = 0.0
 @onready var day_label: Label = $DayLabel
 
 func _ready():
-
-	$VBoxContainer/BuildPlantetionButton.pressed.connect(_on_any_build_button_pressed.bind(PlantationScene))
-	$VBoxContainer/BuildHouseButton.pressed.connect(_on_any_build_button_pressed.bind(HouseScene))
-	$VBoxContainer/BuildHidingPlaceButton.pressed.connect(_on_any_build_button_pressed.bind(HidingPlaceScene))
-	$VBoxContainer/BuildInfirmaryButton.pressed.connect(_on_any_build_button_pressed.bind(InfirmaryScene))
-	$VBoxContainer/BuildTrainingAreaButton.pressed.connect(_on_any_build_button_pressed.bind(TrainingAreaScene))
-	$VBoxContainer/BuildChurchButton.pressed.connect(_on_any_build_button_pressed.bind(ChurchScene))
-	$VBoxContainer/BuildLeadersHouseButton.pressed.connect(_on_any_build_button_pressed.bind(LeadersHouseScene))
-	
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
 	notification_container.modulate.a = 0
 	await get_tree().process_frame 

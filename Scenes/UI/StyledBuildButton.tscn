@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjh23i2f73foj"]
+
+[ext_resource type="Texture2D" uid="uid://doh5qhoders1a" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="1_e8s2j"]
+
+[node name="Button" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+flat = true
+
+[node name="PanelContainer" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 3.125
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 25.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_e8s2j")

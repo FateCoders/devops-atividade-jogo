@@ -13,22 +13,39 @@ extends Control
 @onready var relations_preview_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
 
 @onready var status_panel = $MainContainer/StatusPanel
-@onready var build_button = $MainContainer/ButtonsPanel/BuildButton
-@onready var build_button_icon = $MainContainer/ButtonsPanel/BuildButton/TextureRect
+@onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
 @onready var game_ui = get_tree().get_first_node_in_group("game_ui")
+
+@onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 
 const BUILD_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png") 
 const CURSOR_HOTSPOT = Vector2(16, 16) 
-
 const DEFAULT_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png") 
 const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
 
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	_on_status_updated()
+	
+	button_builds.get_node("Col1/BuildOptions/BuildLeadersHouseButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.LeadersHouseScene))
+	button_builds.get_node("Col1/BuildOptions/BuildHouseButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.HouseScene))
+	button_builds.get_node("Col1/BuildOptions/BuildHidingPlaceButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.HidingPlaceScene))
+
+	button_builds.get_node("Col2/BuildOptions/BuildPlantetionButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.PlantationScene))
+	button_builds.get_node("Col2/BuildOptions/BuildInfirmaryButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.InfirmaryScene))
+	button_builds.get_node("Col2/BuildOptions/BuildTrainingAreaButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.TrainingAreaScene))
+	button_builds.get_node("Col2/BuildOptions/BuildChurchButton").pressed.connect(
+		game_ui._on_any_build_button_pressed.bind(game_ui.ChurchScene))
 
 func _on_status_updated():
 	health_bar.value = StatusManager.saude
@@ -69,17 +86,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_button_pressed():
 	game_ui.visible = !game_ui.visible
+	button_builds.visible = game_ui.visible
 	
 	if game_ui.visible:
 		build_button_icon.visible = false
 		build_button.texture_normal = CLOSE_TEXTURE
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
-		# status_panel.show()
+		#status_panel.show()
 		build_button_icon.visible = true
 		build_button.texture_normal = BUILD_TEXTURE
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
 
 		if game_ui.is_in_placement_mode:
 			game_ui._exit_placement_mode()
-			Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)

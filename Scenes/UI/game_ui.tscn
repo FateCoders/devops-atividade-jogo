@@ -1,15 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://ykryehy8psip"]
+[gd_scene load_steps=7 format=3 uid="uid://ykryehy8psip"]
 
 [ext_resource type="Script" uid="uid://bg38c0k46pge3" path="res://Scripts/UI/game_ui.gd" id="1_3fiko"]
-[ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="2_vo2tu"]
-[ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="3_5b8pf"]
-[ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="3_6w80a"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="5_lolt2"]
-[ext_resource type="Texture2D" uid="uid://clatgmsxnn0mh" path="res://Assets/Sprites/Exported/Buildings/hidingPlace-icon.png" id="5_tig4k"]
-[ext_resource type="Texture2D" uid="uid://chu3xmb8wgosw" path="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png" id="6_plf53"]
-[ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="7_p8jce"]
-[ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="8_bhxso"]
-[ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="9_0pgsb"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="11_0pgsb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tig4k"]
@@ -33,71 +25,12 @@ process_mode = 3
 script = ExtResource("1_3fiko")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 offset_left = 22.0
 offset_top = 372.0
 offset_right = 546.0
 offset_bottom = 707.0
 color = Color(0, 0, 0, 0.392157)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = -113.0
-offset_right = 390.0
-offset_bottom = -29.0
-grow_vertical = 0
-
-[node name="BuildPlantetionButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir plantação"
-icon = ExtResource("3_6w80a")
-flat = true
-
-[node name="BuildHouseButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir casa grande"
-icon = ExtResource("3_5b8pf")
-
-[node name="BuildHidingPlaceButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir esconderijo"
-icon = ExtResource("5_tig4k")
-
-[node name="BuildInfirmaryButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir enfermaria"
-icon = ExtResource("6_plf53")
-
-[node name="BuildTrainingAreaButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir área de treinamento"
-icon = ExtResource("7_p8jce")
-
-[node name="BuildChurchButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir centro espiritual"
-icon = ExtResource("8_bhxso")
-
-[node name="BuildLeadersHouseButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_vo2tu")
-text = "Construir casa do líder"
-icon = ExtResource("9_0pgsb")
 
 [node name="HeaderText" type="Label" parent="."]
 anchors_preset = 5
@@ -146,10 +79,3 @@ label_settings = SubResource("LabelSettings_q6rob")
 custom_minimum_size = Vector2(0, 5)
 layout_direction = 2
 layout_mode = 2
-
-[connection signal="pressed" from="VBoxContainer/BuildHouseButton" to="." method="_on_build_house_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BuildHidingPlaceButton" to="." method="_on_build_hiding_place_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BuildInfirmaryButton" to="." method="_on_build_infirmary_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BuildTrainingAreaButton" to="." method="_on_build_training_area_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BuildChurchButton" to="." method="_on_build_church_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BuildLeadersHouseButton" to="." method="_on_build_leaders_house_button_pressed"]
