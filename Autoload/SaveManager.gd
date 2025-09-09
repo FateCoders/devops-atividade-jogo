@@ -59,3 +59,8 @@ func load_game():
 
 	print("Jogo carregado com sucesso!")
 	return true
+
+func delete_save():
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(SAVE_PATH)
+		print("Arquivo de save deletado.")

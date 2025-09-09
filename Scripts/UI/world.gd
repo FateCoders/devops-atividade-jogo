@@ -14,6 +14,16 @@ func _ready() -> void:
 	# A conexão correta:
 	# O sinal 'placement_preview_started' do objeto 'game_ui'
 	# está sendo conectado à função 'show_preview' do objeto 'hud'.
+	if SaveManager.save_exists():
+		if SaveManager.load_game():
+			QuilomboManager.load_buildings()
+		else:
+			print("Falha ao carrregar o jogo em word.gd")
+	else:
+		print("🆕 Nenhum save encontrado. Criando novo mundo...")
+		_start_new_game()
+		
+	
 	game_ui.placement_preview_started.connect(hud.show_preview)
 	
 	# O mesmo para o outro sinal:
@@ -28,3 +38,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func _start_new_game():
+	# Posiciona a câmera no centro inicial (ajuste a posição conforme necessário)
+	$Camera2D.global_position = Vector2(640, 360)  # Exemplo de centro da tela
+
+	await get_tree().create_timer(1.0).timeout
+	SaveManager.save_game()

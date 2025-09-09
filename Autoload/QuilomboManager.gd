@@ -156,3 +156,78 @@ func _find_house_with_space() -> House:
 		if is_instance_valid(house) and house.residents.size() < house.capacity:
 			return house
 	return null
+
+func save_buildings(file_path: String = "user://quilombo_save.json"):
+	var save_data = []
+
+	# Salvamos casas e locais de trabalho
+	for house in all_houses:
+		if is_instance_valid(house):
+			save_data.append({
+				"type": "House",
+				"scene": house.scene_file_path,
+				"position": {"x": house.global_position.x, "y": house.global_position.y},
+			})
+
+	for node in get_tree().current_scene.get_children():
+		if node.has_method("confirm_construction") and not node is House:
+			if is_instance_valid(node):
+				save_data.append({
+					"type": "Workplace",
+					"scene": node.scene_file_path,
+					"position": {"x": node.global_position.x, "y": node.global_position.y},
+				})
+
+	var file = FileAccess.open(file_path, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(save_data))
+		file.close()
+		print("[SALVAR] Construções salvas com sucesso.")
+	else:
+		printerr("[ERRO] Falha ao salvar arquivo.")
+
+
+func load_buildings(file_path: String = "user://quilombo_save.json"):
+	if not FileAccess.file_exists(file_path):
+		print("[CARREGAR] Nenhum arquivo de salvamento encontrado.")
+		return
+
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if not file:
+		printerr("[ERRO] Falha ao abrir arquivo de salvamento.")
+		return
+
+	var content = file.get_as_text()
+	file.close()
+
+	var save_data = JSON.parse_string(content)
+	if typeof(save_data) != TYPE_ARRAY:
+		printerr("[ERRO] Formato de salvamento inválido.")
+		return
+
+	reset_quilombo_state()
+
+	for item in save_data:
+		if not item.has("scene") or not item.has("position"):
+			continue
+
+		var scene: PackedScene = load(item["scene"])
+		if not scene:
+			printerr("[ERRO] Cena não encontrada: %s" % item["scene"])
+			continue
+
+		var node = scene.instantiate()
+		get_tree().current_scene.add_child(node)
+
+		var pos_dict = item["position"]
+		var pos = Vector2(pos_dict["x"], pos_dict["y"])
+		node.global_position = pos
+
+		match item["type"]:
+			"House":
+				register_house(node)
+			"Workplace":
+				register_building(node)
+				_spawn_npcs_for_workplace(node)
+
+	print("[CARREGAR] Construções carregadas com sucesso.")

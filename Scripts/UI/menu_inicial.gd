@@ -27,13 +27,11 @@ func _process(delta: float) -> void:
 func _on_button_pressed(button: Button) -> void:
 	match button.name:
 		"NewGame":
+			SaveManager.delete_save()
 			get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
 			
 		"Continue":
-			if SaveManager.load_game():
-				get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
-			else:
-				print("Falha ao carregar o jogo a partir do menu.")
+			get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
 				
 		"Quit":
 			get_tree().quit()
