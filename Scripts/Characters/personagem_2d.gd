@@ -272,20 +272,20 @@ func _change_state(new_state: State):
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
-		animated_sprite.speed_scale = 1.0
 		
 	_cancel_idle_timer()
 
 	match current_state:
 		State.SAINDO_DE_CASA:
 			if is_instance_valid(house_node):
-				# MODIFICADO: Garante que o NPC volte a ter um corpo físico ao sair
-				collision_shape.disabled = false
-				
 				show()
+				if collision_shape:
+					collision_shape.disabled = false
 				global_position = house_node.get_door_position()
-				var exit_point = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
-				nav_agent.target_position = exit_point
+				var base_exit_point = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
+				var random_offset = Vector2(randf_range(-40.0, 40.0), randf_range(-10.0, 10.0))
+				nav_agent.target_position = base_exit_point + random_offset
+
 
 		State.INDO_PARA_CASA:
 			if is_instance_valid(house_node):

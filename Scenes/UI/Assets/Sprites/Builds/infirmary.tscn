@@ -16,7 +16,7 @@ size = Vector2(382, 367)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ix0y"]
 size = Vector2(1157.6, 1300.14)
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="Infirmary" type="StaticBody2D"]
 modulate = Color(1, 0.509804, 0.254902, 1)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
@@ -53,14 +53,13 @@ position = Vector2(-1.33211, -165.181)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(-5.32843, 703.352)
+position = Vector2(22.6458, 710.013)
 gizmo_extents = 130.0
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(-4.66234, 66.6054)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_7ix0y")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 

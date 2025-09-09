@@ -16,7 +16,7 @@ size = Vector2(382, 367)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mlfhm"]
 size = Vector2(1266.83, 1364.08)
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="Church" type="StaticBody2D"]
 modulate = Color(0, 1, 0.8, 1)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
@@ -53,7 +53,7 @@ position = Vector2(-1.33211, -165.181)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(-6.66046, 725.998)
+position = Vector2(-6.66053, 729.994)
 gizmo_extents = 130.0
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("4_khm82")]
@@ -62,7 +62,6 @@ gizmo_extents = 130.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(3.33033, 83.9226)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_mlfhm")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 

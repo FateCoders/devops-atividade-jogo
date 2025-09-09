@@ -84,6 +84,8 @@ func build_workplace(workplace_scene: PackedScene, build_position: Vector2):
 	if not workplace_scene:
 		printerr("Tentativa de construir local de trabalho sem cena válida!")
 		return
+		
+	print(building_counts)	
 
 	var new_workplace = workplace_scene.instantiate()
 	get_tree().current_scene.add_child(new_workplace)

@@ -15,7 +15,7 @@ size = Vector2(382, 367)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1rwg"]
 size = Vector2(1126.14, 1274.83)
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="LeadersHouse" type="StaticBody2D"]
 modulate = Color(0.435294, 0.729412, 1, 1)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")

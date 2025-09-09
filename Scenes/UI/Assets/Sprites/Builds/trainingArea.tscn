@@ -112,7 +112,7 @@ sources/4 = SubResource("TileSetAtlasSource_eqaoq")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1oydu"]
 size = Vector2(729, 535)
 
-[node name="trainingArea" type="Node2D"]
+[node name="TrainingArea" type="Node2D"]
 modulate = Color(1, 0.360784, 1, 1)
 script = ExtResource("1_x31qa")
 npc_scene_to_spawn = ExtResource("2_1oydu")

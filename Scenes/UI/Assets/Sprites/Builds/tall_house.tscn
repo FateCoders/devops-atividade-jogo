@@ -15,7 +15,7 @@ size = Vector2(682.977, 590.392)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t6b2j"]
 size = Vector2(1732.27, 1335.09)
 
-[node name="House" type="StaticBody2D"]
+[node name="TallHouse" type="StaticBody2D"]
 scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_7sg2r")
@@ -67,7 +67,6 @@ shape = SubResource("RectangleShape2D_t6b2j")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("3_o6fod")]
-visible = false
 offset_left = 181.143
 offset_top = 226.764
 offset_right = 181.143
