@@ -111,8 +111,10 @@ text = "Modo Construção"
 label_settings = SubResource("LabelSettings_tig4k")
 
 [node name="DayLabel" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 15.0
+offset_top = 13.0
+offset_right = 141.0
+offset_bottom = 68.0
 text = "Dia 01"
 label_settings = SubResource("LabelSettings_plf53")
 
