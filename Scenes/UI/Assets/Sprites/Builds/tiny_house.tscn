@@ -40,6 +40,7 @@ shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 position = Vector2(-5.32842, 704.684)
+collision_mask = 2
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
 position = Vector2(-1.33211, -165.181)

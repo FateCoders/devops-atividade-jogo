@@ -22,22 +22,22 @@ func register_npc(npc: NPC):
 		all_npcs.append(npc)
 
 func register_building(building_node):
-	var type = building_node.get_class() # Pega o tipo do script (ex: "TrainingArea")
+	var type = building_node.scene_file_path
 	if not building_counts.has(type):
-		building_counts[type] = 0 # Inicializa o contador se for o primeiro do tipo
+		building_counts[type] = 0
 	building_counts[type] += 1
-	print("Censo atualizado: %s agora tem %d instâncias." % [type, building_counts[type]])
+	print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
 
 # ADICIONADO: Função para remover uma construção do censo.
 func unregister_building(building_node):
-	var type = building_node.get_class()
+	var type = building_node.scene_file_path
 	if building_counts.has(type) and building_counts[type] > 0:
 		building_counts[type] -= 1
-		print("Censo atualizado: %s agora tem %d instâncias." % [type, building_counts[type]])
+		print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
 
 # ADICIONADO: Funções para a UI verificar o limite.
-func get_build_count_for_type(type: String) -> int:
-	return building_counts.get(type, 0) # Retorna 0 se o tipo ainda não existir no censo.
+func get_build_count_for_type(scene_path: String) -> int:
+	return building_counts.get(scene_path, 0)
 
 # --- CONSTRUÇÃO ---
 func build_structure(structure_scene: PackedScene, build_position: Vector2):

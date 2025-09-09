@@ -48,6 +48,7 @@ position = Vector2(-323.374, 523.302)
 gizmo_extents = 48.5
 
 [node name="EntranceArea" type="Area2D" parent="."]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
 position = Vector2(-321.361, 277.753)

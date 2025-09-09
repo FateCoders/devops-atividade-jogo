@@ -116,12 +116,13 @@ func _on_any_build_button_pressed(scene: PackedScene):
 	var temp_instance = scene.instantiate()
 	
 	var max_allowed = temp_instance.get("max_instances")
-	if max_allowed != null and max_allowed != -1: # -1 significa ilimitado
-		var current_count = QuilomboManager.get_build_count_for_type(temp_instance.get_class())
+	if max_allowed != null and max_allowed > 0: # > 0 significa que há um limite
+		# MODIFICADO: Passamos o caminho do arquivo da cena para a verificação
+		var current_count = QuilomboManager.get_build_count_for_type(scene.resource_path)
 		if current_count >= max_allowed:
 			show_notification("Limite de construções deste tipo atingido!")
-			temp_instance.queue_free() # Limpa a instância temporária
-			return # Impede a entrada no modo de construção
+			temp_instance.queue_free()
+			return
 	
 	var npcs_needed = temp_instance.get("npc_count")
 	var build_cost = temp_instance.get("cost")

@@ -48,8 +48,7 @@ size = Vector2(51.8999, 48)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
-collision_layer = 129
-collision_mask = 255
+collision_layer = 2
 script = ExtResource("1_0ao5h")
 interaction_cursor = ExtResource("2_op7hw")
 
