@@ -4,6 +4,8 @@ extends Node
 # Sinal que será emitido quando o jogador fizer uma escolha em um evento.
 signal event_choice_made(event_id, choice_id)
 
+var icon_test = "res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png"
+
 # Dicionário para guardar todos os eventos possíveis do jogo.
 # Estrutura: ID do Evento -> Dados do Evento
 var all_events = {
