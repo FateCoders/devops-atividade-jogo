@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=33 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://doh5qhoders1a" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -18,6 +18,11 @@
 [ext_resource type="Texture2D" uid="uid://chu3xmb8wgosw" path="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png" id="8_pc4p0"]
 [ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="9_iiebs"]
 [ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="10_n5w8m"]
+[ext_resource type="StyleBox" uid="uid://cocsuxsm44n0n" path="res://Scenes/UI/Assets/Styles/previewbar_health.tres" id="15_8c63k"]
+[ext_resource type="StyleBox" uid="uid://drl4fr0qw7e8f" path="res://Scenes/UI/Assets/Styles/progressbar_background.tres" id="15_qff6j"]
+[ext_resource type="StyleBox" uid="uid://bmqwkdcqqpqmw" path="res://Scenes/UI/Assets/Styles/previewbar_hunger.tres" id="18_e17ao"]
+[ext_resource type="StyleBox" uid="uid://cmepvnwjree6h" path="res://Scenes/UI/Assets/Styles/previewbar_security.tres" id="20_0hfmd"]
+[ext_resource type="StyleBox" uid="uid://dsndh5oc5yn30" path="res://Scenes/UI/Assets/Styles/previewbar_relations.tres" id="22_pc4p0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
 
@@ -45,86 +50,20 @@ font = ExtResource("3_fdl0h")
 font_size = 20
 font_color = Color(0.380392, 0.282353, 0.247059, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mqf2c"]
-bg_color = Color(0.588235, 0.478431, 0.415686, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qff6j"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wqu8"]
-bg_color = Color(0.570893, 1, 0.585074, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e17ao"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fqivn"]
-bg_color = Color(0.99699, 0.802473, 0.444244, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0hfmd"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qdh5o"]
-bg_color = Color(0.62058, 0.907631, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cna6x"]
-bg_color = Color(0.588235, 0.478431, 0.415686, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_am52h"]
-bg_color = Color(0.979438, 0.544564, 0.575288, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.207843, 0.176471, 0.164706, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pc4p0"]
 
 [node name="Hud" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 13.0
-offset_right = -401.0
-offset_bottom = -466.0
+offset_left = 405.0
+offset_top = 479.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 8
@@ -134,6 +73,8 @@ script = ExtResource("1_sprlj")
 
 [node name="MainContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
 [node name="ButtonsPanel" type="PanelContainer" parent="MainContainer"]
 layout_mode = 2
@@ -284,22 +225,6 @@ label_settings = SubResource("LabelSettings_ux5h0")
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
-theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = ExtResource("4_8glcj")
-value = 100.0
-
 [node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
@@ -312,8 +237,25 @@ offset_bottom = 15.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7wqu8")
+theme_override_styles/background = ExtResource("15_qff6j")
+theme_override_styles/fill = ExtResource("15_8c63k")
+value = 100.0
+show_percentage = false
+
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 200.0
+offset_bottom = 15.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_styles/background = SubResource("StyleBoxEmpty_qff6j")
+theme_override_styles/fill = ExtResource("4_8glcj")
 value = 100.0
 
 [node name="HungerContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
@@ -329,22 +271,6 @@ label_settings = SubResource("LabelSettings_ux5h0")
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
-theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = ExtResource("5_vsu76")
-value = 100.0
-
 [node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
@@ -357,8 +283,25 @@ offset_bottom = 15.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = SubResource("StyleBoxFlat_fqivn")
+theme_override_styles/background = ExtResource("15_qff6j")
+theme_override_styles/fill = ExtResource("18_e17ao")
+value = 100.0
+show_percentage = false
+
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 200.0
+offset_bottom = 15.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_styles/background = SubResource("StyleBoxEmpty_e17ao")
+theme_override_styles/fill = ExtResource("5_vsu76")
 value = 100.0
 
 [node name="SecurityContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
@@ -374,21 +317,6 @@ label_settings = SubResource("LabelSettings_ux5h0")
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
-theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = ExtResource("6_mqf2c")
-
 [node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
@@ -401,8 +329,24 @@ offset_bottom = 15.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = SubResource("StyleBoxFlat_qdh5o")
+theme_override_styles/background = ExtResource("15_qff6j")
+theme_override_styles/fill = ExtResource("20_0hfmd")
+show_percentage = false
+
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 200.0
+offset_bottom = 15.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_styles/background = SubResource("StyleBoxEmpty_0hfmd")
+theme_override_styles/fill = ExtResource("6_mqf2c")
 
 [node name="RelationsContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
@@ -417,21 +361,6 @@ label_settings = SubResource("LabelSettings_ux5h0")
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
-theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_mqf2c")
-theme_override_styles/fill = ExtResource("7_7wqu8")
-
 [node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
@@ -444,7 +373,23 @@ offset_bottom = 15.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
-theme_override_styles/background = SubResource("StyleBoxFlat_cna6x")
-theme_override_styles/fill = SubResource("StyleBoxFlat_am52h")
+theme_override_styles/background = ExtResource("15_qff6j")
+theme_override_styles/fill = ExtResource("22_pc4p0")
+show_percentage = false
+
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 200.0
+offset_bottom = 15.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
+theme_override_styles/fill = ExtResource("7_7wqu8")
 
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

@@ -27,6 +27,9 @@ const CURSOR_HOTSPOT = Vector2(16, 16)
 const DEFAULT_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png") 
 const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
 
+const LOW_RELATIONS_COLOR = Color("#ff163f") 
+const DEFAULT_RELATIONS_COLOR = Color("#309cff") 
+
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	_on_status_updated()
@@ -54,29 +57,37 @@ func _on_status_updated():
 	relations_bar.value = StatusManager.relacoes
 	money_label.text = str(StatusManager.dinheiro)
 	
-	clear_preview()
+	var base_color: Color
+
+	if StatusManager.relacoes < 25:
+		base_color = LOW_RELATIONS_COLOR
+	else:
+		base_color = DEFAULT_RELATIONS_COLOR
+	_set_bar_color(relations_bar, base_color)
+
+	var preview_color = base_color
+	preview_color.a = 127 / 255.0 
+	_set_bar_color(relations_preview_bar, preview_color)
+
+	clear_preview();
 
 func show_preview(bonuses: Dictionary):
-	clear_preview()
-	
+	clear_preview();
+
 	if bonuses.has("seguranca") and bonuses.seguranca:
 		security_preview_bar.value = security_bar.value + bonuses.seguranca
-		security_preview_bar.visible = true
 	if bonuses.has("saude") and bonuses.saude:
 		health_preview_bar.value = health_bar.value + bonuses.saude
-		health_preview_bar.visible = true
 	if bonuses.has("relacoes") and bonuses.relacoes:
 		relations_preview_bar.value = relations_bar.value + bonuses.relacoes
-		relations_preview_bar.visible = true
 	if bonuses.has("fome") and bonuses.fome:
 		hunger_preview_bar.value = hunger_bar.value + bonuses.hunger
-		hunger_preview_bar.visible = true
 
 func clear_preview():
-	health_preview_bar.visible = false
-	hunger_preview_bar.visible = false
-	security_preview_bar.visible = false
-	relations_preview_bar.visible = false
+	health_preview_bar.value = security_bar.value
+	hunger_preview_bar.value = health_bar.value
+	security_preview_bar.value = relations_bar.value
+	relations_preview_bar.value = hunger_bar.value
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_space") and visible == false:
@@ -100,3 +111,8 @@ func _on_button_pressed():
 
 		if game_ui.is_in_placement_mode:
 			game_ui._exit_placement_mode()
+
+func _set_bar_color(bar: ProgressBar, new_color: Color):
+	var stylebox = bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
+	stylebox.bg_color = new_color
+	bar.add_theme_stylebox_override("fill", stylebox)
