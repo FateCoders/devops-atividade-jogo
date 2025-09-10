@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://r2i6y2oouxw"]
+
+[ext_resource type="Texture2D" uid="uid://dc77v57wfp0d3" path="res://Assets/Sprites/Exported/Buttons/button-base_menor_provisorio.png" id="1_70y5c"]
+[ext_resource type="Script" uid="uid://t1leqrolyras" path="res://Scripts/UI/styled_button.gd" id="1_i00c6"]
+[ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="2_70y5c"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_orlhf"]
+[ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="3_70y5c"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0a4bi"]
+texture = ExtResource("1_70y5c")
+texture_margin_left = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_70y5c"]
+
+[node name="Button" type="PanelContainer"]
+custom_minimum_size = Vector2(48, 48)
+offset_right = 116.0
+offset_bottom = 48.0
+size_flags_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_0a4bi")
+script = ExtResource("1_i00c6")
+button_icon = ExtResource("2_70y5c")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("2_70y5c")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
+theme_override_fonts/font = ExtResource("2_orlhf")
+text = "Button Text"
+
+[node name="Spacer" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(2.5, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CostIcon" type="TextureRect" parent="HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("3_70y5c")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CostLabel" type="Label" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.560784, 0.337255, 0.227451, 1)
+theme_override_fonts/font = ExtResource("2_orlhf")
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_70y5c")
+flat = true

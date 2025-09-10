@@ -58,7 +58,7 @@ func _ready():
 		"BuildChurchButton": game_ui.ChurchScene
 	}
 
-	var build_buttons = button_builds.find_children("*", "Button")
+	var build_buttons = button_builds.find_children("*", "styledButton")
 	for button in build_buttons:
 		if button.name in button_scene_map:
 			var scene = button_scene_map[button.name]
@@ -66,7 +66,12 @@ func _ready():
 			button.pressed.connect(game_ui._on_any_build_button_pressed.bind(scene))
 
 			var temp_instance = scene.instantiate()
-			var structure_cost: Dictionary = temp_instance.get("cost", {})
+			var structure_cost: Dictionary = {} # 1. Começa com um dicionário vazio como padrão
+
+			# 2. Verifica de forma segura se a propriedade "cost" existe na instância
+			if "cost" in temp_instance:
+				structure_cost = temp_instance.cost # 3. Se existir, pega o valor dela
+
 			temp_instance.queue_free()
 
 			if structure_cost.has("dinheiro"):
