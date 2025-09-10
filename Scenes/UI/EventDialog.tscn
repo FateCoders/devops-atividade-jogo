@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bpj6hsaurwpqq"]
+[gd_scene load_steps=15 format=3 uid="uid://bpj6hsaurwpqq"]
 
 [ext_resource type="Script" uid="uid://dopuggnkcf0dx" path="res://Scripts/UI/event_dialog.gd" id="1_xusqx"]
 [ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_hl1om"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_dvr84"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="4_0mjiy"]
+[ext_resource type="PackedScene" uid="uid://b1nbvk7ami12i" path="res://Scenes/UI/tooltip/tooltip.tscn" id="5_tagxd"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0mjiy"]
 texture = ExtResource("2_hl1om")
@@ -204,3 +205,14 @@ text = "Aceitar"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Negar"
+
+[node name="CustomTooltip" parent="." instance=ExtResource("5_tagxd")]
+offset_left = 31.0
+offset_top = 125.0
+offset_right = 31.0
+offset_bottom = 125.0
+
+[node name="TooltipTimer" type="Timer" parent="."]
+wait_time = 0.3
+
+[connection signal="mouse_entered" from="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer/AcceptButton" to="." method="_on_accept_button_mouse_entered"]

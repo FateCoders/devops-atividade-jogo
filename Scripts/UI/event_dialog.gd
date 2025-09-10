@@ -1,19 +1,28 @@
 # EventDialog.gd
 extends CanvasLayer
 
-# Referências para os nós na nova estrutura de cena
-# !!! ATENÇÃO: Verifique se estes caminhos correspondem à sua nova estrutura !!!
+# --- Referências de Nós ---
+# MODIFICADO: Caminhos corrigidos e agora pegamos o container dos botões
 @onready var title_label: Label = $ColorRect/CenterContainer/Panel/VBoxContainer/TitleLabel
 @onready var description_label: Label = $ColorRect/CenterContainer/Panel/VBoxContainer/ScrollContainer/DescriptionLabel
-@onready var accept_button: Button = $ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer/AcceptButton
-@onready var reject_button: Button = $ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer/RejectButton
+@onready var button_container: HBoxContainer = $ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer
+@onready var custom_tooltip = $CustomTooltip
+@onready var tooltip_timer: Timer = $TooltipTimer
 
+# --- Variáveis de Estado ---
 var current_event_id: String
+var _tooltip_data_to_show: Dictionary
+# Esta lista guardará os botões que você colocou na cena (ex: ChoiceButton1, ChoiceButton2)
+var choice_buttons: Array[Button] = []
 
 func _ready():
-	# Conecta os sinais dos botões uma única vez
-	accept_button.pressed.connect(_on_accept_button_pressed)
-	reject_button.pressed.connect(_on_reject_button_pressed)
+	# Pega todos os botões que são filhos do ButtonContainer e os guarda na lista
+	for child in button_container.get_children():
+		if child is Button:
+			choice_buttons.append(child)
+			
+	# Conecta o sinal do timer uma única vez
+	tooltip_timer.timeout.connect(_on_tooltip_timer_timeout)
 
 func start_event(event_id: String, data: Dictionary):
 	current_event_id = event_id
@@ -21,31 +30,51 @@ func start_event(event_id: String, data: Dictionary):
 	title_label.text = data.get("title", "Evento")
 	description_label.text = data.get("description", "...")
 	
+	# Esconde todos os botões para começar com um estado limpo
+	for button in choice_buttons:
+		button.visible = false
+		# Desconecta quaisquer sinais antigos para evitar bugs
+		if button.is_connected("pressed", _on_choice_button_pressed):
+			button.pressed.disconnect(_on_choice_button_pressed)
+		if button.is_connected("mouse_entered", _on_button_mouse_entered):
+			button.mouse_entered.disconnect(_on_button_mouse_entered)
+		if button.is_connected("mouse_exited", _on_button_mouse_exited):
+			button.mouse_exited.disconnect(_on_button_mouse_exited)
+
 	var choices = data.get("choices", {})
+	var button_index = 0
 	
-	# MODIFICADO: A lógica agora lê o dicionário interno de cada escolha.
-	# Configura o botão de aceitar
-	if choices.has("accept"):
-		var choice_data = choices["accept"] # Pega o dicionário {"label": ..., "tooltip": ...}
-		accept_button.text = choice_data.get("label", "Sim")
-		accept_button.tooltip_text = choice_data.get("tooltip", "") # <-- A mágica acontece aqui!
-		accept_button.visible = true
-	else:
-		accept_button.visible = false
+	# Lógica universal que funciona para QUALQUER evento
+	for choice_id in choices.keys():
+		# Garante que temos um botão na cena para esta escolha
+		if button_index < choice_buttons.size():
+			var button = choice_buttons[button_index]
+			var choice_data = choices[choice_id]
+			
+			# Configura o botão
+			button.text = choice_data.get("label", "...")
+			
+			# Conecta os sinais com os dados corretos para esta escolha
+			button.pressed.connect(_on_choice_button_pressed.bind(choice_id))
+			button.mouse_entered.connect(_on_button_mouse_entered.bind(choice_data))
+			button.mouse_exited.connect(_on_button_mouse_exited)
+			
+			button.visible = true
+			button_index += 1
 
-	# Configura o botão de rejeitar
-	if choices.has("reject"):
-		var choice_data = choices["reject"]
-		reject_button.text = choice_data.get("label", "Não")
-		reject_button.tooltip_text = choice_data.get("tooltip", "") # <-- E aqui também!
-		reject_button.visible = true
-	else:
-		reject_button.visible = false
+# UMA ÚNICA função para lidar com o clique de qualquer botão
+func _on_choice_button_pressed(choice_id: String):
+	EventManager.emit_signal("event_choice_made", current_event_id, choice_id)
+	queue_free() # Destrói o diálogo e suas conexões
 
-func _on_accept_button_pressed():
-	EventManager.emit_signal("event_choice_made", current_event_id, "accept")
-	queue_free()
+# --- Funções de Controle do Tooltip ---
+func _on_button_mouse_entered(data: Dictionary):
+	_tooltip_data_to_show = data
+	tooltip_timer.start()
 
-func _on_reject_button_pressed():
-	EventManager.emit_signal("event_choice_made", current_event_id, "reject")
-	queue_free()
+func _on_button_mouse_exited():
+	tooltip_timer.stop()
+	custom_tooltip.hide_tooltip()
+
+func _on_tooltip_timer_timeout():
+	custom_tooltip.show_tooltip(_tooltip_data_to_show)
