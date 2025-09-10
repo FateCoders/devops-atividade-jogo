@@ -5,7 +5,8 @@ extends Control
 @onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
 @onready var security_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
 @onready var relations_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
-@onready var money_label = $MainContainer/StatusPanel/VBoxContainer/MoneyContainer/MoneyLabel
+@onready var money_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
+@onready var population_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
 
 @onready var health_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
 @onready var hunger_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
@@ -19,6 +20,10 @@ extends Control
 
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
+@onready var health_icon = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
+@onready var hunger_icon = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
+@onready var relations_icon = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
+
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 
@@ -30,8 +35,16 @@ const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
 const LOW_RELATIONS_COLOR = Color("#ff163f") 
 const DEFAULT_RELATIONS_COLOR = Color("#309cff") 
 
+const HEALTH_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/health-icon.png")
+const HEALTH_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/unhealth-icon.png")
+const HUNGER_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png")
+const HUNGER_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/bone-icon.png")
+const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png")
+const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
+
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
+	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
 	_on_status_updated()
 	
 	button_builds.get_node("Col1/BuildOptions/BuildLeadersHouseButton").pressed.connect(
@@ -56,19 +69,19 @@ func _on_status_updated():
 	security_bar.value = StatusManager.seguranca
 	relations_bar.value = StatusManager.relacoes
 	money_label.text = str(StatusManager.dinheiro)
+	population_label.text = str(QuilomboManager.all_npcs.size())
 	
-	var base_color: Color
+	health_icon.texture = HEALTH_ICON_LOW if StatusManager.saude < 50 else HEALTH_ICON_NORMAL
+	hunger_icon.texture = HUNGER_ICON_LOW if StatusManager.fome < 50 else HUNGER_ICON_NORMAL
+	relations_icon.texture = RELATIONS_ICON_LOW if StatusManager.relacoes < 50 else RELATIONS_ICON_NORMAL
 
-	if StatusManager.relacoes < 25:
-		base_color = LOW_RELATIONS_COLOR
-	else:
-		base_color = DEFAULT_RELATIONS_COLOR
+	var base_color = LOW_RELATIONS_COLOR if StatusManager.relacoes < 50 else DEFAULT_RELATIONS_COLOR
 	_set_bar_color(relations_bar, base_color)
-
+	
 	var preview_color = base_color
-	preview_color.a = 127 / 255.0 
+	preview_color.a = 127 / 255.0
 	_set_bar_color(relations_preview_bar, preview_color)
-
+	
 	clear_preview();
 
 func show_preview(bonuses: Dictionary):
@@ -116,3 +129,6 @@ func _set_bar_color(bar: ProgressBar, new_color: Color):
 	var stylebox = bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
 	stylebox.bg_color = new_color
 	bar.add_theme_stylebox_override("fill", stylebox)
+
+func _on_npc_count_changed(new_count: int):
+	population_label.text = str(new_count)

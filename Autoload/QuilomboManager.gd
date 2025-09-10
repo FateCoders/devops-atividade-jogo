@@ -1,6 +1,8 @@
 # QuilomboManager.gd
 extends Node
 
+signal npc_count_changed(new_count: int)
+
 var all_houses: Array[House] = []
 var all_npcs: Array[NPC] = []
 var building_counts: Dictionary = {}
@@ -20,6 +22,7 @@ func register_house(house_node: House):
 func register_npc(npc: NPC):
 	if not all_npcs.has(npc):
 		all_npcs.append(npc)
+		npc_count_changed.emit(all_npcs.size())
 
 func register_building(building_node):
 	var type = building_node.scene_file_path
