@@ -41,27 +41,39 @@ const HUNGER_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/chic
 const HUNGER_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/bone-icon.png")
 const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png")
 const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
+const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
 
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
 	_on_status_updated()
-	
-	button_builds.get_node("Col1/BuildOptions/BuildLeadersHouseButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.LeadersHouseScene))
-	button_builds.get_node("Col1/BuildOptions/BuildHouseButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.HouseScene))
-	button_builds.get_node("Col1/BuildOptions/BuildHidingPlaceButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.HidingPlaceScene))
 
-	button_builds.get_node("Col2/BuildOptions/BuildPlantetionButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.PlantationScene))
-	button_builds.get_node("Col2/BuildOptions/BuildInfirmaryButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.InfirmaryScene))
-	button_builds.get_node("Col2/BuildOptions/BuildTrainingAreaButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.TrainingAreaScene))
-	button_builds.get_node("Col2/BuildOptions/BuildChurchButton").pressed.connect(
-		game_ui._on_any_build_button_pressed.bind(game_ui.ChurchScene))
+	var button_scene_map = {
+		"BuildLeadersHouseButton": game_ui.LeadersHouseScene,
+		"BuildHouseButton": game_ui.HouseScene,
+		"BuildHidingPlaceButton": game_ui.HidingPlaceScene,
+		"BuildPlantetionButton": game_ui.PlantationScene,
+		"BuildInfirmaryButton": game_ui.InfirmaryScene,
+		"BuildTrainingAreaButton": game_ui.TrainingAreaScene,
+		"BuildChurchButton": game_ui.ChurchScene
+	}
+
+	var build_buttons = button_builds.find_children("*", "Button")
+	for button in build_buttons:
+		if button.name in button_scene_map:
+			var scene = button_scene_map[button.name]
+
+			button.pressed.connect(game_ui._on_any_build_button_pressed.bind(scene))
+
+			var temp_instance = scene.instantiate()
+			var structure_cost: Dictionary = temp_instance.get("cost", {})
+			temp_instance.queue_free()
+
+			if structure_cost.has("dinheiro"):
+				var cost_amount = structure_cost["dinheiro"]
+				button.set_cost_value(cost_amount)
+				button.cost_icon.texture = MONEY_ICON
+				button.set_cost_visible(true)
 
 func _on_status_updated():
 	health_bar.value = StatusManager.saude

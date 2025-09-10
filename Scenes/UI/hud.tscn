@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=40 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_mqf2c"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_fdl0h"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="3_uidm2"]
+[ext_resource type="PackedScene" uid="uid://r2i6y2oouxw" path="res://Scenes/UI/styledBuildButton.tscn" id="3_yxyk2"]
 [ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="4_8c63k"]
 [ext_resource type="StyleBox" uid="uid://dvvr17qyjcmtl" path="res://Scenes/UI/Assets/Styles/progressbar_health.tres" id="4_8glcj"]
 [ext_resource type="Texture2D" uid="uid://dcjb6j6qseb04" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor.png" id="4_qdh5o"]
@@ -125,6 +126,9 @@ theme = ExtResource("3_uidm2")
 theme_override_colors/font_color = Color(0.380392, 0.282353, 0.247059, 1)
 text = "Esconderijo"
 icon = ExtResource("6_e17ao")
+
+[node name="Button" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+layout_mode = 2
 
 [node name="Col2" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 custom_minimum_size = Vector2(250, 0)
