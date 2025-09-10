@@ -17,7 +17,6 @@ size = Vector2(382, 367)
 size = Vector2(1157.6, 1300.14)
 
 [node name="Infirmary" type="StaticBody2D"]
-modulate = Color(1, 0.509804, 0.254902, 1)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_ll14k")
