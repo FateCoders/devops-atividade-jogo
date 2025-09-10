@@ -20,7 +20,7 @@ outline_color = Color(0.41598, 0.41598, 0.41598, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tagxd"]
 font = ExtResource("3_dvr84")
-font_size = 20
+font_size = 25
 outline_size = 3
 outline_color = Color(0.509286, 0.509286, 0.509286, 1)
 
@@ -125,25 +125,34 @@ script = ExtResource("1_xusqx")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(641, 335)
-anchors_preset = -1
-anchor_left = 0.25
-anchor_top = 0.389
-anchor_right = 0.751563
-anchor_bottom = 0.854056
-offset_top = -0.0800171
-offset_right = -1.00006
-offset_bottom = 0.0799561
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.5
+offset_top = -167.5
+offset_right = 320.5
+offset_bottom = 167.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(1, 1, 1, 0)
-metadata/_edit_use_anchors_ = true
 
 [node name="CenterContainer" type="CenterContainer" parent="ColorRect"]
-layout_mode = 0
-offset_right = 641.0
-offset_bottom = 160.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -322.0
+offset_top = -238.5
+offset_right = 322.0
+offset_bottom = 238.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="ColorRect/CenterContainer"]
 custom_minimum_size = Vector2(641, 335)
@@ -152,25 +161,28 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_0mjiy")
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer/Panel"]
+custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TitleLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 0
 text = "Mensagem de exemplo"
 label_settings = SubResource("LabelSettings_0mjiy")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(404, 150)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
 [node name="DescriptionLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ScrollContainer"]
-custom_minimum_size = Vector2(404, 40)
+custom_minimum_size = Vector2(394, 40)
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 1
+size_flags_horizontal = 3
 text = "Escravizados refugiados estão vindo, ajude eles..."
 label_settings = SubResource("LabelSettings_tagxd")
 autowrap_mode = 3

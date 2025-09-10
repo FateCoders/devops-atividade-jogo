@@ -9,13 +9,26 @@ signal event_choice_made(event_id, choice_id)
 var all_events = {
 	"fugitives_arrive": {
 		"title": "Fugitivos na Mata",
-		"description": "Um pequeno grupo de escravizados fugitivos encontrou nosso quilombo. Eles estão com fome e cansados, pedindo por abrigo. Abrigá-los pode atrair atenção indesejada, mas também fortalecerá nossa comunidade.",
+		
+		# MODIFICADO: A descrição agora contém todos os detalhes das consequências.
+		"description": "Um pequeno grupo de escravizados fugitivos encontrou nosso quilombo, pedindo por abrigo.
+		
+- Acolher: Adiciona 3 novos moradores ao quilombo. Eles precisarão de casas para se abrigar.
+- Negar Abrigo: Os fugitivos seguirão seu caminho.",
+		
+		# MODIFICADO: Os botões e tooltips agora são simples e diretos.
 		"choices": {
-			"accept": "Acolher os fugitivos. (Gera 3 novos NPCs)",
-			"reject": "Negar abrigo. (Nenhum efeito imediato)"
+			"accept": {
+				"label": "Acolher",
+				"tooltip": "🙂 +3 Moradores" # Tooltip simples e icônico
+			},
+			"reject": {
+				"label": "Negar Abrigo",
+				"tooltip": "Nenhum efeito imediato."
+			}
 		}
 	}
-	# Adicionaremos mais eventos aqui no futuro (ataques, epidemias, etc.)
+	# ... adicione outros eventos seguindo este mesmo modelo.
 }
 
 # Pré-carrega a cena da nossa caixa de diálogo (que faremos no próximo passo).
