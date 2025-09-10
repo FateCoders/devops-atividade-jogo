@@ -97,10 +97,10 @@ func show_preview(bonuses: Dictionary):
 		hunger_preview_bar.value = hunger_bar.value + bonuses.hunger
 
 func clear_preview():
-	health_preview_bar.value = security_bar.value
-	hunger_preview_bar.value = health_bar.value
-	security_preview_bar.value = relations_bar.value
-	relations_preview_bar.value = hunger_bar.value
+	health_preview_bar.value = health_bar.value
+	hunger_preview_bar.value = hunger_bar.value
+	security_preview_bar.value = security_bar.value
+	relations_preview_bar.value = relations_bar.value
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_space") and visible == false:
