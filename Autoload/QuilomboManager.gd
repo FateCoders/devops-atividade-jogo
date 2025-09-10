@@ -156,3 +156,46 @@ func _find_house_with_space() -> House:
 		if is_instance_valid(house) and house.residents.size() < house.capacity:
 			return house
 	return null
+
+func spawn_new_fugitives(amount: int):
+	print("Acolhendo %d novos fugitivos no quilombo..." % amount)
+	
+	# 1. Crie uma lista com todas as cenas de NPC possíveis para este evento.
+	#    !!! AJUSTE OS CAMINHOS ABAIXO PARA APONTAR PARA SUAS CENAS DE NPC !!!
+	const FUGITIVE_NPC_SCENES = [
+		preload("res://Scenes/Characters/citizen_09.tscn"),
+		preload("res://Scenes/Characters/citizen_08.tscn"),
+		preload("res://Scenes/Characters/citizen_07.tscn"),
+		preload("res://Scenes/Characters/citizen_06.tscn"),
+		preload("res://Scenes/Characters/citizen_05.tscn"),
+		preload("res://Scenes/Characters/citizen_04.tscn"),
+		preload("res://Scenes/Characters/citizen_03.tscn"),
+		preload("res://Scenes/Characters/citizen_02.tscn"),
+		preload("res://Scenes/Characters/citizen_01.tscn"),
+		# Adicione quantas cenas de NPC você quiser aqui
+	]
+	
+	# Verificação de segurança caso a lista esteja vazia.
+	if FUGITIVE_NPC_SCENES.is_empty():
+		printerr("Nenhuma cena de NPC foi definida na lista para gerar fugitivos.")
+		return
+
+	var current_scene = get_tree().current_scene
+
+	for i in amount:
+		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
+		
+		var npc = random_npc_scene.instantiate()
+		
+		current_scene.add_child(npc)
+		
+		npc.global_position = Vector2(randf_range(-100, 100), randf_range(-100, 100))
+		
+		npc.work_node = null
+		npc.house_node = null
+		
+		register_npc(npc)
+
+	var game_ui = get_tree().root.get_node_or_null("GameUI")
+	if game_ui:
+		game_ui.show_notification("%d novos moradores chegaram!" % amount)
