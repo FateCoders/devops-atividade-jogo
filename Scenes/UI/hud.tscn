@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=44 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -30,8 +30,21 @@
 [ext_resource type="StyleBox" uid="uid://dsndh5oc5yn30" path="res://Scenes/UI/Assets/Styles/previewbar_relations.tres" id="22_pc4p0"]
 [ext_resource type="Texture2D" uid="uid://cjjfcc1o24jil" path="res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png" id="24_3omb4"]
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="24_yxyk2"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yxyk2"]
+font = ExtResource("3_fdl0h")
+font_size = 45
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q8e8b"]
+font = ExtResource("3_fdl0h")
+font_size = 70
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cna6x"]
 texture = ExtResource("2_fqivn")
@@ -65,20 +78,34 @@ font_color = Color(0.380392, 0.282353, 0.247059, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pc4p0"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_f1jpe"]
+font = ExtResource("31_q8e8b")
+font_size = 40
+
 [node name="Hud" type="PanelContainer"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -930.0
-offset_top = -246.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 8
-size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qdh5o")
 script = ExtResource("1_sprlj")
+
+[node name="DayLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Dia 01"
+label_settings = SubResource("LabelSettings_yxyk2")
+
+[node name="HeaderText" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Modo Construção"
+label_settings = SubResource("LabelSettings_q8e8b")
 
 [node name="MainContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -447,5 +474,25 @@ theme_override_fonts/font = ExtResource("3_fdl0h")
 theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
 theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
+
+[node name="NotificationTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="NotificationContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="NotificationLabel" type="Label" parent="NotificationContainer"]
+layout_mode = 2
+text = "Não há casa para os NPCs..."
+label_settings = SubResource("LabelSettings_f1jpe")
+
+[node name="TimerBar" type="ColorRect" parent="NotificationContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_direction = 2
+layout_mode = 2
 
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
