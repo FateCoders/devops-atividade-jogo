@@ -92,7 +92,6 @@ func _on_entrance_area_body_exited(body: Node2D):
 		if body.current_state == NPC.State.SAINDO_DE_CASA:
 			body.exit_house_complete()
 
-
 func get_status_info() -> Dictionary:
 	var workers = [] # Substitua por sua variável de trabalhadores
 	var info = {

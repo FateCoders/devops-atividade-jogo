@@ -1,0 +1,218 @@
+[gd_scene load_steps=15 format=3 uid="uid://bpj6hsaurwpqq"]
+
+[ext_resource type="Script" uid="uid://dopuggnkcf0dx" path="res://Scripts/UI/event_dialog.gd" id="1_xusqx"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_hl1om"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_dvr84"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="4_0mjiy"]
+[ext_resource type="PackedScene" uid="uid://b1nbvk7ami12i" path="res://Scenes/UI/tooltip/tooltip.tscn" id="5_tagxd"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0mjiy"]
+texture = ExtResource("2_hl1om")
+texture_margin_left = 120.0
+texture_margin_top = 120.0
+texture_margin_right = 120.0
+texture_margin_bottom = 120.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0mjiy"]
+font = ExtResource("3_dvr84")
+font_size = 40
+outline_size = 4
+outline_color = Color(0.41598, 0.41598, 0.41598, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tagxd"]
+font = ExtResource("3_dvr84")
+font_size = 25
+outline_size = 3
+outline_color = Color(0.509286, 0.509286, 0.509286, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mjiy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tagxd"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmlok"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_owund"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ar3w"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="Theme" id="Theme_vmlok"]
+default_font = ExtResource("4_0mjiy")
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 20
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("4_0mjiy")
+Button/styles/disabled = SubResource("StyleBoxFlat_0mjiy")
+Button/styles/focus = SubResource("StyleBoxFlat_tagxd")
+Button/styles/hover = SubResource("StyleBoxFlat_vmlok")
+Button/styles/normal = SubResource("StyleBoxFlat_owund")
+Button/styles/pressed = SubResource("StyleBoxFlat_8ar3w")
+
+[node name="EventDialog" type="CanvasLayer"]
+script = ExtResource("1_xusqx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(641, 335)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.5
+offset_top = -167.5
+offset_right = 320.5
+offset_bottom = 167.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(1, 1, 1, 0)
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -322.0
+offset_top = -238.5
+offset_right = 322.0
+offset_bottom = 238.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="ColorRect/CenterContainer"]
+custom_minimum_size = Vector2(641, 335)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_0mjiy")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer/Panel"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TitleLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Mensagem de exemplo"
+label_settings = SubResource("LabelSettings_0mjiy")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(404, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DescriptionLabel" type="Label" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(394, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Escravizados refugiados estão vindo, ajude eles..."
+label_settings = SubResource("LabelSettings_tagxd")
+autowrap_mode = 3
+
+[node name="ChoicesContainer" type="HBoxContainer" parent="ColorRect/CenterContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.0
+theme = SubResource("Theme_vmlok")
+
+[node name="AcceptButton" type="Button" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Aceitar"
+
+[node name="RejectButton" type="Button" parent="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Negar"
+
+[node name="CustomTooltip" parent="." instance=ExtResource("5_tagxd")]
+offset_left = 31.0
+offset_top = 125.0
+offset_right = 31.0
+offset_bottom = 125.0
+
+[node name="TooltipTimer" type="Timer" parent="."]
+wait_time = 0.3
+
+[connection signal="mouse_entered" from="ColorRect/CenterContainer/Panel/VBoxContainer/ChoicesContainer/AcceptButton" to="." method="_on_accept_button_mouse_entered"]

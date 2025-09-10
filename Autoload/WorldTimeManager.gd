@@ -7,13 +7,13 @@ signal day_passed(new_day: int)
 signal victory_achieved
 
 # --- CONFIGURAÇÕES DE TEMPO ---
-@export var day_length_in_seconds: float = 60.0
+@export var day_length_in_seconds: float = 20.0
 @export var day_starts_at: float = 6.0    # 06:00
 @export var evening_starts_at: float = 17.0 # 17:00
 @export var night_starts_at: float = 20.0  # 20:00
 
 # --- NOVO: CONDIÇÃO DE VITÓRIA ---
-@export var victory_day: int = 2
+@export var victory_day: int = 30
 
 # --- VARIÁVEIS DE ESTADO ---
 # ADICIONADO: Contador de dias

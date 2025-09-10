@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dcbbd2pvrhdxg"]
+
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="1_ofux3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_msuq6"]
+bg_color = Color(0.393086, 0.393086, 0.393085, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+TooltipLabel/font_sizes/font_size = 20
+TooltipLabel/fonts/font = ExtResource("1_ofux3")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_msuq6")

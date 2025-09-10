@@ -27,6 +27,7 @@ WorldTimeManager="*res://Autoload/WorldTimeManager.gd"
 StatusManager="*res://Autoload/StatusManager.gd"
 QuilomboManager="*res://Autoload/QuilomboManager.gd"
 CursorManager="*res://Autoload/CursorManager.gd"
+EventManager="*res://Autoload/EventManager.gd"
 
 [config]
 
@@ -38,6 +39,10 @@ icon="res://icon.svg"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/custom="uid://dcbbd2pvrhdxg"
 
 [input]
 
