@@ -273,7 +273,7 @@ label_settings = SubResource("LabelSettings_vsu76")
 layout_mode = 2
 
 [node name="HealthLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Saúde"
 label_settings = SubResource("LabelSettings_ux5h0")
@@ -328,9 +328,9 @@ value = 100.0
 layout_mode = 2
 
 [node name="HungerLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-text = "Fome (Cheio)"
+text = "Fome (Faminto)"
 label_settings = SubResource("LabelSettings_ux5h0")
 
 [node name="HungerIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer"]
@@ -379,7 +379,7 @@ value = 100.0
 layout_mode = 2
 
 [node name="SecurityLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Segurança"
 label_settings = SubResource("LabelSettings_ux5h0")
@@ -428,7 +428,7 @@ theme_override_styles/fill = ExtResource("6_mqf2c")
 layout_mode = 2
 
 [node name="RelationsLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Relações"
 label_settings = SubResource("LabelSettings_ux5h0")
