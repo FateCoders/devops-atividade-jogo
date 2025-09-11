@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc77v57wfp0d3"
-path="res://.godot/imported/button-base_menor_provisorio.png-0225305a905b9473f4fd785ee54aab07.ctex"
+uid="uid://8k01m3iq8tcd"
+path="res://.godot/imported/hud-sheet-1.png-a284438a3f5efe898da91f50129c1581.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buttons/button-base_menor_provisorio.png"
-dest_files=["res://.godot/imported/button-base_menor_provisorio.png-0225305a905b9473f4fd785ee54aab07.ctex"]
+source_file="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet-1.png"
+dest_files=["res://.godot/imported/hud-sheet-1.png-a284438a3f5efe898da91f50129c1581.ctex"]
 
 [params]
 
