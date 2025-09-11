@@ -42,6 +42,7 @@ var notification_tween: Tween
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
+@onready var day_label = $DayContainer/DayLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -62,6 +63,7 @@ const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-ic
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
+	WorldTimeManager.day_passed.connect(_on_day_passed)
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
 	notification_container.modulate.a = 0.0
 	construction_title.visible = false 
@@ -278,3 +280,7 @@ func _update_cursor_state():
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
+
+func _on_day_passed(new_day: int):
+	if day_label:
+		day_label.text = "Dia %02d" % new_day
