@@ -42,6 +42,7 @@ theme_override_fonts/font = ExtResource("2_orlhf")
 text = "Button Text"
 
 [node name="Spacer" type="Control" parent="HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
