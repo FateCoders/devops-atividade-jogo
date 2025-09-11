@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dy4mjiu0qmdvt"
-path="res://.godot/imported/hint-button-02.png-a6944d7c331b9d18a74305b846cf144b.ctex"
+uid="uid://dti7e8mi3qiho"
+path="res://.godot/imported/infirmary.png-23f81d42953254cf403096d7a9e4ca79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buttons/hint-button-02.png"
-dest_files=["res://.godot/imported/hint-button-02.png-a6944d7c331b9d18a74305b846cf144b.ctex"]
+source_file="res://Assets/Sprites/Exported/Buildings/infirmary.png"
+dest_files=["res://.godot/imported/infirmary.png-23f81d42953254cf403096d7a9e4ca79.ctex"]
 
 [params]
 

@@ -28,12 +28,9 @@ var _current_music: AudioStream = null
 
 
 func _ready():
-	# Conecta ao relógio mundial
 	WorldTimeManager.period_changed.connect(_on_world_period_changed)
-	
-	# --- NOVA CONEXÃO DE SINAL ---
-	# Conecta o sinal de timeout do nosso novo timer a uma função.
 	ambient_timer.timeout.connect(_on_ambient_timer_timeout)
+	self.process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 # --- Funções públicas (play_menu_music, etc.) não mudam ---
@@ -56,6 +53,7 @@ func _fade_to_music(new_stream: AudioStream):
 
 	# Cria um Tween para gerenciar toda a sequência
 	var tween = create_tween()
+	tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	# Garante que o tween não morra se a cena mudar
 	tween.set_parallel(true)
 	

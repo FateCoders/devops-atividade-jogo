@@ -1,11 +1,10 @@
 extends Node
 
-# Sinal para notificar a HUD sobre mudanças nos status
 signal status_updated
 
 var dinheiro = 500
-var saude = 50
-var fome = 50
+var saude = 100
+var fome = 100
 var seguranca = 10
 var relacoes = 10
 
