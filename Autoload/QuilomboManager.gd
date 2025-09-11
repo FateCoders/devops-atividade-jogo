@@ -1,6 +1,8 @@
 # QuilomboManager.gd
 extends Node
 
+signal npc_count_changed(new_count: int)
+
 var all_houses: Array[House] = []
 var all_npcs: Array[NPC] = []
 var building_counts: Dictionary = {}
@@ -20,6 +22,7 @@ func register_house(house_node: House):
 func register_npc(npc: NPC):
 	if not all_npcs.has(npc):
 		all_npcs.append(npc)
+		npc_count_changed.emit(all_npcs.size())
 
 func register_building(building_node):
 	var type = building_node.scene_file_path
@@ -199,3 +202,7 @@ func spawn_new_fugitives(amount: int):
 	var game_ui = get_tree().root.get_node_or_null("GameUI")
 	if game_ui:
 		game_ui.show_notification("%d novos moradores chegaram!" % amount)
+		
+# ADICIONADO: Função a ser chamada quando a mecânica do líder for implementada.
+func on_leader_lost():
+	GameManager.game_over.emit("Seu líder foi capturado ou morto. O quilombo se desfez.")

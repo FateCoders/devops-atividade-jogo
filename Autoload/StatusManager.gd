@@ -1,11 +1,10 @@
 extends Node
 
-# Sinal para notificar a HUD sobre mudanças nos status
 signal status_updated
 
 var dinheiro = 500
-var saude = 50
-var fome = 50
+var saude = 100
+var fome = 100
 var seguranca = 10
 var relacoes = 10
 
@@ -26,8 +25,14 @@ func mudar_status(nome_status, valor):
 			relacoes = clamp(relacoes + valor, 0, 100)
 
 	emit_signal("status_updated")
+	
+	_check_defeat_conditions()
 
 	print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
+	
+func _check_defeat_conditions():
+	if saude <= 0 and fome <= 0:
+		GameManager.game_over.emit("O quilombo sucumbiu à fome e às doenças.")
 
 func get_status_value(nome_status):
 	return get(nome_status)

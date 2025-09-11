@@ -1,44 +1,46 @@
 # VictoryScreen.gd
 extends CanvasLayer
 
-# As variáveis de cursor não são necessárias aqui, então foram removidas para limpeza.
+# --- Referências para os botões ---
+@onready var restart_button: Button = $ColorRect/VBoxContainer/HBoxContainer/continuar_btn
+@onready var main_menu_button: Button = $ColorRect/VBoxContainer/HBoxContainer/sair_btn
+
+@onready var achievements_container: HBoxContainer = $ColorRect/VBoxContainer/AchievementsContainer
+const AchievementItemScene = preload("res://Scenes/UI/AchievementItem.tscn")
 
 func _ready():
-	# 1. A tela começa invisível.
 	visible = false
 	
-	# 2. Conecta-se ao sinal de vitória do WorldTimeManager para "escutar" o anúncio.
-	WorldTimeManager.victory_achieved.connect(_on_victory_achieved)
-
-
-
-# A função _process agora pode ficar vazia.
-func _process(delta: float):
-	pass
-
-
-# --- NOVA FUNÇÃO ---
-# Esta função é chamada AUTOMATICAMENTE quando o WorldTimeManager emite o sinal de vitória.
+	restart_button.pressed.connect(_on_restart_button_pressed)
+	main_menu_button.pressed.connect(_on_main_menu_button_pressed)
+	
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	GameManager.victory_achieved.connect(_on_victory_achieved)
+	
 func _on_victory_achieved():
-	# 3. Torna a tela de vitória visível.
 	visible = true
-	# 4. Pausa o jogo.
 	get_tree().paused = true
+	_populate_achievements()
 
+func _populate_achievements():
+	for child in achievements_container.get_children():
+		child.queue_free()
+
+	var all_achievements = AchievementsManager.get_all_achievements()
+	
+	for achievement_id in all_achievements.keys():
+		var data = all_achievements[achievement_id]
+		var item = AchievementItemScene.instantiate()
+		achievements_container.add_child(item)
+		item.set_data(data)
 
 # --- FUNÇÕES DOS BOTÕES ---
 
-# Chamada quando o botão "Sair" ou "Voltar ao Menu" é pressionado.
-func _on_sair_btn_pressed():
-	# É uma boa prática resetar os managers antes de voltar ao menu.
-	SaveManager.save_game() # Salva o progresso final (opcional)
-	QuilomboManager.reset_quilombo_state()
-
-	# Garante que o jogo esteja despausado antes de mudar de cena.
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scenes/UI/menu_inicial.tscn")
-
-
-func _on_continuar_btn_pressed():
+func _on_restart_button_pressed():
 	get_tree().paused = false
 	visible = false
+
+func _on_main_menu_button_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scenes/UI/menu_inicial.tscn")

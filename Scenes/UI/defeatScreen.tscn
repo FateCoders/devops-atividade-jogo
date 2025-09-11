@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3 uid="uid://r81tceg8r6oj"]
+
+[ext_resource type="Script" uid="uid://bfsgxmm3j62m8" path="res://Scripts/UI/game_over.gd" id="1_dxg4r"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_jxrow"]
+[ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="4_xhgvj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jqelu"]
+font = ExtResource("3_jxrow")
+font_size = 75
+
+[sub_resource type="LabelSettings" id="LabelSettings_dxg4r"]
+font = ExtResource("3_jxrow")
+font_size = 35
+
+[node name="defeatScreen" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_dxg4r")
+
+[node name="ColorReact" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.462745)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.5
+offset_top = -67.5
+offset_right = 199.5
+offset_bottom = 67.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Quilombo derrotado"
+label_settings = SubResource("LabelSettings_jqelu")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+size_flags_vertical = 4
+horizontal_scroll_mode = 0
+
+[node name="ReasonLabel" type="Label" parent="VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Os ataques asolaram o seu quilombo e levaram a vida de sue Líder"
+label_settings = SubResource("LabelSettings_dxg4r")
+horizontal_alignment = 1
+autowrap_mode = 3
+justification_flags = 195
+
+[node name="quit_button" type="Button" parent="VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("4_xhgvj")
+text = "Quit game"
+
+[connection signal="pressed" from="VBoxContainer/quit_button" to="." method="_on_quit_button_pressed"]
