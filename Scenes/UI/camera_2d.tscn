@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsgu817pxagyl"]
+
+[ext_resource type="Script" uid="uid://bi2agvatio3kw" path="res://Scripts/Levels/world_camera.gd" id="1_usqbk"]
+
+[node name="Camera2D" type="Camera2D"]
+process_mode = 3
+scale = Vector2(1.07503, 1.03969)
+script = ExtResource("1_usqbk")
+world_limits = Rect2(-1000, -700, 5500, 3000)

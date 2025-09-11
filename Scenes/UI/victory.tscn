@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bpnly331fjf71"]
+[gd_scene load_steps=8 format=3 uid="uid://bpnly331fjf71"]
 
 [ext_resource type="Script" uid="uid://cwgemtjswlmfy" path="res://Scripts/UI/victory.gd" id="1_jd8qn"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_ge3lp"]
+[ext_resource type="PackedScene" uid="uid://b0cq7ne1fcan1" path="res://Scenes/UI/AchievementItem.tscn" id="4_r7jv4"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="4_w5vdd"]
+[ext_resource type="Texture2D" uid="uid://6oc1vx0g11b4" path="res://Assets/Sprites/Exported/Buttons/configuration-button-01.png" id="5_ge3lp"]
+[ext_resource type="Texture2D" uid="uid://dbm3gc21p4rr0" path="res://Assets/Sprites/Exported/Buttons/play-button.png" id="6_w5vdd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jqelu"]
 font = ExtResource("3_ge3lp")
@@ -43,19 +46,34 @@ size_flags_vertical = 8
 text = "Vitória conquistada"
 label_settings = SubResource("LabelSettings_jqelu")
 
-[node name="continuar_btn" type="Button" parent="VBoxContainer"]
+[node name="AchievementsContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_w5vdd")
-text = "continuar"
+size_flags_horizontal = 4
 
-[node name="sair_btn" type="Button" parent="VBoxContainer"]
+[node name="AchievementItem" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+layout_mode = 2
+
+[node name="AchievementItem2" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+layout_mode = 2
+
+[node name="AchievementItem3" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="sair_btn" type="Button" parent="VBoxContainer/HBoxContainer"]
 process_mode = 3
 layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("4_w5vdd")
-text = "menu"
+icon = ExtResource("5_ge3lp")
 
-[node name="AchievementsContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="continuar_btn" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_w5vdd")
+icon = ExtResource("6_w5vdd")
 
-[connection signal="pressed" from="VBoxContainer/continuar_btn" to="." method="_on_continuar_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/sair_btn" to="." method="_on_sair_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/sair_btn" to="." method="_on_sair_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/continuar_btn" to="." method="_on_continuar_btn_pressed"]

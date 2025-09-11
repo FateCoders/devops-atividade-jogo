@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var restart_button: Button = $VBoxContainer/continuar_btn
 @onready var main_menu_button: Button = $VBoxContainer/sair_btn
 
-@onready var achievements_container: VBoxContainer = $VBoxContainer/AchievementsContainer
+@onready var achievements_container: HBoxContainer = $VBoxContainer/AchievementsContainer
 const AchievementItemScene = preload("res://Scenes/UI/AchievementItem.tscn")
 
 func _ready():

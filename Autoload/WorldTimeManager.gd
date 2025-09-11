@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 		current_day += 1
 		print("--- UM NOVO DIA COMEÇOU! DIA: ", current_day, " ---")
 		day_passed.emit(current_day)
-
+	
 	# --- Lógica de período (permanece a mesma) ---
 	var previous_period := _current_period
 	_current_period = _determine_period(_current_hour)

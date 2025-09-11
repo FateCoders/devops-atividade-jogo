@@ -26,6 +26,3 @@ expand_mode = 2
 layout_mode = 2
 text = "Conteudo de exemplo"
 label_settings = SubResource("LabelSettings_w0evp")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
