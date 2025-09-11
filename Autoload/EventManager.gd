@@ -4,7 +4,7 @@ extends Node
 # Sinal que será emitido quando o jogador fizer uma escolha em um evento.
 signal event_choice_made(event_id, choice_id)
 
-@export var daily_event_chance: float = 30.0
+@export var daily_event_chance: float = 100.0
 
 var populationIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
 var chickenIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
@@ -112,6 +112,9 @@ func _on_event_choice_made(event_id, choice_id):
 			# (No futuro, aqui poderia chamar uma cena de batalha)
 		elif choice_id == "surrender":
 			StatusManager.mudar_status("dinheiro", -50)
+			
+	if StatusManager.seguranca <= 0 or StatusManager.saude <= 0:
+			GameManager.game_over.emit("O quilombo foi destruído em um ataque.")
 
 	# ADICIONADO: Consequências do Evento de Epidemia
 	elif event_id == "epidemic_spreads":

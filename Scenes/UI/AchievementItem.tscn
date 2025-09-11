@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0cq7ne1fcan1"]
+
+[ext_resource type="Script" uid="uid://s546oho3ykmx" path="res://Scripts/UI/achievementItem.gd" id="1_w0evp"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_0kcrk"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_foqhv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_w0evp"]
+font = ExtResource("2_foqhv")
+font_size = 10
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="AchievementItem" type="HBoxContainer"]
+offset_right = 5.0
+offset_bottom = 23.0
+theme_override_constants/separation = 15
+script = ExtResource("1_w0evp")
+
+[node name="CheckIcon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("2_0kcrk")
+expand_mode = 2
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Conteudo de exemplo"
+label_settings = SubResource("LabelSettings_w0evp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2

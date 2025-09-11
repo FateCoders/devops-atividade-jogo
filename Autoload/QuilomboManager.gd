@@ -199,3 +199,7 @@ func spawn_new_fugitives(amount: int):
 	var game_ui = get_tree().root.get_node_or_null("GameUI")
 	if game_ui:
 		game_ui.show_notification("%d novos moradores chegaram!" % amount)
+		
+# ADICIONADO: Função a ser chamada quando a mecânica do líder for implementada.
+func on_leader_lost():
+	GameManager.game_over.emit("Seu líder foi capturado ou morto. O quilombo se desfez.")

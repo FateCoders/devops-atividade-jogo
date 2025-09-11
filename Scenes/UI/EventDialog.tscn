@@ -122,6 +122,7 @@ Button/styles/normal = SubResource("StyleBoxFlat_owund")
 Button/styles/pressed = SubResource("StyleBoxFlat_8ar3w")
 
 [node name="EventDialog" type="CanvasLayer"]
+layer = 50
 script = ExtResource("1_xusqx")
 
 [node name="ColorRect" type="ColorRect" parent="."]

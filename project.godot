@@ -28,6 +28,8 @@ StatusManager="*res://Autoload/StatusManager.gd"
 QuilomboManager="*res://Autoload/QuilomboManager.gd"
 CursorManager="*res://Autoload/CursorManager.gd"
 EventManager="*res://Autoload/EventManager.gd"
+GameManager="*res://Autoload/GameManager.gd"
+AchievementsManager="*res://Autoload/AchievementsManager.gd"
 
 [config]
 

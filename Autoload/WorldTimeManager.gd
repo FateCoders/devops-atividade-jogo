@@ -4,7 +4,6 @@ extends Node
 # --- SINAIS ---
 signal period_changed(period_name: String)
 signal day_passed(new_day: int)
-signal victory_achieved
 
 # --- CONFIGURAÇÕES DE TEMPO ---
 @export var day_length_in_seconds: float = 20.0
@@ -13,7 +12,7 @@ signal victory_achieved
 @export var night_starts_at: float = 20.0  # 20:00
 
 # --- NOVO: CONDIÇÃO DE VITÓRIA ---
-@export var victory_day: int = 30
+@export var victory_day: int = 2
 
 # --- VARIÁVEIS DE ESTADO ---
 # ADICIONADO: Contador de dias
@@ -35,10 +34,6 @@ func _process(delta: float) -> void:
 		current_day += 1
 		print("--- UM NOVO DIA COMEÇOU! DIA: ", current_day, " ---")
 		day_passed.emit(current_day)
-		
-		# Verifica a condição de vitória
-		if current_day >= victory_day:
-			_trigger_victory()
 
 	# --- Lógica de período (permanece a mesma) ---
 	var previous_period := _current_period
@@ -47,12 +42,6 @@ func _process(delta: float) -> void:
 	if _current_period != previous_period:
 		print("⏰ RELÓGIO MUNDIAL: Mudança para '", _current_period, "' às ", snapped(_current_hour, 0.01))
 		period_changed.emit(_current_period)
-
-
-# --- NOVA FUNÇÃO DE VITÓRIA ---
-func _trigger_victory():
-	victory_achieved.emit()
-
 
 # --- O resto das suas funções permanece o mesmo ---
 func _determine_period(hour: float) -> String:
