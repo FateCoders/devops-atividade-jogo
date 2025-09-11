@@ -69,6 +69,8 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	register_building(new_structure)
 
 	new_structure.confirm_construction()
+	
+	GameManager.check_tutorial_progress(structure_scene)
 
 	if not new_structure is House:
 		_spawn_npcs_for_workplace(new_structure)

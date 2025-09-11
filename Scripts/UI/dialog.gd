@@ -2,75 +2,91 @@
 extends Control
 class_name DialogScreen
 
-@export_category("Interação do Cursor")
-@export var interaction_cursor: Texture2D
-@export var cursor_hotspot: Vector2 = Vector2.ZERO
-@export var default_cursor: Texture2D
-@export var default_hotspot: Vector2 = Vector2.ZERO
+# --- Referências de Nós ---
+# MODIFICADO: Corrigido os caminhos para corresponder à sua estrutura de cena (baseado na imagem)
+@onready var name_label: Label = $bg/HContainer/VContainer/Name
+@onready var dialog_label: RichTextLabel = $bg/HContainer/VContainer/Dialog
+@onready var faceset_rect: TextureRect = $bg/HContainer/Border/Faceset
+@onready var next_button: Button = $ButtonContainer/NextButton
+@onready var skip_button: Button = $ButtonContainer/SkipButton
 
-@export_category("Objects")
-@export var _name: Label = null
-@export var _dialog: RichTextLabel = null
-@export var _faceset: TextureRect = null
-
+# --- Variáveis de Controle ---
 var _step: float = 0.05
 var _id: int = 0
-var _current_tween: Tween # Para controlar a animação do texto
+var _current_tween: Tween
+var data: Dictionary
 
-# A variável de dados agora tem uma função "setter" para inicialização segura
-var data: Dictionary = {}:
-	set(value):
-		data = value
-		# A inicialização acontece aqui, depois que 'data' recebe um valor.
-		_initialize_dialog()
-
-# A função _ready() agora fica vazia
 func _ready() -> void:
-	pass
+	# Conecta os botões às suas respectivas funções de ação.
+	next_button.pressed.connect(advance_dialog)
+	skip_button.pressed.connect(skip_dialog)
 	
-func _process(_delta: float) -> void:
-	Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
-	# Se o jogador apertar o botão de ação e o texto ainda está aparecendo...
-	if Input.is_action_just_pressed("ui_accept") and _dialog.visible_ratio < 1:
-		# ...termina a animação de texto instantaneamente.
+func setup_dialog(dialog_data: Dictionary):
+	self.data = dialog_data
+	if not self.data.is_empty():
+		_initialize_dialog()
+	else:
+		printerr("DialogScreen recebeu dados vazios! Fechando...")
+		queue_free()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ui_accept"):
+		advance_dialog()
+		get_viewport().set_input_as_handled()
+		
+	if Input.is_action_just_pressed("ui_cancel"):
+		skip_dialog()
+		get_viewport().set_input_as_handled()
+
+func _process(delta: float):
+	pass
+
+# --- Funções de Ação ---
+
+func advance_dialog():
+	# Se o texto ainda está aparecendo (sendo animado)...
+	if dialog_label.visible_ratio < 1:
+		# ...termina a animação instantaneamente.
 		if _current_tween and _current_tween.is_running():
-			_current_tween.kill() # Para o tween
-		_dialog.visible_ratio = 1 # Mostra todo o texto
+			_current_tween.kill()
+		dialog_label.visible_ratio = 1
+		# CORRIGIDO: Mostra o indicador "próximo" imediatamente ao acelerar.
 		return
 		
-	# Se o texto já terminou de aparecer, avança para o próximo diálogo
-	if Input.is_action_just_pressed("ui_accept"):
-		_id += 1
-		# Se o diálogo terminou, a tela se fecha
-		if _id >= data.size():
-			queue_free()
-			return
-			
-		# Se ainda há diálogos, inicializa o próximo
-		_initialize_dialog()
-		
-func _initialize_dialog() -> void:
-	# Verificação de segurança para garantir que os dados existem antes de usar
+	# Se o texto já terminou, avança para o próximo.
+	_id += 1
+	if _id >= data.size():
+		skip_dialog() # Se acabaram os diálogos, fecha a tela.
+		return
+	_initialize_dialog()
+
+func skip_dialog():
+	queue_free()
+
+# --- Funções Internas ---
+
+func _initialize_dialog():
 	if not data.has(_id):
-		Input.set_custom_mouse_cursor(default_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 		print("Índice de diálogo inválido: ", _id)
-		queue_free()
+		skip_dialog()
 		return
 
-	_name.text = data[_id].get("title", "???")
-	_dialog.text = data[_id].get("dialog", "...")
+	var current_page = data[_id]
+	name_label.text = current_page.get("title", "???")
+	dialog_label.bbcode_enabled = true
+	dialog_label.text = current_page.get("dialog", "...")
 	
-	# Carrega a textura de forma segura
-	var faceset_path = data[_id].get("faceset", "")
+	var faceset_path = current_page.get("faceset", "")
 	if faceset_path:
-		_faceset.texture = load(faceset_path)
+		faceset_rect.texture = load(faceset_path)
 	
-	# Animação do texto letra por letra usando Tween
-	_dialog.visible_characters = 0
-	# Certifica-se de que qualquer tween anterior seja parado
+	dialog_label.visible_ratio = 0
+	
 	if _current_tween and _current_tween.is_running():
 		_current_tween.kill()
 		
-	_current_tween = create_tween().set_parallel(false)
-	# Anima a propriedade 'visible_characters' do início ao fim do texto
-	_current_tween.tween_property(_dialog, "visible_characters", _dialog.text.length(), _dialog.text.length() * _step)
+	_current_tween = create_tween()
+	_current_tween.tween_property(dialog_label, "visible_ratio", 1, dialog_label.text.length() * _step)
+	
+	# Espera o tween terminar para mostrar o indicador de "próximo".
+	await _current_tween.finished
