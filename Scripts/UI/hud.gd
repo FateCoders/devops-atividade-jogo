@@ -16,6 +16,7 @@ const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
+var notification_tween: Tween
 
 @onready var health_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
@@ -37,9 +38,10 @@ var placement_preview = null
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
-@onready var notification_label: Label = $NotificationContainer/NotificationLabel
+@onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
 @onready var notification_timer: Timer = $NotificationTimer
+@onready var construction_title = $BuildTitleLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -61,6 +63,8 @@ func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
+	notification_container.modulate.a = 0.0
+	construction_title.visible = false 
 	_on_status_updated()
 
 	var button_scene_map = {
@@ -87,8 +91,12 @@ func _ready():
 				button.set_cost_value(cost_amount)
 				button.cost_icon.texture = MONEY_ICON
 				button.set_cost_visible(true)
+	
+	self.process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float):
+	_update_cursor_state()
+
 	if not is_in_placement_mode or not is_instance_valid(placement_preview):
 		return
 	placement_preview.global_position = get_viewport().get_canvas_transform().affine_inverse() * get_viewport().get_mouse_position()
@@ -99,6 +107,12 @@ func _process(delta: float):
 		placement_preview.modulate = Color(1, 0.5, 0.5, 0.7)
 		
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.keycode == KEY_SPACE:
+			self.visible = not self.visible
+			get_viewport().set_input_as_handled()
+			return
+
 	if is_in_placement_mode:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
@@ -148,6 +162,10 @@ func _on_npc_count_changed(new_count: int):
 
 func _on_button_pressed():
 	button_builds.visible = !button_builds.visible
+	construction_title.visible = button_builds.visible
+	
+	get_tree().paused = button_builds.visible
+
 	if button_builds.visible:
 		build_button_icon.visible = false
 		build_button.texture_normal = CLOSE_TEXTURE
@@ -189,6 +207,9 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			show_notification("Recursos insuficientes para construir!")
 			return
 
+	button_builds.visible = false
+	construction_title.visible = false
+
 	is_in_placement_mode = true
 	scene_to_place = scene
 	placement_preview = scene.instantiate()
@@ -205,6 +226,12 @@ func _on_any_build_button_pressed(scene: PackedScene):
 func _exit_placement_mode():
 	if is_instance_valid(placement_preview):
 		placement_preview.queue_free()
+
+	button_builds.visible = true
+	construction_title.visible = true
+
+	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+
 	is_in_placement_mode = false
 	scene_to_place = null
 	placement_preview = null
@@ -225,15 +252,29 @@ func _disable_physics(node: Node):
 		_disable_physics(child)
 		
 func show_notification(message: String, duration: float = 3.0):
-	if notification_timer.time_left > 0: return
+	if notification_tween and notification_tween.is_valid():
+		notification_tween.kill()
+
 	notification_label.text = message
+	notification_container.modulate.a = 1.0
 	notification_timer.wait_time = duration
 	notification_timer.start()
-	timer_bar.size.x = notification_container.size.x
-	var tween = create_tween()
-	tween.tween_property(notification_container, "modulate:a", 1.0, 0.3)
-	tween.tween_property(timer_bar, "size:x", 0, duration)
+	timer_bar.size.x = notification_container.size.x 
+
+	notification_tween = create_tween()
+	notification_tween.tween_property(timer_bar, "size:x", 0, duration)
 
 func _on_notification_timer_timeout():
-	var tween = create_tween()
-	tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
+	if notification_tween and notification_tween.is_valid():
+		notification_tween.kill()
+
+	notification_tween = create_tween()
+	notification_tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
+
+func _update_cursor_state():
+	if is_in_placement_mode:
+		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+	elif button_builds.visible:
+		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+	else:
+		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)

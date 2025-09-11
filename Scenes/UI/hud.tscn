@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=46 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -33,18 +33,10 @@
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_yxyk2"]
-font = ExtResource("3_fdl0h")
-font_size = 45
-outline_size = 7
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_q8e8b"]
-font = ExtResource("3_fdl0h")
-font_size = 70
-outline_size = 10
-outline_color = Color(0, 0, 0, 1)
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cna6x"]
 texture = ExtResource("2_fqivn")
@@ -55,10 +47,10 @@ texture_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_am52h"]
 texture = ExtResource("2_mqf2c")
-texture_margin_left = 40.0
-texture_margin_top = 40.0
-texture_margin_right = 40.0
-texture_margin_bottom = 40.0
+texture_margin_left = 30.0
+texture_margin_top = 30.0
+texture_margin_right = 30.0
+texture_margin_bottom = 30.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_vsu76"]
 font = ExtResource("3_fdl0h")
@@ -78,6 +70,27 @@ font_color = Color(0.380392, 0.282353, 0.247059, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pc4p0"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q8e8b"]
+texture = ExtResource("2_fqivn")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_yxyk2"]
+font = ExtResource("3_fdl0h")
+font_size = 28
+font_color = Color(0.352941, 0.290196, 0.266667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q8e8b"]
+font = ExtResource("3_fdl0h")
+font_size = 70
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q8e8b"]
+content_margin_top = 100.0
+
 [sub_resource type="LabelSettings" id="LabelSettings_f1jpe"]
 font = ExtResource("31_q8e8b")
 font_size = 40
@@ -92,20 +105,6 @@ size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qdh5o")
 script = ExtResource("1_sprlj")
-
-[node name="DayLabel" type="Label" parent="."]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Dia 01"
-label_settings = SubResource("LabelSettings_yxyk2")
-
-[node name="HeaderText" type="Label" parent="."]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-text = "Modo Construção"
-label_settings = SubResource("LabelSettings_q8e8b")
 
 [node name="MainContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -475,18 +474,42 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
 theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
 
+[node name="DayContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_q8e8b")
+
+[node name="DayLabel" type="Label" parent="DayContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Dia 01"
+label_settings = SubResource("LabelSettings_yxyk2")
+
+[node name="BuildTitleLabel" type="Label" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Modo Construção"
+label_settings = SubResource("LabelSettings_q8e8b")
+
 [node name="NotificationTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
 
 [node name="NotificationContainer" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 4
+size_flags_horizontal = 4
+size_flags_vertical = 0
 
-[node name="NotificationLabel" type="Label" parent="NotificationContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="NotificationContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_q8e8b")
+
+[node name="NotificationLabel" type="Label" parent="NotificationContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 1
 text = "Não há casa para os NPCs..."
 label_settings = SubResource("LabelSettings_f1jpe")
 

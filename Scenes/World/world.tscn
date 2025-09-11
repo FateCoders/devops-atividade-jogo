@@ -100,6 +100,7 @@ position = Vector2(6351, -4196)
 position = Vector2(1169, 802)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_mode = 3
 position = Vector2(2612, 694)
 scale = Vector2(1.07503, 1.03969)
 script = ExtResource("10_ugf0j")
