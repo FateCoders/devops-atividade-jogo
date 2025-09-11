@@ -1,12 +1,16 @@
 [gd_scene load_steps=7 format=3 uid="uid://b1nbvk7ami12i"]
 
 [ext_resource type="Script" uid="uid://b400mm6a3yuoo" path="res://Scripts/UI/tooltip/CustomTooltip.gd" id="1_mb4nc"]
-[ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_huovv"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_huovv"]
 [ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="3_tpiyd"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="4_tv2nx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5epyg"]
 texture = ExtResource("2_huovv")
+texture_margin_left = 20.0
+texture_margin_top = 10.0
+texture_margin_right = 20.0
+texture_margin_bottom = 10.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_wq2t3"]
 font = ExtResource("4_tv2nx")
@@ -15,7 +19,6 @@ outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
 [node name="CustomTooltip" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
