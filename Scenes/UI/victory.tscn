@@ -4,8 +4,8 @@
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_ge3lp"]
 [ext_resource type="PackedScene" uid="uid://b0cq7ne1fcan1" path="res://Scenes/UI/AchievementItem.tscn" id="4_r7jv4"]
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="4_w5vdd"]
-[ext_resource type="Texture2D" uid="uid://6oc1vx0g11b4" path="res://Assets/Sprites/Exported/Buttons/configuration-button-01.png" id="5_ge3lp"]
-[ext_resource type="Texture2D" uid="uid://dbm3gc21p4rr0" path="res://Assets/Sprites/Exported/Buttons/play-button.png" id="6_w5vdd"]
+[ext_resource type="Texture2D" uid="uid://bcaana0d45uqj" path="res://Assets/Sprites/Exported/Buttons/versao-menor/configuration-button-01.png" id="5_ge3lp"]
+[ext_resource type="Texture2D" uid="uid://bq2b7bpuefpua" path="res://Assets/Sprites/Exported/Buttons/versao-menor/play-button.png" id="6_w5vdd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jqelu"]
 font = ExtResource("3_ge3lp")

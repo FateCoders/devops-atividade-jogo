@@ -2,8 +2,8 @@
 extends CanvasLayer
 
 # --- Referências para os botões ---
-@onready var restart_button: Button = $VBoxContainer/continuar_btn
-@onready var main_menu_button: Button = $VBoxContainer/sair_btn
+@onready var restart_button: Button = $VBoxContainer/HBoxContainer/continuar_btn
+@onready var main_menu_button: Button = $VBoxContainer/HBoxContainer/sair_btn
 
 @onready var achievements_container: HBoxContainer = $VBoxContainer/AchievementsContainer
 const AchievementItemScene = preload("res://Scenes/UI/AchievementItem.tscn")
