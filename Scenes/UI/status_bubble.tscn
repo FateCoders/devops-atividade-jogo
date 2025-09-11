@@ -22,7 +22,6 @@ shadow_size = 0
 [node name="StatusBubbleAnchor" type="Node2D"]
 
 [node name="StatusBubble" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchor_right = 0.28
 anchor_bottom = 0.081
@@ -34,7 +33,7 @@ script = ExtResource("1_vaxuf")
 [node name="NinePatchRect" type="PanelContainer" parent="StatusBubble"]
 layout_mode = 0
 offset_right = 357.0
-offset_bottom = 64.0
+offset_bottom = 90.0
 scale = Vector2(2.02488, 2.02488)
 theme_override_styles/panel = SubResource("StyleBoxTexture_78qeo")
 
