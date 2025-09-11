@@ -1,8 +1,8 @@
 # StatusBubble.gd
 extends Control
 
-@onready var label: Label = $NinePatchRect/StatusLabel
-@onready var icon: TextureRect = $NinePatchRect/StatusIcon
+@onready var label: Label = $NinePatchRect/HBoxContainer/StatusLabel
+@onready var icon: TextureRect = $NinePatchRect/HBoxContainer/StatusIcon
 
 # Dicionário que mapeia o estado para um texto e um ícone
 const STATUS_DATA = {
