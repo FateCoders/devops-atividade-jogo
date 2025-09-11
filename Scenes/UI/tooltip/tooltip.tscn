@@ -19,6 +19,7 @@ outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
 [node name="CustomTooltip" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
