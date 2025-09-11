@@ -8,9 +8,9 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5epyg"]
 texture = ExtResource("2_huovv")
 texture_margin_left = 20.0
-texture_margin_top = 10.0
+texture_margin_top = 20.0
 texture_margin_right = 20.0
-texture_margin_bottom = 10.0
+texture_margin_bottom = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_wq2t3"]
 font = ExtResource("4_tv2nx")
@@ -46,18 +46,24 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_5epyg")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("3_tpiyd")
 expand_mode = 2
+stretch_mode = 5
+
+[node name="Spacer" type="Control" parent="Panel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
