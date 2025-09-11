@@ -13,6 +13,7 @@ events = [SubResource("InputEventAction_8rf44")]
 
 [node name="pause_menu" type="CanvasLayer"]
 process_mode = 3
+layer = 100
 script = ExtResource("1_8rf44")
 interaction_cursor = ExtResource("2_oykix")
 default_cursor = ExtResource("3_kdnb7")
