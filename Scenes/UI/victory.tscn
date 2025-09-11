@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpnly331fjf71"]
+[gd_scene load_steps=9 format=3 uid="uid://bpnly331fjf71"]
 
 [ext_resource type="Script" uid="uid://cwgemtjswlmfy" path="res://Scripts/UI/victory.gd" id="1_jd8qn"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_ge3lp"]
@@ -6,6 +6,16 @@
 [ext_resource type="Theme" uid="uid://reta3c3dnyho" path="res://Resources/Themes/button.tres" id="4_w5vdd"]
 [ext_resource type="Texture2D" uid="uid://bcaana0d45uqj" path="res://Assets/Sprites/Exported/Buttons/versao-menor/configuration-button-01.png" id="5_ge3lp"]
 [ext_resource type="Texture2D" uid="uid://bq2b7bpuefpua" path="res://Assets/Sprites/Exported/Buttons/versao-menor/play-button.png" id="6_w5vdd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ge3lp"]
+bg_color = Color(0.299748, 0.627135, 0.375715, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 40.0
+expand_margin_top = 20.0
+expand_margin_right = 40.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_jqelu"]
 font = ExtResource("3_ge3lp")
@@ -22,58 +32,82 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1.2875e-06, 0.453848, 1.92523e-07, 1)
+color = Color(0, 0, 0, 0.545098)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ColorRect" type="Panel" parent="."]
+custom_minimum_size = Vector2(800, 400)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -199.5
-offset_top = -67.5
-offset_right = 199.5
-offset_bottom = 67.5
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_ge3lp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -392.0
+offset_top = -158.0
+offset_right = 392.0
+offset_bottom = 158.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="text_label" type="Label" parent="VBoxContainer"]
+[node name="text_label" type="Label" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Vitória conquistada"
 label_settings = SubResource("LabelSettings_jqelu")
 
-[node name="AchievementsContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="AchievementsContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 20
 
-[node name="AchievementItem" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+[node name="AchievementItem" parent="ColorRect/VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
 layout_mode = 2
 
-[node name="AchievementItem2" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+[node name="AchievementItem2" parent="ColorRect/VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
 layout_mode = 2
 
-[node name="AchievementItem3" parent="VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
+[node name="AchievementItem3" parent="ColorRect/VBoxContainer/AchievementsContainer" instance=ExtResource("4_r7jv4")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/separation = 100
 
-[node name="sair_btn" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="continuar_btn" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_w5vdd")
+icon = ExtResource("6_w5vdd")
+flat = true
+
+[node name="sair_btn" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
 process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("4_w5vdd")
 icon = ExtResource("5_ge3lp")
 
-[node name="continuar_btn" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme = ExtResource("4_w5vdd")
-icon = ExtResource("6_w5vdd")
-
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/sair_btn" to="." method="_on_sair_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/continuar_btn" to="." method="_on_continuar_btn_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/continuar_btn" to="." method="_on_continuar_btn_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/sair_btn" to="." method="_on_sair_btn_pressed"]

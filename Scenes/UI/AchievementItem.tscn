@@ -1,28 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0cq7ne1fcan1"]
+[gd_scene load_steps=3 format=3 uid="uid://b0cq7ne1fcan1"]
 
 [ext_resource type="Script" uid="uid://s546oho3ykmx" path="res://Scripts/UI/achievementItem.gd" id="1_w0evp"]
-[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_0kcrk"]
-[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_foqhv"]
+[ext_resource type="PackedScene" uid="uid://b1nbvk7ami12i" path="res://Scenes/UI/tooltip/tooltip.tscn" id="4_dgxgw"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_w0evp"]
-font = ExtResource("2_foqhv")
-font_size = 10
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
-
-[node name="AchievementItem" type="HBoxContainer"]
-offset_right = 5.0
-offset_bottom = 23.0
-theme_override_constants/separation = 15
+[node name="AchievementItem" type="Button"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -151.5
+offset_top = -24.0
+offset_right = 151.5
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_w0evp")
 
-[node name="CheckIcon" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(48, 48)
+[node name="CustomTooltip" parent="." instance=ExtResource("4_dgxgw")]
 layout_mode = 2
-texture = ExtResource("2_0kcrk")
-expand_mode = 2
+anchors_preset = 0
 
-[node name="TitleLabel" type="Label" parent="."]
-layout_mode = 2
-text = "Conteudo de exemplo"
-label_settings = SubResource("LabelSettings_w0evp")
+[node name="TooltipTimer" type="Timer" parent="."]
+wait_time = 0.5

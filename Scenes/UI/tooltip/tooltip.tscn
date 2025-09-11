@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b400mm6a3yuoo" path="res://Scripts/UI/tooltip/CustomTooltip.gd" id="1_mb4nc"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_huovv"]
-[ext_resource type="Texture2D" uid="uid://dxrr61uwx8j1b" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="3_tpiyd"]
+[ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="3_tpiyd"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="4_tv2nx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5epyg"]
@@ -27,7 +27,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 script = ExtResource("1_mb4nc")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 1
 anchors_preset = 8
@@ -35,32 +35,29 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -121.0
-offset_top = -20.0
-offset_right = 201.0
-offset_bottom = 20.0
+offset_right = 263.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_5epyg")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = -16.0
-offset_right = 296.0
-offset_bottom = 16.0
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("3_tpiyd")
 expand_mode = 2
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer"]
+[node name="Label" type="Label" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 text = "+ Nenhum efeito"
 label_settings = SubResource("LabelSettings_wq2t3")

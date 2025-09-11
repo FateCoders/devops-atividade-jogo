@@ -19,7 +19,10 @@ font = ExtResource("1_he3hw")
 font_size = 32
 font_color = Color(0.237539, 0.237539, 0.237539, 1)
 
-[node name="Menu-inicial" type="Control"]
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 100
+
+[node name="Menu-inicial" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +32,7 @@ grow_vertical = 2
 script = ExtResource("1_ogbwj")
 interaction_cursor = ExtResource("2_5e2pd")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="Menu-inicial"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +45,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0941176, 0.486275, 0.427451, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu-inicial"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -56,18 +59,18 @@ offset_bottom = 123.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="Title" type="Label" parent="Menu-inicial/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Terra de Libertos"
 label_settings = SubResource("LabelSettings_ogbwj")
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="ButtonsContainer" type="VBoxContainer" parent="Menu-inicial/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="NewGame" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
+[node name="NewGame" type="Button" parent="Menu-inicial/VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_e412q")
@@ -79,7 +82,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Novo jogo"
 flat = true
 
-[node name="Continue" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
+[node name="Continue" type="Button" parent="Menu-inicial/VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_e412q")
@@ -91,7 +94,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Continuar"
 flat = true
 
-[node name="Quit" type="Button" parent="VBoxContainer/ButtonsContainer" groups=["button"]]
+[node name="Quit" type="Button" parent="Menu-inicial/VBoxContainer/ButtonsContainer" groups=["button"]]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_e412q")
@@ -103,7 +106,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_he3hw")
 text = "Sair"
 flat = true
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="Menu-inicial"]
 show_behind_parent = true
 z_index = 1
 layout_mode = 1

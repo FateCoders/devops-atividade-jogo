@@ -72,7 +72,7 @@ func _on_new_day_started(day_number):
 		return
 
 	# Sorteia um número entre 0 e 100.
-	var random_chance = randf() * 100.0
+	var random_chance = randf() * 30.0
 	
 	# Se o número sorteado for menor que a nossa chance, um evento acontece.
 	if random_chance < daily_event_chance:
@@ -120,8 +120,9 @@ func _on_event_choice_made(event_id, choice_id):
 	elif event_id == "epidemic_spreads":
 		if choice_id == "treat":
 			# Verifica se o jogador tem os recursos para tratar
-			if StatusManager.remedios >= 10:
-				StatusManager.mudar_status("remedios", -10)
+			if StatusManager.dinheiro >= 10:
+				#StatusManager.mudar_status("remedios", -10)
+				StatusManager.mudar_status("dinheiro", -10)
 				StatusManager.mudar_status("saude", 10)
 			else:
 				# Penalidade por não ter remédios
@@ -133,8 +134,9 @@ func _on_event_choice_made(event_id, choice_id):
 	# ADICIONADO: Consequências do Evento de Festa
 	elif event_id == "village_party":
 		if choice_id == "celebrate":
-			if StatusManager.alimentos >= 20:
-				StatusManager.mudar_status("alimentos", -20)
+			if StatusManager.dinheiro >= 20:
+				# StatusManager.mudar_status("alimentos", -20)
+				StatusManager.mudar_status("dinheiro", -20)
 				StatusManager.mudar_status("saude", 10)
 			else:
 				get_tree().root.get_node("GameUI").show_notification("Faltam alimentos para a festa!")
