@@ -22,12 +22,16 @@ var notification_tween: Tween
 @onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
 @onready var security_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
 @onready var relations_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
+
 @onready var money_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
 @onready var population_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
+@onready var hunger_label = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
+
 @onready var health_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
 @onready var hunger_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
 @onready var security_preview_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
 @onready var relations_preview_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
+
 @onready var health_icon = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
 @onready var hunger_icon = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
 @onready var relations_icon = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
@@ -129,11 +133,23 @@ func _on_status_updated():
 	hunger_bar.value = StatusManager.fome
 	security_bar.value = StatusManager.seguranca
 	relations_bar.value = StatusManager.relacoes
+
 	money_label.text = str(StatusManager.dinheiro)
 	population_label.text = str(QuilomboManager.all_npcs.size())
+
+	if StatusManager.fome == 100:
+		hunger_label.text = "Fome (Cheio)"
+	elif StatusManager.fome < 50 and StatusManager.fome > 0:
+		hunger_label.text = "Fome (Faminto)"
+	elif StatusManager.fome == 0:
+		hunger_label.text = "Fome (Fadiga)"
+	else:
+		hunger_label.text = "Fome (Normal)"
+
 	health_icon.texture = HEALTH_ICON_LOW if StatusManager.saude < 50 else HEALTH_ICON_NORMAL
 	hunger_icon.texture = HUNGER_ICON_LOW if StatusManager.fome < 50 else HUNGER_ICON_NORMAL
 	relations_icon.texture = RELATIONS_ICON_LOW if StatusManager.relacoes < 50 else RELATIONS_ICON_NORMAL
+
 	var base_color = LOW_RELATIONS_COLOR if StatusManager.relacoes < 50 else DEFAULT_RELATIONS_COLOR
 	_set_bar_color(relations_bar, base_color)
 	var preview_color = base_color

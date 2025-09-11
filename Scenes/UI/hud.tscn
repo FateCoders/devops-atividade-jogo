@@ -16,8 +16,8 @@
 [ext_resource type="StyleBox" uid="uid://ccbxlwmk5cknw" path="res://Scenes/UI/Assets/Styles/progressbar_security.tres" id="6_mqf2c"]
 [ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="7_0hfmd"]
 [ext_resource type="StyleBox" uid="uid://bm1w3purx7v5n" path="res://Scenes/UI/Assets/Styles/progressbar_relations.tres" id="7_7wqu8"]
-[ext_resource type="Texture2D" uid="uid://chu3xmb8wgosw" path="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png" id="8_pc4p0"]
 [ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="9_iiebs"]
+[ext_resource type="Texture2D" uid="uid://dti7e8mi3qiho" path="res://Assets/Sprites/Exported/Buildings/infirmary.png" id="9_q8e8b"]
 [ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="10_n5w8m"]
 [ext_resource type="StyleBox" uid="uid://cocsuxsm44n0n" path="res://Scenes/UI/Assets/Styles/previewbar_health.tres" id="15_8c63k"]
 [ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="15_mu5ro"]
@@ -172,7 +172,7 @@ button_icon = ExtResource("7_0hfmd")
 [node name="BuildInfirmaryButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Enfermaria"
-button_icon = ExtResource("8_pc4p0")
+button_icon = ExtResource("9_q8e8b")
 
 [node name="BuildTrainingAreaButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
@@ -475,6 +475,7 @@ theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
 
 [node name="DayContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
