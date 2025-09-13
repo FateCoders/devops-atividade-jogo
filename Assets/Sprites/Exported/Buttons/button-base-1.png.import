@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc77v57wfp0d3"
-path="res://.godot/imported/button-base_menor_provisorio.png-0225305a905b9473f4fd785ee54aab07.ctex"
+uid="uid://ro4qklqoo80q"
+path="res://.godot/imported/button-base-1.png-dea760aa442f3834d31a38a3ad73a7de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buttons/button-base_menor_provisorio.png"
-dest_files=["res://.godot/imported/button-base_menor_provisorio.png-0225305a905b9473f4fd785ee54aab07.ctex"]
+source_file="res://Assets/Sprites/Exported/Buttons/button-base-1.png"
+dest_files=["res://.godot/imported/button-base-1.png-dea760aa442f3834d31a38a3ad73a7de.ctex"]
 
 [params]
 
