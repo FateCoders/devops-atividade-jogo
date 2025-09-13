@@ -4,7 +4,7 @@ class_name NPC
 #-----------------------------------------------------------------------------
 # CONSTANTES
 #-----------------------------------------------------------------------------
-const MIN_VELOCITY_FOR_WALK: float = 10.0
+const MIN_VELOCITY_FOR_WALK: float = 20.0
 const EXIT_DISTANCE: float = 100.0
 const STUCK_THRESHOLD: float = 0.5
 
