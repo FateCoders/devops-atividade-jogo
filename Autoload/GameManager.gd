@@ -20,27 +20,51 @@ var hud_node = null
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
+const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
+const HidingPlaceScene = preload("res://Scenes/UI/Assets/Sprites/Builds/hiding_place.tscn")
+const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.tscn")
+const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 
 
 var tutorial_data = [
-	{ # Etapa 0
+	{ # Etapa 0: Casa do Líder
 		"dialog": {0: {"title": "Líder", "dialog": "Bem-vindo ao nosso refúgio. Para começarmos a nos organizar, por favor, construa uma Casa do Líder."}},
 		"required_build": LeadersHouseScene,
 		"enabled_builds": [LeadersHouseScene]
 	},
-	{ # Etapa 1
+	{ # Etapa 1: Casa
 		"dialog": {0: {"title": "Líder", "dialog": "Excelente! Agora, precisamos de um lugar para nossos irmãos descansarem. Construa uma Casa para abrigá-los."}},
 		"required_build": HouseScene,
 		"enabled_builds": [HouseScene]
 	},
-	{ # Etapa 2
+	{ # Etapa 2: Plantação
 		"dialog": {0: {"title": "Líder", "dialog": "Com um teto sobre suas cabeças, agora eles precisam de sustento. Construa uma Plantação para garantir nossos recursos."}},
 		"required_build": PlantationScene,
 		"enabled_builds": [PlantationScene]
 	},
-	{ # Etapa 3
-		"dialog": {0: {"title": "Líder", "dialog": "Esse é o espírito! Você tem a fibra de um grande líder. Lembre-se de cuidar do nosso povo e expandir com sabedoria."}},
-		"required_build": null, # Nenhuma construção necessária, apenas um diálogo
+	{ # ADICIONADO: Etapa 3 - Esconderijo
+		"dialog": {0: {"title": "Líder", "dialog": "A segurança é vital. Construa um Esconderijo para que nosso povo tenha um lugar seguro durante ataques."}},
+		"required_build": HidingPlaceScene,
+		"enabled_builds": [HidingPlaceScene]
+	},
+	{ # ADICIONADO: Etapa 4 - Área de Treinamento
+		"dialog": {0: {"title": "Líder", "dialog": "A defesa passiva não é o bastante. Construa uma Área de Treinamento para formar guerreiros e proteger ativamente nosso lar."}},
+		"required_build": TrainingAreaScene,
+		"enabled_builds": [TrainingAreaScene]
+	},
+	{ # ADICIONADO: Etapa 5 - Enfermaria
+		"dialog": {0: {"title": "Líder", "dialog": "Conflitos e doenças podem nos enfraquecer. Construa uma Enfermaria para cuidar da Saúde de nossa comunidade."}},
+		"required_build": InfirmaryScene,
+		"enabled_builds": [InfirmaryScene, HouseScene]
+	},
+	{ # ADICIONADO: Etapa 6 - Centro Espiritual
+		"dialog": {0: {"title": "Líder", "dialog": "Um corpo forte precisa de um espírito forte. Construa um Centro Espiritual para fortalecer nossas Relações e o bem-estar de todos."}},
+		"required_build": ChurchScene,
+		"enabled_builds": [ChurchScene]
+	},
+	{ # Etapa 7: Mensagem Final
+		"dialog": {0: {"title": "Líder", "dialog": "Você proveu liderança, abrigo, sustento e segurança. O quilombo está estabelecido, mas fique atento: eventos ocorrerão ao longo do jogo. Prepare-se para os desafios."}},
+		"required_build": null,
 		"enabled_builds": [] # Habilita todos os botões
 	},
 ]
