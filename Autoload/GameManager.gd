@@ -15,6 +15,7 @@ var _is_game_over: bool = false # Para evitar que o fim de jogo seja chamado vá
 # ADICIONADO: Variáveis para controlar o estado do tutorial
 var tutorial_active: bool = true
 var current_tutorial_step: int = -1 
+var hud_node = null
 
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
@@ -49,10 +50,22 @@ signal tutorial_step_changed(step_data)
 func _ready():
 	if WorldTimeManager:
 		WorldTimeManager.day_passed.connect(_on_new_day_started)
+		
+	game_over.connect(trigger_defeat)
 	
 	# ADICIONADO: Conecta o sinal de game over à função que encerra o jogo.
 	game_over.connect(trigger_defeat)
+
+func end_tutorial():
+	# Se o tutorial já terminou, não faz nada.
+	if not tutorial_active: 
+		return
 	
+	tutorial_active = false
+	print("TUTORIAL FINALIZADO (pulado pelo jogador)!")
+	# Emite o sinal com uma lista vazia, o que reativa todos os botões no Hud.
+	emit_signal("tutorial_step_changed", {"enabled_builds": []})
+
 func _on_new_day_started(day_number: int):
 	print("[GameManager] Recebeu notícia do dia %d. Verificando condição de vitória..." % day_number)
 	
@@ -84,8 +97,16 @@ func trigger_defeat(reason: String):
 		defeat_screen.set_reason(reason)
 	else:
 		printerr("Cena da tela de derrota não foi definida no GameManager!")
-		
+	 	
 func start_tutorial():
+	# ADICIONADO: A busca pelo Hud agora acontece aqui, no momento certo.
+	if hud_node == null: # Procura apenas se ainda não tiver a referência
+		hud_node = get_tree().get_first_node_in_group("hud_main")
+		if hud_node == null:
+			printerr("TUTORIAL FALHOU: GameManager não conseguiu encontrar o Hud no grupo 'hud_main'!")
+			tutorial_active = false # Desativa o tutorial se a UI não for encontrada
+			return
+
 	if tutorial_active:
 		advance_tutorial()
 
@@ -95,18 +116,20 @@ func advance_tutorial():
 	if current_tutorial_step >= tutorial_data.size():
 		tutorial_active = false
 		print("TUTORIAL FINALIZADO!")
-		emit_signal("tutorial_step_changed", {"enabled_builds": []}) # Envia sinal final
+		emit_signal("tutorial_step_changed", {"enabled_builds": []})
 		return
 	
 	var step_data = tutorial_data[current_tutorial_step]
 	
-	# Mostra o diálogo da etapa atual
-	var dialog_scene = preload("res://Scenes/UI/dialog.tscn")
-	var dialog = dialog_scene.instantiate()
-	get_tree().root.add_child(dialog)
-	dialog.setup_dialog(step_data["dialog"])
+	hud_node.show_tutorial_dialog(step_data["dialog"])
 	
-	# Emite o sinal para a GameUI atualizar os botões
+	if is_instance_valid(hud_node):
+		var dialog = hud_node.show_tutorial_dialog(step_data["dialog"])
+		
+		if is_instance_valid(dialog):
+			dialog.tutorial_dialog_skipped.connect(end_tutorial)
+	
+	# Emite o sinal para a GameUI/Hud atualizar os botões
 	emit_signal("tutorial_step_changed", step_data)
 
 # Chamada pelo QuilomboManager sempre que uma construção é finalizada
