@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chu3xmb8wgosw"
-path="res://.godot/imported/infirmary-icon.png-d9abc056970117389ba9e518ceda0eed.ctex"
+uid="uid://8k01m3iq8tcd"
+path="res://.godot/imported/hud-sheet-1.png-a284438a3f5efe898da91f50129c1581.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buildings/infirmary-icon.png"
-dest_files=["res://.godot/imported/infirmary-icon.png-d9abc056970117389ba9e518ceda0eed.ctex"]
+source_file="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet-1.png"
+dest_files=["res://.godot/imported/hud-sheet-1.png-a284438a3f5efe898da91f50129c1581.ctex"]
 
 [params]
 
