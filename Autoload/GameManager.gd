@@ -21,9 +21,9 @@ const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
 const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
-const HidingPlaceScene = preload("res://Scenes/UI/Assets/Sprites/Builds/hiding_place.tscn")
-const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.tscn")
-const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
+#const HidingPlaceScene = preload("res://Scenes/UI/Assets/Sprites/Builds/hiding_place.tscn")
+#const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.tscn")
+#const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 
 
 var tutorial_data = [
@@ -42,26 +42,26 @@ var tutorial_data = [
 		"required_build": PlantationScene,
 		"enabled_builds": [PlantationScene]
 	},
-	{ # ADICIONADO: Etapa 3 - Esconderijo
-		"dialog": {0: {"title": "Líder", "dialog": "A segurança é vital. Construa um Esconderijo para que nosso povo tenha um lugar seguro durante ataques."}},
-		"required_build": HidingPlaceScene,
-		"enabled_builds": [HidingPlaceScene]
-	},
+#	{ # ADICIONADO: Etapa 3 - Esconderijo
+#		"dialog": {0: {"title": "Líder", "dialog": "A segurança é vital. Construa um Esconderijo para que nosso povo tenha um lugar seguro durante ataques."}},
+#		"required_build": HidingPlaceScene,
+#		"enabled_builds": [HidingPlaceScene]
+#	},
 	{ # ADICIONADO: Etapa 4 - Área de Treinamento
 		"dialog": {0: {"title": "Líder", "dialog": "A defesa passiva não é o bastante. Construa uma Área de Treinamento para formar guerreiros e proteger ativamente nosso lar."}},
 		"required_build": TrainingAreaScene,
 		"enabled_builds": [TrainingAreaScene]
 	},
-	{ # ADICIONADO: Etapa 5 - Enfermaria
-		"dialog": {0: {"title": "Líder", "dialog": "Conflitos e doenças podem nos enfraquecer. Construa uma Enfermaria para cuidar da Saúde de nossa comunidade."}},
-		"required_build": InfirmaryScene,
-		"enabled_builds": [InfirmaryScene, HouseScene]
-	},
-	{ # ADICIONADO: Etapa 6 - Centro Espiritual
-		"dialog": {0: {"title": "Líder", "dialog": "Um corpo forte precisa de um espírito forte. Construa um Centro Espiritual para fortalecer nossas Relações e o bem-estar de todos."}},
-		"required_build": ChurchScene,
-		"enabled_builds": [ChurchScene]
-	},
+#	{ # ADICIONADO: Etapa 5 - Enfermaria
+#		"dialog": {0: {"title": "Líder", "dialog": "Conflitos e doenças podem nos enfraquecer. Construa uma Enfermaria para cuidar da Saúde de nossa comunidade."}},
+#		"required_build": InfirmaryScene,
+#		"enabled_builds": [InfirmaryScene, HouseScene]
+#	},
+#	{ # ADICIONADO: Etapa 6 - Centro Espiritual
+#		"dialog": {0: {"title": "Líder", "dialog": "Um corpo forte precisa de um espírito forte. Construa um Centro Espiritual para fortalecer nossas Relações e o bem-estar de todos."}},
+#		"required_build": ChurchScene,
+#		"enabled_builds": [ChurchScene]
+#	},
 	{ # Etapa 7: Mensagem Final
 		"dialog": {0: {"title": "Líder", "dialog": "Você proveu liderança, abrigo, sustento e segurança. O quilombo está estabelecido, mas fique atento: eventos ocorrerão ao longo do jogo. Prepare-se para os desafios."}},
 		"required_build": null,
