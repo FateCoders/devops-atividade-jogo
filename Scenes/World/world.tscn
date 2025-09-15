@@ -111,12 +111,12 @@ script = ExtResource("11_0ph6x")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Hud" parent="HUD" instance=ExtResource("11_pvt60")]
+[node name="Hud" parent="HUD" groups=["hud_main"] instance=ExtResource("11_pvt60")]
 
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]
 visible = false
 script = null
-
+l
 [node name="pause_menu" parent="." instance=ExtResource("16_dr8i3")]
 visible = false
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=47 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://cjjfcc1o24jil" path="res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png" id="24_3omb4"]
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="24_yxyk2"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
+[ext_resource type="PackedScene" uid="uid://boh7y5cx37ols" path="res://Scenes/UI/dialog.tscn" id="32_f1jpe"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
 content_margin_left = 10.0
@@ -99,6 +100,10 @@ font_size = 40
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 8.0
+offset_right = 5.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 8
@@ -517,6 +522,9 @@ label_settings = SubResource("LabelSettings_f1jpe")
 [node name="TimerBar" type="ColorRect" parent="NotificationContainer"]
 custom_minimum_size = Vector2(0, 5)
 layout_direction = 2
+layout_mode = 2
+
+[node name="DialogScreen" parent="." instance=ExtResource("32_f1jpe")]
 layout_mode = 2
 
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

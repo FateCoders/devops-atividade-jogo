@@ -10,19 +10,12 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# A conexão correta:
-	# O sinal 'placement_preview_started' do objeto 'hud'
-	# está sendo conectado à função 'show_preview' do objeto 'hud'.
 	hud.placement_preview_started.connect(hud.show_preview)
-	
-	# O mesmo para o outro sinal:
-	# O sinal 'placement_preview_ended' do 'hud'
-	# conecta-se à função 'clear_preview' do 'hud'.
 	hud.placement_preview_ended.connect(hud.clear_preview)
 	
 	Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	MusicManager.play_game_music()
-
+	GameManager.start_tutorial()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

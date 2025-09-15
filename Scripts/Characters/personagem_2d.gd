@@ -329,13 +329,7 @@ func _change_state(new_state: State):
 
 		State.EM_CASA:
 			velocity = Vector2.ZERO
-			# MODIFICADO: Desabilita a colisão, tornando o NPC um "fantasma"
-			print('NPC fantasma')
-			print('NPC fantasma')
-			print('NPC fantasma')
-			print(collision_shape.disabled)
 			collision_shape.disabled = true
-			print(collision_shape.disabled)
 			hide()			
 
 

@@ -17,6 +17,7 @@ var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
 var notification_tween: Tween
+var build_buttons: Dictionary = {}
 
 @onready var health_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
@@ -47,6 +48,8 @@ var notification_tween: Tween
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
+
+@onready var dialog_screen = $DialogScreen
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -82,12 +85,17 @@ func _ready():
 		"BuildTrainingAreaButton": TrainingAreaScene,
 		"BuildChurchButton": ChurchScene
 	}
+	
+	GameManager.tutorial_step_changed.connect(update_build_buttons_for_tutorial)
 
-	var build_buttons = button_builds.find_children("*", "styledButton")
-	for button in build_buttons:
+	var found_buttons_array = button_builds.find_children("*", "styledButton")
+	for button in found_buttons_array:
 		if button.name in button_scene_map:
 			var scene = button_scene_map[button.name]
 			button.pressed.connect(_on_any_build_button_pressed.bind(scene))
+			
+			build_buttons[scene.resource_path] = button
+			
 			var temp_instance = scene.instantiate()
 			var structure_cost: Dictionary = {}
 			if "cost" in temp_instance: structure_cost = temp_instance.cost
@@ -127,6 +135,30 @@ func _unhandled_input(event: InputEvent) -> void:
 				_exit_placement_mode()
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			_exit_placement_mode()
+
+func update_build_buttons_for_tutorial(step_data: Dictionary):
+	var enabled_builds = step_data.get("enabled_builds", [])
+	if enabled_builds.is_empty():
+		for button in build_buttons.values():
+			if is_instance_valid(button):
+				button.visible = true
+		return
+	
+	for button in build_buttons.values():
+		if is_instance_valid(button):
+			button.visible = false
+	
+	for scene in enabled_builds:
+		var scene_path = scene.resource_path
+		if build_buttons.has(scene_path):
+			var button_to_show = build_buttons[scene_path]
+			if is_instance_valid(button_to_show):
+				button_to_show.visible = true
+
+func show_tutorial_dialog(data: Dictionary) -> DialogScreen:
+	dialog_screen.setup_dialog(data)
+	dialog_screen.show()
+	return dialog_screen
 
 func _on_status_updated():
 	health_bar.value = StatusManager.saude
