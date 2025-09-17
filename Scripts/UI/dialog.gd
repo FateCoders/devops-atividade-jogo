@@ -8,6 +8,10 @@ class_name DialogScreen
 @onready var next_button: Button = $ButtonContainer/NextButton
 @onready var skip_button: Button = $ButtonContainer/SkipButton
 
+@onready var typewriter_sound_player: AudioStreamPlayer = $TypewriterSoundPlayer
+
+const TYPEWRITER_SOUND = preload("res://Assets/Audio/SFX/keyboard_sound.MP3")
+
 var _step: float = 0.05
 var _id: int = 0
 var _current_tween: Tween
@@ -43,6 +47,7 @@ func advance_dialog():
 	if dialog_label.visible_ratio < 1:
 		if _current_tween and _current_tween.is_running():
 			_current_tween.kill()
+		typewriter_sound_player.stop()
 		dialog_label.visible_ratio = 1
 		return
 		
@@ -53,6 +58,7 @@ func advance_dialog():
 	_initialize_dialog()
 
 func skip_dialog():
+	typewriter_sound_player.stop()
 	emit_signal("tutorial_dialog_skipped")
 	hide()
 
@@ -75,8 +81,12 @@ func _initialize_dialog():
 	
 	if _current_tween and _current_tween.is_running():
 		_current_tween.kill()
+	
+	typewriter_sound_player.stream = TYPEWRITER_SOUND
+	typewriter_sound_player.play()
 		
 	_current_tween = create_tween()
 	_current_tween.tween_property(dialog_label, "visible_ratio", 1, dialog_label.text.length() * _step)
 	
 	await _current_tween.finished
+	typewriter_sound_player.stop()
