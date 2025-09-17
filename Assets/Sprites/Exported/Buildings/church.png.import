@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw7vh10c425ru"
-path="res://.godot/imported/hiding_spot.png-7b575abd11c3668802c49fc2cd158825.ctex"
+uid="uid://d3bmhcbpjocve"
+path="res://.godot/imported/church.png-6256262bf91b2e24f5c08e1f11bba7db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buildings/hiding_spot.png"
-dest_files=["res://.godot/imported/hiding_spot.png-7b575abd11c3668802c49fc2cd158825.ctex"]
+source_file="res://Assets/Sprites/Exported/Buildings/church.png"
+dest_files=["res://.godot/imported/church.png-6256262bf91b2e24f5c08e1f11bba7db.ctex"]
 
 [params]
 
