@@ -33,6 +33,9 @@ func register_building(building_node):
 		building_counts[type] = 0
 	building_counts[type] += 1
 	print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
+	
+	if building_node.has_signal("vacancy_opened"):
+		building_node.vacancy_opened.connect(_on_vacancy_opened)
 
 # ADICIONADO: Função para remover uma construção do censo.
 func unregister_building(building_node):
@@ -313,3 +316,20 @@ func _find_homeless_npcs() -> Array[NPC]:
 			found_npcs.append(npc)
 	print("Encontrados %d NPCs desabrigados." % found_npcs.size())
 	return found_npcs
+
+func _on_vacancy_opened(profession: NPC.Profession):
+	print("[Quilombo Manager] Vaga aberta para a profissão: %s" % NPC.Profession.keys()[profession])
+	
+	# Procura por um NPC desempregado com a profissão necessária
+	for npc in all_npcs:
+		if is_instance_valid(npc) and npc.current_state == NPC.State.DESEMPREGADO and npc.profession == profession:
+			print("--> Desempregado qualificado encontrado: '%s'. Enviando para a vaga..." % npc.name)
+			
+			# Usa a função que já existe para fazer a mágica acontecer!
+			find_work_for_npc(npc)
+			
+			# Importante: para o loop assim que encontra o primeiro candidato
+			# para não enviar todos os desempregados para a mesma vaga.
+			return
+			
+	print("--> Nenhum desempregado qualificado encontrado no momento.")

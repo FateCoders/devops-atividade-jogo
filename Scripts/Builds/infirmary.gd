@@ -2,6 +2,8 @@
 extends Node2D
 class_name Infirmary
 
+signal vacancy_opened(profession: NPC.Profession)
+
 @export var required_profession: NPC.Profession = NPC.Profession.ENFERMEIRO
 @export var max_instances: int = 3
 
@@ -23,6 +25,8 @@ class_name Infirmary
 # ADICIONADO: Variáveis para gerenciar os locais de trabalho.
 var all_work_spots: Array[Marker2D] = []
 var available_work_spots: Array[Marker2D] = []
+
+var workers: Array[NPC] = []
 
 func _ready():
 	# ADICIONADO: Lógica para encontrar e inicializar os work_spots.
@@ -67,3 +71,19 @@ func _on_interaction_area_mouse_entered() -> void:
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
+
+
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc_leaving: NPC):
+	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
+	if workers.has(npc_leaving):
+		# 2. Remove o NPC da lista de trabalhadores
+		workers.erase(npc_leaving)
+		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
+		
+		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
+		emit_signal("vacancy_opened", required_profession)

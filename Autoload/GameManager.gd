@@ -188,7 +188,7 @@ func toggle_pause():
 
 func is_game_paused() -> bool:
 	return get_tree().paused
-#
-#func _unhandled_input(event: InputEvent):
-	#if event.is_action_pressed("ui_cancel") and not hud_node.dialog_screen.visible:
-		#toggle_pause()
+
+func _unhandled_input(event: InputEvent):
+	if event.is_action_pressed("ui_cancel") and not hud_node.dialog_screen.visible:
+		toggle_pause()
