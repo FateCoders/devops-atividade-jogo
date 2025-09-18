@@ -117,22 +117,60 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
+[node name="ButtonsPanel2" type="PanelContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
+
+[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/ButtonsPanel2"]
+layout_mode = 2
+
+[node name="ButtonInventoryOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel2/SectionsPanel"]
+visible = false
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/ButtonsPanel2/SectionsPanel/ButtonInventoryOptions"]
+layout_mode = 2
+
+[node name="ItemList" type="VBoxContainer" parent="MainContainer/ButtonsPanel2/SectionsPanel/ButtonInventoryOptions/ScrollContainer"]
+layout_mode = 2
+
+[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel2/SectionsPanel"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel2/SectionsPanel/ButtonOptions"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture_normal = ExtResource("2_7wqu8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel2/SectionsPanel/ButtonOptions/InventoryButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13_mgdch")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="ButtonsPanel" type="PanelContainer" parent="MainContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
 
 [node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/ButtonsPanel"]
-layout_mode = 2
-
-[node name="ButtonInventoryOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
-visible = false
-layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
-layout_mode = 2
-
-[node name="ItemList" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer"]
 layout_mode = 2
 
 [node name="ButtonBuildsOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
@@ -204,36 +242,6 @@ button_icon = ExtResource("11_k32gu")
 custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="ButtonOptions2" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-
-[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-texture_normal = ExtResource("2_7wqu8")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("13_mgdch")
-expand_mode = 1
-stretch_mode = 5
 
 [node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
@@ -568,5 +576,5 @@ layout_mode = 2
 [node name="DialogScreen" parent="." instance=ExtResource("32_f1jpe")]
 layout_mode = 2
 
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton" to="." method="_on_inventory_button_pressed"]
+[connection signal="pressed" from="MainContainer/ButtonsPanel2/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

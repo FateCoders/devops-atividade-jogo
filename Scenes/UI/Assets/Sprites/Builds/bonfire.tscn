@@ -84,6 +84,7 @@ fill_from = Vector2(0.504587, 0.522936)
 [node name="Bonfire" type="Area2D"]
 z_index = 1
 y_sort_enabled = true
+collision_mask = 2
 script = ExtResource("1_n1q47")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
