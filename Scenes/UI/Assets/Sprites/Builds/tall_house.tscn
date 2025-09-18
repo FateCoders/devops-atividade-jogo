@@ -7,16 +7,15 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc8wa"]
-size = Vector2(1721, 539.376)
+size = Vector2(794.3462, 405.19623)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sg2r"]
-size = Vector2(682.977, 590.392)
+size = Vector2(224.08078, 267.6893)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t6b2j"]
-size = Vector2(1732.27, 1335.09)
+size = Vector2(931.2099, 764.8266)
 
 [node name="TallHouse" type="StaticBody2D"]
-scale = Vector2(0.745267, 0.745267)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_7sg2r")
 
@@ -26,44 +25,46 @@ position = Vector2(0, -183)
 [node name="Top" type="Sprite2D" parent="Sprite"]
 z_index = 2
 y_sort_enabled = true
-position = Vector2(1, -283)
+position = Vector2(2.6836023, 34.060074)
 texture = ExtResource("1_dc8wa")
 region_enabled = true
-region_rect = Rect2(0, 0, 1760, 721.303)
+region_rect = Rect2(0, 0, 801.9477, 412.23032)
 
 [node name="Bottom" type="Sprite2D" parent="Sprite"]
 y_sort_enabled = true
 position = Vector2(1, 355)
 texture = ExtResource("1_dc8wa")
 region_enabled = true
-region_rect = Rect2(0, 722.518, 1760, 557.482)
+region_rect = Rect2(18.507217, 408.64996, 761.90936, 229.74341)
 
 [node name="CollisionShape2d" type="CollisionShape2D" parent="."]
 z_as_relative = false
-position = Vector2(-19.5, 159.688)
+position = Vector2(-3.199103e-06, 92.598114)
 shape = SubResource("RectangleShape2D_dc8wa")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-323.374, 523.302)
+position = Vector2(-155.64891, 308.61426)
 gizmo_extents = 48.5
 
 [node name="EntranceArea" type="Area2D" parent="."]
+position = Vector2(197.24475, -60.381046)
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
-position = Vector2(-321.361, 277.753)
+position = Vector2(-355.57727, 253.93582)
 shape = SubResource("RectangleShape2D_7sg2r")
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
 z_index = 3
 y_sort_enabled = true
-position = Vector2(-326.058, -111.369)
-radius = 500.0
+position = Vector2(20.127016, -18.785215)
+radius = 300.0
+vertices = PackedVector2Array(322.03226, 277.7528, -63.06465, 292.51263, -61.722847, 83.191666, -291.17084, 80.508064, -288.4872, 292.51263, -401.19852, 292.51263, -409.24933, -155.64893, 370.3371, -158.33252, 379.7297, 49.646637)
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-43.6085, -164.371)
+position = Vector2(-6.398206e-06, -9.392605)
 shape = SubResource("RectangleShape2D_t6b2j")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 

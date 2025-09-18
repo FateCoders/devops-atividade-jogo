@@ -46,6 +46,7 @@ var build_buttons: Dictionary = {}
 @onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
+
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
@@ -53,12 +54,18 @@ var build_buttons: Dictionary = {}
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
 
+@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 const BUILD_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png")
+const INVENTORY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png")
 const CURSOR_HOTSPOT = Vector2(16, 16)
 const DEFAULT_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png")
 const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
@@ -71,6 +78,8 @@ const HUNGER_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/bone-ic
 const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png")
 const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
+
+var InventoryItemScene = preload("res://Scenes/UI/InventoryItem.tscn")
 
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
@@ -393,3 +402,39 @@ func show_escambo_ui(quilombo_id: String):
 	var escambo_ui = EscamboScene.instantiate()
 	add_child(escambo_ui)
 	escambo_ui.start_trade(quilombo_id)
+
+
+func _on_inventory_button_pressed() -> void:
+	# Alterna a visibilidade do painel de inventário
+	button_inventorys.visible = !button_inventorys.visible
+	
+	# Se o painel acabou de se tornar visível, popula a lista.
+	if button_inventorys.visible:
+		_populate_inventory_list()
+
+	# A lógica de mudar o ícone do botão e o cursor continua a mesma
+	inventory_button_icon.visible = !button_inventorys.visible
+	if button_inventorys.visible:
+		button_inventory.texture_normal = CLOSE_TEXTURE
+	else:
+		button_inventory.texture_normal = BUILD_TEXTURE
+
+# ADICIONE esta nova função para preencher a lista
+func _populate_inventory_list():
+	
+	# 1. Limpa a lista antiga
+	for child in list_container.get_children():
+		child.queue_free()
+		
+	# 2. Pega os recursos do StatusManager
+	var player_inventory = StatusManager.get_all_resources()
+	
+	# 3. Cria um item na UI para cada recurso
+	for resource_name in player_inventory:
+		var amount = player_inventory[resource_name]
+		
+		# Só mostra o recurso se o jogador tiver algum
+		if amount > 0 or resource_name == "dinheiro": # Mostra dinheiro mesmo se for 0
+			var item = InventoryItemScene.instantiate()
+			list_container.add_child(item)
+			item.set_data(resource_name, amount)

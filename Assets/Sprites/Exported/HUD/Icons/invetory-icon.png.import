@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4667p5ttwsom"
-path="res://.godot/imported/church-icon.png-ba0edf3ba10ef9d13229412a91f42421.ctex"
+uid="uid://bbrfwbu16gwkn"
+path="res://.godot/imported/invetory-icon.png-5d79ea059cf83b1c034bae6544ea821d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Buildings/church-icon.png"
-dest_files=["res://.godot/imported/church-icon.png-ba0edf3ba10ef9d13229412a91f42421.ctex"]
+source_file="res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png"
+dest_files=["res://.godot/imported/invetory-icon.png-5d79ea059cf83b1c034bae6544ea821d.ctex"]
 
 [params]
 

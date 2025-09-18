@@ -1,24 +1,23 @@
 [gd_scene load_steps=9 format=3 uid="uid://tuggivakc5ta"]
 
 [ext_resource type="Script" uid="uid://ccmaxq5us7qps" path="res://Scripts/Builds/church.gd" id="1_mpu7n"]
-[ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_0fuy5"]
 [ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="2_khm82"]
+[ext_resource type="Texture2D" uid="uid://d3bmhcbpjocve" path="res://Assets/Sprites/Exported/Buildings/church.png" id="3_khm82"]
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="4_khm82"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1121, 760)
+size = Vector2(464.905, 379.65036)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(382, 367)
+size = Vector2(382, 295.39688)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mlfhm"]
-size = Vector2(1266.83, 1364.08)
+size = Vector2(550.1598, 684.7025)
 
 [node name="Church" type="StaticBody2D"]
-modulate = Color(0, 1, 0.8, 1)
-scale = Vector2(0.750691, 0.750691)
+scale = Vector2(2, 2)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_mpu7n")
 npc_scene_to_spawn = ExtResource("2_khm82")
@@ -29,20 +28,21 @@ position = Vector2(-9, -4)
 [node name="Top" type="Sprite2D" parent="Sprite"]
 z_index = 2
 y_sort_enabled = true
-position = Vector2(0, -316)
-texture = ExtResource("2_0fuy5")
+position = Vector2(1.0073624, 4)
+texture = ExtResource("3_khm82")
 region_enabled = true
-region_rect = Rect2(0, 0, 1280, 520.4)
+region_rect = Rect2(0, 0, 480.97235, 299.99408)
 
 [node name="Bottom" type="Sprite2D" parent="Sprite"]
 y_sort_enabled = true
 position = Vector2(0, 323)
-texture = ExtResource("2_0fuy5")
+texture = ExtResource("3_khm82")
 region_enabled = true
-region_rect = Rect2(0, 521.14, 1280, 758.86)
+region_rect = Rect2(9.2960205, 300.2702, 460.6062, 338.82263)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-8.5, 320)
+position = Vector2(-7.3265553, 259.09457)
+scale = Vector2(0.99999946, 0.99999946)
 shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
@@ -50,7 +50,8 @@ position = Vector2(-5.32842, 704.684)
 collision_mask = 2
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-1.33211, -165.181)
+position = Vector2(-3.9963245, -374.32162)
+scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
@@ -62,7 +63,8 @@ gizmo_extents = 130.0
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(3.33033, 83.9226)
+position = Vector2(-11.322882, 171.84158)
+scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_mlfhm")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 

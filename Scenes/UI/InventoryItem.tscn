@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://bplyf1nwxk103"]
+
+[ext_resource type="Script" uid="uid://dbggr1btqgffr" path="res://Scripts/UI/inventory_item.gd" id="1_nyv04"]
+[ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="2_25xny"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_uihe2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_21x8i"]
+font = ExtResource("3_uihe2")
+
+[sub_resource type="LabelSettings" id="LabelSettings_3jxbu"]
+font = ExtResource("3_uihe2")
+
+[node name="InventoryItem" type="HBoxContainer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+alignment = 1
+script = ExtResource("1_nyv04")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("2_25xny")
+expand_mode = 2
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Alimentos"
+label_settings = SubResource("LabelSettings_21x8i")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AmountLabel" type="Label" parent="."]
+layout_mode = 2
+text = "500"
+label_settings = SubResource("LabelSettings_3jxbu")
+horizontal_alignment = 1
+vertical_alignment = 1
