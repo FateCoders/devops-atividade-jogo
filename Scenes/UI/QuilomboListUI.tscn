@@ -1,0 +1,82 @@
+[gd_scene load_steps=6 format=3 uid="uid://dc4sfj6ojjwul"]
+
+[ext_resource type="Script" uid="uid://b6yuwu036tbrh" path="res://Scripts/UI/quilombo_list_ui.gd" id="1_v5i2c"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_conqa"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_cfm2p"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m3ifa"]
+texture = ExtResource("2_conqa")
+
+[sub_resource type="LabelSettings" id="LabelSettings_6s1hp"]
+font = ExtResource("3_cfm2p")
+font_size = 45
+
+[node name="QuilomboListUi" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_v5i2c")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(650, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -325.0
+offset_top = -240.0
+offset_right = 325.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Panel" type="PanelContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_m3ifa")
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 95
+theme_override_constants/margin_top = 95
+theme_override_constants/margin_right = 95
+theme_override_constants/margin_bottom = 95
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="ColorRect/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quilombos Vizinhos"
+label_settings = SubResource("LabelSettings_6s1hp")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(460, 300)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="QuilomboListContainer" type="VBoxContainer" parent="ColorRect/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="CloseButton" type="Button" parent="ColorRect/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Fechar"

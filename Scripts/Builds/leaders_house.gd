@@ -35,3 +35,15 @@ func _on_interaction_area_mouse_entered() -> void:
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
+
+func _on_interaction_area_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+		print("Casa do Líder clicada. Abrindo menu de quilombos...")
+		
+		# Agora, pedimos ao Hud para abrir a tela de listagem.
+		# Assumimos que o seu Hud principal está no grupo "hud_main".
+		var hud = get_tree().get_first_node_in_group("hud_main")
+		
+		# Verificação de segurança para garantir que o Hud foi encontrado.
+		if is_instance_valid(hud):
+			hud.show_quilombo_list()

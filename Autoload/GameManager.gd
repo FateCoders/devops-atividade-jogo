@@ -91,19 +91,24 @@ func end_tutorial():
 	emit_signal("tutorial_step_changed", {"enabled_builds": []})
 
 func _on_new_day_started(day_number: int):
-	print("[GameManager] Recebeu notícia do dia %d. Verificando condição de vitória..." % day_number)
-	
 	if day_number >= WorldTimeManager.victory_day:
-		_trigger_victory()
-
-func _trigger_victory():
+		# Agora chama a função com o tipo correto.
+		_trigger_victory("survival")
+		
+func _trigger_victory(victory_type: String = "survival"): # "survival" é o padrão
 	if _is_game_over: return
 	_is_game_over = true
 	
-	print("VITÓRIA! O jogador sobreviveu por %d dias." % WorldTimeManager.victory_day)
+	print("VITÓRIA! O jogador venceu por: ", victory_type)
 	get_tree().paused = true
 	
-	emit_signal("victory_achieved")
+	if victory_screen_scene:
+		var victory_screen = victory_screen_scene.instantiate()
+		add_child(victory_screen)
+		if victory_screen.has_method("set_victory_type"):
+			victory_screen.set_victory_type(victory_type)
+	else:
+		printerr("A cena da tela de vitória não foi definida no GameManager!")
 
 # ADICIONADO: Função central que lida com a derrota.
 func trigger_defeat(reason: String):
