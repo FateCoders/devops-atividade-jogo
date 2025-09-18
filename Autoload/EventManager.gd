@@ -27,32 +27,32 @@ var all_events = {
 		}
 	},
 	
-	"capitao_do_mato_attack": {
-		"title": "Ataque Iminente!",
-		"description": "Um capitão-do-mato e seus homens foram avistados se aproximando do quilombo! Eles exigem nossos recursos em troca de paz.\n\n- Lutar: Nossa segurança será testada, mas podemos proteger nossos bens.\n- Entregar Recursos: Perderemos recursos, mas evitaremos o conflito direto.",
-		"choices": {
-			"fight": { "label": "Lutar!", "tooltip": "-10 Segurança", "icon": boneIcon },
-			"surrender": { "label": "Entregar Recursos", "tooltip": "-50 Dinheiro", "icon": goldIcon }
-		}
-	},
-	
-	"epidemic_spreads": {
-		"title": "Epidemia se Espalha",
-		"description": "Uma doença desconhecida está se espalhando pelo quilombo, enfraquecendo nossos moradores.\n\n- Usar Remédios: Se tivermos uma enfermaria e remédios, podemos conter a doença.\n- Ignorar: A saúde do quilombo vai piorar drasticamente.",
-		"choices": {
-			"treat": { "label": "Usar Remédios", "tooltip": "-10 Remédios, +10 Saúde", "icon": healthIcon },
-			"ignore": { "label": "Ignorar", "tooltip": "-20 Saúde", "icon": negativeIcon }
-		}
-	},
-	
-	"village_party": {
-		"title": "Noite de Festa",
-		"description": "Os moradores estão com o espírito elevado e sugerem uma festa para celebrar a comunidade e aliviar o estresse.\n\n- Realizar Festa: Gastaremos alimentos, mas a alegria fortalecerá a todos.\n- Manter o Foco: Economizaremos recursos, mas perderemos a chance de melhorar o ânimo.",
-		"choices": {
-			"celebrate": { "label": "Realizar Festa!", "tooltip": "-20 Alimentos, +10 Saúde", "icon": chickenIcon },
-			"focus": { "label": "Manter o Foco", "tooltip": "Nenhum efeito", "icon": defaultIcon }
-		}
-	}
+	#"capitao_do_mato_attack": {
+		#"title": "Ataque Iminente!",
+		#"description": "Um capitão-do-mato e seus homens foram avistados se aproximando do quilombo! Eles exigem nossos recursos em troca de paz.\n\n- Lutar: Nossa segurança será testada, mas podemos proteger nossos bens.\n- Entregar Recursos: Perderemos recursos, mas evitaremos o conflito direto.",
+		#"choices": {
+			#"fight": { "label": "Lutar!", "tooltip": "-10 Segurança", "icon": boneIcon },
+			#"surrender": { "label": "Entregar Recursos", "tooltip": "-50 Dinheiro", "icon": goldIcon }
+		#}
+	#},
+	#
+	#"epidemic_spreads": {
+		#"title": "Epidemia se Espalha",
+		#"description": "Uma doença desconhecida está se espalhando pelo quilombo, enfraquecendo nossos moradores.\n\n- Usar Remédios: Se tivermos uma enfermaria e remédios, podemos conter a doença.\n- Ignorar: A saúde do quilombo vai piorar drasticamente.",
+		#"choices": {
+			#"treat": { "label": "Usar Remédios", "tooltip": "-10 Remédios, +10 Saúde", "icon": healthIcon },
+			#"ignore": { "label": "Ignorar", "tooltip": "-20 Saúde", "icon": negativeIcon }
+		#}
+	#},
+	#
+	#"village_party": {
+		#"title": "Noite de Festa",
+		#"description": "Os moradores estão com o espírito elevado e sugerem uma festa para celebrar a comunidade e aliviar o estresse.\n\n- Realizar Festa: Gastaremos alimentos, mas a alegria fortalecerá a todos.\n- Manter o Foco: Economizaremos recursos, mas perderemos a chance de melhorar o ânimo.",
+		#"choices": {
+			#"celebrate": { "label": "Realizar Festa!", "tooltip": "-20 Alimentos, +10 Saúde", "icon": chickenIcon },
+			#"focus": { "label": "Manter o Foco", "tooltip": "Nenhum efeito", "icon": defaultIcon }
+		#}
+	#}
 }
 # Pré-carrega a cena da nossa caixa de diálogo (que faremos no próximo passo).
 const EventDialogScene = preload("res://Scenes/UI/EventDialog.tscn")
@@ -87,6 +87,8 @@ func trigger_event(event_id: String):
 	if not all_events.has(event_id):
 		printerr("Tentativa de iniciar um evento desconhecido: ", event_id)
 		return
+		
+	GameManager.pause_game()
 
 	print("Disparando evento: ", event_id)
 	
@@ -101,6 +103,7 @@ func trigger_event(event_id: String):
 
 # Função que processa a escolha do jogador.
 func _on_event_choice_made(event_id, choice_id):
+	GameManager.resume_game()
 	MusicManager.play_game_music()
 	
 	print("Jogador escolheu '%s' para o evento '%s'" % [choice_id, event_id])

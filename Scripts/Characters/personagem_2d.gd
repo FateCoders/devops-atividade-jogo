@@ -19,11 +19,22 @@ enum State {
 	SAINDO_DE_CASA,
 	INDO_PARA_O_TRABALHO,
 	TRABALHANDO,
-	REAGINDO_AO_JOGADOR
+	REAGINDO_AO_JOGADOR,
+	DESABRIGADO, 
+	DESEMPREGADO 
+}
+
+enum Profession {
+	NENHUMA,
+	ENFERMEIRO,
+	RELIGIOSO,
+	AGRICULTOR, 
+	GUERREIRO
 }
 
 @export_category("Comportamento Geral")
-@export var move_speed: float = 100.0
+@export var profession: Profession = Profession.NENHUMA 
+@export var move_speed: float = 160.0
 @export var wander_range: float = 200.0
 
 @export_category("Dança")
@@ -81,7 +92,7 @@ var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 func _ready():
 	status_bubble.hide()
 	
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_noise.seed = randi()
 	_noise.frequency = 2.0
 	work_turn_timer.timeout.connect(_on_work_turn_timer_timeout)
@@ -102,43 +113,31 @@ func _ready():
 	await get_tree().physics_frame
 	_initialize_state_and_position()
 
-# ADICIONADO: Nova função para definir o estado e a posição iniciais do NPC.
 func _initialize_state_and_position():
-	# Garante que as referências existam antes de decidir o que fazer.
-	if not is_instance_valid(house_node) or not is_instance_valid(work_node):
-		printerr("NPC '%s' não possui casa ou trabalho definidos. Iniciando como OCIOSO." % name)
-		_change_state(State.OCIOSO)
+	if not is_instance_valid(house_node):
+		print("'%s' nasceu sem casa. Estado inicial: DESABRIGADO." % name)
+		_change_state(State.DESABRIGADO)
 		return
 
 	var current_hour = WorldTimeManager.get_current_hour()
-	var work_starts = work_node.work_starts_at
-	var work_ends = work_node.work_ends_at
-
-	# --- LÓGICA DE NASCIMENTO REESCRITA ---
-
-	# Primeiro, lida com o caso especial da noite.
-	if WorldTimeManager.is_night():
-		print("'%s' está nascendo em casa (noite)." % name)
-		# O estado EM_CASA já cuida de esconder o NPC na posição correta.
-		_change_state(State.EM_CASA)
 	
-	# Para QUALQUER outro caso (se for dia), ele sempre nascerá na frente da casa.
+	if WorldTimeManager.is_night():
+		_change_state(State.EM_CASA)
 	else:
-		print("'%s' está nascendo do lado de fora da casa." % name)
-		# 1. Define a posição inicial na porta da casa.
 		global_position = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
 		
-		# 2. Agora, decide qual é a PRIMEIRA TAREFA do dia.
-		# Se for horário de trabalho...
-		if current_hour >= work_starts and current_hour < work_ends:
-			# ...a tarefa é ir para o trabalho.
-			print("--> É hora de trabalhar, então o estado inicial será INDO_PARA_O_TRABALHO.")
-			_change_state(State.INDO_PARA_O_TRABALHO)
-		# Se não for horário de trabalho...
+		# Verificação de trabalho
+		if is_instance_valid(work_node):
+			var work_starts = work_node.work_starts_at
+			var work_ends = work_node.work_ends_at
+			if current_hour >= work_starts and current_hour < work_ends:
+				_change_state(State.INDO_PARA_O_TRABALHO)
+			else:
+				_change_state(State.SAINDO_DE_CASA)
 		else:
-			# ...a tarefa é sair de casa para passear.
-			print("--> É tempo livre, então o estado inicial será SAINDO_DE_CASA.")
-			_change_state(State.SAINDO_DE_CASA)
+			# Tem casa, mas não tem trabalho? Fica Desempregado.
+			print("'%s' tem casa mas não tem trabalho. Estado inicial: DESEMPREGADO." % name)
+			_change_state(State.DESEMPREGADO)
 
 #-----------------------------------------------------------------------------
 # LOOP PRINCIPAL
@@ -263,16 +262,25 @@ func _update_schedule():
 func _change_state(new_state: State):
 	if current_state == new_state:
 		return
-	
-	if current_state == State.TRABALHANDO:
+
+	var old_state = current_state
+
+	if old_state == State.TRABALHANDO:
 		StatusManager.mudar_status('dinheiro', 10)
+
+	if old_state == State.DESABRIGADO:
+		StatusManager.remove_persistent_debuff(self.get_instance_id())
+	
+	if old_state == State.DESEMPREGADO:
+		StatusManager.remove_persistent_debuff(self.get_instance_id())
+
 	
 	current_state = new_state
-	
+
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()
 		animated_sprite.position = Vector2.ZERO
-		
+
 	_cancel_idle_timer()
 
 	match current_state:
@@ -286,31 +294,26 @@ func _change_state(new_state: State):
 				var random_offset = Vector2(randf_range(-40.0, 40.0), randf_range(-10.0, 10.0))
 				nav_agent.target_position = base_exit_point + random_offset
 
-
 		State.INDO_PARA_CASA:
 			if is_instance_valid(house_node):
 				collision_shape.disabled = false
 				show()
 				var door_position = house_node.get_door_position()
-				var random_offset = Vector2(randf_range(-25.0, 25.0), 0) 
+				var random_offset = Vector2(randf_range(-25.0, 25.0), 0)
 				nav_agent.target_position = door_position + random_offset
 
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
 				show()
-				# MODIFICADO: O NPC agora pede um local de trabalho vago.
 				assigned_work_spot = work_node.claim_available_work_spot()
 				
-				# Se conseguiu um local, vai para lá.
 				if is_instance_valid(assigned_work_spot):
 					nav_agent.target_position = assigned_work_spot.global_position
 				else:
-					# Se não conseguiu (lotação máxima), ele fica ocioso por um tempo.
 					print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
 					_change_state(State.OCIOSO)
 
 		State.PASSEANDO:
-			# MODIFICADO: Garante que o NPC tenha colisão ao passear (caso spawne nesse estado)
 			if collision_shape:
 				collision_shape.disabled = false
 			_set_new_random_destination()
@@ -330,11 +333,32 @@ func _change_state(new_state: State):
 		State.EM_CASA:
 			velocity = Vector2.ZERO
 			collision_shape.disabled = true
-			hide()			
+			hide()
 
+		State.DESABRIGADO:
+			velocity = Vector2.ZERO
+			show()
+			if collision_shape:
+				collision_shape.disabled = false
+			print("'%s' está no estado DESABRIGADO." % name)
+
+		State.DESEMPREGADO:
+			show()
+			if collision_shape:
+				collision_shape.disabled = false
+			print("'%s' está desempregado e vai passear." % name)
+			_set_new_random_destination()
+
+	if current_state == State.DESABRIGADO:
+		StatusManager.add_persistent_debuff(self.get_instance_id(), "saude", -5)
+	
+	if current_state == State.DESEMPREGADO:
+		pass
 
 func _on_target_reached():
 	match current_state:
+		State.DESEMPREGADO:
+			_change_state(State.OCIOSO)
 		State.PASSEANDO:
 			_change_state(State.OCIOSO)
 		State.INDO_PARA_O_TRABALHO:
@@ -502,3 +526,23 @@ func load_data(data: Dictionary):
 	var loaded_pos_x = data.get("pos_x", position.x)
 	var loaded_pos_y = data.get("pos_y", position.y)
 	position = Vector2(loaded_pos_x, loaded_pos_y)
+
+func assign_house(new_house: House):
+	if not is_instance_valid(new_house): return
+	print("'%s' recebeu uma casa! Deixando de ser desabrigado." % name)
+	self.house_node = new_house
+	new_house.add_resident(self)
+	_initialize_state_and_position()
+
+func assign_work(new_workplace):
+	if not is_instance_valid(new_workplace): return
+	print("'%s' recebeu um trabalho! Deixando de ser desempregado." % name)
+	self.work_node = new_workplace
+	_initialize_state_and_position()
+	
+func set_profession(new_profession: Profession):
+	if self.profession == new_profession: return
+	self.profession = new_profession
+	print("'%s' agora tem a profissão de %s." % [name, Profession.keys()[profession]])
+	QuilomboManager.find_work_for_npc(self)
+	QuilomboManager._debug_print_all_npc_status("Após Atribuir Profissão")

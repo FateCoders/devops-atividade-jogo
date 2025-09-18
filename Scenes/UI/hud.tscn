@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=49 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -32,6 +32,8 @@
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="24_yxyk2"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
 [ext_resource type="PackedScene" uid="uid://boh7y5cx37ols" path="res://Scenes/UI/dialog.tscn" id="32_f1jpe"]
+[ext_resource type="Script" uid="uid://gndv8vb6nf0d" path="res://Scripts/UI/profession_assignment_screen.gd" id="33_mgdch"]
+[ext_resource type="PackedScene" uid="uid://cat5yr3hnnewl" path="res://Scenes/UI/NPCAssignmentRow.tscn" id="34_k32gu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
 content_margin_left = 10.0
@@ -526,5 +528,34 @@ layout_mode = 2
 
 [node name="DialogScreen" parent="." instance=ExtResource("32_f1jpe")]
 layout_mode = 2
+
+[node name="ProfessionAssignmentScreen" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("33_mgdch")
+npc_row_scene = ExtResource("34_k32gu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="ProfessionAssignmentScreen/VBoxContainer"]
+layout_mode = 2
+text = "Atribuir Profissões aos Recém-Chegados"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NPCListContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer"]
+layout_mode = 2
+text = "Confirmar"
 
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

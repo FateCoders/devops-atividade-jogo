@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cat5yr3hnnewl"]
+
+[ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="1_apr13"]
+[ext_resource type="Script" uid="uid://dw3bpsm5h03y2" path="res://Scripts/UI/npc_assignment_row.gd" id="1_uwqj7"]
+
+[node name="NPCAssignmentRow" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_uwqj7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("1_apr13")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Recém-chegado X"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2

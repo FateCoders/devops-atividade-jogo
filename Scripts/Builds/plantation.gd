@@ -2,6 +2,7 @@
 extends Node2D
 class_name Plantation
 
+@export var required_profession: NPC.Profession = NPC.Profession.AGRICULTOR
 @export var max_instances: int = 5
 
 @export var npc_scene_to_spawn: PackedScene

@@ -2,6 +2,9 @@
 extends Node
 
 signal npc_count_changed(new_count: int)
+signal fugitives_awaiting_assignment(npcs: Array)
+
+const NPC_SPAWN_SPACING: float = 40.0
 
 var all_houses: Array[House] = []
 var all_npcs: Array[NPC] = []
@@ -42,24 +45,32 @@ func unregister_building(building_node):
 func get_build_count_for_type(scene_path: String) -> int:
 	return building_counts.get(scene_path, 0)
 
+func count_unemployed_by_profession(profession: NPC.Profession) -> int:
+	var count = 0
+	for npc in all_npcs:
+		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO]
+		if is_instance_valid(npc) and is_available and npc.profession == profession:
+			count += 1
+	return count
+
 # --- CONSTRUÇÃO ---
 func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	if not structure_scene:
 		printerr("Tentativa de construir uma estrutura sem cena válida!")
 		return
 
+	# A verificação de custo ainda é importante e pode ser feita aqui ou na UI.
 	var temp_instance = structure_scene.instantiate()
 	var build_cost = temp_instance.get("cost")
-	temp_instance.queue_free()
-	
 	if build_cost and not StatusManager.has_enough_resources(build_cost):
-		print("Construção cancelada no último segundo. Recursos se esgotaram.")
-		# Na UI, o jogador não deve ver isso, mas é uma boa segurança.
+		print("Construção cancelada: Recursos insuficientes.")
+		temp_instance.queue_free()
 		return
-
-	# Se a verificação passou, gasta os recursos e constrói.
+	
+	# Se passou, gasta os recursos e constrói de fato.
 	if build_cost:
 		StatusManager.spend_resources(build_cost)
+	temp_instance.queue_free()
 
 	var new_structure = structure_scene.instantiate()
 	get_tree().current_scene.add_child(new_structure)
@@ -67,13 +78,28 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
 	
 	register_building(new_structure)
-
-	new_structure.confirm_construction()
-	
 	GameManager.check_tutorial_progress(structure_scene)
 
-	if not new_structure is House:
-		_spawn_npcs_for_workplace(new_structure)
+	var vacancies = new_structure.get("npc_count") if "npc_count" in new_structure else 0
+	if vacancies > 0:
+		var required_profession = new_structure.get("required_profession") if "required_profession" in new_structure else NPC.Profession.NENHUMA
+		
+		# --- LÓGICA DE PREENCHIMENTO INTELIGENTE ---
+		
+		# 1. Encontra e atribui todos os desempregados qualificados que puder.
+		var unemployed_to_assign = _find_unemployed_npcs(required_profession, vacancies)
+		for npc in unemployed_to_assign:
+			print("Atribuindo NPC desempregado existente '%s' à nova construção." % npc.name)
+			npc.assign_work(new_structure)
+			
+		# 2. Calcula quantos novos NPCs ainda precisam ser gerados.
+		var amount_to_spawn = vacancies - unemployed_to_assign.size()
+		
+		# 3. Gera apenas os NPCs restantes, se houver necessidade.
+		if amount_to_spawn > 0:
+			print("Ainda restam %d vagas. Gerando novos NPCs para completar." % amount_to_spawn)
+			# Usamos a função que você já tem, mas com a quantidade calculada.
+			_spawn_npcs_for_workplace(new_structure, amount_to_spawn)
 
 func build_house(house_scene: PackedScene, build_position: Vector2):
 	if not house_scene:
@@ -85,63 +111,43 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	new_house.global_position = build_position
 	print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
 
-func build_workplace(workplace_scene: PackedScene, build_position: Vector2):
-	if not workplace_scene:
-		printerr("Tentativa de construir local de trabalho sem cena válida!")
-		return
-		
-	print(building_counts)	
-
-	var new_workplace = workplace_scene.instantiate()
-	get_tree().current_scene.add_child(new_workplace)
-	new_workplace.global_position = build_position
-	print("--> Construído local '%s' em %s" % [new_workplace.name, build_position])
-
-	_spawn_npcs_for_workplace(new_workplace)
-
 # --- NPCs ---
-func _spawn_npcs_for_workplace(workplace_node):
-	print("--> Verificando NPCs para '%s'" % workplace_node.name)
+func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
+	print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
 
-	# MODIFICADO: A verificação de npc_count agora vem PRIMEIRO.
-	# Todas as suas construções têm a variável npc_count, então esta linha é segura.
-	var npc_count = workplace_node.npc_count
-	
-	# Se a construção não gera NPCs (npc_count == 0), nós paramos aqui.
-	if npc_count == 0:
-		print("--> Nenhum NPC será gerado para esta construção.")
-		return
-
-	# Se chegamos até aqui, significa que npc_count > 0.
-	# Agora sim é seguro acessar a variável npc_scene_to_spawn.
 	var npc_scene = workplace_node.npc_scene_to_spawn
-
-	# Verificação de segurança extra caso a cena não tenha sido definida no inspetor.
 	if not npc_scene:
-		printerr("--> ERRO: '%s' deveria gerar %d NPCs, mas a cena do NPC não foi definida!" % [workplace_node.name, npc_count])
+		printerr("--> ERRO: '%s' deveria gerar NPCs, mas a cena do NPC não foi definida!" % workplace_node.name)
 		return
 
 	var current_scene = get_tree().current_scene
 	var nav_map = get_tree().root.get_world_2d().navigation_map
-
-	for i in npc_count:
+	
+	var base_spawn_pos = workplace_node.global_position + Vector2(0, 65)
+	
+	# A lógica de formação agora usa 'amount_to_spawn'
+	var total_formation_width = (amount_to_spawn - 1) * NPC_SPAWN_SPACING
+	var start_offset_x = -total_formation_width / 2.0
+	
+	# O laço 'for' agora usa 'amount_to_spawn'
+	for i in amount_to_spawn:
 		var npc = npc_scene.instantiate()
 		current_scene.add_child(npc)
-
-		var desired_pos = workplace_node.global_position + Vector2(randf_range(-30, 30), randf_range(50, 80))
+		
+		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
+		var desired_pos = base_spawn_pos + Vector2(current_offset_x, 0)
+		
 		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, desired_pos)
 		npc.global_position = safe_pos
-		print("--> NPC #%d gerado em %s" % [i + 1, safe_pos])
+		print("--> Novo NPC #%d gerado em %s" % [i + 1, safe_pos])
 
 		npc.work_node = workplace_node
 
 		var house = _find_house_with_space()
 		if house:
-			npc.house_node = house
-			print("--> NPC #%d recebeu casa '%s'" % [i + 1, house.name])
-			house.add_resident(npc)
+			npc.assign_house(house)
 		else:
-			print("AVISO: Nenhuma casa disponível para NPC #%d" % [i + 1])
+			print("AVISO: Nenhuma casa disponível para o novo NPC #%d" % [i + 1])
 
 		register_npc(npc)
 
@@ -184,27 +190,103 @@ func spawn_new_fugitives(amount: int):
 	if FUGITIVE_NPC_SCENES.is_empty():
 		printerr("Nenhuma cena de NPC foi definida na lista para gerar fugitivos.")
 		return
+		
+	var new_fugitives: Array[NPC] = []
 
 	var current_scene = get_tree().current_scene
+	var arrival_point = Vector2(0, 200) 
+	
+	var total_formation_width = (amount - 1) * NPC_SPAWN_SPACING
+	var start_offset_x = -total_formation_width / 2.0
 
 	for i in amount:
 		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
-		
 		var npc = random_npc_scene.instantiate()
-		
 		current_scene.add_child(npc)
 		
-		npc.global_position = Vector2(randf_range(-100, 100), randf_range(-100, 100))
+		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
+		var spawn_pos = arrival_point + Vector2(current_offset_x, 0)
+		npc.global_position = spawn_pos
 		
-		npc.work_node = null
-		npc.house_node = null
+		npc.profession = NPC.Profession.NENHUMA
+		var house = _find_house_with_space()
+
+		if house:
+			npc.assign_house(house) 
 		
 		register_npc(npc)
+		new_fugitives.append(npc)
 
 	var game_ui = get_tree().root.get_node_or_null("GameUI")
 	if game_ui:
 		game_ui.show_notification("%d novos moradores chegaram!" % amount)
-		
-# ADICIONADO: Função a ser chamada quando a mecânica do líder for implementada.
+	
+	if not new_fugitives.is_empty():
+		emit_signal("fugitives_awaiting_assignment", new_fugitives)
+
+func find_work_for_npc(npc: NPC):
+	if not is_instance_valid(npc) or npc.profession == NPC.Profession.NENHUMA:
+		return
+
+	print("'%s' está procurando trabalho como %s..." % [npc.name, NPC.Profession.keys()[npc.profession]])
+	var workplace = _find_workplace_with_vacancies(npc.profession)
+	
+	if is_instance_valid(workplace):
+		print("--> Vaga encontrada em '%s'!" % workplace.name)
+		npc.assign_work(workplace)
+		if workplace.has_method("add_worker"):
+			workplace.add_worker(npc)
+	else:
+		print("--> Nenhuma vaga de trabalho encontrada no momento.")
+
+func _find_workplace_with_vacancies(profession: NPC.Profession):
+	for node in get_tree().get_nodes_in_group("buildings"):
+		if not node is House and is_instance_valid(node):
+			var required_prof = node.get("required_profession")
+			var capacity = node.get("npc_count")
+			var current_workers = node.get("workers").size() if "workers" in node else 0
+			
+			if required_prof == profession and current_workers < capacity:
+				return node
+	return null
+
 func on_leader_lost():
 	GameManager.game_over.emit("Seu líder foi capturado ou morto. O quilombo se desfez.")
+
+func _find_unemployed_npcs(profession: NPC.Profession, limit: int) -> Array[NPC]:
+	var found_npcs: Array[NPC] = []
+	for npc in all_npcs:
+		if found_npcs.size() >= limit:
+			break 
+
+		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO]
+		
+		if is_instance_valid(npc) and is_available and npc.profession == profession:
+			found_npcs.append(npc)
+			
+	print("Encontrados %d NPCs desempregados com a profissão %s" % [found_npcs.size(), NPC.Profession.keys()[profession]])
+	return found_npcs
+
+
+func _debug_print_all_npc_status(origem_da_chamada: String):
+	print("==============================================================")
+	print(">>> VERIFICAÇÃO DE ESTADO DOS NPCS (Origem: %s) <<<" % origem_da_chamada)
+	print("Total de NPCs no quilombo: %d" % all_npcs.size())
+	
+	if all_npcs.is_empty():
+		print("Nenhum NPC para verificar.")
+		print("==============================================================")
+		return
+
+	for npc in all_npcs:
+		if not is_instance_valid(npc):
+			print(" - NPC inválido encontrado na lista.")
+			continue
+		
+		# Converte os enums (números) para texto para ficar legível
+		var estado_texto = NPC.State.keys()[npc.current_state]
+		var profissao_texto = NPC.Profession.keys()[npc.profession]
+		
+		print(" - NPC: '%s' | Estado: %s | Profissão: %s" % [npc.name, estado_texto, profissao_texto])
+	
+	print("==============================================================")

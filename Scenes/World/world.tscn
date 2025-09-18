@@ -116,12 +116,12 @@ script = ExtResource("11_0ph6x")
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]
 visible = false
 script = null
-l
-[node name="pause_menu" parent="." instance=ExtResource("16_dr8i3")]
-visible = false
 
 [node name="victory" parent="." instance=ExtResource("13_vbhkl")]
 visible = false
 
 [node name="game_over" parent="." instance=ExtResource("14_dbvd7")]
+visible = false
+
+[node name="pause_menu" parent="." instance=ExtResource("16_dr8i3")]
 visible = false

@@ -50,6 +50,7 @@ var build_buttons: Dictionary = {}
 @onready var day_label = $DayContainer/DayLabel
 
 @onready var dialog_screen = $DialogScreen
+@onready var profession_screen = $ProfessionAssignmentScreen
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -107,6 +108,7 @@ func _ready():
 				button.set_cost_visible(true)
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
+	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
 
 func _process(delta: float):
 	_update_cursor_state()
@@ -214,7 +216,10 @@ func _on_button_pressed():
 	button_builds.visible = !button_builds.visible
 	construction_title.visible = button_builds.visible
 	
-	get_tree().paused = button_builds.visible
+	if button_builds.visible:
+		GameManager.pause_game()
+	else:
+		GameManager.resume_game()
 
 	if button_builds.visible:
 		build_button_icon.visible = false
@@ -229,11 +234,15 @@ func _on_button_pressed():
 			_exit_placement_mode()
 
 func _on_any_build_button_pressed(scene: PackedScene):
+	QuilomboManager._debug_print_all_npc_status("Clique no Botão de Construir")
+
 	if is_in_placement_mode:
 		_exit_placement_mode()
 		return
 
 	var temp_instance = scene.instantiate()
+	
+	# Checagem de limite de construção (já estava correta)
 	var max_allowed = temp_instance.get("max_instances")
 	if max_allowed != null and max_allowed > 0:
 		var current_count = QuilomboManager.get_build_count_for_type(scene.resource_path)
@@ -242,24 +251,45 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			temp_instance.queue_free()
 			return
 
-	var npcs_needed = temp_instance.get("npc_count")
+	# --- INÍCIO DA NOVA LÓGICA DE VERIFICAÇÃO ---
+	var npcs_needed = temp_instance.npc_count if "npc_count" in temp_instance else 0
 	var build_cost = temp_instance.get("cost")
-	temp_instance.queue_free()
-	if npcs_needed == null: npcs_needed = 0
+	
+	# 1. Primeiro, verificamos os recursos (dinheiro, etc.)
+	if build_cost and not StatusManager.has_enough_resources(build_cost):
+		show_notification("Recursos insuficientes para construir!")
+		temp_instance.queue_free()
+		return
+
+	# 2. Agora, a verificação inteligente de trabalhadores e casas
 	if npcs_needed > 0:
-		var available_space = QuilomboManager.get_available_housing_space()
-		if available_space < npcs_needed:
-			show_notification("Casas insuficientes para novos moradores!")
+		var required_profession = temp_instance.required_profession if "required_profession" in temp_instance else NPC.Profession.NENHUMA
+		
+		# Quantos trabalhadores qualificados já temos desempregados?
+		var available_workers = QuilomboManager.count_unemployed_by_profession(required_profession)
+		
+		# Quantos novos trabalhadores precisarão ser gerados?
+		var new_workers_to_spawn = npcs_needed - available_workers
+		if new_workers_to_spawn < 0:
+			new_workers_to_spawn = 0 # Não podemos gerar um número negativo
+		
+		# Quantas vagas em casas precisamos para esses NOVOS trabalhadores?
+		var available_housing = QuilomboManager.get_available_housing_space()
+		
+		if available_housing < new_workers_to_spawn:
+			show_notification("Casas insuficientes para os novos moradores!")
+			temp_instance.queue_free()
 			return
+	
+	# --- FIM DA NOVA LÓGICA DE VERIFICAÇÃO ---
+	
+	temp_instance.queue_free() # Limpa a instância temporária
 
-	if build_cost:
-		if not StatusManager.has_enough_resources(build_cost):
-			show_notification("Recursos insuficientes para construir!")
-			return
-
+	# Se todas as verificações passaram, inicia o modo de posicionamento
 	button_builds.visible = false
 	construction_title.visible = false
-
+	
+	GameManager.pause_game()
 	is_in_placement_mode = true
 	scene_to_place = scene
 	placement_preview = scene.instantiate()
@@ -279,7 +309,7 @@ func _exit_placement_mode():
 
 	button_builds.visible = true
 	construction_title.visible = true
-
+	GameManager.pause_game()
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
 	is_in_placement_mode = false
@@ -332,3 +362,6 @@ func _update_cursor_state():
 func _on_day_passed(new_day: int):
 	if day_label:
 		day_label.text = "Dia %02d" % new_day
+
+func _on_fugitives_awaiting_assignment(npcs: Array):
+	profession_screen.show_panel(npcs)
