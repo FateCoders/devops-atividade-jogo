@@ -9,7 +9,15 @@ const OfferItemScene = preload("res://Scenes/UI/EscamboItem.tscn")
 var target_quilombo_id: String
 
 func _ready():
-	close_button.pressed.connect(queue_free)
+	close_button.pressed.connect(back_to_list)
+	
+func back_to_list():
+	var hud = get_tree().get_first_node_in_group("hud_main")
+	if is_instance_valid(hud):
+		hud.show_quilombo_list()
+	
+	queue_free()
+
 
 func start_trade(quilombo_id: String):
 	target_quilombo_id = quilombo_id
