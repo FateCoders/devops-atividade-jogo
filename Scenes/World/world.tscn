@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=16 format=4 uid="uid://bofjyi7d5qug8"]
 
 [ext_resource type="Script" uid="uid://cghxvxhbj6tn3" path="res://Scripts/UI/world.gd" id="1_dr8i3"]
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://cajh6ojms2bej" path="res://Scripts/UI/canvas_modulate.gd" id="11_0ph6x"]
 [ext_resource type="PackedScene" uid="uid://ixvmmog1grra" path="res://Scenes/UI/hud.tscn" id="11_pvt60"]
 [ext_resource type="PackedScene" uid="uid://bpnly331fjf71" path="res://Scenes/UI/victory.tscn" id="13_vbhkl"]
-[ext_resource type="PackedScene" uid="uid://bx5sd7qqtkm6h" path="res://Scenes/Characters/citizen_01.tscn" id="14_4pv6w"]
 [ext_resource type="PackedScene" uid="uid://r81tceg8r6oj" path="res://Scenes/UI/defeatScreen.tscn" id="14_dbvd7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vadfg"]
@@ -122,6 +121,3 @@ visible = false
 
 [node name="game_over" parent="." instance=ExtResource("14_dbvd7")]
 visible = false
-
-[node name="Personagem_2D" parent="." instance=ExtResource("14_4pv6w")]
-position = Vector2(975, 891)
