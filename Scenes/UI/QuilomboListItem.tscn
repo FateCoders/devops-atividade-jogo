@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3 uid="uid://dlbaw2m18sg1u"]
+
+[ext_resource type="Script" uid="uid://bwjowghnfsoqt" path="res://Scripts/UI/quilombo_list_item.gd" id="1_lytnw"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="2_2gobm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mo6qf"]
+font = ExtResource("2_2gobm")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_2gobm"]
+font = ExtResource("2_2gobm")
+font_size = 30
+
+[node name="QuilomboListItem" type="PanelContainer"]
+custom_minimum_size = Vector2(460, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -25.0
+offset_right = 230.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_lytnw")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(440, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 15
+
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quilombo de Camapuã"
+label_settings = SubResource("LabelSettings_mo6qf")
+
+[node name="RelationsLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "30"
+label_settings = SubResource("LabelSettings_2gobm")
+
+[node name="EscamboButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 30)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_2gobm")
+text = "Negociar"

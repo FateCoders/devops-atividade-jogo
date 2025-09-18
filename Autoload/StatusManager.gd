@@ -3,6 +3,11 @@ extends Node
 signal status_updated
 
 var dinheiro = 500
+var remedios = 500
+var ferramentas = 500
+var madeira = 500
+var alimentos = 500
+
 var saude = 100
 var fome = 100
 var seguranca = 10
@@ -84,3 +89,23 @@ func _recalculate_status():
 			current_health_debuff += debuff.value
 
 	print("Debuff de saúde total atual: %d" % current_health_debuff)
+	
+func get_all_resources() -> Dictionary:
+	return {
+		"dinheiro": dinheiro,
+		"madeira": madeira,
+		"alimentos": alimentos,	
+		"remedios": remedios,
+		"ferramentas": ferramentas
+	}
+	
+func execute_trade(items_given: Dictionary, items_received: Dictionary):
+	# Remove os itens que o jogador deu
+	for resource in items_given:
+		set(resource, get(resource) - items_given[resource])
+	
+	# Adiciona os itens que o jogador recebeu
+	for resource in items_received:
+		set(resource, get(resource) + items_received[resource])
+
+	emit_signal("status_updated")

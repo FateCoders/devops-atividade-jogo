@@ -13,6 +13,10 @@ const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainin
 const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 
+const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
+
+const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
+
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
@@ -365,3 +369,22 @@ func _on_day_passed(new_day: int):
 
 func _on_fugitives_awaiting_assignment(npcs: Array):
 	profession_screen.show_panel(npcs)
+
+func show_quilombo_list():
+	# Medida de segurança para garantir que não abrimos duas janelas ao mesmo tempo.
+	# Procura por uma janela antiga e a remove, se existir.
+	var old_list = find_child("QuilomboListUI", true, false)
+	if old_list:
+		old_list.queue_free()
+
+	# Cria a nova janela da lista de quilombos.
+	var list_ui = QuilomboListScene.instantiate()
+	# Damos um nome para que a verificação acima possa encontrá-la.
+	list_ui.name = "QuilomboListUI" 
+	# Adiciona a janela à cena, tornando-a visível.
+	add_child(list_ui)
+	
+func show_escambo_ui(quilombo_id: String):
+	var escambo_ui = EscamboScene.instantiate()
+	add_child(escambo_ui)
+	escambo_ui.start_trade(quilombo_id)
