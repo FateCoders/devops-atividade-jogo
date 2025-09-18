@@ -151,10 +151,12 @@ func check_alliance_victory():
 		if data.get("relations", 0) >= 100:
 			allied_quilombos_count += 1
 	
-	print("[QuilombosManager] Verificando vitória por aliança. Aliados: %d/3" % allied_quilombos_count)
 	
+	var total_quilombos = current_quilombos_data.size()
+	
+	print("[QuilombosManager] Verificando vitória por aliança. Aliados: %d/%d" % [allied_quilombos_count, total_quilombos])
 	# Se o número de aliados for 3 ou mais, avisa o GameManager.
-	if allied_quilombos_count >= 3:
+	if allied_quilombos_count >= total_quilombos:
 		# Passamos uma string para identificar o tipo de vitória.
 		GameManager._trigger_victory("unification")
 
