@@ -89,6 +89,9 @@ func trigger_event(event_id: String):
 		return
 
 	print("Disparando evento: ", event_id)
+	
+	MusicManager.play_decision_music()
+	
 	var event_data = all_events[event_id]
 	
 	# Cria a caixa de diálogo e passa os dados do evento para ela.
@@ -98,6 +101,8 @@ func trigger_event(event_id: String):
 
 # Função que processa a escolha do jogador.
 func _on_event_choice_made(event_id, choice_id):
+	MusicManager.play_game_music()
+	
 	print("Jogador escolheu '%s' para o evento '%s'" % [choice_id, event_id])
 	
 	# Evento de Fugitivos (já existente)
