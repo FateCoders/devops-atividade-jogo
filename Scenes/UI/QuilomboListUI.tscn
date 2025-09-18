@@ -72,6 +72,7 @@ horizontal_scroll_mode = 0
 
 [node name="QuilomboListContainer" type="VBoxContainer" parent="ColorRect/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="CloseButton" type="Button" parent="ColorRect/Panel/MarginContainer/VBoxContainer"]

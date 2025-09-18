@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvi7odfdm47yb"]
+[gd_scene load_steps=7 format=3 uid="uid://cvi7odfdm47yb"]
 
 [ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="1_51web"]
 [ext_resource type="Script" uid="uid://xu34bdcciass" path="res://Scripts/UI/escambo_ui.gd" id="1_vij3d"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_vij3d"]
+[ext_resource type="PackedScene" uid="uid://cdiih2k5lsv44" path="res://Scenes/UI/EscamboItem.tscn" id="4_g8ca2"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g8ca2"]
 texture = ExtResource("1_51web")
@@ -69,7 +70,15 @@ horizontal_scroll_mode = 0
 
 [node name="OffersListContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer3/VBoxContainer/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 10
+
+[node name="TradeOfferItem" parent="PanelContainer/MarginContainer/VBoxContainer3/VBoxContainer/ScrollContainer/OffersListContainer" instance=ExtResource("4_g8ca2")]
+layout_mode = 2
+
+[node name="TradeOfferItem2" parent="PanelContainer/MarginContainer/VBoxContainer3/VBoxContainer/ScrollContainer/OffersListContainer" instance=ExtResource("4_g8ca2")]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer3"]
 layout_mode = 2

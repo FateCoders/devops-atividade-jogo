@@ -24,7 +24,7 @@ offset_right = 230.0
 offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 script = ExtResource("1_lytnw")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
