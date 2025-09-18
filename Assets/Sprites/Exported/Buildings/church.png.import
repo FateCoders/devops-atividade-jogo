@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b72l5pxysyurb"
-path="res://.godot/imported/hud-sheet.png-38e7981f354e61189ace7564f9bd0d7f.ctex"
+uid="uid://brq137tbxm0g8"
+path="res://.godot/imported/church.png-6256262bf91b2e24f5c08e1f11bba7db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png"
-dest_files=["res://.godot/imported/hud-sheet.png-38e7981f354e61189ace7564f9bd0d7f.ctex"]
+source_file="res://Assets/Sprites/Exported/Buildings/church.png"
+dest_files=["res://.godot/imported/church.png-6256262bf91b2e24f5c08e1f11bba7db.ctex"]
 
 [params]
 
