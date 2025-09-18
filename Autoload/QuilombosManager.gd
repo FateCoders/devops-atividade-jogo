@@ -8,7 +8,7 @@ var current_quilombos_data: Dictionary = {}
 const INITIAL_QUILOMBOS_DATA = {
 	"palmares": {
 		"name": "Quilombo dos Palmares",
-		"relations": 50,
+		"relations": 90,
 		"trade_offers": [
 			{
 				"id": "sell_food_palmares", "type": "sell", "item": "alimentos",
@@ -27,7 +27,7 @@ const INITIAL_QUILOMBOS_DATA = {
 	
 	"camapua": {
 		"name": "Quilombo de Camapuã",
-		"relations": 30,
+		"relations": 90,
 		"trade_offers": [
 			{
 				"id": "sell_wood_camapua", "type": "sell", "item": "madeira",
@@ -44,7 +44,7 @@ const INITIAL_QUILOMBOS_DATA = {
 
 	"catucá": {
 		"name": "Quilombo do Catucá",
-		"relations": 40,
+		"relations": 90,
 		"trade_offers": [
 			{
 				"id": "sell_remedies_catuca", "type": "sell", "item": "remedios",
@@ -127,6 +127,7 @@ func change_relation(quilombo_id: String, amount: int):
 		var current_relation = current_quilombos_data[quilombo_id]["relations"]
 		current_quilombos_data[quilombo_id]["relations"] = clamp(current_relation + amount, 0, 100)
 		print("Nova relação com '%s': %d" % [current_quilombos_data[quilombo_id]["name"], current_quilombos_data[quilombo_id]["relations"]])
+		check_alliance_victory()
 
 func execute_trade(quilombo_id, items_given_by_them, items_received_by_them):
 	change_relation(quilombo_id, 5)
@@ -140,6 +141,22 @@ func set_offer_on_cooldown(quilombo_id: String, offer_id: String, cooldown_days:
 			offer["available_on_day"] = WorldTimeManager.current_day + cooldown_days
 			print("Oferta '%s' de '%s' entrará em cooldown. Disponível no dia %d." % [offer_id, quilombo_id, offer["available_on_day"]])
 			break
+
+func check_alliance_victory():
+	var allied_quilombos_count = 0
+	# Passa por todos os quilombos nos dados da partida atual.
+	for quilombo_id in current_quilombos_data:
+		var data = current_quilombos_data[quilombo_id]
+		# Se a relação for 100 ou mais, conta como um aliado.
+		if data.get("relations", 0) >= 100:
+			allied_quilombos_count += 1
+	
+	print("[QuilombosManager] Verificando vitória por aliança. Aliados: %d/3" % allied_quilombos_count)
+	
+	# Se o número de aliados for 3 ou mais, avisa o GameManager.
+	if allied_quilombos_count >= 3:
+		# Passamos uma string para identificar o tipo de vitória.
+		GameManager._trigger_victory("unification")
 
 func get_save_data() -> Dictionary:
 	return { "quilombos_data": current_quilombos_data }
