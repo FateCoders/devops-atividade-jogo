@@ -110,6 +110,21 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	get_tree().current_scene.add_child(new_house)
 	new_house.global_position = build_position
 	print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
+	
+	var homeless_npcs = _find_homeless_npcs()
+	
+	if not homeless_npcs.is_empty():
+		print("Nova casa construída! Tentando abrigar %d NPCs desabrigados..." % homeless_npcs.size())
+		
+		for npc in homeless_npcs:
+			# 4. ...e verifica se a nova casa AINDA tem espaço.
+			if new_house.residents.size() < new_house.capacity:
+				# 5. Se tiver, atribui a casa ao NPC.
+				npc.assign_house(new_house)
+			else:
+				# 6. Se a casa encheu, para de procurar.
+				print("A nova casa está cheia. NPCs restantes continuarão desabrigados.")
+				break 
 
 # --- NPCs ---
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
@@ -290,3 +305,11 @@ func _debug_print_all_npc_status(origem_da_chamada: String):
 		print(" - NPC: '%s' | Estado: %s | Profissão: %s" % [npc.name, estado_texto, profissao_texto])
 	
 	print("==============================================================")
+
+func _find_homeless_npcs() -> Array[NPC]:
+	var found_npcs: Array[NPC] = []
+	for npc in all_npcs:
+		if is_instance_valid(npc) and npc.current_state == NPC.State.DESABRIGADO:
+			found_npcs.append(npc)
+	print("Encontrados %d NPCs desabrigados." % found_npcs.size())
+	return found_npcs

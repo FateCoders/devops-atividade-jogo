@@ -2,6 +2,7 @@
 extends Node2D
 class_name TrainingArea
 
+@export var required_profession: NPC.Profession = NPC.Profession.GUERREIRO
 @export var max_instances: int = 5
 
 @export var npc_count: int = 3

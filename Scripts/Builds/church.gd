@@ -2,6 +2,7 @@
 extends Node2D
 class_name SpiritualCenter
 
+@export var required_profession: NPC.Profession = NPC.Profession.RELIGIOSO
 @export var max_instances: int = 2
 
 @export var npc_count: int = 1

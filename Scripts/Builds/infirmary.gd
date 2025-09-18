@@ -2,6 +2,7 @@
 extends Node2D
 class_name Infirmary
 
+@export var required_profession: NPC.Profession = NPC.Profession.ENFERMEIRO
 @export var max_instances: int = 3
 
 @export var npc_count: int = 1
