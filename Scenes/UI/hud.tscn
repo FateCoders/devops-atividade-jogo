@@ -9,16 +9,16 @@
 [ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="4_8c63k"]
 [ext_resource type="StyleBox" uid="uid://dvvr17qyjcmtl" path="res://Scenes/UI/Assets/Styles/progressbar_health.tres" id="4_8glcj"]
 [ext_resource type="Texture2D" uid="uid://dcjb6j6qseb04" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor.png" id="4_qdh5o"]
-[ext_resource type="Texture2D" uid="uid://pxfw5x400unl" path="res://Assets/Sprites/Exported/Buildings/house-icon.png" id="5_qff6j"]
+[ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="5_f1jpe"]
 [ext_resource type="StyleBox" uid="uid://t580o606lwph" path="res://Scenes/UI/Assets/Styles/progressbar_hunger.tres" id="5_vsu76"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="5_yxyk2"]
-[ext_resource type="Texture2D" uid="uid://clatgmsxnn0mh" path="res://Assets/Sprites/Exported/Buildings/hidingPlace-icon.png" id="6_e17ao"]
+[ext_resource type="Texture2D" uid="uid://bw7vh10c425ru" path="res://Assets/Sprites/Exported/Buildings/hiding_spot.png" id="6_mgdch"]
 [ext_resource type="StyleBox" uid="uid://ccbxlwmk5cknw" path="res://Scenes/UI/Assets/Styles/progressbar_security.tres" id="6_mqf2c"]
 [ext_resource type="Texture2D" uid="uid://d166phih6inic" path="res://Assets/Sprites/Exported/Buildings/plowed-icon.png" id="7_0hfmd"]
 [ext_resource type="StyleBox" uid="uid://bm1w3purx7v5n" path="res://Scenes/UI/Assets/Styles/progressbar_relations.tres" id="7_7wqu8"]
 [ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="9_iiebs"]
 [ext_resource type="Texture2D" uid="uid://dti7e8mi3qiho" path="res://Assets/Sprites/Exported/Buildings/infirmary.png" id="9_q8e8b"]
-[ext_resource type="Texture2D" uid="uid://b4667p5ttwsom" path="res://Assets/Sprites/Exported/Buildings/church-icon.png" id="10_n5w8m"]
+[ext_resource type="Texture2D" uid="uid://d3bmhcbpjocve" path="res://Assets/Sprites/Exported/Buildings/church.png" id="11_k32gu"]
 [ext_resource type="StyleBox" uid="uid://cocsuxsm44n0n" path="res://Scenes/UI/Assets/Styles/previewbar_health.tres" id="15_8c63k"]
 [ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="15_mu5ro"]
 [ext_resource type="Texture2D" uid="uid://dulxt81pyxfr4" path="res://Assets/Sprites/Exported/HUD/Icons/health-icon.png" id="15_n5w8m"]
@@ -144,12 +144,12 @@ button_icon = ExtResource("5_yxyk2")
 [node name="BuildHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa Grande"
-button_icon = ExtResource("5_qff6j")
+button_icon = ExtResource("5_f1jpe")
 
 [node name="BuildHidingPlaceButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Esconderijo"
-button_icon = ExtResource("6_e17ao")
+button_icon = ExtResource("6_mgdch")
 
 [node name="BuildLeadersHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
@@ -187,7 +187,7 @@ button_icon = ExtResource("9_iiebs")
 [node name="BuildChurchButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Centro Espiritual"
-button_icon = ExtResource("10_n5w8m")
+button_icon = ExtResource("11_k32gu")
 
 [node name="Spacer2" type="Control" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 custom_minimum_size = Vector2(2.5, 0)
