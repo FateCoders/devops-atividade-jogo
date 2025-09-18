@@ -229,34 +229,50 @@ func _handle_idle_states(delta):
 func _update_schedule():
 	if current_state == State.REAGINDO_AO_JOGADOR:
 		return
-	
-	if not is_instance_valid(house_node) or not is_instance_valid(work_node):
-		if current_state != State.OCIOSO:
-			_change_state(State.OCIOSO)
-		return
 
+	# --- LÓGICA DE ESTADO CORRIGIDA ---
+	
+	# PRIORIDADE 1: Verificar se tem casa. Se não tiver, é DESABRIGADO.
+	if not is_instance_valid(house_node):
+		# Garante que o estado seja e permaneça DESABRIGADO.
+		_change_state(State.DESABRIGADO)
+		return # Um NPC desabrigado não tem rotina, então paramos aqui.
+
+	# PRIORIDADE 2: Verificar se tem trabalho. Se tiver casa mas não tiver trabalho, é DESEMPREGADO.
+	if not is_instance_valid(work_node):
+		# Se ele não estiver já em um estado "sem trabalho", muda para DESEMPREGADO.
+		if current_state not in [State.DESEMPREGADO, State.OCIOSO, State.PASSEANDO, State.SAINDO_DE_CASA, State.EM_CASA]:
+			_change_state(State.DESEMPREGADO)
+		return # Um NPC desempregado não tem rotina de trabalho, então paramos aqui.
+
+	# PRIORIDADE 3: Se chegamos até aqui, o NPC TEM CASA E TEM TRABALHO.
+	# Agora sim, podemos executar a lógica de horários.
+	
 	var current_hour = WorldTimeManager.get_current_hour()
 
+	# Lógica noturna
 	if WorldTimeManager.is_night():
 		if current_state not in [State.EM_CASA, State.INDO_PARA_CASA]:
 			_change_state(State.INDO_PARA_CASA)
 		return
 
+	# Lógica de horário de trabalho
 	var work_starts = work_node.work_starts_at
 	var work_ends = work_node.work_ends_at
 
 	if current_hour >= work_starts and current_hour < work_ends:
+		# Se é horário de trabalho e ele não está trabalhando ou indo para lá
 		if current_state not in [State.TRABALHANDO, State.INDO_PARA_O_TRABALHO]:
 			_change_state(State.INDO_PARA_O_TRABALHO)
 		return
 
+	# Lógica de fim de expediente / manhã antes do trabalho
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
 		if is_instance_valid(work_node) and is_instance_valid(assigned_work_spot):
 			work_node.release_work_spot(assigned_work_spot)
-			assigned_work_spot = null # Limpa a referência
-		
+			assigned_work_spot = null
 		_change_state(State.PASSEANDO)
 
 func _change_state(new_state: State):

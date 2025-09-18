@@ -51,7 +51,7 @@ func get_build_count_for_type(scene_path: String) -> int:
 func count_unemployed_by_profession(profession: NPC.Profession) -> int:
 	var count = 0
 	for npc in all_npcs:
-		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO]
+		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO, NPC.State.DESABRIGADO, NPC.State.EM_CASA]
 		if is_instance_valid(npc) and is_available and npc.profession == profession:
 			count += 1
 	return count
@@ -113,21 +113,33 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	get_tree().current_scene.add_child(new_house)
 	new_house.global_position = build_position
 	print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
+
+	# --- INÍCIO DA DEPURAÇÃO ---
+	print("\n[DEBUG] Iniciando processo de alocação de desabrigados...")
 	
+	# 1. Vamos ver se estamos encontrando algum desabrigado.
 	var homeless_npcs = _find_homeless_npcs()
+	print("[DEBUG 1] Função _find_homeless_npcs foi chamada. NPCs desabrigados encontrados: %d" % homeless_npcs.size())
 	
+	# 2. Vamos checar a condição para entrar no loop.
 	if not homeless_npcs.is_empty():
-		print("Nova casa construída! Tentando abrigar %d NPCs desabrigados..." % homeless_npcs.size())
+		print("[DEBUG 2] A lista de desabrigados não está vazia. Iniciando o processo de acolhimento...")
 		
 		for npc in homeless_npcs:
-			# 4. ...e verifica se a nova casa AINDA tem espaço.
+			# 3. Para cada NPC, vamos checar a lotação da casa.
+			print("[DEBUG 3] Processando o NPC: %s. Verificando vagas na casa. Lotação atual: %d/%d" % [npc.name, new_house.residents.size(), new_house.capacity])
+			
 			if new_house.residents.size() < new_house.capacity:
-				# 5. Se tiver, atribui a casa ao NPC.
+				# 4. Se houver vaga, vamos confirmar a atribuição.
+				print("[DEBUG 4] Vaga encontrada! Chamando npc.assign_house() para %s." % npc.name)
 				npc.assign_house(new_house)
 			else:
-				# 6. Se a casa encheu, para de procurar.
-				print("A nova casa está cheia. NPCs restantes continuarão desabrigados.")
-				break 
+				print("[DEBUG X] A casa já está cheia. Não é possível abrigar %s." % npc.name)
+				break
+	else:
+		print("[DEBUG 2] A lista de desabrigados está vazia. Processo de alocação encerrado.")
+
+	print("[DEBUG] Fim do processo de alocação.\n")
 
 # --- NPCs ---
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
@@ -277,7 +289,7 @@ func _find_unemployed_npcs(profession: NPC.Profession, limit: int) -> Array[NPC]
 		if found_npcs.size() >= limit:
 			break 
 
-		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO]
+		var is_available = npc.current_state in [NPC.State.DESEMPREGADO, NPC.State.OCIOSO, NPC.State.PASSEANDO, NPC.State.DESABRIGADO, NPC.State.EM_CASA]
 		
 		if is_instance_valid(npc) and is_available and npc.profession == profession:
 			found_npcs.append(npc)
@@ -310,12 +322,12 @@ func _debug_print_all_npc_status(origem_da_chamada: String):
 	print("==============================================================")
 
 func _find_homeless_npcs() -> Array[NPC]:
-	var found_npcs: Array[NPC] = []
+	var homeless: Array[NPC] = []
 	for npc in all_npcs:
+		# Um NPC é considerado desabrigado se for válido e seu estado for DESABRIGADO
 		if is_instance_valid(npc) and npc.current_state == NPC.State.DESABRIGADO:
-			found_npcs.append(npc)
-	print("Encontrados %d NPCs desabrigados." % found_npcs.size())
-	return found_npcs
+			homeless.append(npc)
+	return homeless
 
 func _on_vacancy_opened(profession: NPC.Profession):
 	print("[Quilombo Manager] Vaga aberta para a profissão: %s" % NPC.Profession.keys()[profession])

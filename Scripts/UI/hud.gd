@@ -137,7 +137,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
 				var build_pos = placement_preview.global_position
-				QuilomboManager.build_structure(scene_to_place, build_pos)
+				
+				if scene_to_place == HouseScene:
+					QuilomboManager.build_house(scene_to_place, build_pos)
+				else:
+					QuilomboManager.build_structure(scene_to_place, build_pos)
+				
 				_exit_placement_mode()
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			_exit_placement_mode()
