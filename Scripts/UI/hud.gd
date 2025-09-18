@@ -54,10 +54,10 @@ var build_buttons: Dictionary = {}
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
 
-@onready var button_inventory = $MainContainer/ButtonsPanel2/SectionsPanel/ButtonOptions/InventoryButton
-@onready var inventory_button_icon = $MainContainer/ButtonsPanel2/SectionsPanel/ButtonOptions/InventoryButton/TextureRect
-@onready var button_inventorys = $MainContainer/ButtonsPanel2/SectionsPanel/ButtonInventoryOptions
-@onready var list_container = $MainContainer/ButtonsPanel2/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var dialog_screen = $DialogScreen
 
