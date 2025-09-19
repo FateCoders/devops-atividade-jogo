@@ -26,6 +26,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if GameManager.is_camera_paused:
+		return
+
 	# A lógica de zoom e arraste com o mouse permanece a mesma
 	if event is InputEventMouseButton:
 		if event.is_pressed():
@@ -46,6 +49,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # --- FUNÇÃO _PROCESS CORRIGIDA ---
 func _process(delta: float) -> void:
+	if GameManager.is_camera_paused:
+		return
+
 	# Movimento com teclado
 	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	position += direction * pan_speed * delta

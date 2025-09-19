@@ -1,10 +1,13 @@
 # NPCAssignmentRow.gd
+class_name NPCAssignmentRow
+
 extends HBoxContainer
 
 # Guardamos uma referência ao NPC que esta "ficha" representa.
 var npc_ref: NPC
 
 # Variáveis dos nós, declaradas mas ainda não atribuídas.
+@onready var texture_rect: TextureRect = $TextureRect
 @onready var label: Label = $VBoxContainer/Label
 @onready var option_button: OptionButton = $VBoxContainer/OptionButton
 
@@ -30,13 +33,17 @@ func setup(npc: NPC, index: int):
 	self.npc_ref = npc
 	if is_instance_valid(label):
 		label.text = "Recém-chegado %d" % (index + 1)
+		
+	if is_instance_valid(texture_rect) and is_instance_valid(npc_ref):
+		texture_rect.texture = npc_ref.get_idle_sprite_texture()
+		texture_rect.expand_mode = TextureRect.EXPAND_FIT_HEIGHT
+		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
-# Função para a tela principal pegar a escolha do jogador
 func get_selected_profession() -> NPC.Profession:
-	# Pega o índice do item selecionado no dropdown (0, 1, 2...).
 	var selected_index = option_button.selected
-	
-	# Converte o índice do botão para o valor correto da enum.
-	# Como pulamos "NENHUMA" (valor 0), o primeiro item do botão (índice 0)
-	# corresponde à profissão de valor 1 (ENFERMEIRO), e assim por diante.
 	return selected_index + 1
+
+func set_selected_profession(profession_id: NPC.Profession):
+	var button_index = profession_id - 1
+	if button_index >= 0 and button_index < option_button.item_count:
+		option_button.select(button_index)

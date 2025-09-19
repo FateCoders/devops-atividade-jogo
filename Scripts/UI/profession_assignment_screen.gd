@@ -3,30 +3,23 @@ extends PanelContainer
 
 @export var npc_row_scene: PackedScene
 
-# --- NOVAS VARIÁVEIS PARA GERENCIAR A PAGINAÇÃO ---
 var all_npcs: Array[NPC] = []
 var current_index: int = 0
 # Dicionário para guardar as escolhas: {npc_ref: profession_id}
 var npc_choices: Dictionary = {}
-# ---------------------------------------------------
 
 @onready var npc_list_container: VBoxContainer = $VBoxContainer/NPCListContainer
-@onready var confirm_button: Button = $VBoxContainer/Button
-# --- NOVAS REFERÊNCIAS AOS NÓS DA UI ---
-@onready var anterior_button: Button = $VBoxContainer/HBoxContainer/AnteriorButton
-@onready var proximo_button: Button = $VBoxContainer/HBoxContainer/ProximoButton
+@onready var confirm_button: styledButton = $VBoxContainer/Button
+@onready var anterior_button: styledButton = $VBoxContainer/HBoxContainer/AnteriorButton
+@onready var proximo_button: styledButton = $VBoxContainer/HBoxContainer/ProximoButton
 @onready var counter_label: Label = $VBoxContainer/HBoxContainer/CounterLabel
-# ----------------------------------------
 
 func _ready():
 	confirm_button.pressed.connect(_on_confirm_button_pressed)
-	# --- CONECTAR SINAIS DOS NOVOS BOTÕES ---
 	anterior_button.pressed.connect(_on_anterior_button_pressed)
 	proximo_button.pressed.connect(_on_proximo_button_pressed)
-	# -----------------------------------------
 
 func show_panel(npcs: Array):
-	# Guarda a lista de NPCs e reseta o estado
 	self.all_npcs = npcs
 	self.current_index = 0
 	self.npc_choices.clear()
@@ -40,6 +33,7 @@ func show_panel(npcs: Array):
 
 	self.show()
 	GameManager.pause_game()
+	GameManager.pause_camera()
 
 # Função central que atualiza qual NPC é mostrado
 func _update_view():
@@ -107,3 +101,4 @@ func _on_confirm_button_pressed():
 
 	self.hide()
 	GameManager.resume_game()
+	GameManager.resume_camera()

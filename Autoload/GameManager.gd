@@ -11,6 +11,7 @@ signal victory_achieved
 signal game_over(reason)
 
 var _is_game_over: bool = false # Para evitar que o fim de jogo seja chamado várias vezes
+var is_camera_paused: bool = false
 
 # ADICIONADO: Variáveis para controlar o estado do tutorial
 var tutorial_active: bool = true
@@ -179,6 +180,12 @@ func pause_game():
 
 func resume_game():
 	get_tree().paused = false
+
+func pause_camera():
+	is_camera_paused = true
+
+func resume_camera():
+	is_camera_paused = false
 
 func toggle_pause():
 	if get_tree().paused and not _is_game_over:

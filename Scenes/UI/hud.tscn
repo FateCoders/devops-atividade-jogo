@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=52 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -34,6 +34,7 @@
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
 [ext_resource type="PackedScene" uid="uid://boh7y5cx37ols" path="res://Scenes/UI/dialog.tscn" id="32_f1jpe"]
 [ext_resource type="Script" uid="uid://gndv8vb6nf0d" path="res://Scripts/UI/profession_assignment_screen.gd" id="33_mgdch"]
+[ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="34_jxctp"]
 [ext_resource type="PackedScene" uid="uid://cat5yr3hnnewl" path="res://Scenes/UI/NPCAssignmentRow.tscn" id="34_k32gu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qdh5o"]
@@ -98,6 +99,17 @@ content_margin_top = 100.0
 [sub_resource type="LabelSettings" id="LabelSettings_f1jpe"]
 font = ExtResource("31_q8e8b")
 font_size = 40
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q71jo"]
+texture = ExtResource("34_jxctp")
+texture_margin_left = 30.0
+texture_margin_top = 30.0
+texture_margin_right = 30.0
+texture_margin_bottom = 30.0
+expand_margin_left = 30.0
+expand_margin_top = 30.0
+expand_margin_right = 30.0
+expand_margin_bottom = 30.0
 
 [node name="Hud" type="PanelContainer"]
 anchors_preset = 15
@@ -568,47 +580,62 @@ layout_direction = 2
 layout_mode = 2
 
 [node name="DialogScreen" parent="." instance=ExtResource("32_f1jpe")]
+visible = false
 layout_mode = 2
 
 [node name="ProfessionAssignmentScreen" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(400, 300)
+visible = false
+custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_q71jo")
 script = ExtResource("33_mgdch")
 npc_row_scene = ExtResource("34_k32gu")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen"]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 10
 
 [node name="Label" type="Label" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2
-text = "Atribuir Profissões aos Recém-Chegados"
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_font_sizes/font_size = 18
+text = "Atribuir Profissões aos 
+Recém-Chegados"
 horizontal_alignment = 1
 
 [node name="NPCListContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="AnteriorButton" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
+[node name="AnteriorButton" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
-text = "Anterior"
+button_text = "Anterior"
+button_icon = null
 
 [node name="CounterLabel" type="Label" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
 
-[node name="ProximoButton" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
+[node name="ProximoButton" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
-text = "Próximo"
+button_text = "Próximo"
+button_icon = null
 
-[node name="Button" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer"]
+[node name="Button" parent="ProfessionAssignmentScreen/VBoxContainer" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
-text = "Confirmar"
+size_flags_horizontal = 4
+button_text = "Confirmar"
+button_icon = null
 
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

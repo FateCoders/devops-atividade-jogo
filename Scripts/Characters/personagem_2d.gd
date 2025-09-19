@@ -562,3 +562,14 @@ func set_profession(new_profession: Profession):
 	print("'%s' agora tem a profissão de %s." % [name, Profession.keys()[profession]])
 	QuilomboManager.find_work_for_npc(self)
 	QuilomboManager._debug_print_all_npc_status("Após Atribuir Profissão")
+
+func get_idle_sprite_texture() -> Texture2D:
+	if not is_instance_valid(animated_sprite):
+		return null
+
+	var sprite_frames = animated_sprite.sprite_frames
+	var anim_name = "idle"
+
+	if sprite_frames.has_animation(anim_name) and sprite_frames.get_frame_count(anim_name) > 0:
+		return sprite_frames.get_frame_texture(anim_name, 0)
+	return null
