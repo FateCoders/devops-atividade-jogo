@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=50 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -571,7 +571,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ProfessionAssignmentScreen" type="PanelContainer" parent="."]
-visible = false
 custom_minimum_size = Vector2(400, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -588,12 +587,24 @@ layout_mode = 2
 text = "Atribuir Profissões aos Recém-Chegados"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
+[node name="NPCListContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NPCListContainer" type="VBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="AnteriorButton" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Anterior"
+
+[node name="CounterLabel" type="Label" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="ProximoButton" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Próximo"
 
 [node name="Button" type="Button" parent="ProfessionAssignmentScreen/VBoxContainer"]
 layout_mode = 2

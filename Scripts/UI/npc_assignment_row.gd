@@ -5,8 +5,8 @@ extends HBoxContainer
 var npc_ref: NPC
 
 # Variáveis dos nós, declaradas mas ainda não atribuídas.
-@onready var label: Label = $Label
-@onready var option_button: OptionButton = $OptionButton
+@onready var label: Label = $VBoxContainer/Label
+@onready var option_button: OptionButton = $VBoxContainer/OptionButton
 
 func _ready():
 	# Atribuição Manual: Pegamos os nós diretamente.
