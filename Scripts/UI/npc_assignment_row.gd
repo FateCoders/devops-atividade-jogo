@@ -32,7 +32,7 @@ func _ready():
 func setup(npc: NPC, index: int):
 	self.npc_ref = npc
 	if is_instance_valid(label):
-		label.text = "Recém-chegado %d" % (index + 1)
+		label.text = "Nome: " + npc.npc_name
 		
 	if is_instance_valid(texture_rect) and is_instance_valid(npc_ref):
 		texture_rect.texture = npc_ref.get_idle_sprite_texture()

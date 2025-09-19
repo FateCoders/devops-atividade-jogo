@@ -180,7 +180,8 @@ func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 	for i in amount_to_spawn:
 		var random_npc_scene = npc_scenes.pick_random()
 		var npc = random_npc_scene.instantiate()
-		
+		npc.npc_name = NameGenerator.get_random_name()
+
 		y_sort_layer.add_child(npc)
 		
 		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
@@ -256,6 +257,7 @@ func spawn_new_fugitives(amount: int):
 	for i in amount:
 		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
 		var npc = random_npc_scene.instantiate()
+		npc.npc_name = NameGenerator.get_random_name()
 		y_sort_layer.add_child(npc)
 		
 		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)

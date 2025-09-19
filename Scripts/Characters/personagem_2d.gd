@@ -33,6 +33,7 @@ enum Profession {
 }
 
 @export_category("Comportamento Geral")
+@export var npc_name: String = "Morador"
 @export var profession: Profession = Profession.NENHUMA 
 @export var move_speed: float = 200.0
 @export var wander_range: float = 200.0
@@ -459,7 +460,7 @@ func _on_area_2d_mouse_entered():
 	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
 		return
 		
-	status_bubble.update_status(current_state)
+	status_bubble.update_status(self)
 	
 	if interaction_cursor:
 		Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
