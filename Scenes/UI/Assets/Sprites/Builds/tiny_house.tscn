@@ -1,15 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://bcsjw0emawgsl"]
+[gd_scene load_steps=8 format=3 uid="uid://bcsjw0emawgsl"]
 
 [ext_resource type="Script" uid="uid://ca6qrfx8pdmdh" path="res://Scripts/Builds/house.gd" id="1_8dv00"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="1_f6tn5"]
+[ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="3_otsq3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(450.25183, 390.30707)
+size = Vector2(450.25183, 438.15363)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(230.45435, 259.7605)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_viahb"]
+size = Vector2(570, 696)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1u4yw"]
+size = Vector2(222.04039, 267.6893)
 
 [node name="TinyHouse" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
@@ -34,20 +38,40 @@ texture = ExtResource("1_f6tn5")
 region_enabled = true
 region_rect = Rect2(19.562931, 390.08896, 440.77304, 249.96585)
 
-[node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-6.6605473, 247.10558)
+[node name="CollisionShape2d" type="CollisionShape2D" parent="."]
+position = Vector2(-2.0000005, 226.07674)
 scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_m5062")
 
-[node name="ZonaDeEntrada" type="Area2D" parent="."]
-position = Vector2(-5.32842, 704.684)
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-12.999992, 122.999985)
+shape = SubResource("RectangleShape2D_viahb")
+debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
+[node name="EntranceArea" type="Area2D" parent="."]
+position = Vector2(197.24475, -60.381046)
 collision_mask = 2
 
-[node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-3.3302584, -362.99844)
-scale = Vector2(0.99999934, 0.99999934)
-shape = SubResource("RectangleShape2D_otsq3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
+position = Vector2(-205.24475, 410.38104)
+shape = SubResource("RectangleShape2D_1u4yw")
+
+[node name="DoorPosition" type="Marker2D" parent="."]
+position = Vector2(-155.64891, 308.61426)
+gizmo_extents = 48.5
+
+[node name="buildingStatusBubble" parent="." instance=ExtResource("3_otsq3")]
+offset_left = 103.0
+offset_top = 223.0
+offset_right = 103.0
+offset_bottom = 223.0
+metadata/_edit_use_anchors_ = true
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+vertices = PackedVector2Array(-87, 442, -224, 440, -225, 189, -251, 193, -251, -6, 235, -11, 234, 193, 215, 193, 214, 446, 69, 442, 65, 229, -84, 229)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
-[connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
+[connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

@@ -147,7 +147,7 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BuildSmallHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildTinyHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa"
 button_icon = ExtResource("5_yxyk2")

@@ -42,10 +42,6 @@ z_as_relative = false
 position = Vector2(-3.199103e-06, 92.598114)
 shape = SubResource("RectangleShape2D_dc8wa")
 
-[node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-155.64891, 308.61426)
-gizmo_extents = 48.5
-
 [node name="EntranceArea" type="Area2D" parent="."]
 position = Vector2(197.24475, -60.381046)
 collision_mask = 2
@@ -53,13 +49,6 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntranceArea"]
 position = Vector2(-355.57727, 253.93582)
 shape = SubResource("RectangleShape2D_7sg2r")
-
-[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
-z_index = 3
-y_sort_enabled = true
-position = Vector2(20.127016, -18.785215)
-radius = 300.0
-vertices = PackedVector2Array(322.03226, 277.7528, -63.06465, 292.51263, -61.722847, 83.191666, -291.17084, 80.508064, -288.4872, 292.51263, -401.19852, 292.51263, -409.24933, -155.64893, 370.3371, -158.33252, 379.7297, 49.646637)
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
@@ -73,6 +62,17 @@ offset_left = 181.143
 offset_top = 226.764
 offset_right = 181.143
 offset_bottom = 226.764
+
+[node name="DoorPosition" type="Marker2D" parent="."]
+position = Vector2(-155.64891, 308.61426)
+gizmo_extents = 48.5
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+z_index = 3
+y_sort_enabled = true
+position = Vector2(20.127016, -18.785215)
+radius = 300.0
+vertices = PackedVector2Array(322.03226, 277.7528, -63.06465, 292.51263, -61.722847, 83.191666, -291.17084, 80.508064, -288.4872, 292.51263, -401.19852, 292.51263, -409.24933, -155.64893, 370.3371, -158.33252, 379.7297, 49.646637)
 
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
 [connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]

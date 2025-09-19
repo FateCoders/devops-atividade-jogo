@@ -7,6 +7,7 @@ signal placement_preview_ended()
 
 const PlantationScene = preload("res://Scenes/UI/Assets/Sprites/Builds/plowed.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")
+const TinyHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tiny_house.tscn")
 const HidingPlaceScene = preload("res://Scenes/UI/Assets/Sprites/Builds/hiding_place.tscn")
 const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.tscn")
 const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
@@ -92,6 +93,7 @@ func _ready():
 	var button_scene_map = {
 		"BuildLeadersHouseButton": LeadersHouseScene,
 		"BuildHouseButton": HouseScene,
+		"BuildTinyHouseButton": TinyHouseScene,
 		"BuildHidingPlaceButton": HidingPlaceScene,
 		"BuildPlantetionButton": PlantationScene,
 		"BuildInfirmaryButton": InfirmaryScene,
@@ -247,6 +249,7 @@ func _on_any_build_button_pressed(scene: PackedScene):
 		return
 
 	var temp_instance = scene.instantiate()
+	print(temp_instance)
 	var max_allowed = temp_instance.get("max_instances")
 	if max_allowed != null and max_allowed > 0:
 		var current_count = QuilomboManager.get_build_count_for_type(scene.resource_path)
