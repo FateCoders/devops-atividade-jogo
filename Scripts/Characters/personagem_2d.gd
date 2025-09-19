@@ -34,7 +34,7 @@ enum Profession {
 
 @export_category("Comportamento Geral")
 @export var profession: Profession = Profession.NENHUMA 
-@export var move_speed: float = 160.0
+@export var move_speed: float = 200.0
 @export var wander_range: float = 200.0
 
 @export_category("Dança")

@@ -1,13 +1,21 @@
-[gd_scene load_steps=16 format=4 uid="uid://dta2iaiuf8luc"]
+[gd_scene load_steps=24 format=4 uid="uid://dta2iaiuf8luc"]
 
 [ext_resource type="Texture2D" uid="uid://bnfj1tkcmlrgo" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-bottom.png" id="1_53kwo"]
 [ext_resource type="Script" uid="uid://qdc18urqj28g" path="res://Scripts/Builds/plantation.gd" id="1_lsrhn"]
+[ext_resource type="PackedScene" uid="uid://bx5sd7qqtkm6h" path="res://Scenes/Characters/citizen_01.tscn" id="2_kvf88"]
 [ext_resource type="Texture2D" uid="uid://uscwdtyvadny" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-flat.png" id="2_lsrhn"]
 [ext_resource type="PackedScene" uid="uid://x5cw57i6q22r" path="res://Scenes/Characters/citizen_04.tscn" id="2_sbkyb"]
+[ext_resource type="PackedScene" uid="uid://748hyj07y8rd" path="res://Scenes/Characters/citizen_02.tscn" id="3_ajpgc"]
 [ext_resource type="Texture2D" uid="uid://roigj5x5uwxd" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-top.png" id="3_sbkyb"]
+[ext_resource type="PackedScene" uid="uid://c6jpfnor7etw6" path="res://Scenes/Characters/citizen_03.tscn" id="4_f1ko0"]
 [ext_resource type="Texture2D" uid="uid://cwltm6us64w0v" path="res://Assets/Sprites/Exported/Plantation/sugar_cane.png" id="4_msv76"]
 [ext_resource type="Texture2D" uid="uid://yfr1o32o47ps" path="res://Assets/Sprites/Exported/Plantation/cassava.png" id="5_wey6k"]
+[ext_resource type="PackedScene" uid="uid://c20c71vq4h2ik" path="res://Scenes/Characters/citizen_05.tscn" id="6_fn2g2"]
+[ext_resource type="PackedScene" uid="uid://b60nxbwb1jqnk" path="res://Scenes/Characters/citizen_06.tscn" id="7_ehiws"]
+[ext_resource type="PackedScene" uid="uid://dpf2yyepe8oxn" path="res://Scenes/Characters/citizen_07.tscn" id="8_0e4sn"]
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="8_msv76"]
+[ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="9_dkka0"]
+[ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="10_pq0iv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x3nle"]
 texture = ExtResource("1_53kwo")
@@ -114,7 +122,7 @@ size = Vector2(729, 535)
 
 [node name="Plowed" type="Node2D"]
 script = ExtResource("1_lsrhn")
-npc_scene_to_spawn = ExtResource("2_sbkyb")
+possible_npc_scenes = Array[PackedScene]([ExtResource("2_kvf88"), ExtResource("3_ajpgc"), ExtResource("4_f1ko0"), ExtResource("2_sbkyb"), ExtResource("6_fn2g2"), ExtResource("7_ehiws"), ExtResource("8_0e4sn"), ExtResource("9_dkka0"), ExtResource("10_pq0iv")])
 
 [node name="Sprite2D" type="TileMapLayer" parent="."]
 position = Vector2(4, -2)
@@ -122,6 +130,7 @@ tile_map_data = PackedByteArray("AAD8/wIAAAAAAAAAAAAGAAIAAAAAAAAAAAD8//n/AQAAAAA
 tile_set = SubResource("TileSet_p6app")
 
 [node name="Sprite2D2" type="TileMapLayer" parent="."]
+z_index = -1
 position = Vector2(4, -2)
 tile_map_data = PackedByteArray("AAD8/wIAAAAAAAAAAAD8//n/AQAAAAAAAAD8/+//AgAAAAAAAAD9////AwAAAAAAAAD8//T/AwAAAAAAAAD8/+7/AwAAAAAAAAAGAP//AwAAAAAAAAAGAPn/AQAAAAAAAAAGAPb/AwAAAAAAAAAGAO//AgAAAAAAAAAGAO7/AwAAAAAAAAAPAP//BAAAAAAAAAAZAP//BAAAAAAAAAAQAPf/BAAAAAAAAAAZAPf/BAAAAAAAAAAZAPD/BAAAAAAAAAAPAO//BAAAAAAAAAA=")
 tile_set = SubResource("TileSet_p6app")

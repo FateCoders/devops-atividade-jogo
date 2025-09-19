@@ -109,6 +109,9 @@ world_limits = Rect2(-1000, -700, 5500, 3000)
 position = Vector2(-1, 1)
 script = ExtResource("11_0ph6x")
 
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Hud" parent="HUD" groups=["hud_main"] instance=ExtResource("11_pvt60")]

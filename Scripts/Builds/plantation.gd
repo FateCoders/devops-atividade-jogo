@@ -7,7 +7,7 @@ signal vacancy_opened(profession: NPC.Profession)
 @export var required_profession: NPC.Profession = NPC.Profession.AGRICULTOR
 @export var max_instances: int = 5
 
-@export var npc_scene_to_spawn: PackedScene
+@export var possible_npc_scenes: Array[PackedScene]
 @export var npc_count: int = 2
 
 @export_category("Horário de Trabalho")

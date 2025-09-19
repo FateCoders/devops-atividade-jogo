@@ -74,9 +74,14 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	if build_cost:
 		StatusManager.spend_resources(build_cost)
 	temp_instance.queue_free()
+	
+	var y_sort_layer = get_tree().current_scene.find_child("YSortLayer")
+	if not is_instance_valid(y_sort_layer):
+		printerr("ERRO: Nó 'YSortLayer' não encontrado!")
+		return
 
 	var new_structure = structure_scene.instantiate()
-	get_tree().current_scene.add_child(new_structure)
+	y_sort_layer.add_child(new_structure)
 	new_structure.global_position = build_position
 	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
 	
@@ -108,9 +113,14 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	if not house_scene:
 		printerr("Tentativa de construir casa sem cena válida!")
 		return
+		
+	var y_sort_layer = get_tree().current_scene.find_child("YSortLayer")
+	if not is_instance_valid(y_sort_layer):
+		printerr("ERRO: Nó 'YSortLayer' não encontrado!")
+		return
 
 	var new_house = house_scene.instantiate()
-	get_tree().current_scene.add_child(new_house)
+	y_sort_layer.add_child(new_house)
 	new_house.global_position = build_position
 	print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
 
@@ -142,34 +152,43 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	print("[DEBUG] Fim do processo de alocação.\n")
 
 # --- NPCs ---
+# Em QuilomboManager.gd
+
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 	print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
 
-	var npc_scene = workplace_node.npc_scene_to_spawn
-	if not npc_scene:
-		printerr("--> ERRO: '%s' deveria gerar NPCs, mas a cena do NPC não foi definida!" % workplace_node.name)
+	var npc_scenes = workplace_node.get("possible_npc_scenes")
+
+	if not npc_scenes or npc_scenes.is_empty():
+		printerr("--> ERRO: '%s' deveria gerar NPCs, mas a lista 'possible_npc_scenes' não foi definida ou está vazia!" % workplace_node.name)
 		return
 
 	var current_scene = get_tree().current_scene
+	
+	var y_sort_layer = current_scene.find_child("YSortLayer")
+	if not is_instance_valid(y_sort_layer):
+		printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
+		y_sort_layer = current_scene
+	
 	var nav_map = get_tree().root.get_world_2d().navigation_map
 	
 	var base_spawn_pos = workplace_node.global_position + Vector2(0, 65)
 	
-	# A lógica de formação agora usa 'amount_to_spawn'
 	var total_formation_width = (amount_to_spawn - 1) * NPC_SPAWN_SPACING
 	var start_offset_x = -total_formation_width / 2.0
 	
-	# O laço 'for' agora usa 'amount_to_spawn'
 	for i in amount_to_spawn:
-		var npc = npc_scene.instantiate()
-		current_scene.add_child(npc)
+		var random_npc_scene = npc_scenes.pick_random()
+		var npc = random_npc_scene.instantiate()
+		
+		y_sort_layer.add_child(npc)
 		
 		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
 		var desired_pos = base_spawn_pos + Vector2(current_offset_x, 0)
 		
 		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, desired_pos)
 		npc.global_position = safe_pos
-		print("--> Novo NPC #%d gerado em %s" % [i + 1, safe_pos])
+		print("--> Novo NPC #%d (usando '%s') gerado em %s" % [i + 1, random_npc_scene.resource_path.get_file(), safe_pos])
 
 		npc.work_node = workplace_node
 
@@ -224,15 +243,20 @@ func spawn_new_fugitives(amount: int):
 	var new_fugitives: Array[NPC] = []
 
 	var current_scene = get_tree().current_scene
-	var arrival_point = Vector2(0, 200) 
 	
+	var y_sort_layer = current_scene.find_child("YSortLayer")
+	if not is_instance_valid(y_sort_layer):
+		printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
+		y_sort_layer = current_scene
+	
+	var arrival_point = Vector2(0, 200) 
 	var total_formation_width = (amount - 1) * NPC_SPAWN_SPACING
 	var start_offset_x = -total_formation_width / 2.0
 
 	for i in amount:
 		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
 		var npc = random_npc_scene.instantiate()
-		current_scene.add_child(npc)
+		y_sort_layer.add_child(npc)
 		
 		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
 		var spawn_pos = arrival_point + Vector2(current_offset_x, 0)
