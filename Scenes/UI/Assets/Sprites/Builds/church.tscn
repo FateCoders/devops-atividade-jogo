@@ -1,29 +1,37 @@
-[gd_scene load_steps=9 format=3 uid="uid://tuggivakc5ta"]
+[gd_scene load_steps=17 format=3 uid="uid://tuggivakc5ta"]
 
 [ext_resource type="Script" uid="uid://ccmaxq5us7qps" path="res://Scripts/Builds/church.gd" id="1_mpu7n"]
 [ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="2_khm82"]
+[ext_resource type="PackedScene" uid="uid://bx5sd7qqtkm6h" path="res://Scenes/Characters/citizen_01.tscn" id="2_ylega"]
+[ext_resource type="PackedScene" uid="uid://748hyj07y8rd" path="res://Scenes/Characters/citizen_02.tscn" id="3_62n5i"]
 [ext_resource type="Texture2D" uid="uid://d3bmhcbpjocve" path="res://Assets/Sprites/Exported/Buildings/church.png" id="3_khm82"]
+[ext_resource type="PackedScene" uid="uid://c6jpfnor7etw6" path="res://Scenes/Characters/citizen_03.tscn" id="4_g5ly8"]
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="4_khm82"]
+[ext_resource type="PackedScene" uid="uid://x5cw57i6q22r" path="res://Scenes/Characters/citizen_04.tscn" id="5_d83im"]
+[ext_resource type="PackedScene" uid="uid://c20c71vq4h2ik" path="res://Scenes/Characters/citizen_05.tscn" id="6_n5o80"]
+[ext_resource type="PackedScene" uid="uid://b60nxbwb1jqnk" path="res://Scenes/Characters/citizen_06.tscn" id="7_pdh31"]
+[ext_resource type="PackedScene" uid="uid://dpf2yyepe8oxn" path="res://Scenes/Characters/citizen_07.tscn" id="8_ct3db"]
+[ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="10_tppwy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(464.905, 379.65036)
+size = Vector2(479.50024, 384.2307)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(382, 295.39688)
+size = Vector2(399.50006, 287.33606)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mlfhm"]
-size = Vector2(550.1598, 684.7025)
+size = Vector2(519.5001, 654.5001)
 
 [node name="Church" type="StaticBody2D"]
+position = Vector2(0, -859)
 scale = Vector2(2, 2)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_mpu7n")
-npc_scene_to_spawn = ExtResource("2_khm82")
+possible_npc_scenes = Array[PackedScene]([ExtResource("2_ylega"), ExtResource("3_62n5i"), ExtResource("4_g5ly8"), ExtResource("5_d83im"), ExtResource("6_n5o80"), ExtResource("7_pdh31"), ExtResource("8_ct3db"), ExtResource("2_khm82"), ExtResource("10_tppwy")])
 
 [node name="Sprite" type="Node2D" parent="."]
-position = Vector2(-9, -4)
 
 [node name="Top" type="Sprite2D" parent="Sprite"]
 z_index = 2
@@ -41,7 +49,7 @@ region_enabled = true
 region_rect = Rect2(9.2960205, 300.2702, 460.6062, 338.82263)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-7.3265553, 259.09457)
+position = Vector2(0.75000846, 261.38474)
 scale = Vector2(0.99999946, 0.99999946)
 shape = SubResource("RectangleShape2D_m5062")
 
@@ -50,7 +58,7 @@ position = Vector2(-5.32842, 704.684)
 collision_mask = 2
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-3.9963245, -374.32162)
+position = Vector2(5.078419, -378.35205)
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_otsq3")
 
@@ -63,7 +71,7 @@ gizmo_extents = 130.0
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-11.322882, 171.84158)
+position = Vector2(-0.75000143, 165.25003)
 scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_mlfhm")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)

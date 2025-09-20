@@ -12,6 +12,7 @@ signal victory_achieved
 signal game_over(reason)
 
 var _is_game_over: bool = false # Para evitar que o fim de jogo seja chamado várias vezes
+var is_camera_paused: bool = false
 
 # ADICIONADO: Variáveis para controlar o estado do tutorial
 var tutorial_active: bool = true
@@ -100,7 +101,7 @@ func _trigger_victory(victory_type: String = "survival"): # "survival" é o padr
 	_is_game_over = true
 	
 	print("VITÓRIA! O jogador venceu por: ", victory_type)
-	get_tree().paused = true
+	pause_game()
 	
 	if victory_screen_scene:
 		var victory_screen = victory_screen_scene.instantiate()
@@ -117,7 +118,7 @@ func trigger_defeat(reason: String):
 	_is_game_over = true
 	
 	print("DERROTA! Motivo: ", reason)
-	get_tree().paused = true
+	pause_game()
 	
 	if defeat_screen_scene:
 		var defeat_screen = defeat_screen_scene.instantiate()
@@ -179,3 +180,28 @@ func _update_all_buildings_functionality():
 	for building in buildings:
 		if building.has_method("update_functionality"):
 			building.update_functionality()
+func pause_game():
+	if not _is_game_over:
+		get_tree().paused = true
+
+func resume_game():
+	get_tree().paused = false
+
+func pause_camera():
+	is_camera_paused = true
+
+func resume_camera():
+	is_camera_paused = false
+
+func toggle_pause():
+	if get_tree().paused and not _is_game_over:
+		resume_game()
+	elif not get_tree().paused:
+		pause_game()
+
+func is_game_paused() -> bool:
+	return get_tree().paused
+
+func _unhandled_input(event: InputEvent):
+	if event.is_action_pressed("ui_cancel") and not hud_node.dialog_screen.visible:
+		toggle_pause()

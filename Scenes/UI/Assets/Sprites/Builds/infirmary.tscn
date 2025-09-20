@@ -1,29 +1,37 @@
-[gd_scene load_steps=9 format=3 uid="uid://tth4frm64f4e"]
+[gd_scene load_steps=17 format=3 uid="uid://tth4frm64f4e"]
 
 [ext_resource type="Script" uid="uid://c42e8h71ull5y" path="res://Scripts/Builds/infirmary.gd" id="1_ll14k"]
 [ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="2_7ix0y"]
+[ext_resource type="PackedScene" uid="uid://bx5sd7qqtkm6h" path="res://Scenes/Characters/citizen_01.tscn" id="2_iglc1"]
+[ext_resource type="PackedScene" uid="uid://748hyj07y8rd" path="res://Scenes/Characters/citizen_02.tscn" id="3_fu0fx"]
 [ext_resource type="Texture2D" uid="uid://dti7e8mi3qiho" path="res://Assets/Sprites/Exported/Buildings/infirmary.png" id="3_l1wna"]
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="4_l1wna"]
+[ext_resource type="PackedScene" uid="uid://c6jpfnor7etw6" path="res://Scenes/Characters/citizen_03.tscn" id="4_pbv06"]
+[ext_resource type="PackedScene" uid="uid://x5cw57i6q22r" path="res://Scenes/Characters/citizen_04.tscn" id="5_g8ixv"]
+[ext_resource type="PackedScene" uid="uid://c20c71vq4h2ik" path="res://Scenes/Characters/citizen_05.tscn" id="6_addcw"]
+[ext_resource type="PackedScene" uid="uid://b60nxbwb1jqnk" path="res://Scenes/Characters/citizen_06.tscn" id="7_udsbu"]
+[ext_resource type="PackedScene" uid="uid://dpf2yyepe8oxn" path="res://Scenes/Characters/citizen_07.tscn" id="8_uk6ac"]
+[ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="9_fb5ar"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1121, 443.591)
+size = Vector2(1121.6338, 443.5913)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(544.831, 196.821)
+size = Vector2(615.4337, 255.76434)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ix0y"]
-size = Vector2(1157.6, 884.518)
+size = Vector2(1194.8989, 907.1635)
 
 [node name="Infirmary" type="StaticBody2D"]
+position = Vector2(0, -406.99994)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_ll14k")
-npc_scene_to_spawn = ExtResource("2_7ix0y")
+possible_npc_scenes = Array[PackedScene]([ExtResource("2_iglc1"), ExtResource("3_fu0fx"), ExtResource("4_pbv06"), ExtResource("5_g8ixv"), ExtResource("6_addcw"), ExtResource("7_udsbu"), ExtResource("8_uk6ac"), ExtResource("9_fb5ar"), ExtResource("2_7ix0y")])
 
 [node name="Sprite" type="Node2D" parent="."]
-position = Vector2(-9, -4)
 
 [node name="Top" type="Sprite2D" parent="Sprite"]
 z_index = 2
@@ -43,14 +51,16 @@ region_enabled = true
 region_rect = Rect2(0, 229.326, 640.945, 254.221)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-8.5, 320.371)
+position = Vector2(3.271266e-05, 321.7032)
+scale = Vector2(0.9999991, 0.9999991)
 shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 position = Vector2(-5.32842, 704.684)
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(252.434, -250.27)
+position = Vector2(290.399, -261.09265)
+scale = Vector2(0.99999887, 0.99999887)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
@@ -60,7 +70,8 @@ gizmo_extents = 130.0
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-4.66234, 121.222)
+position = Vector2(13.987132, 132.54468)
+scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_7ix0y")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 
