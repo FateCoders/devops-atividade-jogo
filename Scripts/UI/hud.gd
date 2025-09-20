@@ -20,10 +20,21 @@ const STATUS_DATA = {
 	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
 	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
 	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.EM_CASA: {"text": "Dormindo...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
 
 	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
 	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
 	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESABRIGADO: {"text": "Desabrigado!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESEMPREGADO: {"text": "Sem local para trabalhar!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+}
+
+const WORKPLACE_NAMES = {
+	PlantationScene.resource_path: "Plantação",
+	InfirmaryScene.resource_path: "Enfermaria",
+	TrainingAreaScene.resource_path: "Área de Treinamento",
+	ChurchScene.resource_path: "Centro Espiritual",
+	LeadersHouseScene.resource_path: "Casa do Líder"
 }
 
 var is_in_placement_mode: bool = false
@@ -53,9 +64,9 @@ var currently_highlighted_npc: NPC = null
 @onready var relations_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
 
 @onready var status_panel = $MainContainer/HBoxContainer/StatusPanel
-@onready var build_button = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var build_button_icon = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_builds = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
+@onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
@@ -65,20 +76,20 @@ var currently_highlighted_npc: NPC = null
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
 
-@onready var button_inventory = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var inventory_button_icon = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_inventorys = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
-@onready var list_container = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
 
-@onready var npc_inspector_panel = $MainContainer/NPCInspectorPanel
-@onready var npc_sprite = $MainContainer/NPCInspectorPanel/HBoxContainer/NPCSprite
-@onready var npc_name_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCNameLabel
-@onready var npc_profession_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCProfessionLabel
-@onready var npc_workplace_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
-@onready var npc_state_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCStateLabel
+@onready var npc_inspector_panel = $MainContainer/HBoxContainer/NPCInspectorPanel
+@onready var npc_sprite = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/NPCSprite
+@onready var npc_name_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCNameLabel
+@onready var npc_profession_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCProfessionLabel
+@onready var npc_workplace_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
+@onready var npc_state_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/NPCStateLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -98,6 +109,7 @@ const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/nega
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
 
 var InventoryItemScene = preload("res://Scenes/UI/InventoryItem.tscn")
+var currently_inspected_npc: NPC = null
 
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
@@ -459,27 +471,17 @@ func _populate_inventory_list():
 
 func show_npc_inspector(npc_ref: NPC):
 	if not is_instance_valid(npc_ref):
-		npc_inspector_panel.hide()
+		hide_npc_inspector()
 		return
 
-	npc_sprite.texture = npc_ref.get_idle_sprite_texture()
-	npc_name_label.text = npc_ref.npc_name
-	
-	var profession_text = "Profissão: %s" % NPC.Profession.keys()[npc_ref.profession]
-	npc_profession_label.text = profession_text
-	
-	if is_instance_valid(npc_ref.work_node):
-		npc_workplace_label.text = "Trabalho: %s" % npc_ref.work_node.name
-	else:
-		npc_workplace_label.text = "Trabalho: Nenhum"
-	
-	var state_key = npc_ref.current_state
-	if STATUS_DATA.has(state_key):
-		var state_text = STATUS_DATA[state_key].text
-		npc_state_label.text = "Estado: %s" % state_text
-	else:
-		npc_state_label.text = "Estado: Desconhecido"
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
 
+	currently_inspected_npc = npc_ref
+	currently_inspected_npc.state_changed.connect(_on_inspected_npc_state_changed)
+
+	_update_npc_inspector_panel()
 	npc_inspector_panel.show()
 
 func report_npc_hover(npc: NPC):
@@ -512,15 +514,50 @@ func _on_close_button_pressed():
 	hide_npc_inspector()
 
 func hide_npc_inspector():
-	# 1. Esconde o painel
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
+	
+	currently_inspected_npc = null
+
 	if is_instance_valid(npc_inspector_panel):
 		npc_inspector_panel.hide()
 	
-	# 2. Limpa o highlight do NPC que estava sendo "hoverado"
-	#    Isso evita que o outline fique preso se o jogador fechar o painel com o mouse sobre o NPC
 	if is_instance_valid(currently_highlighted_npc):
 		currently_highlighted_npc.highlight_off()
 		currently_highlighted_npc = null
 	
-	# 3. Limpa a lista de candidatos ao hover
 	hover_candidates.clear()
+	
+func _on_inspected_npc_state_changed(npc_ref: NPC):
+	if npc_inspector_panel.visible and npc_ref == currently_inspected_npc:
+		print("HUD: Recebido update de estado de %s. Atualizando painel." % npc_ref.npc_name)
+		_update_npc_inspector_panel()
+
+func _update_npc_inspector_panel():
+	if not is_instance_valid(currently_inspected_npc):
+		hide_npc_inspector()
+		return
+
+	var npc_ref = currently_inspected_npc
+
+	npc_sprite.texture = npc_ref.get_idle_sprite_texture()
+	npc_name_label.text = npc_ref.npc_name
+	
+	var profession_key = npc_ref.profession
+	var profession_name = NPC.PROFESSION_NAMES.get(profession_key, "Desconhecida")
+	npc_profession_label.text = "Profissão: %s" % profession_name
+	
+	if is_instance_valid(npc_ref.work_node):
+		var workplace_path = npc_ref.work_node.scene_file_path
+		var workplace_name = WORKPLACE_NAMES.get(workplace_path, "Local Desconhecido")
+		npc_workplace_label.text = "Local de Trabalho: %s" % workplace_name
+	else:
+		npc_workplace_label.text = "Local de Trabalho: Desempregado"
+	
+	var state_key = npc_ref.current_state
+	if STATUS_DATA.has(state_key):
+		var state_text = STATUS_DATA[state_key].text
+		npc_state_label.text = "Estado: %s" % state_text
+	else:
+		npc_state_label.text = "Estado: Desconhecido"

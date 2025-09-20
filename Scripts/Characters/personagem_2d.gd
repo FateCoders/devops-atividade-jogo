@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name NPC
 
 signal npc_clicked(npc_ref: NPC)
+signal state_changed(npc_ref: NPC)
 
 #-----------------------------------------------------------------------------
 # CONSTANTES
@@ -33,6 +34,14 @@ enum Profession {
 	RELIGIOSO,
 	AGRICULTOR, 
 	GUERREIRO
+}
+
+const PROFESSION_NAMES = {
+	Profession.NENHUMA: "Desempregado",
+	Profession.ENFERMEIRO: "Enfermeiro(a)",
+	Profession.RELIGIOSO: "Líder Espiritual",
+	Profession.AGRICULTOR: "Agricultor(a)",
+	Profession.GUERREIRO: "Guerreiro(a)"
 }
 
 @export_category("Comportamento Geral")
@@ -298,6 +307,8 @@ func _change_state(new_state: State):
 
 	
 	current_state = new_state
+	
+	emit_signal("state_changed", self)
 
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()

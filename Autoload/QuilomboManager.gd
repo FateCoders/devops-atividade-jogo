@@ -160,6 +160,7 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 	print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
+	var required_profession = workplace_node.required_profession
 
 	var npc_scenes = workplace_node.get("possible_npc_scenes")
 
@@ -193,6 +194,8 @@ func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 		
 		var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, desired_pos)
 		npc.global_position = safe_pos
+		npc.profession = required_profession
+		
 		print("--> Novo NPC #%d (usando '%s') gerado em %s" % [i + 1, random_npc_scene.resource_path.get_file(), safe_pos])
 
 		npc.work_node = workplace_node
