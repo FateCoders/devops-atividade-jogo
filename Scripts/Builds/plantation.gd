@@ -2,6 +2,10 @@
 extends Node2D
 class_name Plantation
 
+enum ProductionType { ALIMENTOS, REMEDIOS }
+@export var production_type: ProductionType = ProductionType.ALIMENTOS
+@export var daily_yield: int = 10
+
 @export var max_instances: int = 5
 
 @export var npc_scene_to_spawn: PackedScene
@@ -23,17 +27,14 @@ var is_functional: bool = false
 
 var workers: Array[Node] = []
 var all_work_spots: Array[Marker2D] = []
-# ADICIONADO: Uma lista separada apenas para os locais que estão livres.
 var available_work_spots: Array[Marker2D] = []
 
 func _ready():
 	print("Plantação '%s' pronta." % self.name)
-	# Pega todos os work_spots da cena.
 	for child in get_children():
 		if child is Marker2D:
 			all_work_spots.append(child)
 	
-	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
 	available_work_spots = all_work_spots.duplicate()
 	
 	add_to_group("functional_buildings")
@@ -48,24 +49,44 @@ func update_functionality():
 		if not is_functional:
 			is_functional = true
 			print("Plantação '%s' agora está funcional." % name)
+		
+		_produce_resources()
 	else:
 		if is_functional:
 			is_functional = false
 			print("Plantação '%s' parou de funcionar por falta de ferramentas." % name)
 
-# MODIFICADO: Esta função agora "reserva" um local e o retorna.
 func claim_available_work_spot() -> Marker2D:
-	# Se não houver locais disponíveis, retorna nulo.
 	if available_work_spots.is_empty():
 		return null
 	
-	# Pega um local aleatório da lista de DISPONÍVEIS.
 	var spot = available_work_spots.pick_random()
-	# Remove o local escolhido da lista de disponíveis para que ninguém mais o pegue.
 	available_work_spots.erase(spot)
 	
 	print("Local '%s' foi reivindicado. Locais restantes: %d" % [spot.name, available_work_spots.size()])
+	
+	# A linha 'add_worker(1)' foi REMOVIDA.
+	
 	return spot
+	
+func _produce_resources():
+	if workers.is_empty():
+		return
+
+	var resource_to_produce: String
+	
+	match production_type:
+		ProductionType.ALIMENTOS:
+			resource_to_produce = "alimentos"
+		ProductionType.REMEDIOS:
+			resource_to_produce = "remedios"
+	
+	# A produção pode ser influenciada pelo número de trabalhadores.
+	# Exemplo: Produção = rendimento_diario * número_de_trabalhadores
+	var amount_produced = daily_yield * workers.size()
+	
+	StatusManager.mudar_status(resource_to_produce, amount_produced)
+	print("Plantação '%s' produziu %d de %s." % [name, amount_produced, resource_to_produce])
 
 # ADICIONADO: Uma função para que o NPC "devolva" o local quando terminar.
 func release_work_spot(spot: Marker2D):
@@ -73,8 +94,15 @@ func release_work_spot(spot: Marker2D):
 		available_work_spots.append(spot)
 		print("Local '%s' foi devolvido. Locais disponíveis: %d" % [spot.name, available_work_spots.size()])
 
-func add_worker(npc: Node):
-	workers.append(npc)
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' começou a trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc: NPC):
+	if workers.has(npc):
+		workers.erase(npc)
+		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
 
 func get_status_info() -> Dictionary:
 	var details_text = "Trabalhadores: %d/%d" % [workers.size(), npc_count]
@@ -86,7 +114,6 @@ func get_status_info() -> Dictionary:
 func _on_interaction_area_mouse_entered() -> void:
 	var info = get_status_info()
 	status_bubble.show_info(info)
-
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()

@@ -46,7 +46,15 @@ enum State {
 
 # Referências externas
 var house_node: House
-var work_node: Node
+var work_node: Node:
+	set(new_work_node):
+		if is_instance_valid(work_node) and work_node.has_method("remove_worker"):
+			work_node.remove_worker(self)
+			
+		work_node = new_work_node
+		
+		if is_instance_valid(work_node) and work_node.has_method("add_worker"):
+			work_node.add_worker(self)
 var assigned_work_spot: Marker2D = null
 var house: House = null  # Referência à casa atual do NPC
 
@@ -254,9 +262,8 @@ func _update_schedule():
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
-		if is_instance_valid(work_node) and is_instance_valid(assigned_work_spot):
-			work_node.release_work_spot(assigned_work_spot)
-			assigned_work_spot = null # Limpa a referência
+		if is_instance_valid(work_node) and work_node.has_method("remove_worker"):
+			work_node.remove_worker(self) # Garante a remoção
 		
 		_change_state(State.PASSEANDO)
 
