@@ -75,6 +75,8 @@ shape = SubResource("RectangleShape2D_udjy7")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
 [node name="StatusBubbleAnchor" parent="." instance=ExtResource("5_6cfxb")]
+visible = false
 
+[connection signal="input_event" from="InteractionArea" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

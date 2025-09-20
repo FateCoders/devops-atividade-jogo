@@ -1,15 +1,17 @@
-[gd_scene load_steps=52 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=56 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
 [ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_fqivn"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_mqf2c"]
+[ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="3_81d8i"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_fdl0h"]
 [ext_resource type="PackedScene" uid="uid://r2i6y2oouxw" path="res://Scenes/UI/styledButton.tscn" id="3_yxyk2"]
 [ext_resource type="Texture2D" uid="uid://cfmj1t3hau4wb" path="res://Assets/Sprites/Exported/Buildings/leadersHouse-icon.png" id="4_8c63k"]
 [ext_resource type="StyleBox" uid="uid://dvvr17qyjcmtl" path="res://Scenes/UI/Assets/Styles/progressbar_health.tres" id="4_8glcj"]
 [ext_resource type="Texture2D" uid="uid://dcjb6j6qseb04" path="res://Assets/Sprites/Exported/HUD/Cursors/build_cursor.png" id="4_qdh5o"]
 [ext_resource type="Texture2D" uid="uid://c4dic1nlkfwro" path="res://Assets/Sprites/Exported/Buildings/house02.png" id="5_f1jpe"]
+[ext_resource type="Texture2D" uid="uid://dvlx4ch8kvch4" path="res://Assets/Sprites/Exported/Buttons/close-button.png" id="5_njpji"]
 [ext_resource type="StyleBox" uid="uid://t580o606lwph" path="res://Scenes/UI/Assets/Styles/progressbar_hunger.tres" id="5_vsu76"]
 [ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="5_yxyk2"]
 [ext_resource type="Texture2D" uid="uid://bw7vh10c425ru" path="res://Assets/Sprites/Exported/Buildings/hiding_spot.png" id="6_mgdch"]
@@ -42,6 +44,16 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wae4w"]
+texture = ExtResource("2_fqivn")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_81d8i"]
+texture = ExtResource("5_njpji")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cna6x"]
 texture = ExtResource("2_fqivn")
@@ -111,7 +123,7 @@ expand_margin_top = 30.0
 expand_margin_right = 30.0
 expand_margin_bottom = 30.0
 
-[node name="Hud" type="PanelContainer"]
+[node name="Hud" type="PanelContainer" groups=["hud_main"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -126,105 +138,166 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qdh5o")
 script = ExtResource("1_sprlj")
 
-[node name="MainContainer" type="HBoxContainer" parent="."]
+[node name="MainContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="ButtonsPanel" type="PanelContainer" parent="MainContainer"]
+[node name="NPCInspectorPanel" type="PanelContainer" parent="MainContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_wae4w")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/NPCInspectorPanel"]
+layout_mode = 2
+
+[node name="NPCSprite" type="TextureRect" parent="MainContainer/NPCInspectorPanel/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("3_81d8i")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/NPCInspectorPanel/HBoxContainer"]
+layout_mode = 2
+
+[node name="NPCNameLabel" type="Label" parent="MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "aaaaaaaaa"
+
+[node name="NPCProfessionLabel" type="Label" parent="MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "aaaaaaaaa"
+
+[node name="NPCWorkplaceLabel" type="Label" parent="MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "aaaaaaaaa"
+
+[node name="NPCStateLabel" type="Label" parent="MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "aaaaaaaaa"
+
+[node name="Control" type="Control" parent="MainContainer/NPCInspectorPanel/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainContainer/NPCInspectorPanel/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_81d8i")
+
+[node name="Button" type="Button" parent="MainContainer/NPCInspectorPanel/HBoxContainer/PanelContainer"]
+layout_mode = 2
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="ButtonsPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
 
-[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/ButtonsPanel"]
+[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel"]
 layout_mode = 2
 
-[node name="ButtonInventoryOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonInventoryOptions" type="HBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
 layout_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer"]
 layout_mode = 2
 
-[node name="ButtonBuildsOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonBuildsOptions" type="HBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel"]
 visible = false
 layout_mode = 2
 
-[node name="Col1" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="Col1" type="HBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 layout_mode = 2
 
-[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1"]
+[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BuildSmallHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildSmallHouseButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa"
 button_icon = ExtResource("5_yxyk2")
 
-[node name="BuildHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildHouseButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa Grande"
 button_icon = ExtResource("5_f1jpe")
 
-[node name="BuildHidingPlaceButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildHidingPlaceButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Esconderijo"
 button_icon = ExtResource("6_mgdch")
 
-[node name="BuildLeadersHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildLeadersHouseButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa do Líder"
 button_icon = ExtResource("4_8c63k")
 
-[node name="Spacer" type="Control" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="Spacer" type="Control" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Col2" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="Col2" type="HBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 layout_mode = 2
 
-[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2"]
+[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BuildPlantetionButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildPlantetionButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Plantação"
 button_icon = ExtResource("7_0hfmd")
 
-[node name="BuildInfirmaryButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildInfirmaryButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Enfermaria"
 button_icon = ExtResource("9_q8e8b")
 
-[node name="BuildTrainingAreaButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildTrainingAreaButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Área de Treinamento"
 button_icon = ExtResource("9_iiebs")
 
-[node name="BuildChurchButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildChurchButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Centro Espiritual"
 button_icon = ExtResource("11_k32gu")
 
-[node name="Spacer2" type="Control" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="Spacer2" type="Control" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonOptions2" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonOptions2" type="VBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2"]
+[node name="InventoryButton" type="TextureButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions2"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -233,7 +306,7 @@ texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -249,12 +322,12 @@ texture = ExtResource("13_mgdch")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="BuildButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
+[node name="BuildButton" type="TextureButton" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -263,7 +336,7 @@ texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -279,26 +352,26 @@ texture = ExtResource("4_qdh5o")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="StatusPanel" type="PanelContainer" parent="MainContainer"]
+[node name="StatusPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_am52h")
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/StatusPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
+[node name="VBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="MoneyContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer"]
+[node name="MoneyContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="MoneyIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer"]
+[node name="MoneyIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -306,17 +379,17 @@ size_flags_vertical = 4
 texture = ExtResource("15_mu5ro")
 expand_mode = 5
 
-[node name="MoneyLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer"]
+[node name="MoneyLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer"]
 layout_mode = 2
 text = "Dinheiro"
 label_settings = SubResource("LabelSettings_vsu76")
 
-[node name="PopulationContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer"]
+[node name="PopulationContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="PopulationIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer"]
+[node name="PopulationIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer"]
 custom_minimum_size = Vector2(30, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -324,21 +397,21 @@ size_flags_vertical = 4
 texture = ExtResource("16_ragyo")
 expand_mode = 5
 
-[node name="PopulationLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer"]
+[node name="PopulationLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer"]
 layout_mode = 2
 text = "População"
 label_settings = SubResource("LabelSettings_vsu76")
 
-[node name="HealthContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
+[node name="HealthContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="HealthLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer"]
+[node name="HealthLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Saúde"
 label_settings = SubResource("LabelSettings_ux5h0")
 
-[node name="HealthIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer"]
+[node name="HealthIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer"]
 custom_minimum_size = Vector2(30, 23.5)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -346,12 +419,12 @@ size_flags_vertical = 4
 texture = ExtResource("15_n5w8m")
 expand_mode = 5
 
-[node name="Control" type="Control" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer"]
+[node name="Control" type="Control" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
+[node name="PreviewBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 4
@@ -368,7 +441,7 @@ theme_override_styles/fill = ExtResource("15_8c63k")
 value = 100.0
 show_percentage = false
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 4
@@ -384,16 +457,16 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_qff6j")
 theme_override_styles/fill = ExtResource("4_8glcj")
 value = 100.0
 
-[node name="HungerContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
+[node name="HungerContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="HungerLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer"]
+[node name="HungerLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Fome (Faminto)"
 label_settings = SubResource("LabelSettings_ux5h0")
 
-[node name="HungerIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer"]
+[node name="HungerIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -401,12 +474,12 @@ size_flags_vertical = 4
 texture = ExtResource("19_3omb4")
 expand_mode = 2
 
-[node name="Control" type="Control" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer"]
+[node name="Control" type="Control" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
+[node name="PreviewBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -421,7 +494,7 @@ theme_override_styles/fill = ExtResource("18_e17ao")
 value = 100.0
 show_percentage = false
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -435,16 +508,16 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_e17ao")
 theme_override_styles/fill = ExtResource("5_vsu76")
 value = 100.0
 
-[node name="SecurityContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
+[node name="SecurityContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="SecurityLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer"]
+[node name="SecurityLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Segurança"
 label_settings = SubResource("LabelSettings_ux5h0")
 
-[node name="HealthIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer"]
+[node name="HealthIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -452,12 +525,12 @@ size_flags_vertical = 4
 texture = ExtResource("24_yxyk2")
 expand_mode = 2
 
-[node name="Control" type="Control" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer"]
+[node name="Control" type="Control" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
+[node name="PreviewBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -471,7 +544,7 @@ theme_override_styles/background = ExtResource("15_qff6j")
 theme_override_styles/fill = ExtResource("20_0hfmd")
 show_percentage = false
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -484,16 +557,16 @@ theme_override_fonts/font = ExtResource("3_fdl0h")
 theme_override_styles/background = SubResource("StyleBoxEmpty_0hfmd")
 theme_override_styles/fill = ExtResource("6_mqf2c")
 
-[node name="RelationsContainer" type="HBoxContainer" parent="MainContainer/StatusPanel/VBoxContainer"]
+[node name="RelationsContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="RelationsLabel" type="Label" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer"]
+[node name="RelationsLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Relações"
 label_settings = SubResource("LabelSettings_ux5h0")
 
-[node name="RelationsIcon" type="TextureRect" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer"]
+[node name="RelationsIcon" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer"]
 custom_minimum_size = Vector2(30, 25.7)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -501,12 +574,12 @@ size_flags_vertical = 4
 texture = ExtResource("24_3omb4")
 expand_mode = 2
 
-[node name="Control" type="Control" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer"]
+[node name="Control" type="Control" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PreviewBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
+[node name="PreviewBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -520,7 +593,7 @@ theme_override_styles/background = ExtResource("15_qff6j")
 theme_override_styles/fill = ExtResource("22_pc4p0")
 show_percentage = false
 
-[node name="ProgressBar" type="ProgressBar" parent="MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
+[node name="ProgressBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -637,5 +710,6 @@ size_flags_horizontal = 4
 button_text = "Confirmar"
 button_icon = null
 
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton" to="." method="_on_inventory_button_pressed"]
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="MainContainer/NPCInspectorPanel/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton" to="." method="_on_inventory_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]

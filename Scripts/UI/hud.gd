@@ -12,39 +12,50 @@ const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.
 const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
 const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
-
 const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
-
 const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
+
+const STATUS_DATA = {
+	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+
+	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+}
 
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
 var notification_tween: Tween
 var build_buttons: Dictionary = {}
+var hover_candidates: Array[NPC] = []
+var currently_highlighted_npc: NPC = null
 
-@onready var health_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
-@onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
-@onready var security_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
-@onready var relations_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
+@onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
+@onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
+@onready var security_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
+@onready var relations_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
 
-@onready var money_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
-@onready var population_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
-@onready var hunger_label = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
+@onready var money_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
+@onready var population_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
+@onready var hunger_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
 
-@onready var health_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
-@onready var hunger_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
-@onready var security_preview_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
-@onready var relations_preview_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
+@onready var health_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
+@onready var hunger_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
+@onready var security_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
+@onready var relations_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
 
-@onready var health_icon = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
-@onready var hunger_icon = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
-@onready var relations_icon = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
+@onready var health_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
+@onready var hunger_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
+@onready var relations_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
 
-@onready var status_panel = $MainContainer/StatusPanel
-@onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
+@onready var status_panel = $MainContainer/HBoxContainer/StatusPanel
+@onready var build_button = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var build_button_icon = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_builds = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
@@ -54,13 +65,20 @@ var build_buttons: Dictionary = {}
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
 
-@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
-@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+@onready var button_inventory = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var inventory_button_icon = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_inventorys = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/HBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
+
+@onready var npc_inspector_panel = $MainContainer/NPCInspectorPanel
+@onready var npc_sprite = $MainContainer/NPCInspectorPanel/HBoxContainer/NPCSprite
+@onready var npc_name_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCNameLabel
+@onready var npc_profession_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCProfessionLabel
+@onready var npc_workplace_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
+@onready var npc_state_label = $MainContainer/NPCInspectorPanel/HBoxContainer/VBoxContainer/NPCStateLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -438,3 +456,71 @@ func _populate_inventory_list():
 			var item = InventoryItemScene.instantiate()
 			list_container.add_child(item)
 			item.set_data(resource_name, amount)
+
+func show_npc_inspector(npc_ref: NPC):
+	if not is_instance_valid(npc_ref):
+		npc_inspector_panel.hide()
+		return
+
+	npc_sprite.texture = npc_ref.get_idle_sprite_texture()
+	npc_name_label.text = npc_ref.npc_name
+	
+	var profession_text = "Profissão: %s" % NPC.Profession.keys()[npc_ref.profession]
+	npc_profession_label.text = profession_text
+	
+	if is_instance_valid(npc_ref.work_node):
+		npc_workplace_label.text = "Trabalho: %s" % npc_ref.work_node.name
+	else:
+		npc_workplace_label.text = "Trabalho: Nenhum"
+	
+	var state_key = npc_ref.current_state
+	if STATUS_DATA.has(state_key):
+		var state_text = STATUS_DATA[state_key].text
+		npc_state_label.text = "Estado: %s" % state_text
+	else:
+		npc_state_label.text = "Estado: Desconhecido"
+
+	npc_inspector_panel.show()
+
+func report_npc_hover(npc: NPC):
+	if not hover_candidates.has(npc):
+		hover_candidates.append(npc)
+	_update_highlight()
+	
+func report_npc_unhover(npc: NPC):
+	if hover_candidates.has(npc):
+		hover_candidates.erase(npc)
+	_update_highlight()
+	
+func _update_highlight():
+	var topmost_npc: NPC = null
+
+	if not hover_candidates.is_empty():
+		hover_candidates.sort_custom(func(a, b): return a.global_position.y < b.global_position.y)
+		topmost_npc = hover_candidates.back()
+
+	if topmost_npc != currently_highlighted_npc:
+		if is_instance_valid(currently_highlighted_npc):
+			currently_highlighted_npc.highlight_off()
+
+		if is_instance_valid(topmost_npc):
+			topmost_npc.highlight_on()
+
+		currently_highlighted_npc = topmost_npc
+
+func _on_close_button_pressed():
+	hide_npc_inspector()
+
+func hide_npc_inspector():
+	# 1. Esconde o painel
+	if is_instance_valid(npc_inspector_panel):
+		npc_inspector_panel.hide()
+	
+	# 2. Limpa o highlight do NPC que estava sendo "hoverado"
+	#    Isso evita que o outline fique preso se o jogador fechar o painel com o mouse sobre o NPC
+	if is_instance_valid(currently_highlighted_npc):
+		currently_highlighted_npc.highlight_off()
+		currently_highlighted_npc = null
+	
+	# 3. Limpa a lista de candidatos ao hover
+	hover_candidates.clear()

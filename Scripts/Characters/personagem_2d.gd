@@ -1,12 +1,15 @@
 extends CharacterBody2D
 class_name NPC
 
+signal npc_clicked(npc_ref: NPC)
+
 #-----------------------------------------------------------------------------
 # CONSTANTES
 #-----------------------------------------------------------------------------
 const MIN_VELOCITY_FOR_WALK: float = 20.0
 const EXIT_DISTANCE: float = 100.0
 const STUCK_THRESHOLD: float = 0.5
+const OUTLINE_MATERIAL = preload("res://Resources/Shaders/outline_material.tres")
 
 #-----------------------------------------------------------------------------
 # ESTADOS E PROPRIEDADES
@@ -87,6 +90,7 @@ var is_yielding: bool = false # O NPC está cedendo passagem no momento?
 var _stuck_on_npc: NPC = null # Em qual NPC estamos presos?
 var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 
+var hud_node: Hud = null
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
@@ -113,6 +117,7 @@ func _ready():
 	# MODIFICADO: Em vez de chamar _update_schedule, chamamos nossa nova função de inicialização.
 	await get_tree().physics_frame
 	_initialize_state_and_position()
+	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
 
 func _initialize_state_and_position():
 	if not is_instance_valid(house_node):
@@ -457,24 +462,33 @@ func _perform_unstuck():
 # FUNÇÕES DE INTERAÇÃO E ANIMAÇÃO
 #-----------------------------------------------------------------------------
 func _on_area_2d_mouse_entered():
-	if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
-		return
-		
-	status_bubble.update_status(self)
+	if is_instance_valid(hud_node):
+		hud_node.report_npc_hover(self)
+	#if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
+		#return
 	
-	if interaction_cursor:
-		Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
-	
-	_state_before_interaction = current_state
+	#status_bubble.update_status(self)
+	#if interaction_cursor:
+		#Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
+	#_state_before_interaction = current_state
 
 func _on_area_2d_mouse_exited():
-	status_bubble.hide()
-	Input.set_custom_mouse_cursor(null)
+	if is_instance_valid(hud_node):
+		hud_node.report_npc_unhover(self)
+	#status_bubble.hide()
+	#Input.set_custom_mouse_cursor(null)
 
 func _on_work_turn_timer_timeout():
 	var random_direction = randi() % 2
 	work_turn_timer.wait_time = randf_range(min_turn_time, max_turn_time)
 	work_turn_timer.start()
+	
+func _on_area_2d_input_event(viewport, event, shape_idx):
+	print("Evento de input detectado no NPC!")
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+		print("É um clique do botão esquerdo do mouse!")
+		emit_signal("npc_clicked", self)
+		print("Sinal 'npc_clicked' emitido!")
 
 func _update_animation():
 	if not is_instance_valid(animated_sprite):
@@ -574,3 +588,11 @@ func get_idle_sprite_texture() -> Texture2D:
 	if sprite_frames.has_animation(anim_name) and sprite_frames.get_frame_count(anim_name) > 0:
 		return sprite_frames.get_frame_texture(anim_name, 0)
 	return null
+
+func highlight_on():
+	if is_instance_valid(animated_sprite):
+		animated_sprite.material = OUTLINE_MATERIAL
+
+func highlight_off():
+	if is_instance_valid(animated_sprite):
+		animated_sprite.material = null

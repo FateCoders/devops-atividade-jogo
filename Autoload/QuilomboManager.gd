@@ -27,6 +27,10 @@ func register_npc(npc: NPC):
 		all_npcs.append(npc)
 		npc_count_changed.emit(all_npcs.size())
 
+		var hud = get_tree().get_first_node_in_group("hud_main")
+		if is_instance_valid(hud):
+			npc.npc_clicked.connect(hud.show_npc_inspector)
+
 func register_building(building_node):
 	var type = building_node.scene_file_path
 	if not building_counts.has(type):
