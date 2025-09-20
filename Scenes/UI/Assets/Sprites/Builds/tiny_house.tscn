@@ -18,7 +18,7 @@ size = Vector2(222.04039, 267.6893)
 [node name="TinyHouse" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_8dv00")
-capacity = 2
+capacity = 3
 
 [node name="Sprite" type="Node2D" parent="."]
 position = Vector2(-9, -4)
@@ -59,7 +59,7 @@ position = Vector2(-205.24475, 410.38104)
 shape = SubResource("RectangleShape2D_1u4yw")
 
 [node name="DoorPosition" type="Marker2D" parent="."]
-position = Vector2(-155.64891, 308.61426)
+position = Vector2(-7, 472)
 gizmo_extents = 48.5
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("3_otsq3")]
