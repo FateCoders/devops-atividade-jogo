@@ -296,6 +296,8 @@ func _update_schedule():
 		if is_instance_valid(work_node) and is_instance_valid(assigned_work_spot):
 			work_node.release_work_spot(assigned_work_spot)
 			assigned_work_spot = null
+			if work_node.has_method("remove_worker"):
+				work_node.remove_worker(self)
 		_change_state(State.PASSEANDO)
 
 func _change_state(new_state: State):

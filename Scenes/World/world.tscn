@@ -114,7 +114,7 @@ y_sort_enabled = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Hud" parent="HUD" groups=["hud_main"] instance=ExtResource("11_pvt60")]
+[node name="Hud" parent="HUD" instance=ExtResource("11_pvt60")]
 
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]
 visible = false

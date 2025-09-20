@@ -68,6 +68,7 @@ func remove_worker(npc: NPC):
 	if workers.has(npc):
 		workers.erase(npc)
 		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+		emit_signal("vacancy_opened", required_profession)
 
 func update_functionality():
 	var required_resources = {upkeep_resource: upkeep_amount}
@@ -115,18 +116,3 @@ func _on_interaction_area_mouse_entered() -> void:
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
-
-func add_worker(npc: NPC):
-	if not workers.has(npc):
-		workers.append(npc)
-		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
-
-func remove_worker(npc_leaving: NPC):
-	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
-	if workers.has(npc_leaving):
-		# 2. Remove o NPC da lista de trabalhadores
-		workers.erase(npc_leaving)
-		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
-		
-		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
-		emit_signal("vacancy_opened", required_profession)

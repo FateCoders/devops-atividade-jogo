@@ -107,16 +107,11 @@ func remove_worker(npc: NPC):
 		workers.erase(npc)
 		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
 		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
-
-func remove_worker(npc_leaving: NPC):
-	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
-	if workers.has(npc_leaving):
-		# 2. Remove o NPC da lista de trabalhadores
-		workers.erase(npc_leaving)
-		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
-		
-		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
+	
 		emit_signal("vacancy_opened", required_profession)
+
+
+		
 
 func get_status_info() -> Dictionary:
 	var details_text = "Trabalhadores: %d/%d" % [workers.size(), npc_count]
