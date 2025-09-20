@@ -56,8 +56,15 @@ func confirm_construction():
 #		StatusManager.mudar_status("relacoes", -relations_bonus)
 #		print("Área de Treinamento '%s' destruída. Bônus removidos." % self.name)
 
-func add_worker(npc: Node):
-	workers.append(npc)
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' começou a trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc: NPC):
+	if workers.has(npc):
+		workers.erase(npc)
+		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
 
 func update_functionality():
 	var required_resources = {upkeep_resource: upkeep_amount}

@@ -37,8 +37,15 @@ func _ready():
 	
 	add_to_group("functional_buildings")
 
-func add_worker(npc: Node):
-	workers.append(npc)
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' começou a trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc: NPC):
+	if workers.has(npc):
+		workers.erase(npc)
+		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
 
 func confirm_construction():
 	StatusManager.mudar_status("saude", health_bonus)
