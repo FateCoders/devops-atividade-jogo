@@ -11,6 +11,10 @@ class_name Plantation
 @export var work_starts_at: float = 8.0  # 8 AM
 @export var work_ends_at: float = 17.0 # 5 PM
 
+var is_functional: bool = false
+@export var upkeep_resource: String = "ferramentas"
+@export var upkeep_amount: int = 1
+
 @export var cost: Dictionary = {
 	"dinheiro": 20,
 }
@@ -31,9 +35,23 @@ func _ready():
 	
 	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
 	available_work_spots = all_work_spots.duplicate()
+	
+	add_to_group("functional_buildings")
 
 func confirm_construction():
-	pass
+	update_functionality()
+	
+func update_functionality():
+	var required_resources = {upkeep_resource: upkeep_amount}
+	if StatusManager.has_enough_resources(required_resources):
+		StatusManager.spend_resources(required_resources)
+		if not is_functional:
+			is_functional = true
+			print("Plantação '%s' agora está funcional." % name)
+	else:
+		if is_functional:
+			is_functional = false
+			print("Plantação '%s' parou de funcionar por falta de ferramentas." % name)
 
 # MODIFICADO: Esta função agora "reserva" um local e o retorna.
 func claim_available_work_spot() -> Marker2D:
@@ -59,12 +77,11 @@ func add_worker(npc: Node):
 	workers.append(npc)
 
 func get_status_info() -> Dictionary:
-	var workers = [] # Substitua por sua variável de trabalhadores
-	var info = {
-		"name": "Plantação", # Você pode exportar uma variável para nomes customizados se quiser
-		"details": "Área de plantação",
-	}
-	return info
+	var details_text = "Trabalhadores: %d/%d" % [workers.size(), npc_count]
+	
+	if not is_functional:
+		details_text += "\n(Faltam Ferramentas!)"
+	return { "name": "Plantação", "details": details_text }
 
 func _on_interaction_area_mouse_entered() -> void:
 	var info = get_status_info()

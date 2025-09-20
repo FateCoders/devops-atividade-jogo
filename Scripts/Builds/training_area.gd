@@ -14,6 +14,10 @@ class_name TrainingArea
 @export var security_bonus: int = 15
 @export var relations_bonus: int = 5
 
+var is_functional: bool = false
+@export var upkeep_resource: String = "ferramentas" # Recurso de manutenção
+@export var upkeep_amount: int = 2 # Custo por dia para funcionar
+
 # ADICIONADO: Variáveis para gerenciar os locais de trabalho.
 var all_work_spots: Array[Marker2D] = []
 var available_work_spots: Array[Marker2D] = []
@@ -24,18 +28,24 @@ var available_work_spots: Array[Marker2D] = []
 
 @onready var status_bubble = $buildingStatusBubble
 
+var workers: Array[Node] = []
+
 func _ready():
 	for child in get_children():
 		if child is Marker2D:
 			all_work_spots.append(child)
 	available_work_spots = all_work_spots.duplicate()
 	print("Área de Treinamento '%s' pronta. Bônus aplicados." % self.name)
+	
+	add_to_group("functional_buildings")
 
 func confirm_construction():
 	# A lógica de mudar os status agora vive aqui!
 	StatusManager.mudar_status("seguranca", security_bonus)
 	StatusManager.mudar_status("relacoes", relations_bonus)
 	print("Área de Treinamento '%s' CONFIRMADA. Bônus aplicados." % self.name)
+	
+	update_functionality()
 
 # ADICIONADO: A função _notification para lidar com eventos do nó.
 #func _notification(what):
@@ -45,6 +55,25 @@ func confirm_construction():
 #		StatusManager.mudar_status("seguranca", -security_bonus)
 #		StatusManager.mudar_status("relacoes", -relations_bonus)
 #		print("Área de Treinamento '%s' destruída. Bônus removidos." % self.name)
+
+func add_worker(npc: Node):
+	workers.append(npc)
+
+func update_functionality():
+	var required_resources = {upkeep_resource: upkeep_amount}
+	if StatusManager.has_enough_resources(required_resources):
+		StatusManager.spend_resources(required_resources)
+		if not is_functional:
+			is_functional = true
+			StatusManager.mudar_status("seguranca", security_bonus)
+			StatusManager.mudar_status("relacoes", relations_bonus)
+			print("Área de Treinamento '%s' agora está funcional." % name)
+	else:
+		if is_functional:
+			is_functional = false
+			StatusManager.mudar_status("seguranca", -security_bonus)
+			StatusManager.mudar_status("relacoes", -relations_bonus)
+			print("Área de Treinamento '%s' parou de funcionar por falta de ferramentas/armas." % name)
 
 # ADICIONADO: Função para que NPCs reivindiquem um local.
 func claim_available_work_spot() -> Marker2D:
@@ -64,12 +93,10 @@ func release_work_spot(spot: Marker2D):
 		print("Local '%s' foi devolvido para '%s'. Locais disponíveis: %d" % [spot.name, self.name, available_work_spots.size()])
 
 func get_status_info() -> Dictionary:
-	var workers = [] # Substitua por sua variável de trabalhadores
-	var info = {
-		"name": "Área de treinamento", # Você pode exportar uma variável para nomes customizados se quiser
-		"details": "Área de segurança",
-	}
-	return info
+	var details_text = "Guerreiros: %d/%d" % [workers.size(), npc_count]
+	if not is_functional:
+		details_text += "\n(Faltam Ferramentas!)"
+	return { "name": "Área de Treinamento", "details": details_text }
 
 func _on_interaction_area_mouse_entered() -> void:
 	var info = get_status_info()

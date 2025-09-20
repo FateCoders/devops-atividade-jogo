@@ -5,6 +5,7 @@ const DAYS_TO_WIN: int = 30
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")
 @export var defeat_screen_scene: PackedScene = preload("res://Scenes/UI/defeatScreen.tscn")
 
+
 signal victory_achieved
 
 # ADICIONADO: Sinal para que outros scripts possam anunciar o fim do jogo.
@@ -74,10 +75,7 @@ signal tutorial_step_changed(step_data)
 func _ready():
 	if WorldTimeManager:
 		WorldTimeManager.day_passed.connect(_on_new_day_started)
-		
-	game_over.connect(trigger_defeat)
 	
-	# ADICIONADO: Conecta o sinal de game over à função que encerra o jogo.
 	game_over.connect(trigger_defeat)
 
 func end_tutorial():
@@ -91,6 +89,8 @@ func end_tutorial():
 	emit_signal("tutorial_step_changed", {"enabled_builds": []})
 
 func _on_new_day_started(day_number: int):
+	_update_all_buildings_functionality()
+	
 	if day_number >= WorldTimeManager.victory_day:
 		# Agora chama a função com o tipo correto.
 		_trigger_victory("survival")
@@ -172,3 +172,10 @@ func check_tutorial_progress(built_structure_scene: PackedScene):
 	if built_structure_scene == required_build:
 		print("Etapa %d do tutorial concluída!" % current_tutorial_step)
 		advance_tutorial() # ...avança para a próxima etapa.
+
+func _update_all_buildings_functionality():
+	print("[GameManager] Início do dia. Atualizando funcionalidade das construções...")
+	var buildings = get_tree().get_nodes_in_group("functional_buildings")
+	for building in buildings:
+		if building.has_method("update_functionality"):
+			building.update_functionality()

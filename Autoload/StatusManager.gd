@@ -3,10 +3,10 @@ extends Node
 signal status_updated
 
 var dinheiro = 500
-var remedios = 500
-var ferramentas = 500
-var madeira = 500
-var alimentos = 500
+var remedios = 0
+var ferramentas = 0
+var madeira = 0
+var alimentos = 0
 
 var saude = 100
 var fome = 100
