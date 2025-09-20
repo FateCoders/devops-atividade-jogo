@@ -231,12 +231,12 @@ custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonOptions2" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2"]
+[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -245,7 +245,7 @@ texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -260,11 +260,6 @@ mouse_filter = 2
 texture = ExtResource("13_mgdch")
 expand_mode = 1
 stretch_mode = 5
-
-[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
 
 [node name="BuildButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
@@ -293,10 +288,11 @@ stretch_mode = 5
 
 [node name="HBoxContainer" type="VBoxContainer" parent="MainContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="NPCInspectorPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_wae4w")
@@ -359,6 +355,7 @@ theme_override_font_sizes/font_size = 20
 text = "aaaaaaaaa"
 
 [node name="StatusPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
+custom_minimum_size = Vector2(380, 160)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_am52h")
@@ -366,7 +363,6 @@ metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="VBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
@@ -412,6 +408,7 @@ label_settings = SubResource("LabelSettings_vsu76")
 layout_mode = 2
 
 [node name="HealthLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer"]
+visible = false
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Saúde"
@@ -433,12 +430,13 @@ size_flags_horizontal = 3
 [node name="PreviewBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 14
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
@@ -450,12 +448,13 @@ show_percentage = false
 [node name="ProgressBar" type="ProgressBar" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 14
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 200.0
-offset_bottom = 15.0
+offset_top = -10.5
+offset_bottom = 10.5
+grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.207843, 0.176471, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
@@ -467,6 +466,7 @@ value = 100.0
 layout_mode = 2
 
 [node name="HungerLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer"]
+visible = false
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Fome (Faminto)"
@@ -518,6 +518,7 @@ value = 100.0
 layout_mode = 2
 
 [node name="SecurityLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer"]
+visible = false
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Segurança"
@@ -567,6 +568,7 @@ theme_override_styles/fill = ExtResource("6_mqf2c")
 layout_mode = 2
 
 [node name="RelationsLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer"]
+visible = false
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "Relações"
@@ -716,6 +718,6 @@ size_flags_horizontal = 4
 button_text = "Confirmar"
 button_icon = null
 
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions2/InventoryButton" to="." method="_on_inventory_button_pressed"]
+[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
