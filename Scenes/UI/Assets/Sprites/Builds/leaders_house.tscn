@@ -7,22 +7,22 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(483.55457, 431.6027)
+size = Vector2(480.89075, 436.93115)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(211.80487, 280.4083)
+size = Vector2(237.78099, 251.7678)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1rwg"]
-size = Vector2(570.1414, 703.3519)
+size = Vector2(527.5143, 694.0275)
 
 [node name="LeadersHouse" type="StaticBody2D"]
 modulate = Color(0.435294, 0.729412, 1, 1)
+position = Vector2(0, -331.99997)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_fbne4")
 
 [node name="Sprite" type="Node2D" parent="."]
-position = Vector2(-9, -4)
 
 [node name="Top" type="Sprite2D" parent="Sprite"]
 z_index = 2
@@ -40,16 +40,16 @@ region_enabled = true
 region_rect = Rect2(18.999733, 391.66394, 442.16293, 248.4848)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-5.9945025, 226.45796)
-scale = Vector2(0.9999992, 0.9999992)
+position = Vector2(3.330288, 229.1222)
+scale = Vector2(0.99999887, 0.99999887)
 shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 position = Vector2(-5.32842, 704.684)
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(-10.65685, -352.67487)
-scale = Vector2(0.9999996, 0.9999996)
+position = Vector2(2.3312047, -366.99487)
+scale = Vector2(0.99999934, 0.99999934)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("3_6yvq3")]
@@ -57,8 +57,8 @@ shape = SubResource("RectangleShape2D_otsq3")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-6.6605086, 125.21787)
-scale = Vector2(0.9999997, 0.9999997)
+position = Vector2(1.3320814, 132.54443)
+scale = Vector2(0.9999992, 0.9999992)
 shape = SubResource("RectangleShape2D_f1rwg")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 

@@ -12,6 +12,7 @@ size = Vector2(450.25183, 390.30707)
 size = Vector2(230.45435, 259.7605)
 
 [node name="TinyHouse" type="StaticBody2D"]
+position = Vector2(0, -444)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_8dv00")
 capacity = 2

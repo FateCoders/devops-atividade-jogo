@@ -26,6 +26,18 @@ signal pressed
 @onready var cost_spacer = $HBoxContainer/Spacer
 @onready var internal_button = $Button
 
+@export var disabled: bool = false:
+	set(value):
+		disabled = value
+		if is_instance_valid(internal_button):
+			internal_button.disabled = value
+		
+		# Efeito visual opcional: deixa o botão cinza quando desabilitado
+		if disabled:
+			self.modulate = Color(1, 1, 1, 0.5) # Cinza e um pouco transparente
+		else:
+			self.modulate = Color.WHITE
+
 func _ready():
 	internal_button.pressed.connect(_on_internal_button_pressed)
 

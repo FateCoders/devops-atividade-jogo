@@ -12,36 +12,58 @@ const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.
 const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
 const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
-
 const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
-
 const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
+
+const STATUS_DATA = {
+	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.EM_CASA: {"text": "Dormindo...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+
+	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESABRIGADO: {"text": "Desabrigado!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESEMPREGADO: {"text": "Sem local para trabalhar!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+}
+
+const WORKPLACE_NAMES = {
+	PlantationScene.resource_path: "Plantação",
+	InfirmaryScene.resource_path: "Enfermaria",
+	TrainingAreaScene.resource_path: "Área de Treinamento",
+	ChurchScene.resource_path: "Centro Espiritual",
+	LeadersHouseScene.resource_path: "Casa do Líder"
+}
 
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
 var notification_tween: Tween
 var build_buttons: Dictionary = {}
+var hover_candidates: Array[NPC] = []
+var currently_highlighted_npc: NPC = null
 
-@onready var health_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
-@onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
-@onready var security_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
-@onready var relations_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
+@onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
+@onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
+@onready var security_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
+@onready var relations_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
 
-@onready var money_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
-@onready var population_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
-@onready var hunger_label = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
+@onready var money_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
+@onready var population_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
+@onready var hunger_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
 
-@onready var health_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
-@onready var hunger_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
-@onready var security_preview_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
-@onready var relations_preview_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
+@onready var health_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
+@onready var hunger_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
+@onready var security_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
+@onready var relations_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
 
-@onready var health_icon = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
-@onready var hunger_icon = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
-@onready var relations_icon = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
+@onready var health_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
+@onready var hunger_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
+@onready var relations_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
 
-@onready var status_panel = $MainContainer/StatusPanel
+@onready var status_panel = $MainContainer/HBoxContainer/StatusPanel
 @onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
 @onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
@@ -60,6 +82,14 @@ var build_buttons: Dictionary = {}
 @onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var dialog_screen = $DialogScreen
+@onready var profession_screen = $ProfessionAssignmentScreen
+
+@onready var npc_inspector_panel = $MainContainer/HBoxContainer/NPCInspectorPanel
+@onready var npc_sprite = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/NPCSprite
+@onready var npc_name_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCNameLabel
+@onready var npc_profession_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCProfessionLabel
+@onready var npc_workplace_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
+@onready var npc_state_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/NPCStateLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
@@ -79,6 +109,7 @@ const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/nega
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
 
 var InventoryItemScene = preload("res://Scenes/UI/InventoryItem.tscn")
+var currently_inspected_npc: NPC = null
 
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
@@ -120,6 +151,7 @@ func _ready():
 				button.set_cost_visible(true)
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
+	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
 
 func _process(delta: float):
 	_update_cursor_state()
@@ -144,7 +176,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
 				var build_pos = placement_preview.global_position
-				QuilomboManager.build_structure(scene_to_place, build_pos)
+				
+				if scene_to_place == HouseScene:
+					QuilomboManager.build_house(scene_to_place, build_pos)
+				else:
+					QuilomboManager.build_structure(scene_to_place, build_pos)
+				
 				_exit_placement_mode()
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			_exit_placement_mode()
@@ -227,7 +264,10 @@ func _on_button_pressed():
 	button_builds.visible = !button_builds.visible
 	construction_title.visible = button_builds.visible
 	
-	get_tree().paused = button_builds.visible
+	if button_builds.visible:
+		GameManager.pause_game()
+	else:
+		GameManager.resume_game()
 
 	if button_builds.visible:
 		build_button_icon.visible = false
@@ -242,11 +282,15 @@ func _on_button_pressed():
 			_exit_placement_mode()
 
 func _on_any_build_button_pressed(scene: PackedScene):
+	QuilomboManager._debug_print_all_npc_status("Clique no Botão de Construir")
+
 	if is_in_placement_mode:
 		_exit_placement_mode()
 		return
 
 	var temp_instance = scene.instantiate()
+	
+	# Checagem de limite de construção (já estava correta)
 	var max_allowed = temp_instance.get("max_instances")
 	if max_allowed != null and max_allowed > 0:
 		var current_count = QuilomboManager.get_build_count_for_type(scene.resource_path)
@@ -255,24 +299,45 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			temp_instance.queue_free()
 			return
 
-	var npcs_needed = temp_instance.get("npc_count")
+	# --- INÍCIO DA NOVA LÓGICA DE VERIFICAÇÃO ---
+	var npcs_needed = temp_instance.npc_count if "npc_count" in temp_instance else 0
 	var build_cost = temp_instance.get("cost")
-	temp_instance.queue_free()
-	if npcs_needed == null: npcs_needed = 0
+	
+	# 1. Primeiro, verificamos os recursos (dinheiro, etc.)
+	if build_cost and not StatusManager.has_enough_resources(build_cost):
+		show_notification("Recursos insuficientes para construir!")
+		temp_instance.queue_free()
+		return
+
+	# 2. Agora, a verificação inteligente de trabalhadores e casas
 	if npcs_needed > 0:
-		var available_space = QuilomboManager.get_available_housing_space()
-		if available_space < npcs_needed:
-			show_notification("Casas insuficientes para novos moradores!")
+		var required_profession = temp_instance.required_profession if "required_profession" in temp_instance else NPC.Profession.NENHUMA
+		
+		# Quantos trabalhadores qualificados já temos desempregados?
+		var available_workers = QuilomboManager.count_unemployed_by_profession(required_profession)
+		
+		# Quantos novos trabalhadores precisarão ser gerados?
+		var new_workers_to_spawn = npcs_needed - available_workers
+		if new_workers_to_spawn < 0:
+			new_workers_to_spawn = 0 # Não podemos gerar um número negativo
+		
+		# Quantas vagas em casas precisamos para esses NOVOS trabalhadores?
+		var available_housing = QuilomboManager.get_available_housing_space()
+		
+		if available_housing < new_workers_to_spawn:
+			show_notification("Casas insuficientes para os novos moradores!")
+			temp_instance.queue_free()
 			return
+	
+	# --- FIM DA NOVA LÓGICA DE VERIFICAÇÃO ---
+	
+	temp_instance.queue_free() # Limpa a instância temporária
 
-	if build_cost:
-		if not StatusManager.has_enough_resources(build_cost):
-			show_notification("Recursos insuficientes para construir!")
-			return
-
+	# Se todas as verificações passaram, inicia o modo de posicionamento
 	button_builds.visible = false
 	construction_title.visible = false
-
+	
+	GameManager.pause_game()
 	is_in_placement_mode = true
 	scene_to_place = scene
 	placement_preview = scene.instantiate()
@@ -292,7 +357,7 @@ func _exit_placement_mode():
 
 	button_builds.visible = true
 	construction_title.visible = true
-
+	GameManager.pause_game()
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
 	is_in_placement_mode = false
@@ -345,6 +410,9 @@ func _update_cursor_state():
 func _on_day_passed(new_day: int):
 	if day_label:
 		day_label.text = "Dia %02d" % new_day
+
+func _on_fugitives_awaiting_assignment(npcs: Array):
+	profession_screen.show_panel(npcs)
 
 func show_quilombo_list():
 	# Medida de segurança para garantir que não abrimos duas janelas ao mesmo tempo.
@@ -400,3 +468,96 @@ func _populate_inventory_list():
 			var item = InventoryItemScene.instantiate()
 			list_container.add_child(item)
 			item.set_data(resource_name, amount)
+
+func show_npc_inspector(npc_ref: NPC):
+	if not is_instance_valid(npc_ref):
+		hide_npc_inspector()
+		return
+
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
+
+	currently_inspected_npc = npc_ref
+	currently_inspected_npc.state_changed.connect(_on_inspected_npc_state_changed)
+
+	_update_npc_inspector_panel()
+	npc_inspector_panel.show()
+
+func report_npc_hover(npc: NPC):
+	if not hover_candidates.has(npc):
+		hover_candidates.append(npc)
+	_update_highlight()
+	
+func report_npc_unhover(npc: NPC):
+	if hover_candidates.has(npc):
+		hover_candidates.erase(npc)
+	_update_highlight()
+	
+func _update_highlight():
+	var topmost_npc: NPC = null
+
+	if not hover_candidates.is_empty():
+		hover_candidates.sort_custom(func(a, b): return a.global_position.y < b.global_position.y)
+		topmost_npc = hover_candidates.back()
+
+	if topmost_npc != currently_highlighted_npc:
+		if is_instance_valid(currently_highlighted_npc):
+			currently_highlighted_npc.highlight_off()
+
+		if is_instance_valid(topmost_npc):
+			topmost_npc.highlight_on()
+
+		currently_highlighted_npc = topmost_npc
+
+func _on_close_button_pressed():
+	hide_npc_inspector()
+
+func hide_npc_inspector():
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
+	
+	currently_inspected_npc = null
+
+	if is_instance_valid(npc_inspector_panel):
+		npc_inspector_panel.hide()
+	
+	if is_instance_valid(currently_highlighted_npc):
+		currently_highlighted_npc.highlight_off()
+		currently_highlighted_npc = null
+	
+	hover_candidates.clear()
+	
+func _on_inspected_npc_state_changed(npc_ref: NPC):
+	if npc_inspector_panel.visible and npc_ref == currently_inspected_npc:
+		print("HUD: Recebido update de estado de %s. Atualizando painel." % npc_ref.npc_name)
+		_update_npc_inspector_panel()
+
+func _update_npc_inspector_panel():
+	if not is_instance_valid(currently_inspected_npc):
+		hide_npc_inspector()
+		return
+
+	var npc_ref = currently_inspected_npc
+
+	npc_sprite.texture = npc_ref.get_idle_sprite_texture()
+	npc_name_label.text = npc_ref.npc_name
+	
+	var profession_key = npc_ref.profession
+	var profession_name = NPC.PROFESSION_NAMES.get(profession_key, "Desconhecida")
+	npc_profession_label.text = "Profissão: %s" % profession_name
+	
+	if is_instance_valid(npc_ref.work_node):
+		var workplace_path = npc_ref.work_node.scene_file_path
+		var workplace_name = WORKPLACE_NAMES.get(workplace_path, "Local Desconhecido")
+		npc_workplace_label.text = "Local de Trabalho: %s" % workplace_name
+	else:
+		npc_workplace_label.text = "Local de Trabalho: Desempregado"
+	
+	var state_key = npc_ref.current_state
+	if STATUS_DATA.has(state_key):
+		var state_text = STATUS_DATA[state_key].text
+		npc_state_label.text = "Estado: %s" % state_text
+	else:
+		npc_state_label.text = "Estado: Desconhecido"

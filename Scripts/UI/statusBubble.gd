@@ -19,11 +19,18 @@ const STATUS_DATA = {
 	
 }
 
-func update_status(npc_state: NPC.State):
+func update_status(npc_ref: NPC):
+	# Pega o estado do NPC que foi passado como referência
+	var npc_state = npc_ref.current_state
+
 	if STATUS_DATA.has(npc_state):
 		var data = STATUS_DATA[npc_state]
-		label.text = data.get("text", "")
+		var status_text = data.get("text", "")
+		
+		# Formata o texto para incluir o nome do NPC
+		label.text = "%s - %s" % [npc_ref.npc_name, status_text]
+		
 		icon.texture = load(data.get("icon", ""))
-		show() # Mostra o balão
+		show()
 	else:
-		hide() # Esconde se for um estado sem status (ex: EM_CASA)
+		hide()

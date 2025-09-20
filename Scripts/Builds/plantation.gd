@@ -2,9 +2,12 @@
 extends Node2D
 class_name Plantation
 
+signal vacancy_opened(profession: NPC.Profession)
+
+@export var required_profession: NPC.Profession = NPC.Profession.AGRICULTOR
 @export var max_instances: int = 5
 
-@export var npc_scene_to_spawn: PackedScene
+@export var possible_npc_scenes: Array[PackedScene]
 @export var npc_count: int = 2
 
 @export_category("Horário de Trabalho")
@@ -55,8 +58,20 @@ func release_work_spot(spot: Marker2D):
 		available_work_spots.append(spot)
 		print("Local '%s' foi devolvido. Locais disponíveis: %d" % [spot.name, available_work_spots.size()])
 
-func add_worker(npc: Node):
-	workers.append(npc)
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc_leaving: NPC):
+	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
+	if workers.has(npc_leaving):
+		# 2. Remove o NPC da lista de trabalhadores
+		workers.erase(npc_leaving)
+		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
+		
+		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
+		emit_signal("vacancy_opened", required_profession)
 
 func get_status_info() -> Dictionary:
 	var workers = [] # Substitua por sua variável de trabalhadores

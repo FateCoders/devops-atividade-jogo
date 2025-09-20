@@ -13,6 +13,8 @@ var fome = 100
 var seguranca = 10
 var relacoes = 10
 
+var persistent_debuffs = {}
+
 func _ready():
 	emit_signal("status_updated")
 
@@ -70,6 +72,23 @@ func spend_resources(costs: Dictionary):
 		print("Gasto: %d de %s." % [amount_to_spend, resource])
 	
 	emit_signal("status_updated")
+
+func add_persistent_debuff(source_id, status_type: String, value: int):
+	persistent_debuffs[source_id] = {"type": status_type, "value": value}
+	_recalculate_status()
+
+func remove_persistent_debuff(source_id):
+	if persistent_debuffs.has(source_id):
+		persistent_debuffs.erase(source_id)
+		_recalculate_status()
+
+func _recalculate_status():
+	var current_health_debuff = 0
+	for debuff in persistent_debuffs.values():
+		if debuff.type == "saude":
+			current_health_debuff += debuff.value
+
+	print("Debuff de saúde total atual: %d" % current_health_debuff)
 	
 func get_all_resources() -> Dictionary:
 	return {
