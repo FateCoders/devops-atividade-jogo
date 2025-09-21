@@ -15,6 +15,7 @@ const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
 const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
+const PlantationTypeUIScene = preload("res://Scenes/UI/PlantationTypeUI.tscn")
 
 const STATUS_DATA = {
 	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
@@ -68,7 +69,6 @@ var currently_highlighted_npc: NPC = null
 @onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
 @onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
-
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
@@ -562,3 +562,8 @@ func _update_npc_inspector_panel():
 		npc_state_label.text = "Estado: %s" % state_text
 	else:
 		npc_state_label.text = "Estado: Desconhecido"
+
+func show_plantation_selection_ui(plantation: Plantation):
+	var selection_ui = PlantationTypeUIScene.instantiate()
+	add_child(selection_ui)
+	selection_ui.set_target_plantation(plantation)

@@ -91,6 +91,11 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	
 	register_building(new_structure)
 	GameManager.check_tutorial_progress(structure_scene)
+	
+	if new_structure is Plantation:
+		var hud = get_tree().get_first_node_in_group("hud_main")
+		if hud:
+			hud.show_plantation_selection_ui(new_structure)
 
 	var vacancies = new_structure.get("npc_count") if "npc_count" in new_structure else 0
 	if vacancies > 0:

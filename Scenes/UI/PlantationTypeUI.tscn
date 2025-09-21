@@ -1,0 +1,94 @@
+[gd_scene load_steps=9 format=3 uid="uid://cb0pti00i2pvh"]
+
+[ext_resource type="Script" uid="uid://bm0qfl12j1bl2" path="res://Scripts/UI/plantation_type_ui.gd" id="1_fudon"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="2_1y7hm"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_j577v"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_sw234"]
+[ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="5_e28ro"]
+[ext_resource type="Texture2D" uid="uid://dulxt81pyxfr4" path="res://Assets/Sprites/Exported/HUD/Icons/health-icon.png" id="6_6tvbx"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e28ro"]
+texture = ExtResource("2_j577v")
+texture_margin_left = 25.0
+texture_margin_top = 25.0
+texture_margin_right = 25.0
+texture_margin_bottom = 25.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_sw234"]
+font = ExtResource("2_sw234")
+font_size = 40
+font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+
+[node name="PlantationTypeUI" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_fudon")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.0
+offset_top = -79.5
+offset_right = 207.0
+offset_bottom = 79.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_e28ro")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 30
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Escolha a produção"
+label_settings = SubResource("LabelSettings_sw234")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="FoodButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_1y7hm")
+theme_override_font_sizes/font_size = 20
+text = "Alimentos"
+icon = ExtResource("5_e28ro")
+expand_icon = true
+
+[node name="RemedyButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_1y7hm")
+theme_override_font_sizes/font_size = 20
+text = "Remédios"
+icon = ExtResource("6_6tvbx")
+expand_icon = true

@@ -91,6 +91,17 @@ func _produce_resources():
 	StatusManager.mudar_status(resource_to_produce, amount_produced)
 	print("Plantação '%s' produziu %d de %s." % [name, amount_produced, resource_to_produce])
 
+func set_production_type(new_type: ProductionType):
+	production_type = new_type
+	
+	# (Opcional) Você pode mudar a aparência da plantação aqui.
+	# if new_type == ProductionType.ALIMENTOS:
+	#	 $Sprite2D.texture = load("res://path/to/food_sprite.png")
+	# else:
+	#	 $Sprite2D.texture = load("res://path/to/remedy_sprite.png")
+		
+	print("Plantação '%s' foi configurada para produzir %s." % [self.name, ProductionType.keys()[new_type]])
+
 # ADICIONADO: Uma função para que o NPC "devolva" o local quando terminar.
 func release_work_spot(spot: Marker2D):
 	if is_instance_valid(spot) and not available_work_spots.has(spot):
@@ -109,9 +120,6 @@ func remove_worker(npc: NPC):
 		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
 	
 		emit_signal("vacancy_opened", required_profession)
-
-
-		
 
 func get_status_info() -> Dictionary:
 	var details_text = "Trabalhadores: %d/%d" % [workers.size(), npc_count]
