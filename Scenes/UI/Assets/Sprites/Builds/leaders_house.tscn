@@ -1,24 +1,22 @@
 [gd_scene load_steps=8 format=3 uid="uid://30xlfh0om2p2"]
 
 [ext_resource type="Script" uid="uid://bci1bbnicl5un" path="res://Scripts/Builds/leaders_house.gd" id="1_fbne4"]
-[ext_resource type="Texture2D" uid="uid://dong6xmegiqhb" path="res://Assets/Sprites/Exported/Buildings/house01.png" id="2_6yvq3"]
+[ext_resource type="Texture2D" uid="uid://bj6ianw5l7o0c" path="res://Assets/Sprites/Exported/Buildings/leaders_house.png" id="2_6yvq3"]
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="3_6yvq3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(480.89075, 436.93115)
+size = Vector2(1156.9353, 556.82104)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(237.78099, 251.7678)
+size = Vector2(237.78099, 263.0909)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1rwg"]
-size = Vector2(527.5143, 694.0275)
+size = Vector2(1214.8818, 1033.7153)
 
 [node name="LeadersHouse" type="StaticBody2D"]
-modulate = Color(0.435294, 0.729412, 1, 1)
 position = Vector2(0, -331.99997)
-scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_fbne4")
 
@@ -30,26 +28,26 @@ y_sort_enabled = true
 position = Vector2(2.339469, 4)
 texture = ExtResource("2_6yvq3")
 region_enabled = true
-region_rect = Rect2(0, 0, 484.3722, 390.94113)
+region_rect = Rect2(0, 0, 1120.2903, 730.0078)
 
 [node name="Bottom" type="Sprite2D" parent="Sprite"]
 y_sort_enabled = true
-position = Vector2(0, 323)
+position = Vector2(-2.6642108, 483.55444)
 texture = ExtResource("2_6yvq3")
 region_enabled = true
-region_rect = Rect2(18.999733, 391.66394, 442.16293, 248.4848)
+region_rect = Rect2(8.805237, 729.44586, 1091.6357, 231.25336)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(3.330288, 229.1222)
-scale = Vector2(0.99999887, 0.99999887)
+position = Vector2(0.99911976, 326.3659)
+scale = Vector2(0.9999986, 0.9999986)
 shape = SubResource("RectangleShape2D_m5062")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 position = Vector2(-5.32842, 704.684)
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(2.3312047, -366.99487)
-scale = Vector2(0.99999934, 0.99999934)
+position = Vector2(5.3284197, -198.48375)
+scale = Vector2(0.9999992, 0.9999992)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("3_6yvq3")]
@@ -57,10 +55,13 @@ shape = SubResource("RectangleShape2D_otsq3")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(1.3320814, 132.54443)
-scale = Vector2(0.9999992, 0.9999992)
+position = Vector2(2.6643505, 129.2143)
+scale = Vector2(0.99999875, 0.99999875)
 shape = SubResource("RectangleShape2D_f1rwg")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+vertices = PackedVector2Array(-540.83496, 594.1192, -538.1708, 364.99698, -547.49554, 366.3291, -550.1597, 339.68698, -558.15234, 333.02643, -558.15234, 43.959473, 566.145, 45.291565, 567.4771, 343.6833, 552.8239, 339.68698, 548.82764, 367.6612, 539.50287, 374.32172, 538.1708, 599.44763, 105.23637, 599.44763, 107.90057, 372.98962, -97.24373, 370.3254, -103.90426, 591.45496)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]

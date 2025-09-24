@@ -112,6 +112,10 @@ script = ExtResource("11_0ph6x")
 [node name="YSortLayer" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Plantacao_Fundo" type="Node2D" parent="YSortLayer"]
+
+[node name="Plantacao_Frente" type="Node2D" parent="YSortLayer"]
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Hud" parent="HUD" instance=ExtResource("11_pvt60")]
