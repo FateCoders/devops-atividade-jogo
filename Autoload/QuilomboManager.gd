@@ -12,7 +12,7 @@ var building_counts: Dictionary = {}
 
 # --- RESET ---
 func reset_quilombo_state():
-	print("[QUILOMBO MANAGER] Resetando estado.")
+	#print("[QUILOMBO MANAGER] Resetando estado.")
 	all_houses.clear()
 	all_npcs.clear()
 
@@ -20,7 +20,7 @@ func reset_quilombo_state():
 func register_house(house_node: House):
 	if not all_houses.has(house_node):
 		all_houses.append(house_node)
-		print("Casa '%s' registrada. Total: %d" % [house_node.name, all_houses.size()])
+		#print("Casa '%s' registrada. Total: %d" % [house_node.name, all_houses.size()])
 
 func register_npc(npc: NPC):
 	if not all_npcs.has(npc):
@@ -36,7 +36,7 @@ func register_building(building_node):
 	if not building_counts.has(type):
 		building_counts[type] = 0
 	building_counts[type] += 1
-	print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
+	#print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
 	
 	if building_node.has_signal("vacancy_opened"):
 		building_node.vacancy_opened.connect(_on_vacancy_opened)
@@ -46,7 +46,7 @@ func unregister_building(building_node):
 	var type = building_node.scene_file_path
 	if building_counts.has(type) and building_counts[type] > 0:
 		building_counts[type] -= 1
-		print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
+		#print("Censo atualizado: %s agora tem %d instâncias." % [type.get_file(), building_counts[type]])
 
 # ADICIONADO: Funções para a UI verificar o limite.
 func get_build_count_for_type(scene_path: String) -> int:
@@ -63,14 +63,14 @@ func count_unemployed_by_profession(profession: NPC.Profession) -> int:
 # --- CONSTRUÇÃO ---
 func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	if not structure_scene:
-		printerr("Tentativa de construir uma estrutura sem cena válida!")
+		#printerr("Tentativa de construir uma estrutura sem cena válida!")
 		return
 
 	# A verificação de custo ainda é importante e pode ser feita aqui ou na UI.
 	var temp_instance = structure_scene.instantiate()
 	var build_cost = temp_instance.get("cost")
 	if build_cost and not StatusManager.has_enough_resources(build_cost):
-		print("Construção cancelada: Recursos insuficientes.")
+		#print("Construção cancelada: Recursos insuficientes.")
 		temp_instance.queue_free()
 		return
 	
@@ -81,13 +81,13 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	
 	var y_sort_layer = get_tree().current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		printerr("ERRO: Nó 'YSortLayer' não encontrado!")
+		#printerr("ERRO: Nó 'YSortLayer' não encontrado!")
 		return
 
 	var new_structure = structure_scene.instantiate()
 	y_sort_layer.add_child(new_structure)
 	new_structure.global_position = build_position
-	print("--> Construído '%s' em %s" % [new_structure.name, build_position])
+	#print("--> Construído '%s' em %s" % [new_structure.name, build_position])
 	
 	register_building(new_structure)
 	GameManager.check_tutorial_progress(structure_scene)
@@ -103,10 +103,9 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 		
 		# --- LÓGICA DE PREENCHIMENTO INTELIGENTE ---
 		
-		# 1. Encontra e atribui todos os desempregados qualificados que puder.
 		var unemployed_to_assign = _find_unemployed_npcs(required_profession, vacancies)
 		for npc in unemployed_to_assign:
-			print("Atribuindo NPC desempregado existente '%s' à nova construção." % npc.name)
+			#print("Atribuindo NPC desempregado existente '%s' à nova construção." % npc.name)
 			npc.assign_work(new_structure)
 			
 		# 2. Calcula quantos novos NPCs ainda precisam ser gerados.
@@ -114,70 +113,69 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 		
 		# 3. Gera apenas os NPCs restantes, se houver necessidade.
 		if amount_to_spawn > 0:
-			print("Ainda restam %d vagas. Gerando novos NPCs para completar." % amount_to_spawn)
-			# Usamos a função que você já tem, mas com a quantidade calculada.
+			#print("Ainda restam %d vagas. Gerando novos NPCs para completar." % amount_to_spawn)
 			_spawn_npcs_for_workplace(new_structure, amount_to_spawn)
 
 func build_house(house_scene: PackedScene, build_position: Vector2):
 	if not house_scene:
-		printerr("Tentativa de construir casa sem cena válida!")
+		#printerr("Tentativa de construir casa sem cena válida!")
 		return
 		
 	var y_sort_layer = get_tree().current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		printerr("ERRO: Nó 'YSortLayer' não encontrado!")
+		#printerr("ERRO: Nó 'YSortLayer' não encontrado!")
 		return
 
 	var new_house = house_scene.instantiate()
 	y_sort_layer.add_child(new_house)
 	new_house.global_position = build_position
-	print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
+	#print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
 
 	# --- INÍCIO DA DEPURAÇÃO ---
-	print("\n[DEBUG] Iniciando processo de alocação de desabrigados...")
+	#print("\n[DEBUG] Iniciando processo de alocação de desabrigados...")
 	
 	# 1. Vamos ver se estamos encontrando algum desabrigado.
 	var homeless_npcs = _find_homeless_npcs()
-	print("[DEBUG 1] Função _find_homeless_npcs foi chamada. NPCs desabrigados encontrados: %d" % homeless_npcs.size())
+	#print("[DEBUG 1] Função _find_homeless_npcs foi chamada. NPCs desabrigados encontrados: %d" % homeless_npcs.size())
 	
 	# 2. Vamos checar a condição para entrar no loop.
 	if not homeless_npcs.is_empty():
-		print("[DEBUG 2] A lista de desabrigados não está vazia. Iniciando o processo de acolhimento...")
+		#print("[DEBUG 2] A lista de desabrigados não está vazia. Iniciando o processo de acolhimento...")
 		
 		for npc in homeless_npcs:
 			# 3. Para cada NPC, vamos checar a lotação da casa.
-			print("[DEBUG 3] Processando o NPC: %s. Verificando vagas na casa. Lotação atual: %d/%d" % [npc.name, new_house.residents.size(), new_house.capacity])
+			#print("[DEBUG 3] Processando o NPC: %s. Verificando vagas na casa. Lotação atual: %d/%d" % [npc.name, new_house.residents.size(), new_house.capacity])
 			
 			if new_house.residents.size() < new_house.capacity:
 				# 4. Se houver vaga, vamos confirmar a atribuição.
-				print("[DEBUG 4] Vaga encontrada! Chamando npc.assign_house() para %s." % npc.name)
+				#print("[DEBUG 4] Vaga encontrada! Chamando npc.assign_house() para %s." % npc.name)
 				npc.assign_house(new_house)
 			else:
-				print("[DEBUG X] A casa já está cheia. Não é possível abrigar %s." % npc.name)
+				#print("[DEBUG X] A casa já está cheia. Não é possível abrigar %s." % npc.name)
 				break
 	else:
 		print("[DEBUG 2] A lista de desabrigados está vazia. Processo de alocação encerrado.")
 
-	print("[DEBUG] Fim do processo de alocação.\n")
+	#print("[DEBUG] Fim do processo de alocação.\n")
 
 # --- NPCs ---
 # Em QuilomboManager.gd
 
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
-	print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
+	#print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
 	var required_profession = workplace_node.required_profession
 
 	var npc_scenes = workplace_node.get("possible_npc_scenes")
 
 	if not npc_scenes or npc_scenes.is_empty():
-		printerr("--> ERRO: '%s' deveria gerar NPCs, mas a lista 'possible_npc_scenes' não foi definida ou está vazia!" % workplace_node.name)
+		#printerr("--> ERRO: '%s' deveria gerar NPCs, mas a lista 'possible_npc_scenes' não foi definida ou está vazia!" % workplace_node.name)
 		return
 
 	var current_scene = get_tree().current_scene
 	
 	var y_sort_layer = current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
+		#printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
 		y_sort_layer = current_scene
 	
 	var nav_map = get_tree().root.get_world_2d().navigation_map
@@ -201,7 +199,7 @@ func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 		npc.global_position = safe_pos
 		npc.profession = required_profession
 		
-		print("--> Novo NPC #%d (usando '%s') gerado em %s" % [i + 1, random_npc_scene.resource_path.get_file(), safe_pos])
+		#print("--> Novo NPC #%d (usando '%s') gerado em %s" % [i + 1, random_npc_scene.resource_path.get_file(), safe_pos])
 
 		npc.work_node = workplace_node
 
@@ -220,7 +218,7 @@ func get_available_housing_space() -> int:
 			# Vagas = Capacidade da casa - número de moradores atuais
 			total_space += house.capacity - house.residents.size()
 	
-	print("[Quilombo Manager] Espaços de moradia disponíveis: %d" % total_space)
+	#print("[Quilombo Manager] Espaços de moradia disponíveis: %d" % total_space)
 	return total_space
 
 # --- Busca ---
@@ -231,10 +229,8 @@ func _find_house_with_space() -> House:
 	return null
 
 func spawn_new_fugitives(amount: int):
-	print("Acolhendo %d novos fugitivos no quilombo..." % amount)
+	#print("Acolhendo %d novos fugitivos no quilombo..." % amount)
 	
-	# 1. Crie uma lista com todas as cenas de NPC possíveis para este evento.
-	#    !!! AJUSTE OS CAMINHOS ABAIXO PARA APONTAR PARA SUAS CENAS DE NPC !!!
 	const FUGITIVE_NPC_SCENES = [
 		preload("res://Scenes/Characters/citizen_09.tscn"),
 		preload("res://Scenes/Characters/citizen_08.tscn"),
@@ -245,12 +241,10 @@ func spawn_new_fugitives(amount: int):
 		preload("res://Scenes/Characters/citizen_03.tscn"),
 		preload("res://Scenes/Characters/citizen_02.tscn"),
 		preload("res://Scenes/Characters/citizen_01.tscn"),
-		# Adicione quantas cenas de NPC você quiser aqui
 	]
 	
-	# Verificação de segurança caso a lista esteja vazia.
 	if FUGITIVE_NPC_SCENES.is_empty():
-		printerr("Nenhuma cena de NPC foi definida na lista para gerar fugitivos.")
+		#printerr("Nenhuma cena de NPC foi definida na lista para gerar fugitivos.")
 		return
 		
 	var new_fugitives: Array[NPC] = []
@@ -259,7 +253,7 @@ func spawn_new_fugitives(amount: int):
 	
 	var y_sort_layer = current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
+		#printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
 		y_sort_layer = current_scene
 	
 	var arrival_point = Vector2(0, 200) 
@@ -296,11 +290,11 @@ func find_work_for_npc(npc: NPC):
 	if not is_instance_valid(npc) or npc.profession == NPC.Profession.NENHUMA:
 		return
 
-	print("'%s' está procurando trabalho como %s..." % [npc.name, NPC.Profession.keys()[npc.profession]])
+	#print("'%s' está procurando trabalho como %s..." % [npc.name, NPC.Profession.keys()[npc.profession]])
 	var workplace = _find_workplace_with_vacancies(npc.profession)
 	
 	if is_instance_valid(workplace):
-		print("--> Vaga encontrada em '%s'!" % workplace.name)
+		#print("--> Vaga encontrada em '%s'!" % workplace.name)
 		npc.assign_work(workplace)
 		if workplace.has_method("add_worker"):
 			workplace.add_worker(npc)
@@ -332,32 +326,25 @@ func _find_unemployed_npcs(profession: NPC.Profession, limit: int) -> Array[NPC]
 		if is_instance_valid(npc) and is_available and npc.profession == profession:
 			found_npcs.append(npc)
 			
-	print("Encontrados %d NPCs desempregados com a profissão %s" % [found_npcs.size(), NPC.Profession.keys()[profession]])
+	#print("Encontrados %d NPCs desempregados com a profissão %s" % [found_npcs.size(), NPC.Profession.keys()[profession]])
 	return found_npcs
 
 
 func _debug_print_all_npc_status(origem_da_chamada: String):
-	print("==============================================================")
-	print(">>> VERIFICAÇÃO DE ESTADO DOS NPCS (Origem: %s) <<<" % origem_da_chamada)
-	print("Total de NPCs no quilombo: %d" % all_npcs.size())
+	#print(">>> VERIFICAÇÃO DE ESTADO DOS NPCS (Origem: %s) <<<" % origem_da_chamada)
+	#print("Total de NPCs no quilombo: %d" % all_npcs.size())
 	
 	if all_npcs.is_empty():
-		print("Nenhum NPC para verificar.")
-		print("==============================================================")
+		#print("Nenhum NPC para verificar.")
 		return
 
 	for npc in all_npcs:
 		if not is_instance_valid(npc):
-			print(" - NPC inválido encontrado na lista.")
 			continue
 		
 		# Converte os enums (números) para texto para ficar legível
 		var estado_texto = NPC.State.keys()[npc.current_state]
 		var profissao_texto = NPC.Profession.keys()[npc.profession]
-		
-		print(" - NPC: '%s' | Estado: %s | Profissão: %s" % [npc.name, estado_texto, profissao_texto])
-	
-	print("==============================================================")
 
 func _find_homeless_npcs() -> Array[NPC]:
 	var homeless: Array[NPC] = []
@@ -368,18 +355,10 @@ func _find_homeless_npcs() -> Array[NPC]:
 	return homeless
 
 func _on_vacancy_opened(profession: NPC.Profession):
-	print("[Quilombo Manager] Vaga aberta para a profissão: %s" % NPC.Profession.keys()[profession])
 	
-	# Procura por um NPC desempregado com a profissão necessária
 	for npc in all_npcs:
 		if is_instance_valid(npc) and npc.current_state == NPC.State.DESEMPREGADO and npc.profession == profession:
-			print("--> Desempregado qualificado encontrado: '%s'. Enviando para a vaga..." % npc.name)
-			
-			# Usa a função que já existe para fazer a mágica acontecer!
 			find_work_for_npc(npc)
-			
-			# Importante: para o loop assim que encontra o primeiro candidato
-			# para não enviar todos os desempregados para a mesma vaga.
 			return
 			
-	print("--> Nenhum desempregado qualificado encontrado no momento.")
+	#print("--> Nenhum desempregado qualificado encontrado no momento.")

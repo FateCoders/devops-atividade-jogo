@@ -24,7 +24,7 @@ size = Vector2(615.4337, 255.76434)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ix0y"]
 size = Vector2(1194.8989, 907.1635)
 
-[node name="Infirmary" type="StaticBody2D"]
+[node name="Infirmary" type="StaticBody2D" groups=["locais_de_interesse"]]
 position = Vector2(0, -406.99994)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")

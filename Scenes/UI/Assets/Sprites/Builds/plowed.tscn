@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://dta2iaiuf8luc"]
+[gd_scene load_steps=26 format=4 uid="uid://dta2iaiuf8luc"]
 
 [ext_resource type="Texture2D" uid="uid://bnfj1tkcmlrgo" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Plowed/plowed-bottom.png" id="1_53kwo"]
 [ext_resource type="Script" uid="uid://qdc18urqj28g" path="res://Scripts/Builds/plantation.gd" id="1_lsrhn"]
@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://c4lab8c15srn6" path="res://Scenes/UI/buildingStatusBubble.tscn" id="8_msv76"]
 [ext_resource type="PackedScene" uid="uid://cs5omdseayc8w" path="res://Scenes/Characters/citizen_08.tscn" id="9_dkka0"]
 [ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="10_pq0iv"]
+[ext_resource type="TileSet" uid="uid://cubs7vcblaybn" path="res://Scenes/UI/Assets/Tilesets/MedicinePlantation.tres" id="16_fn2g2"]
+[ext_resource type="TileSet" uid="uid://c6l2nonrt0g2l" path="res://Scenes/UI/Assets/Tilesets/FoodPlantation.tres" id="17_ehiws"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x3nle"]
 texture = ExtResource("1_53kwo")
@@ -121,19 +123,58 @@ sources/4 = SubResource("TileSetAtlasSource_eqaoq")
 size = Vector2(729, 535)
 
 [node name="Plowed" type="Node2D"]
+position = Vector2(-193, -116)
 script = ExtResource("1_lsrhn")
 possible_npc_scenes = Array[PackedScene]([ExtResource("2_kvf88"), ExtResource("3_ajpgc"), ExtResource("4_f1ko0"), ExtResource("2_sbkyb"), ExtResource("6_fn2g2"), ExtResource("7_ehiws"), ExtResource("8_0e4sn"), ExtResource("9_dkka0"), ExtResource("10_pq0iv")])
 
-[node name="Sprite2D" type="TileMapLayer" parent="."]
-position = Vector2(4, -2)
+[node name="PlowedLandLayer" type="TileMapLayer" parent="."]
+position = Vector2(0, 1)
 tile_map_data = PackedByteArray("AAD8/wIAAAAAAAAAAAAGAAIAAAAAAAAAAAD8//n/AQAAAAAAAAAGAPn/AQAAAAAAAAD8/+//AgAAAAAAAAAGAO//AgAAAAAAAAAaAO//AgAAAAAAAAAQAO//AgAAAAAAAAAQAAIAAAAAAAAAAAAQAPn/AQAAAAAAAAAaAPn/AQAAAAAAAAD8//r/AQAAAAAAAAD8//b/AQAAAAAAAAAGAPf/AQAAAAAAAAAQAPj/AQAAAAAAAAAaAPj/AQAAAAAAAAAaAAIAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_p6app")
 
-[node name="Sprite2D2" type="TileMapLayer" parent="."]
-z_index = -1
-position = Vector2(4, -2)
-tile_map_data = PackedByteArray("AAD8/wIAAAAAAAAAAAD8//n/AQAAAAAAAAD8/+//AgAAAAAAAAD9////AwAAAAAAAAD8//T/AwAAAAAAAAD8/+7/AwAAAAAAAAAGAP//AwAAAAAAAAAGAPn/AQAAAAAAAAAGAPb/AwAAAAAAAAAGAO//AgAAAAAAAAAGAO7/AwAAAAAAAAAPAP//BAAAAAAAAAAZAP//BAAAAAAAAAAQAPf/BAAAAAAAAAAZAPf/BAAAAAAAAAAZAPD/BAAAAAAAAAAPAO//BAAAAAAAAAA=")
-tile_set = SubResource("TileSet_p6app")
+[node name="MedicinePlantationLayers2" type="Node2D" parent="."]
+position = Vector2(183, 101)
+
+[node name="RowBack" type="TileMapLayer" parent="MedicinePlantationLayers2"]
+visible = false
+y_sort_enabled = true
+position = Vector2(17, 2)
+tile_map_data = PackedByteArray("AADx/+X/AAAAAAAAAAAEAOX/AAAAAAAAAAD6/+f/AQAAAAAAAAAOAOf/AQAAAAAAAAA=")
+tile_set = ExtResource("16_fn2g2")
+
+[node name="RowMiddle" type="TileMapLayer" parent="MedicinePlantationLayers2"]
+visible = false
+y_sort_enabled = true
+position = Vector2(21, 1)
+tile_map_data = PackedByteArray("AADw//D/AAAAAAAAAAAEAPD/AAAAAAAAAAD6//L/AQAAAAAAAAAOAPL/AQAAAAAAAAA=")
+tile_set = ExtResource("16_fn2g2")
+
+[node name="RowFront" type="TileMapLayer" parent="MedicinePlantationLayers2"]
+visible = false
+y_sort_enabled = true
+position = Vector2(8, 0)
+tile_map_data = PackedByteArray("AADw//T/AAAAAAAAAAAEAPT/AAAAAAAAAAD6//f/AQAAAAAAAAAOAPf/AQAAAAAAAAAOAPb/AQAAAAAAAAA=")
+tile_set = ExtResource("16_fn2g2")
+
+[node name="FoodPlantationLayers" type="Node2D" parent="."]
+position = Vector2(179, 115)
+
+[node name="RowBack" type="TileMapLayer" parent="FoodPlantationLayers"]
+y_sort_enabled = true
+position = Vector2(0, 2)
+tile_map_data = PackedByteArray("AADw/+P/AAAAAAAAAAD6/+X/AgAAAAAAAAAEAOP/AAAAAAAAAAAOAOX/AgAAAAAAAAA=")
+tile_set = ExtResource("17_ehiws")
+
+[node name="RowMiddle" type="TileMapLayer" parent="FoodPlantationLayers"]
+y_sort_enabled = true
+position = Vector2(0, 1)
+tile_map_data = PackedByteArray("AADw/+7/AAAAAAAAAAD5/+//AgAAAAAAAAAOAO//AgAAAAAAAAAEAO3/AAAAAAAAAAA=")
+tile_set = ExtResource("17_ehiws")
+
+[node name="RowFront" type="TileMapLayer" parent="FoodPlantationLayers"]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AADw//f/AAAAAAAAAAAEAPf/AAAAAAAAAAD5//j/AgAAAAAAAAAOAPj/AgAAAAAAAAA=")
+tile_set = ExtResource("17_ehiws")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
 position = Vector2(438, 39)
@@ -143,12 +184,8 @@ gizmo_extents = 130.0
 position = Vector2(-68, 30)
 gizmo_extents = 130.0
 
-[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
-position = Vector2(196, -109)
-scale = Vector2(2.26984, 0.620759)
-radius = 95.0
-
 [node name="InteractionArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(187.5, -124.5)

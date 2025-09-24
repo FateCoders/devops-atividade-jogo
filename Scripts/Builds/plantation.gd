@@ -28,6 +28,15 @@ var is_functional: bool = false
 
 @onready var status_bubble = $buildingStatusBubble
 
+@onready var FoodPlantationBack = $FoodPlantationLayers/RowBack
+@onready var FoodPlantationMiddle = $FoodPlantationLayers/RowMiddle
+@onready var FoodPlantationFront = $FoodPlantationLayers/RowFront
+
+@onready var MedicinePlantationBack = $MedicinePlantationLayers2/RowBack
+@onready var MedicinePlantationMiddle = $MedicinePlantationLayers2/RowMiddle
+@onready var MedicinePlantationFront = $MedicinePlantationLayers2/RowFront
+
+
 var workers: Array[Node] = []
 var all_work_spots: Array[Marker2D] = []
 var available_work_spots: Array[Marker2D] = []
@@ -68,8 +77,6 @@ func claim_available_work_spot() -> Marker2D:
 	
 	print("Local '%s' foi reivindicado. Locais restantes: %d" % [spot.name, available_work_spots.size()])
 	
-	# A linha 'add_worker(1)' foi REMOVIDA.
-	
 	return spot
 	
 func _produce_resources():
@@ -84,8 +91,6 @@ func _produce_resources():
 		ProductionType.REMEDIOS:
 			resource_to_produce = "remedios"
 	
-	# A produção pode ser influenciada pelo número de trabalhadores.
-	# Exemplo: Produção = rendimento_diario * número_de_trabalhadores
 	var amount_produced = daily_yield * workers.size()
 	
 	StatusManager.mudar_status(resource_to_produce, amount_produced)
@@ -94,11 +99,17 @@ func _produce_resources():
 func set_production_type(new_type: ProductionType):
 	production_type = new_type
 	
-	# (Opcional) Você pode mudar a aparência da plantação aqui.
-	# if new_type == ProductionType.ALIMENTOS:
-	#	 $Sprite2D.texture = load("res://path/to/food_sprite.png")
-	# else:
-	#	 $Sprite2D.texture = load("res://path/to/remedy_sprite.png")
+	if new_type == ProductionType.ALIMENTOS:
+		FoodPlantationBack.visible = true
+		FoodPlantationMiddle.visible = true
+		FoodPlantationFront.visible = true
+	else:
+		FoodPlantationBack.visible = false
+		FoodPlantationMiddle.visible = false
+		FoodPlantationFront.visible = false
+		MedicinePlantationBack.visible = true
+		MedicinePlantationMiddle.visible = true
+		MedicinePlantationFront.visible = true
 		
 	print("Plantação '%s' foi configurada para produzir %s." % [self.name, ProductionType.keys()[new_type]])
 

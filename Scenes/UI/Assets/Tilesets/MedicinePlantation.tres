@@ -1,0 +1,44 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://cubs7vcblaybn"]
+
+[ext_resource type="Texture2D" uid="uid://duq3nap4k4fx" path="res://Assets/Sprites/Exported/Plantation/beans.png" id="1_jx0t4"]
+[ext_resource type="Texture2D" uid="uid://egc83arfjuf6" path="res://Assets/Sprites/Exported/Plantation/rice.png" id="2_pvdvp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f1ko0"]
+texture = ExtResource("1_jx0t4")
+texture_region_size = Vector2i(240, 320)
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/terrains_peering_bit/bottom_right_corner = 0
+0:0/0/terrains_peering_bit/bottom_side = 0
+0:0/0/terrains_peering_bit/bottom_left_corner = 0
+0:0/0/terrains_peering_bit/left_side = 0
+0:0/0/terrains_peering_bit/top_left_corner = 0
+0:0/0/terrains_peering_bit/top_side = 0
+0:0/0/terrains_peering_bit/top_right_corner = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fn2g2"]
+texture = ExtResource("2_pvdvp")
+texture_region_size = Vector2i(160, 240)
+0:0/0 = 0
+0:0/0/modulate = Color(0.7792914, 0.7792914, 0.7792913, 1)
+0:0/0/terrain_set = 0
+0:0/0/terrain = 1
+0:0/0/terrains_peering_bit/right_side = 1
+0:0/0/terrains_peering_bit/bottom_right_corner = 1
+0:0/0/terrains_peering_bit/bottom_side = 1
+0:0/0/terrains_peering_bit/bottom_left_corner = 1
+0:0/0/terrains_peering_bit/left_side = 1
+0:0/0/terrains_peering_bit/top_left_corner = 1
+0:0/0/terrains_peering_bit/top_side = 1
+0:0/0/terrains_peering_bit/top_right_corner = 1
+
+[resource]
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Beans Terrain"
+terrain_set_0/terrain_0/color = Color(0.32562575, 0.7164388, 0.8035357, 1)
+terrain_set_0/terrain_1/name = "Rice Terrain"
+terrain_set_0/terrain_1/color = Color(0, 0.75576, 0.42320022, 1)
+sources/0 = SubResource("TileSetAtlasSource_f1ko0")
+sources/1 = SubResource("TileSetAtlasSource_fn2g2")

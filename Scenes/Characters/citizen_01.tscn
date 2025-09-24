@@ -43,6 +43,7 @@ size = Vector2(55.14365, 61)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
+y_sort_enabled = true
 collision_layer = 2
 script = ExtResource("1_dc5lp")
 

@@ -406,6 +406,14 @@ func _on_target_reached():
 			_change_state(State.OCIOSO)
 		State.INDO_PARA_O_TRABALHO:
 			_change_state(State.TRABALHANDO)
+		State.PASSEANDO:
+			if is_instance_valid(assigned_work_spot):
+				var location_node = assigned_work_spot.get_owner()
+				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
+					location_node.release_work_spot(assigned_work_spot)
+					assigned_work_spot = null # Limpa a referência
+			
+			_change_state(State.OCIOSO)
 
 #=============================================================================
 # FUNÇÕES DE INTERAÇÃO COM A CASA
