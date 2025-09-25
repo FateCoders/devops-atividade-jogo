@@ -2,7 +2,7 @@ extends Node
 
 signal status_updated
 
-var dinheiro = 500
+var dinheiro = 50000
 var remedios = 500
 var ferramentas = 500
 var madeira = 500
@@ -14,6 +14,7 @@ var seguranca = 10
 var relacoes = 10
 
 var persistent_debuffs = {}
+
 
 func _ready():
 	emit_signal("status_updated")
@@ -32,9 +33,7 @@ func mudar_status(nome_status, valor):
 			relacoes = clamp(relacoes + valor, 0, 100)
 
 	emit_signal("status_updated")
-	
 	_check_defeat_conditions()
-
 	print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
 	
 func _check_defeat_conditions():
@@ -48,13 +47,10 @@ func mudar_dinheiro(valor):
 	dinheiro += valor
 	emit_signal("status_updated")
 
-# ADICIONADO: Nova função para verificar se temos recursos suficientes.
 func has_enough_resources(costs: Dictionary) -> bool:
 	for resource in costs.keys():
 		var required_amount = costs[resource]
-		
 		var current_amount = get(resource)
-		
 		if current_amount == null or current_amount < required_amount:
 			print("Recurso insuficiente: %s. Necessário: %d, Possui: %d" % [resource, required_amount, current_amount])
 			return false
@@ -87,7 +83,6 @@ func _recalculate_status():
 	for debuff in persistent_debuffs.values():
 		if debuff.type == "saude":
 			current_health_debuff += debuff.value
-
 	print("Debuff de saúde total atual: %d" % current_health_debuff)
 	
 func get_all_resources() -> Dictionary:
@@ -96,16 +91,17 @@ func get_all_resources() -> Dictionary:
 		"madeira": madeira,
 		"alimentos": alimentos,	
 		"remedios": remedios,
-		"ferramentas": ferramentas
+		"ferramentas": ferramentas,
+		"libertos": GameManager.libertos,
 	}
 	
 func execute_trade(items_given: Dictionary, items_received: Dictionary):
-	# Remove os itens que o jogador deu
 	for resource in items_given:
 		set(resource, get(resource) - items_given[resource])
-	
-	# Adiciona os itens que o jogador recebeu
 	for resource in items_received:
 		set(resource, get(resource) + items_received[resource])
-
 	emit_signal("status_updated")
+
+# NOVO: lógica de libertação
+func libertar_morador():
+	GameManager.add_libertos(1)

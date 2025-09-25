@@ -4,6 +4,9 @@ extends Node
 # Este dicionário guardará os dados da PARTIDA ATUAL.
 var current_quilombos_data: Dictionary = {}
 
+# Meta de vitória por liberdade
+const LIBERTOS_VICTORY_TARGET = 5
+
 # Estes são os "dados de fábrica", os valores iniciais.
 const INITIAL_QUILOMBOS_DATA = {
 	"palmares": {
@@ -19,11 +22,17 @@ const INITIAL_QUILOMBOS_DATA = {
 				"id": "buy_tools_palmares", "type": "buy", "item": "ferramentas",
 				"quantity": 5, "price": 40, "description": "Comprar 5 Ferramentas por 40 Dinheiro",
 				"available_on_day": 1
+			},
+			# --- OFERTA ESPECIAL DE ALFORRIA ---
+			{
+				"id": "buy_freedom_palmares", "type": "buy", "item": "libertos",
+				"quantity": 1, "price": 100, "description": "Comprar a alforria de 1 morador por 100 Dinheiro",
+				"available_on_day": 1
 			}
 		]
 	},
 	
-	# --- NOVOS QUILOMBOS ADICIONADOS ---
+	# --- OUTROS QUILOMBOS ---
 	
 	"camapua": {
 		"name": "Quilombo de Camapuã",
@@ -113,11 +122,10 @@ const INITIAL_QUILOMBOS_DATA = {
 
 func _ready():
 	current_quilombos_data = INITIAL_QUILOMBOS_DATA.duplicate(true)
-	pass
 
 func start_new_game_data():
 	current_quilombos_data = INITIAL_QUILOMBOS_DATA.duplicate(true)
-	print("Dados para um novo jogo foram inicializados.")
+	print("Dados para um novo jogo foram inicializados. Libertos: 0")
 
 func get_all_quilombos() -> Dictionary:
 	return current_quilombos_data
@@ -132,6 +140,23 @@ func change_relation(quilombo_id: String, amount: int):
 func execute_trade(quilombo_id, items_given_by_them, items_received_by_them):
 	change_relation(quilombo_id, 5)
 
+	if quilombo_id == "palmares" and items_received_by_them.has("libertos"):
+		var qtd = items_received_by_them["libertos"]
+		var offer_price = 100
+		for offer in current_quilombos_data[quilombo_id]["trade_offers"]:
+			if offer["id"] == "buy_freedom_palmares":
+				offer_price = offer["price"]
+			break
+			for i in range(qtd):
+				buy_alforria(offer_price)
+
+
+	# Checa se a troca foi a compra de alforria
+	if quilombo_id == "palmares" and items_received_by_them.has("libertos"):
+		var qtd = items_received_by_them["libertos"]
+		for i in range(qtd):
+			buy_alforria(100) # preço fixo por enquanto
+
 func set_offer_on_cooldown(quilombo_id: String, offer_id: String, cooldown_days: int = 5):
 	if not current_quilombos_data.has(quilombo_id):
 		return
@@ -144,21 +169,26 @@ func set_offer_on_cooldown(quilombo_id: String, offer_id: String, cooldown_days:
 
 func check_alliance_victory():
 	var allied_quilombos_count = 0
-	# Passa por todos os quilombos nos dados da partida atual.
 	for quilombo_id in current_quilombos_data:
 		var data = current_quilombos_data[quilombo_id]
-		# Se a relação for 100 ou mais, conta como um aliado.
 		if data.get("relations", 0) >= 100:
 			allied_quilombos_count += 1
 	
-	
 	var total_quilombos = current_quilombos_data.size()
-	
 	print("[QuilombosManager] Verificando vitória por aliança. Aliados: %d/%d" % [allied_quilombos_count, total_quilombos])
-	# Se o número de aliados for 3 ou mais, avisa o GameManager.
+	
 	if allied_quilombos_count >= total_quilombos:
-		# Passamos uma string para identificar o tipo de vitória.
 		GameManager._trigger_victory("unification")
+
+# --- Função para comprar alforria ---
+func buy_alforria(price: int):
+	if StatusManager.dinheiro >= price:
+		StatusManager.mudar_dinheiro(-price)
+		GameManager.add_libertos(1)  # ← Agora chama o contador central
+		print("Um morador foi libertado!")
+	else:
+		print("Dinheiro insuficiente para comprar alforria.")
+
 
 func get_save_data() -> Dictionary:
 	return { "quilombos_data": current_quilombos_data }
@@ -169,3 +199,4 @@ func load_data(data: Dictionary):
 		print("Dados dos quilombos carregados com sucesso.")
 	else:
 		start_new_game_data()
+	
