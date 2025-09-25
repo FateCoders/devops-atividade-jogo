@@ -1,46 +1,45 @@
-[gd_scene load_steps=6 format=3 uid="uid://bplyf1nwxk103"]
+[gd_scene load_steps=5 format=3 uid="uid://bplyf1nwxk103"]
 
 [ext_resource type="Script" uid="uid://dbggr1btqgffr" path="res://Scripts/UI/inventory_item.gd" id="1_nyv04"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="1_uihe2"]
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="2_25xny"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_uihe2"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_21x8i"]
-font = ExtResource("3_uihe2")
-
-[sub_resource type="LabelSettings" id="LabelSettings_3jxbu"]
-font = ExtResource("3_uihe2")
-
-[node name="InventoryItem" type="HBoxContainer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -8.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-alignment = 1
+[node name="InventoryItem" type="NinePatchRect"]
+custom_minimum_size = Vector2(60, 60)
+offset_right = 48.0
+offset_bottom = 48.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+texture = ExtResource("1_uihe2")
 script = ExtResource("1_nyv04")
 
 [node name="Icon" type="TextureRect" parent="."]
-layout_mode = 2
-size_flags_horizontal = 0
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 11.0
+offset_right = 48.0
+offset_bottom = 47.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
 texture = ExtResource("2_25xny")
-expand_mode = 2
+expand_mode = 4
+stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="."]
-layout_mode = 2
-size_flags_horizontal = 2
-text = "Alimentos"
-label_settings = SubResource("LabelSettings_21x8i")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="AmountLabel" type="Label" parent="."]
-layout_mode = 2
-text = "500"
-label_settings = SubResource("LabelSettings_3jxbu")
-horizontal_alignment = 1
+[node name="QuantityLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 35.0
+offset_right = 51.0
+offset_bottom = 55.0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3_uihe2")
+theme_override_font_sizes/font_size = 20
+text = "x500"
+horizontal_alignment = 2
 vertical_alignment = 1

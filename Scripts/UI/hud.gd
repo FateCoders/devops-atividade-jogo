@@ -23,6 +23,7 @@ var build_buttons: Dictionary = {}
 var hover_candidates: Array[NPC] = []
 var currently_highlighted_npc: NPC = null
 var main_ui_panels: Dictionary = {}
+var inventory_rows: Array = [] 
 
 @onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
@@ -43,14 +44,24 @@ var main_ui_panels: Dictionary = {}
 @onready var relations_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
 
 @onready var status_panel = $MainContainer/HBoxContainer/StatusPanel
-@onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
-@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton
-@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton/TextureRect
-@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
-@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+@onready var main_panel_container = $MainContainer/MainPanelContainer
+@onready var tabs_container = $MainContainer/MainPanelContainer/VBoxContainer/TabsContainer
+
+@onready var construcoes_sub_panel = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel
+@onready var decoracoes_sub_panel = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/DecoracoesSubPanel
+
+@onready var build_button = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var build_button_icon = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_builds = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
+
+@onready var button_inventory = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton
+@onready var inventory_button_icon = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton/TextureRect
+@onready var button_inventorys = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+
+@onready var inventory_row_1 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer
+@onready var inventory_row_2 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer2
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
@@ -86,6 +97,9 @@ const HUNGER_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/bone-ic
 const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png")
 const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
+
+const Z_INDEX_NORMAL = 0
+const Z_INDEX_ACTIVE = 1
 
 const STATUS_DATA = {
 	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
@@ -158,17 +172,41 @@ func _ready():
 		button_builds: {
 			"button": build_button,
 			"icon_node": build_button_icon,
-			"base_texture": BUILD_TEXTURE
+			"base_texture": BUILD_TEXTURE,
+			"tabs": [
+				{
+					"label": "Construções",
+					"sub_panel": construcoes_sub_panel
+				},
+				 {
+				   "label": "Decorações",
+				   "sub_panel": decoracoes_sub_panel
+				 }
+			]
 		},
 		button_inventorys: {
 			"button": button_inventory,
 			"icon_node": inventory_button_icon,
-			"base_texture": INVENTORY_TEXTURE 
+			"base_texture": INVENTORY_TEXTURE,
+			"tabs": [
+				{
+					"label": "Meus Recursos",
+					"sub_panel": button_inventorys 
+				}
+			]
 		}
 	}
-
-	for panel in main_ui_panels:
-		panel.visible = false
+	
+	inventory_rows = [
+		{
+			"container": inventory_row_1,
+			"resources": ["madeira", "ferramentas"]
+		},
+		{
+			"container": inventory_row_2,
+			"resources": ["alimentos", "remedios"]
+		}
+	]
 
 func _process(delta: float):
 	_update_cursor_state()
@@ -233,7 +271,7 @@ func _on_status_updated():
 	security_bar.value = StatusManager.seguranca
 	relations_bar.value = StatusManager.relacoes
 
-	money_label.text = str(StatusManager.dinheiro)
+	money_label.text = str(StatusManager.get_resource("dinheiro"))
 	population_label.text = str(QuilomboManager.all_npcs.size())
 
 	if StatusManager.fome == 100:
@@ -328,11 +366,8 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			temp_instance.queue_free()
 			return
 	
-	# --- FIM DA NOVA LÓGICA DE VERIFICAÇÃO ---
-	
-	temp_instance.queue_free() # Limpa a instância temporária
+	temp_instance.queue_free() 
 
-	# Se todas as verificações passaram, inicia o modo de posicionamento
 	button_builds.visible = false
 	construction_title.visible = false
 	
@@ -414,17 +449,12 @@ func _on_fugitives_awaiting_assignment(npcs: Array):
 	profession_screen.show_panel(npcs)
 
 func show_quilombo_list():
-	# Medida de segurança para garantir que não abrimos duas janelas ao mesmo tempo.
-	# Procura por uma janela antiga e a remove, se existir.
 	var old_list = find_child("QuilomboListUI", true, false)
 	if old_list:
 		old_list.queue_free()
 
-	# Cria a nova janela da lista de quilombos.
 	var list_ui = QuilomboListScene.instantiate()
-	# Damos um nome para que a verificação acima possa encontrá-la.
 	list_ui.name = "QuilomboListUI" 
-	# Adiciona a janela à cena, tornando-a visível.
 	add_child(list_ui)
 	
 func show_escambo_ui(quilombo_id: String):
@@ -445,17 +475,19 @@ func _on_inventory_button_pressed() -> void:
 		button_inventory.texture_normal = INVENTORY_TEXTURE
 
 func _populate_inventory_list():
-	for child in list_container.get_children():
-		child.queue_free()
+	for row_data in inventory_rows:
+		var container = row_data.container
+		for child in container.get_children():
+			child.queue_free()
 
-	var player_inventory = StatusManager.get_all_resources()
+	for row_data in inventory_rows:
+		var container = row_data.container
+		var resources_in_row = row_data.resources
 
-	for resource_name in player_inventory:
-		var amount = player_inventory[resource_name]
-
-		if amount > 0 or resource_name == "dinheiro":
+		for resource_name in resources_in_row:
+			var amount = StatusManager.get_resource(resource_name)
 			var item = InventoryItemScene.instantiate()
-			list_container.add_child(item)
+			container.add_child(item)
 			item.set_data(resource_name, amount)
 
 func show_npc_inspector(npc_ref: NPC):
@@ -553,29 +585,86 @@ func _update_npc_inspector_panel():
 
 
 func _toggle_main_panel(panel_to_toggle: Control):
-	var was_open = panel_to_toggle.visible
+	var is_closing_action = panel_to_toggle.visible
 
 	for panel in main_ui_panels:
 		var data = main_ui_panels[panel]
 		panel.visible = false
 		data.icon_node.visible = true
 		data.button.texture_normal = data.base_texture
+	_clear_tabs()
+	construction_title.visible = false
 
-	if not was_open:
+	if not is_closing_action:
 		var data = main_ui_panels[panel_to_toggle]
 		panel_to_toggle.visible = true
 		data.icon_node.visible = false
 		data.button.texture_normal = CLOSE_TEXTURE
+
+		call_deferred("_update_tabs_for_panel", panel_to_toggle)
 
 		if panel_to_toggle == button_inventorys:
 			_populate_inventory_list()
 		elif panel_to_toggle == button_builds:
 			construction_title.visible = true
 
-	var any_panel_open = was_open == false
-	construction_title.visible = (button_builds.visible) 
-	
-	if any_panel_open:
+	if not is_closing_action:
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
+
+func _update_tabs_for_panel(panel_node):
+	_clear_tabs()
+
+	var panel_data = main_ui_panels[panel_node]
+	var tabs_data = panel_data.get("tabs", [])
+	if tabs_data.is_empty():
+		return
+
+	var all_sub_panels_in_section = []
+	for tab_info in tabs_data:
+		all_sub_panels_in_section.append(tab_info.sub_panel)
+
+	var tab_button_group = ButtonGroup.new()
+
+	for tab_info in tabs_data:
+		var tab_button = Button.new()
+		tab_button.text = tab_info.label
+		tab_button.toggle_mode = true
+		tab_button.button_group = tab_button_group
+		tabs_container.add_child(tab_button)
+		tab_button.pressed.connect(_on_tab_button_pressed.bind(tab_button, tab_info.sub_panel, all_sub_panels_in_section))
+
+	if not tabs_data.is_empty():
+		var first_tab_button = tabs_container.get_child(0) as Button
+		var first_sub_panel = tabs_data[0].sub_panel
+
+		first_tab_button.button_pressed = true
+		first_tab_button.z_index = Z_INDEX_ACTIVE
+
+		for panel in all_sub_panels_in_section:
+			if is_instance_valid(panel):
+				panel.visible = false
+
+		if is_instance_valid(first_sub_panel):
+			first_sub_panel.visible = true
+
+func _clear_tabs():
+	for child in tabs_container.get_children():
+		tabs_container.remove_child(child)
+		child.queue_free()
+
+func _on_tab_button_pressed(button_pressed: Button, sub_panel_to_show, all_sub_panels):
+	for tab in tabs_container.get_children():
+		if tab is Button:
+			tab.z_index = Z_INDEX_NORMAL
+
+	if is_instance_valid(button_pressed):
+		button_pressed.z_index = Z_INDEX_ACTIVE
+
+	for panel in all_sub_panels:
+		if is_instance_valid(panel):
+			panel.visible = false
+
+	if is_instance_valid(sub_panel_to_show):
+		sub_panel_to_show.visible = true

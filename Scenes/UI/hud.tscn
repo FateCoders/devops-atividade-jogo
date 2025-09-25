@@ -1,9 +1,10 @@
-[gd_scene load_steps=56 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=57 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
 [ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_fqivn"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_mqf2c"]
+[ext_resource type="Theme" uid="uid://gxuf8hob5imi" path="res://Resources/Themes/abas_theme.tres" id="2_njpji"]
 [ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="3_81d8i"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_fdl0h"]
 [ext_resource type="PackedScene" uid="uid://r2i6y2oouxw" path="res://Scenes/UI/styledButton.tscn" id="3_yxyk2"]
@@ -143,100 +144,111 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="ButtonsPanel" type="PanelContainer" parent="MainContainer"]
+[node name="MainPanelContainer" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MainPanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = -10
+
+[node name="TabsContainer" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_njpji")
+
+[node name="ButtonsPanel" type="PanelContainer" parent="MainContainer/MainPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
 
-[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/ButtonsPanel"]
+[node name="SectionsPanel" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel"]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="ButtonInventoryOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonInventoryOptions" type="VBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
 layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="ItemList" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions"]
 layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="ButtonBuildsOptions" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonBuildsOptions" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel"]
 visible = false
 layout_mode = 2
 
-[node name="Col1" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="ConstrucoesSubPanel" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 layout_mode = 2
 
-[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1"]
+[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BuildSmallHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildSmallHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa"
 button_icon = ExtResource("5_yxyk2")
 
-[node name="BuildHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa Grande"
 button_icon = ExtResource("5_f1jpe")
 
-[node name="BuildHidingPlaceButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildHidingPlaceButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Esconderijo"
 button_icon = ExtResource("6_mgdch")
 
-[node name="BuildLeadersHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildLeadersHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa do Líder"
 button_icon = ExtResource("4_8c63k")
 
-[node name="Spacer" type="Control" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+[node name="Spacer" type="Control" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel"]
 custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Col2" type="HBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
-layout_mode = 2
-
-[node name="BuildOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2"]
+[node name="BuildOptions2" type="VBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BuildPlantetionButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildPlantetionButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions2" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Plantação"
 button_icon = ExtResource("7_0hfmd")
 
-[node name="BuildInfirmaryButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildInfirmaryButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions2" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Enfermaria"
 button_icon = ExtResource("9_q8e8b")
 
-[node name="BuildTrainingAreaButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildTrainingAreaButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions2" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Área de Treinamento"
 button_icon = ExtResource("9_iiebs")
 
-[node name="BuildChurchButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col2/BuildOptions" instance=ExtResource("3_yxyk2")]
+[node name="BuildChurchButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions2" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Centro Espiritual"
 button_icon = ExtResource("11_k32gu")
 
-[node name="Spacer2" type="Control" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
-custom_minimum_size = Vector2(2.5, 0)
+[node name="DecoracoesSubPanel" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
+visible = false
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/ButtonsPanel/SectionsPanel"]
+[node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="InventoryButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
+[node name="InventoryButton" type="TextureButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -245,7 +257,7 @@ texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -261,7 +273,7 @@ texture = ExtResource("13_81d8i")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BuildButton" type="TextureButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
+[node name="BuildButton" type="TextureButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -270,7 +282,7 @@ texture_normal = ExtResource("2_7wqu8")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton"]
+[node name="TextureRect" type="TextureRect" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -718,6 +730,6 @@ size_flags_horizontal = 4
 button_text = "Confirmar"
 button_icon = null
 
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
-[connection signal="pressed" from="MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
+[connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
