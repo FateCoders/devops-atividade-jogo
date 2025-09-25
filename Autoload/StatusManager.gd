@@ -4,7 +4,7 @@ signal status_updated
 
 var recursos = {
 	"dinheiro": 500,
-	"madeira": 0,
+	"madeira": 20,
 	"remedios": 90,
 	"ferramentas": 30,
 	"alimentos": 200

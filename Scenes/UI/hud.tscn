@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=64 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -23,15 +23,22 @@
 [ext_resource type="Texture2D" uid="uid://dti7e8mi3qiho" path="res://Assets/Sprites/Exported/Buildings/infirmary.png" id="9_q8e8b"]
 [ext_resource type="Texture2D" uid="uid://d3bmhcbpjocve" path="res://Assets/Sprites/Exported/Buildings/church.png" id="11_k32gu"]
 [ext_resource type="Texture2D" uid="uid://dq0q1nl0cnaee" path="res://Assets/Sprites/Exported/HUD/Icons/backback-icon.png" id="13_81d8i"]
+[ext_resource type="Texture2D" uid="uid://m8hclu1hhhj3" path="res://Assets/Sprites/Exported/Props/Builds/Bonfires/bonfire-01-static.png" id="13_wae4w"]
+[ext_resource type="Texture2D" uid="uid://djvw55huequ2p" path="res://Assets/Sprites/Exported/Buttons/pause-button.png" id="14_b4m6i"]
 [ext_resource type="StyleBox" uid="uid://cocsuxsm44n0n" path="res://Scenes/UI/Assets/Styles/previewbar_health.tres" id="15_8c63k"]
 [ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="15_mu5ro"]
+[ext_resource type="Texture2D" uid="uid://c1agacfb5jsja" path="res://Assets/Sprites/Exported/Buttons/play-button.png" id="15_mugiv"]
 [ext_resource type="Texture2D" uid="uid://dulxt81pyxfr4" path="res://Assets/Sprites/Exported/HUD/Icons/health-icon.png" id="15_n5w8m"]
 [ext_resource type="StyleBox" uid="uid://drl4fr0qw7e8f" path="res://Scenes/UI/Assets/Styles/progressbar_background.tres" id="15_qff6j"]
+[ext_resource type="Texture2D" uid="uid://pj7cl3ic5ukl" path="res://Assets/Sprites/Exported/Buttons/speedup-button.png" id="16_ndia8"]
 [ext_resource type="Texture2D" uid="uid://cux6272ol70m6" path="res://Assets/Sprites/Exported/HUD/Icons/population-icon.png" id="16_ragyo"]
+[ext_resource type="Texture2D" uid="uid://dy4mjiu0qmdvt" path="res://Assets/Sprites/Exported/Buttons/hint-button-02.png" id="17_eaycp"]
 [ext_resource type="StyleBox" uid="uid://bmqwkdcqqpqmw" path="res://Scenes/UI/Assets/Styles/previewbar_hunger.tres" id="18_e17ao"]
+[ext_resource type="Texture2D" uid="uid://cn87mw0baye6f" path="res://Assets/Sprites/Exported/Buttons/configuration-button-02.png" id="18_f13sg"]
 [ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="19_3omb4"]
 [ext_resource type="StyleBox" uid="uid://cmepvnwjree6h" path="res://Scenes/UI/Assets/Styles/previewbar_security.tres" id="20_0hfmd"]
 [ext_resource type="StyleBox" uid="uid://dsndh5oc5yn30" path="res://Scenes/UI/Assets/Styles/previewbar_relations.tres" id="22_pc4p0"]
+[ext_resource type="Texture2D" uid="uid://b2y8ura4iqj73" path="res://Assets/Sprites/Exported/Buttons/configuration-button-01.png" id="22_xp6xv"]
 [ext_resource type="Texture2D" uid="uid://cjjfcc1o24jil" path="res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png" id="24_3omb4"]
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="24_yxyk2"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
@@ -242,6 +249,11 @@ button_icon = ExtResource("11_k32gu")
 [node name="DecoracoesSubPanel" type="HBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions"]
 visible = false
 layout_mode = 2
+
+[node name="BuildBonfireButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/DecoracoesSubPanel" instance=ExtResource("3_yxyk2")]
+layout_mode = 2
+button_text = "Fogueira"
+button_icon = ExtResource("13_wae4w")
 
 [node name="ButtonOptions" type="VBoxContainer" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel"]
 layout_mode = 2
@@ -627,18 +639,93 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
 theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
 
-[node name="DayContainer" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="DayContainer" type="PanelContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_q8e8b")
 
-[node name="DayLabel" type="Label" parent="DayContainer"]
+[node name="DayLabel" type="Label" parent="VBoxContainer/DayContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Dia 01"
 label_settings = SubResource("LabelSettings_yxyk2")
+
+[node name="ButtonsPanel" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_cna6x")
+
+[node name="SectionsPanel" type="VBoxContainer" parent="VBoxContainer/ButtonsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ButtonOptions" type="VBoxContainer" parent="VBoxContainer/ButtonsPanel/SectionsPanel"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="MenuButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture_normal = ExtResource("22_xp6xv")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MenuSubPanel" type="VBoxContainer" parent="VBoxContainer/ButtonsPanel/SectionsPanel"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="PlayButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("15_mugiv")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PauseButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("14_b4m6i")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SpeedUpButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("16_ndia8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TutorialButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("17_eaycp")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SettingsButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("18_f13sg")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="BuildTitleLabel" type="Label" parent="."]
 visible = false

@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://t1leqrolyras" path="res://Scripts/UI/styled_button.gd" id="1_i00c6"]
 [ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="2_70y5c"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="2_orlhf"]
-[ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="3_70y5c"]
+[ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="5_70y5c"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0a4bi"]
 texture = ExtResource("1_70y5c")
@@ -47,21 +47,27 @@ custom_minimum_size = Vector2(2.5, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CostIcon" type="TextureRect" parent="HBoxContainer"]
+[node name="CostsContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="CostTemplate" type="HBoxContainer" parent="HBoxContainer/CostsContainer"]
 visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/CostsContainer/CostTemplate"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-texture = ExtResource("3_70y5c")
 expand_mode = 2
-stretch_mode = 5
+stretch_mode = 4
 
-[node name="CostLabel" type="Label" parent="HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(25, 0)
+[node name="Amount" type="Label" parent="HBoxContainer/CostsContainer/CostTemplate"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.560784, 0.337255, 0.227451, 1)
-theme_override_fonts/font = ExtResource("2_orlhf")
-vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.56078434, 0.3372549, 0.22745098, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("5_70y5c")
+theme_override_font_sizes/font_size = 22
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 2

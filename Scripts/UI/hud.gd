@@ -15,6 +15,8 @@ const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders
 const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
 const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
 
+const BonfireScene = preload("res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn") 
+
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
@@ -63,12 +65,15 @@ var inventory_rows: Array = []
 @onready var inventory_row_1 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer
 @onready var inventory_row_2 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer2
 
+@onready var menu_button = $VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/MenuButton
+@onready var menu_sub_panel = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel
+
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
-@onready var day_label = $DayContainer/DayLabel
+@onready var day_label = $VboxContainer/DayContainer/DayLabel
 
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
@@ -82,6 +87,8 @@ var inventory_rows: Array = []
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const INVENTORY_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
+const MENU_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/configuration-button-01.png")
+
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 const BUILD_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png")
 const INVENTORY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png")
@@ -142,7 +149,9 @@ func _ready():
 		"BuildPlantetionButton": PlantationScene,
 		"BuildInfirmaryButton": InfirmaryScene,
 		"BuildTrainingAreaButton": TrainingAreaScene,
-		"BuildChurchButton": ChurchScene
+		"BuildChurchButton": ChurchScene,
+		
+		"BuildBonfireButton": BonfireScene,
 	}
 	
 	GameManager.tutorial_step_changed.connect(update_build_buttons_for_tutorial)
@@ -152,18 +161,15 @@ func _ready():
 		if button.name in button_scene_map:
 			var scene = button_scene_map[button.name]
 			button.pressed.connect(_on_any_build_button_pressed.bind(scene))
-			
 			build_buttons[scene.resource_path] = button
-			
 			var temp_instance = scene.instantiate()
+
 			var structure_cost: Dictionary = {}
-			if "cost" in temp_instance: structure_cost = temp_instance.cost
+			if "cost" in temp_instance:
+				structure_cost = temp_instance.cost
+
+			button.display_costs(structure_cost)
 			temp_instance.queue_free()
-			if structure_cost.has("dinheiro"):
-				var cost_amount = structure_cost["dinheiro"]
-				button.set_cost_value(cost_amount)
-				button.cost_icon.texture = MONEY_ICON
-				button.set_cost_visible(true)
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
 	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
@@ -207,6 +213,9 @@ func _ready():
 			"resources": ["alimentos", "remedios"]
 		}
 	]
+	
+	menu_button.pressed.connect(_on_menu_button_pressed)
+	menu_sub_panel.visible 
 
 func _process(delta: float):
 	_update_cursor_state()
@@ -368,8 +377,7 @@ func _on_any_build_button_pressed(scene: PackedScene):
 	
 	temp_instance.queue_free() 
 
-	button_builds.visible = false
-	construction_title.visible = false
+	main_panel_container.visible = false
 	
 	GameManager.pause_game()
 	is_in_placement_mode = true
@@ -389,8 +397,8 @@ func _exit_placement_mode():
 	if is_instance_valid(placement_preview):
 		placement_preview.queue_free()
 
-	button_builds.visible = true
-	construction_title.visible = true
+	main_panel_container.visible = true
+
 	GameManager.pause_game()
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
@@ -668,3 +676,11 @@ func _on_tab_button_pressed(button_pressed: Button, sub_panel_to_show, all_sub_p
 
 	if is_instance_valid(sub_panel_to_show):
 		sub_panel_to_show.visible = true
+
+func _on_menu_button_pressed():
+	menu_sub_panel.visible = not menu_sub_panel.visible
+
+	if menu_sub_panel.visible:
+		menu_button.texture_normal = CLOSE_TEXTURE
+	else:
+		menu_button.texture_normal = MENU_TEXTURE
