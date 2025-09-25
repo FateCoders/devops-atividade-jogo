@@ -15,28 +15,6 @@ const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders
 const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
 const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
 
-const STATUS_DATA = {
-	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.EM_CASA: {"text": "Dormindo...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-
-	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.DESABRIGADO: {"text": "Desabrigado!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-	NPC.State.DESEMPREGADO: {"text": "Sem local para trabalhar!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
-}
-
-const WORKPLACE_NAMES = {
-	PlantationScene.resource_path: "Plantação",
-	InfirmaryScene.resource_path: "Enfermaria",
-	TrainingAreaScene.resource_path: "Área de Treinamento",
-	ChurchScene.resource_path: "Centro Espiritual",
-	LeadersHouseScene.resource_path: "Casa do Líder"
-}
-
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
@@ -44,6 +22,7 @@ var notification_tween: Tween
 var build_buttons: Dictionary = {}
 var hover_candidates: Array[NPC] = []
 var currently_highlighted_npc: NPC = null
+var main_ui_panels: Dictionary = {}
 
 @onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
@@ -68,6 +47,10 @@ var currently_highlighted_npc: NPC = null
 @onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
 @onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
 
+@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton
+@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton/TextureRect
+@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
@@ -75,11 +58,6 @@ var currently_highlighted_npc: NPC = null
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
 @onready var day_label = $DayContainer/DayLabel
-
-@onready var button_inventory = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var inventory_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_inventorys = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
-@onready var list_container = $MainContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
 
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
@@ -92,6 +70,7 @@ var currently_highlighted_npc: NPC = null
 @onready var npc_state_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/NPCStateLabel
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
+const INVENTORY_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 const BUILD_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png")
 const INVENTORY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png")
@@ -107,6 +86,28 @@ const HUNGER_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/bone-ic
 const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png")
 const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
+
+const STATUS_DATA = {
+	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.EM_CASA: {"text": "Dormindo...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+
+	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESABRIGADO: {"text": "Desabrigado!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESEMPREGADO: {"text": "Sem local para trabalhar!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+}
+
+const WORKPLACE_NAMES = {
+	PlantationScene.resource_path: "Plantação",
+	InfirmaryScene.resource_path: "Enfermaria",
+	TrainingAreaScene.resource_path: "Área de Treinamento",
+	ChurchScene.resource_path: "Centro Espiritual",
+	LeadersHouseScene.resource_path: "Casa do Líder"
+}
 
 var InventoryItemScene = preload("res://Scenes/UI/InventoryItem.tscn")
 var currently_inspected_npc: NPC = null
@@ -152,6 +153,22 @@ func _ready():
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
 	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
+
+	main_ui_panels = {
+		button_builds: {
+			"button": build_button,
+			"icon_node": build_button_icon,
+			"base_texture": BUILD_TEXTURE
+		},
+		button_inventorys: {
+			"button": button_inventory,
+			"icon_node": inventory_button_icon,
+			"base_texture": INVENTORY_TEXTURE 
+		}
+	}
+
+	for panel in main_ui_panels:
+		panel.visible = false
 
 func _process(delta: float):
 	_update_cursor_state()
@@ -261,25 +278,7 @@ func _on_npc_count_changed(new_count: int):
 	population_label.text = str(new_count)
 
 func _on_button_pressed():
-	button_builds.visible = !button_builds.visible
-	construction_title.visible = button_builds.visible
-	
-	if button_builds.visible:
-		GameManager.pause_game()
-	else:
-		GameManager.resume_game()
-
-	if button_builds.visible:
-		build_button_icon.visible = false
-		build_button.texture_normal = CLOSE_TEXTURE
-		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
-	else:
-		build_button_icon.visible = true
-		build_button.texture_normal = BUILD_TEXTURE
-		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
-
-		if is_in_placement_mode:
-			_exit_placement_mode()
+	_toggle_main_panel(button_builds)
 
 func _on_any_build_button_pressed(scene: PackedScene):
 	QuilomboManager._debug_print_all_npc_status("Clique no Botão de Construir")
@@ -433,38 +432,28 @@ func show_escambo_ui(quilombo_id: String):
 	add_child(escambo_ui)
 	escambo_ui.start_trade(quilombo_id)
 
-
 func _on_inventory_button_pressed() -> void:
-	# Alterna a visibilidade do painel de inventário
-	button_inventorys.visible = !button_inventorys.visible
-	
-	# Se o painel acabou de se tornar visível, popula a lista.
+	_toggle_main_panel(button_inventorys)
+
 	if button_inventorys.visible:
 		_populate_inventory_list()
 
-	# A lógica de mudar o ícone do botão e o cursor continua a mesma
 	inventory_button_icon.visible = !button_inventorys.visible
 	if button_inventorys.visible:
 		button_inventory.texture_normal = CLOSE_TEXTURE
 	else:
-		button_inventory.texture_normal = BUILD_TEXTURE
+		button_inventory.texture_normal = INVENTORY_TEXTURE
 
-# ADICIONE esta nova função para preencher a lista
 func _populate_inventory_list():
-	
-	# 1. Limpa a lista antiga
 	for child in list_container.get_children():
 		child.queue_free()
-		
-	# 2. Pega os recursos do StatusManager
+
 	var player_inventory = StatusManager.get_all_resources()
-	
-	# 3. Cria um item na UI para cada recurso
+
 	for resource_name in player_inventory:
 		var amount = player_inventory[resource_name]
-		
-		# Só mostra o recurso se o jogador tiver algum
-		if amount > 0 or resource_name == "dinheiro": # Mostra dinheiro mesmo se for 0
+
+		if amount > 0 or resource_name == "dinheiro":
 			var item = InventoryItemScene.instantiate()
 			list_container.add_child(item)
 			item.set_data(resource_name, amount)
@@ -561,3 +550,32 @@ func _update_npc_inspector_panel():
 		npc_state_label.text = "Estado: %s" % state_text
 	else:
 		npc_state_label.text = "Estado: Desconhecido"
+
+
+func _toggle_main_panel(panel_to_toggle: Control):
+	var was_open = panel_to_toggle.visible
+
+	for panel in main_ui_panels:
+		var data = main_ui_panels[panel]
+		panel.visible = false
+		data.icon_node.visible = true
+		data.button.texture_normal = data.base_texture
+
+	if not was_open:
+		var data = main_ui_panels[panel_to_toggle]
+		panel_to_toggle.visible = true
+		data.icon_node.visible = false
+		data.button.texture_normal = CLOSE_TEXTURE
+
+		if panel_to_toggle == button_inventorys:
+			_populate_inventory_list()
+		elif panel_to_toggle == button_builds:
+			construction_title.visible = true
+
+	var any_panel_open = was_open == false
+	construction_title.visible = (button_builds.visible) 
+	
+	if any_panel_open:
+		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+	else:
+		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)

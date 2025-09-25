@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://b6328dvo6jnsd" path="res://Assets/Sprites/Exported/Buildings/trainingArea-icon.png" id="9_iiebs"]
 [ext_resource type="Texture2D" uid="uid://dti7e8mi3qiho" path="res://Assets/Sprites/Exported/Buildings/infirmary.png" id="9_q8e8b"]
 [ext_resource type="Texture2D" uid="uid://d3bmhcbpjocve" path="res://Assets/Sprites/Exported/Buildings/church.png" id="11_k32gu"]
-[ext_resource type="Texture2D" uid="uid://bbrfwbu16gwkn" path="res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png" id="13_mgdch"]
+[ext_resource type="Texture2D" uid="uid://dq0q1nl0cnaee" path="res://Assets/Sprites/Exported/HUD/Icons/backback-icon.png" id="13_81d8i"]
 [ext_resource type="StyleBox" uid="uid://cocsuxsm44n0n" path="res://Scenes/UI/Assets/Styles/previewbar_health.tres" id="15_8c63k"]
 [ext_resource type="Texture2D" uid="uid://c4fb56pco7ykx" path="res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png" id="15_mu5ro"]
 [ext_resource type="Texture2D" uid="uid://dulxt81pyxfr4" path="res://Assets/Sprites/Exported/HUD/Icons/health-icon.png" id="15_n5w8m"]
@@ -257,7 +257,7 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_mgdch")
+texture = ExtResource("13_81d8i")
 expand_mode = 1
 stretch_mode = 5
 
