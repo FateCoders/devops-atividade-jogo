@@ -71,9 +71,9 @@ gizmo_extents = 48.5
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
 z_index = 3
 y_sort_enabled = true
-position = Vector2(20.127016, -18.785215)
+position = Vector2(23, -16.999998)
 radius = 300.0
-vertices = PackedVector2Array(322.03226, 277.7528, -63.06465, 292.51263, -61.722847, 83.191666, -291.17084, 80.508064, -288.4872, 292.51263, -401.19852, 292.51263, -409.24933, -155.64893, 370.3371, -158.33252, 379.7297, 49.646637)
+vertices = PackedVector2Array(378, 313, -69, 315, -69, 75, -291.17084, 80.508064, -296, 314, -419, 314, -419, -152, 370.3371, -158.33252, 382, 59)
 
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
 [connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]

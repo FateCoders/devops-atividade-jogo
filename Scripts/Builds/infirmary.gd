@@ -101,3 +101,11 @@ func _on_interaction_area_mouse_entered() -> void:
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
+	
+func get_arrival_position() -> Vector2:
+	# Check if the ArrivalPoint node exists to prevent errors.
+	if has_node("ArrivalPoint"):
+		return $ArrivalPoint.global_position
+	
+	# If it doesn't exist for some reason, return the building's own position as a fallback.
+	return global_position

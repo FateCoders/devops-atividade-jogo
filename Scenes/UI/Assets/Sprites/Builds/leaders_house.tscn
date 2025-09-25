@@ -7,7 +7,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1156.9353, 556.82104)
+size = Vector2(1156.9353, 641.777)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
 size = Vector2(237.78099, 263.0909)
@@ -38,7 +38,7 @@ region_enabled = true
 region_rect = Rect2(8.805237, 729.44586, 1091.6357, 231.25336)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(0.99911976, 326.3659)
+position = Vector2(0.99911976, 283.888)
 scale = Vector2(0.9999986, 0.9999986)
 shape = SubResource("RectangleShape2D_m5062")
 
@@ -61,7 +61,7 @@ shape = SubResource("RectangleShape2D_f1rwg")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
-vertices = PackedVector2Array(-540.83496, 594.1192, -538.1708, 364.99698, -547.49554, 366.3291, -550.1597, 339.68698, -558.15234, 333.02643, -558.15234, 43.959473, 566.145, 45.291565, 567.4771, 343.6833, 552.8239, 339.68698, 548.82764, 367.6612, 539.50287, 374.32172, 538.1708, 599.44763, 105.23637, 599.44763, 107.90057, 372.98962, -97.24373, 370.3254, -103.90426, 591.45496)
+vertices = PackedVector2Array(-577, 612, -579, 341.99997, -579, -44.00003, 581, -38.00003, 580, 338.99997, 587, 610, 119, 605, 118, 375.99997, -120, 372.99997, -122, 605)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]

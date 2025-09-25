@@ -48,7 +48,7 @@ const PROFESSION_NAMES = {
 @export var npc_name: String = "Morador"
 @export var profession: Profession = Profession.NENHUMA 
 @export var move_speed: float = 200.0
-@export var wander_range: float = 200.0
+@export var wander_range: float = 20.0
 
 @export_category("Dança")
 @export var dance_animation_speed: float = 0.7
@@ -112,6 +112,7 @@ var hud_node: Hud = null
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
 func _ready():
+	
 	status_bubble.hide()
 	
 	#process_mode = Node.PROCESS_MODE_ALWAYS
@@ -135,6 +136,11 @@ func _ready():
 	await get_tree().physics_frame
 	_initialize_state_and_position()
 	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
+	
+	nav_agent.velocity_computed.connect(on_velocity_computed)
+
+func on_velocity_computed(safe_velocity: Vector2):
+	velocity = safe_velocity
 
 func _initialize_state_and_position():
 	if not is_instance_valid(house_node):
@@ -167,19 +173,26 @@ func _initialize_state_and_position():
 #-----------------------------------------------------------------------------
 func _physics_process(delta):
 	# O resto do código permanece o mesmo...
+		# Se o NPC deve estar parado por algum motivo, zera a velocidade.
 	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		_handle_idle_states(delta)
+		# Zera a velocidade do agente também para que ele não tente desviar.
+		nav_agent.set_velocity(Vector2.ZERO)
 	else:
-		var just_unstuck = _check_if_stuck(delta)
-		if just_unstuck:
-			velocity = Vector2.ZERO
-		elif nav_agent.is_navigation_finished():
-			velocity = Vector2.ZERO
-			_on_target_reached()
-		else:
+		# Se a navegação ainda não terminou...
+		if not nav_agent.is_navigation_finished():
+			# 1. Calcula a direção para o próximo ponto do caminho.
 			var next_path_position = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_path_position)
-			velocity = direction.normalized() * move_speed
+			
+			# 2. INFORMA ao agente qual é a nossa velocidade desejada.
+			# O agente então calculará a velocidade segura e a enviará pelo sinal.
+			nav_agent.set_velocity(direction * move_speed)
+		else:
+			# Chegou ao destino final, para o agente e o corpo.
+			nav_agent.set_velocity(Vector2.ZERO)
+			velocity = Vector2.ZERO
+			_on_target_reached()
 
 	move_and_slide()
 	_update_animation()
@@ -322,7 +335,7 @@ func _change_state(new_state: State):
 
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()
-		animated_sprite.position = Vector2.ZERO
+		#animated_sprite.position = Vector2.ZERO
 
 	_cancel_idle_timer()
 
@@ -348,17 +361,32 @@ func _change_state(new_state: State):
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
 				show()
-				assigned_work_spot = work_node.claim_available_work_spot()
+				nav_agent.target_position = work_node.get_arrival_position()
 				
-				if is_instance_valid(assigned_work_spot):
-					nav_agent.target_position = assigned_work_spot.global_position
-				else:
-					print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
-					_change_state(State.OCIOSO)
+			else:
+				print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
+				_change_state(State.OCIOSO)
 
 		State.PASSEANDO:
-			if collision_shape:
-				collision_shape.disabled = false
+			collision_shape.disabled = false
+			
+			var decision = randf()
+			
+			if decision < 0.33: 
+				var interest_points = get_tree().get_nodes_in_group("locais_de_interesse")
+				if not interest_points.is_empty():
+					var destination_node = interest_points.pick_random()
+					
+					if destination_node.has_method("claim_available_work_spot"):
+						var spot = destination_node.claim_available_work_spot()
+						if is_instance_valid(spot):
+							nav_agent.target_position = spot.global_position
+							print("'%s' decidiu visitar '%s'." % [name, destination_node.name])
+							
+							assigned_work_spot = spot 
+							return
+				
+			print("'%s' decidiu passear aleatoriamente." % name)
 			_set_new_random_destination()
 
 		State.TRABALHANDO:
@@ -403,6 +431,13 @@ func _on_target_reached():
 		State.DESEMPREGADO:
 			_change_state(State.OCIOSO)
 		State.PASSEANDO:
+			if is_instance_valid(assigned_work_spot):
+				var location_node = assigned_work_spot.get_owner()
+				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
+					print("'%s' está liberando seu local de visita." % name)
+					location_node.release_work_spot(assigned_work_spot)
+					assigned_work_spot = null
+			
 			_change_state(State.OCIOSO)
 		State.INDO_PARA_O_TRABALHO:
 			_change_state(State.TRABALHANDO)
@@ -411,19 +446,16 @@ func _on_target_reached():
 				var location_node = assigned_work_spot.get_owner()
 				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
 					location_node.release_work_spot(assigned_work_spot)
-					assigned_work_spot = null # Limpa a referência
+					assigned_work_spot = null
 			
 			_change_state(State.OCIOSO)
-
 #=============================================================================
 # FUNÇÕES DE INTERAÇÃO COM A CASA
 #=============================================================================
 func enter_house():
 	if current_state == State.INDO_PARA_CASA:
 		print("'%s' está entrando na casa." % name)
-		# Esconde o NPC
 		hide()
-		# Desativa a colisão para não bloquear a entrada
 		if collision_shape:
 			collision_shape.disabled = true
 		_change_state(State.EM_CASA)

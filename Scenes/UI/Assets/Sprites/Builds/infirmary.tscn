@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://tth4frm64f4e"]
+[gd_scene load_steps=20 format=3 uid="uid://tth4frm64f4e"]
 
 [ext_resource type="Script" uid="uid://c42e8h71ull5y" path="res://Scripts/Builds/infirmary.gd" id="1_ll14k"]
 [ext_resource type="PackedScene" uid="uid://dldw0tvmu5lqa" path="res://Scenes/Characters/citizen_09.tscn" id="2_7ix0y"]
@@ -16,15 +16,25 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ooq57"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5062"]
-size = Vector2(1121.6338, 443.5913)
+size = Vector2(546.16437, 1005.7417)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iglc1"]
+size = Vector2(92.9147, 568.8104)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fu0fx"]
+radius = 141.22864
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iglc1"]
+radius = 117.293625
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_otsq3"]
-size = Vector2(615.4337, 255.76434)
+size = Vector2(469.56836, 1027.0559)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ix0y"]
-size = Vector2(1194.8989, 907.1635)
+size = Vector2(1428.0188, 1056.3606)
 
 [node name="Infirmary" type="StaticBody2D" groups=["locais_de_interesse"]]
+y_sort_enabled = true
 position = Vector2(0, -406.99994)
 scale = Vector2(0.750691, 0.750691)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
@@ -33,49 +43,90 @@ possible_npc_scenes = Array[PackedScene]([ExtResource("2_iglc1"), ExtResource("3
 
 [node name="Sprite" type="Node2D" parent="."]
 
-[node name="Top" type="Sprite2D" parent="Sprite"]
+[node name="Right" type="Sprite2D" parent="Sprite"]
 z_index = 2
 y_sort_enabled = true
-position = Vector2(-1.157, -99)
+position = Vector2(251.76804, 127.88209)
 scale = Vector2(1.75, 1.75)
 texture = ExtResource("3_l1wna")
 region_enabled = true
-region_rect = Rect2(0, 0, 639.921, 230.253)
+region_rect = Rect2(300.14322, 0.1817131, 499.85483, 639.8482)
 
-[node name="Bottom" type="Sprite2D" parent="Sprite"]
+[node name="Left" type="Sprite2D" parent="Sprite"]
 y_sort_enabled = true
-position = Vector2(0, 323)
+position = Vector2(-447.58755, 127.88213)
 scale = Vector2(1.75002, 1.75002)
 texture = ExtResource("3_l1wna")
 region_enabled = true
-region_rect = Rect2(0, 229.326, 640.945, 254.221)
+region_rect = Rect2(-0.23454666, -0.0029830933, 300.05292, 640.0105)
 
 [node name="MurosCollision" type="CollisionShape2D" parent="."]
-position = Vector2(3.271266e-05, 321.7032)
-scale = Vector2(0.9999991, 0.9999991)
+position = Vector2(-438.2626, 71.26721)
+scale = Vector2(0.9999977, 0.9999977)
 shape = SubResource("RectangleShape2D_m5062")
+
+[node name="MurosCollision2" type="CollisionShape2D" parent="."]
+position = Vector2(347.84607, -101.90625)
+scale = Vector2(0.9999978, 0.9999978)
+shape = SubResource("RectangleShape2D_iglc1")
+
+[node name="MurosCollision3" type="CollisionShape2D" parent="."]
+position = Vector2(130.54639, 315.70908)
+scale = Vector2(0.99999803, 0.99999803)
+shape = SubResource("CircleShape2D_fu0fx")
+
+[node name="MurosCollision4" type="CollisionShape2D" parent="."]
+position = Vector2(560.81665, -37.29907)
+scale = Vector2(0.9999979, 0.9999979)
+shape = SubResource("CircleShape2D_iglc1")
+
+[node name="MurosCollision5" type="CollisionShape2D" parent="."]
+position = Vector2(491.54712, 201.14795)
+scale = Vector2(0.9999959, 0.9999959)
+shape = SubResource("CircleShape2D_iglc1")
 
 [node name="ZonaDeEntrada" type="Area2D" parent="."]
 position = Vector2(-5.32842, 704.684)
 
 [node name="PortaCollision" type="CollisionShape2D" parent="ZonaDeEntrada"]
-position = Vector2(290.399, -261.09265)
-scale = Vector2(0.99999887, 0.99999887)
+position = Vector2(74.930885, -644.07294)
+scale = Vector2(0.99999744, 0.99999744)
 shape = SubResource("RectangleShape2D_otsq3")
-
-[node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(22.6458, 710.013)
-gizmo_extents = 130.0
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(13.987132, 132.54468)
-scale = Vector2(0.9999999, 0.9999999)
+position = Vector2(-25.310015, 82.59048)
+scale = Vector2(0.9999991, 0.9999991)
 shape = SubResource("RectangleShape2D_7ix0y")
 debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("4_l1wna")]
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+position = Vector2(430.27023, 137.20682)
+radius = 367.4
+vertices = PackedVector2Array(-384.9786, 339.68698, -467.56915, 249.10379, -464.90497, 129.21426, -412.95282, 51.952118, -333.0265, 19.981567, -193.15535, 61.276855, -133.2106, 66.605286, -142.53534, -91.91531, -147.86377, -231.7864, -21.31369, -298.39175, 121.22162, -374.32175, 246.43958, -350.34384, 313.04486, -226.45804, 262.42487, -67.93741, 230.45428, -13.321075, 238.44696, 82.590546, 205.14429, 157.18848, 161.18481, 199.81587, 69.2695, 194.48744, -26.64212, 202.48009, -62.60898, 271.74957, -73.26584, 329.03015, -182.4985, 380.98227, -243.77538, 380.98227)
+
+[node name="NavigationObstacle2D2" type="NavigationObstacle2D" parent="."]
+position = Vector2(-468.90134, 283.7385)
+radius = 373.54
+vertices = PackedVector2Array(-282.40646, -427.60602, -277.07803, 325.0338, 311.71277, 319.70538, 319.7054, -427.60602)
+
+[node name="NavigationObstacle2D3" type="NavigationObstacle2D" parent="."]
+position = Vector2(-524.8498, -161.1849)
+radius = 380.0
+vertices = PackedVector2Array(-234.45062, -305.05225, -226.45801, 310.3807, 334.35858, 305.05228, 362.33282, -310.3806)
+
+[node name="WorkSpot1" type="Marker2D" parent="."]
+position = Vector2(957.7842, -43.95958)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="ArrivalPoint" type="Marker2D" parent="."]
+position = Vector2(957.7842, -43.95958)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
