@@ -63,5 +63,6 @@ debug_color = Color(0.343976, 0.582611, 0.309137, 0.419608)
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="input_event" from="InteractionArea" to="." method="_on_interaction_area_input_event"]
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

@@ -385,6 +385,73 @@ theme_override_fonts/font = ExtResource("3_fdl0h")
 theme_override_font_sizes/font_size = 20
 text = "aaaaaaaaa"
 
+[node name="BuildingInspectorPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_wae4w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="BuildSprite" type="TextureRect" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("3_81d8i")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="BuildingNameLabel" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_font_sizes/font_size = 22
+text = "Nome"
+
+[node name="CapacityLabe" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "Profissão: aaaaaaaaa"
+
+[node name="HoursLabel" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+text = "Local de Trabalho: aaaaaaaaa"
+
+[node name="OccupantContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_81d8i")
+
+[node name="Button" type="Button" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+flat = true
+
+[node name="NPCStateLabel" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_font_sizes/font_size = 20
+text = "Outras informações"
+
 [node name="StatusPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
 custom_minimum_size = Vector2(380, 160)
 layout_mode = 2
@@ -853,3 +920,5 @@ button_icon = null
 [connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="hide_building_inspector"]

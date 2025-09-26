@@ -98,6 +98,13 @@ var hovered_button: TextureButton = null
 @onready var npc_workplace_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
 @onready var npc_state_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/NPCStateLabel
 
+var currently_highlighted_building = null
+@onready var building_inspector_panel = $MainContainer/HBoxContainer/BuildingInspectorPanel
+@onready var building_name_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/BuildingNameLabel
+@onready var capacity_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/CapacityLabe
+@onready var hours_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/HoursLabel
+@onready var occupant_container = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/OccupantContainer
+
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const INVENTORY_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const MENU_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/configuration-button-01.png")
@@ -779,3 +786,52 @@ func _on_any_button_mouse_exited(button: TextureButton):
 	if hovered_button == button:
 		hovered_button = null
 	_update_cursor_state()
+
+func hide_building_inspector() -> void:
+	if is_instance_valid(building_inspector_panel):
+		building_inspector_panel.hide()
+
+func report_building_hover(building):
+	if currently_highlighted_building != building:
+		if is_instance_valid(currently_highlighted_building):
+			currently_highlighted_building.highlight_off()
+		
+		building.highlight_on()
+		currently_highlighted_building = building
+
+func report_building_unhover(building):
+	if currently_highlighted_building == building:
+		building.highlight_off()
+		currently_highlighted_building = null
+
+func show_building_inspector(building):
+	hide_npc_inspector()
+
+	building_name_label.text = building.building_name if "building_name" in building else "Nome Indefinido"
+	var capacity = building.max_capacity if "max_capacity" in building else 0
+	var occupants = []
+	if "workers" in building and not building.workers.is_empty():
+		occupants = building.workers
+	elif "residents" in building:
+		occupants = building.residents
+		
+	capacity_label.text = "Ocupação: %d / %d" % [occupants.size(), capacity]
+
+	if "work_starts_at" in building:
+		hours_label.text = "Funciona: %02d:00 - %02d:00" % [building.work_starts_at, building.work_ends_at]
+		hours_label.visible = true
+	else:
+		hours_label.visible = false
+
+	for child in occupant_container.get_children():
+		child.queue_free()
+
+	for npc in occupants:
+		var sprite = TextureRect.new()
+		sprite.texture = npc.get_idle_sprite_texture()
+		sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		sprite.custom_minimum_size = Vector2(48, 48)
+		occupant_container.add_child(sprite)
+	
+	building_inspector_panel.show()

@@ -52,3 +52,4 @@ shape = SubResource("RectangleShape2D_otsq3")
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="body_entered" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_entered"]
 [connection signal="body_exited" from="ZonaDeEntrada" to="ZonaDeEntrada" method="_on_body_exited"]
+[connection signal="input_event" from="ZonaDeEntrada" to="." method="_on_zona_de_entrada_input_event"]
