@@ -28,6 +28,11 @@ var main_ui_panels: Dictionary = {}
 var inventory_rows: Array = [] 
 var hovered_button: TextureButton = null
 
+@onready var health_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer
+@onready var hunger_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer
+@onready var security_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer
+@onready var relations_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer
+
 @onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
 @onready var security_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
@@ -312,15 +317,20 @@ func _on_status_updated():
 
 	money_label.text = str(StatusManager.get_resource("dinheiro"))
 	population_label.text = str(QuilomboManager.all_npcs.size())
-
+	
+	var estado_fome = "Normal"
 	if StatusManager.fome == 100:
 		hunger_label.text = "Fome (Cheio)"
+		estado_fome = "Cheio"
 	elif StatusManager.fome < 50 and StatusManager.fome > 0:
 		hunger_label.text = "Fome (Faminto)"
+		estado_fome = "Faminto"
 	elif StatusManager.fome == 0:
 		hunger_label.text = "Fome (Fadiga)"
+		estado_fome = "Fadiga"
 	else:
 		hunger_label.text = "Fome (Normal)"
+		estado_fome = "Normal"
 
 	health_icon.texture = HEALTH_ICON_LOW if StatusManager.saude < 50 else HEALTH_ICON_NORMAL
 	hunger_icon.texture = HUNGER_ICON_LOW if StatusManager.fome < 50 else HUNGER_ICON_NORMAL
@@ -332,6 +342,11 @@ func _on_status_updated():
 	preview_color.a = 127 / 255.0
 	_set_bar_color(relations_preview_bar, preview_color)
 	clear_preview()
+	
+	health_container.tooltip_text = "Saúde: %d/100" % StatusManager.saude
+	hunger_container.tooltip_text = "Fome: %d/100 (%s)" % [StatusManager.fome, estado_fome]
+	security_container.tooltip_text = "Segurança: %d/100" % StatusManager.seguranca
+	relations_container.tooltip_text = "Relações: %d/100" % StatusManager.relacoes
 
 func show_preview(bonuses: Dictionary):
 	clear_preview()
@@ -477,6 +492,8 @@ func _update_cursor_state():
 
 	if is_in_placement_mode or button_builds.visible:
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+	else:
+		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
 
 func _on_day_passed(new_day: int):
 	if day_label:
