@@ -77,5 +77,6 @@ offset_bottom = 226.764
 
 [connection signal="body_entered" from="EntranceArea" to="." method="_on_entrance_area_body_entered"]
 [connection signal="body_exited" from="EntranceArea" to="." method="_on_entrance_area_body_exited"]
+[connection signal="input_event" from="InteractionArea" to="." method="_on_interaction_area_input_event"]
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_interaction_area_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_interaction_area_mouse_exited"]

@@ -100,6 +100,8 @@ var _stuck_on_npc: NPC = null # Em qual NPC estamos presos?
 var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 
 var hud_node: Hud = null
+
+var _original_move_speed: float
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
@@ -127,6 +129,10 @@ func _ready():
 	await get_tree().physics_frame
 	_initialize_state_and_position()
 	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
+	
+	WorldTimeManager.time_scale_changed.connect(_on_time_scale_changed)
+	_original_move_speed = move_speed
+	_on_time_scale_changed()
 
 func _initialize_state_and_position():
 	if not is_instance_valid(house_node):
@@ -607,3 +613,9 @@ func highlight_on():
 func highlight_off():
 	if is_instance_valid(animated_sprite):
 		animated_sprite.material = null
+
+func _on_time_scale_changed():
+	var current_time_scale = WorldTimeManager.time_scale
+	move_speed = _original_move_speed * current_time_scale
+	if is_instance_valid(animated_sprite):
+		animated_sprite.speed_scale = current_time_scale
