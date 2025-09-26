@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=65 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -106,6 +106,13 @@ texture_margin_bottom = 20.0
 font = ExtResource("3_fdl0h")
 font_size = 28
 font_color = Color(0.352941, 0.290196, 0.266667, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b4m6i"]
+texture = ExtResource("2_fqivn")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_q8e8b"]
 font = ExtResource("3_fdl0h")
@@ -644,17 +651,31 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="DayContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="DateTimeContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="DayContainer" type="PanelContainer" parent="VBoxContainer/DateTimeContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_q8e8b")
 
-[node name="DayLabel" type="Label" parent="VBoxContainer/DayContainer"]
+[node name="DayLabel" type="Label" parent="VBoxContainer/DateTimeContainer/DayContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Dia 01"
+label_settings = SubResource("LabelSettings_yxyk2")
+
+[node name="ClockContainer" type="PanelContainer" parent="VBoxContainer/DateTimeContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_b4m6i")
+
+[node name="ClockLabel" type="Label" parent="VBoxContainer/DateTimeContainer/ClockContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00"
 label_settings = SubResource("LabelSettings_yxyk2")
 
 [node name="ButtonsPanel" type="PanelContainer" parent="VBoxContainer"]

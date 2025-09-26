@@ -97,7 +97,7 @@ position = Vector2(6351, -4196)
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["player_camera"]]
 process_mode = 3
-position = Vector2(654.00037, 364)
+position = Vector2(642.00006, 361)
 scale = Vector2(1.07503, 1.03969)
 script = ExtResource("10_ugf0j")
 world_limits = Rect2(-1000, -700, 5500, 3000)
@@ -112,9 +112,9 @@ y_sort_enabled = true
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Hud" parent="HUD" instance=ExtResource("11_pvt60")]
-offset_left = 1.0
+offset_left = 0.0
 offset_top = 0.0
-offset_right = 1.0
+offset_right = 0.0
 offset_bottom = 0.0
 
 [node name="GameUI" parent="." instance=ExtResource("11_pvt60")]

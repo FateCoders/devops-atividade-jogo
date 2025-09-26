@@ -8,7 +8,6 @@ extends CanvasLayer
 @export var default_hotspot: Vector2 = Vector2.ZERO
 @onready var resume_button = $menu_holder/resume_button
 
-# Não precisamos mais do caminho fixo.
 var camera = null
 var cameras = []
 
@@ -38,3 +37,13 @@ func _on_quit_button_2_pressed() -> void:
 	
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/UI/menu_inicial.tscn")
+
+func open_menu():
+	visible = true
+	get_tree().paused = true
+	resume_button.grab_focus()
+	
+	cameras = get_tree().get_nodes_in_group("player_camera")
+	if not cameras.is_empty():
+		camera = cameras[0]
+		camera.process_mode = Node.PROCESS_MODE_DISABLED

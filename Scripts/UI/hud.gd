@@ -26,6 +26,7 @@ var hover_candidates: Array[NPC] = []
 var currently_highlighted_npc: NPC = null
 var main_ui_panels: Dictionary = {}
 var inventory_rows: Array = [] 
+var hovered_button: TextureButton = null
 
 @onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
 @onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
@@ -68,12 +69,19 @@ var inventory_rows: Array = []
 @onready var menu_button = $VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/MenuButton
 @onready var menu_sub_panel = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel
 
+@onready var play_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/PlayButton
+@onready var pause_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/PauseButton
+@onready var speedup_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/SpeedUpButton
+@onready var tutorial_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/TutorialButton
+@onready var settings_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/SettingsButton
+
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
-@onready var day_label = $VboxContainer/DayContainer/DayLabel
+@onready var day_label = $VBoxContainer/DateTimeContainer/DayContainer/DayLabel
+@onready var clock_label = $VBoxContainer/DateTimeContainer/ClockContainer/ClockLabel
 
 @onready var dialog_screen = $DialogScreen
 @onready var profession_screen = $ProfessionAssignmentScreen
@@ -95,6 +103,10 @@ const INVENTORY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/invetory
 const CURSOR_HOTSPOT = Vector2(16, 16)
 const DEFAULT_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png")
 const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
+const INTERACTION_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/pointer_cursor-menor.png") 
+const INTERACTION_CURSOR_HOTSPOT = Vector2(4, 4)
+const BLOCKED_CURSOR = preload("res:///Assets/Sprites/Exported/HUD/Cursors/blocked-cursor-menor.png") 
+const BLOCKED_CURSOR_HOTSPOT = Vector2(16, 16)
 const LOW_RELATIONS_COLOR = Color("#ff163f")
 const DEFAULT_RELATIONS_COLOR = Color("#309cff")
 const HEALTH_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/health-icon.png")
@@ -137,6 +149,9 @@ func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
 	WorldTimeManager.day_passed.connect(_on_day_passed)
+	GameManager.game_paused.connect(_update_time_control_buttons)
+	GameManager.game_resumed.connect(_update_time_control_buttons)
+	WorldTimeManager.time_scale_changed.connect(_update_time_control_buttons)
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
 	notification_container.modulate.a = 0.0
 	construction_title.visible = false 
@@ -216,8 +231,23 @@ func _ready():
 	
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	menu_sub_panel.visible 
+	
+	play_button.pressed.connect(_on_play_button_pressed)
+	pause_button.pressed.connect(_on_pause_button_pressed)
+	speedup_button.pressed.connect(_on_speedup_button_pressed)
+	tutorial_button.pressed.connect(_on_tutorial_button_pressed)
+	settings_button.pressed.connect(_on_settings_button_pressed)
+	_update_time_control_buttons()
+	
+	var menu_buttons = [play_button, pause_button, speedup_button, tutorial_button, settings_button, build_button, button_inventory, menu_button]
+	for button in menu_buttons:
+		button.mouse_entered.connect(_on_any_button_mouse_entered.bind(button))
+		button.mouse_exited.connect(_on_any_button_mouse_exited.bind(button))
 
 func _process(delta: float):
+	if is_instance_valid(clock_label):
+		clock_label.text = WorldTimeManager.get_formatted_time()
+
 	_update_cursor_state()
 
 	if not is_in_placement_mode or not is_instance_valid(placement_preview):
@@ -399,7 +429,7 @@ func _exit_placement_mode():
 
 	main_panel_container.visible = true
 
-	GameManager.pause_game()
+	GameManager.resume_game()
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
 	is_in_placement_mode = false
@@ -442,9 +472,14 @@ func _on_notification_timer_timeout():
 	notification_tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
 
 func _update_cursor_state():
-	if is_in_placement_mode:
-		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
-	elif button_builds.visible:
+	if is_instance_valid(hovered_button):
+		if hovered_button.disabled:
+			Input.set_custom_mouse_cursor(BLOCKED_CURSOR, Input.CURSOR_ARROW, BLOCKED_CURSOR_HOTSPOT)
+		else:
+			Input.set_custom_mouse_cursor(INTERACTION_CURSOR, Input.CURSOR_ARROW, INTERACTION_CURSOR_HOTSPOT)
+		return
+
+	if is_in_placement_mode or button_builds.visible:
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
@@ -684,3 +719,44 @@ func _on_menu_button_pressed():
 		menu_button.texture_normal = CLOSE_TEXTURE
 	else:
 		menu_button.texture_normal = MENU_TEXTURE
+
+# --- FUNÇÕES DE CONTROLE DE TEMPO ---
+func _on_play_button_pressed():
+	GameManager.resume_game()
+	WorldTimeManager.set_normal_speed()
+	_update_time_control_buttons()
+
+func _on_pause_button_pressed():
+	GameManager.pause_game()
+	_update_time_control_buttons()
+
+func _on_speedup_button_pressed():
+	var is_paused = (WorldTimeManager.process_mode == Node.PROCESS_MODE_DISABLED)
+
+	if is_paused:
+		GameManager.resume_game()
+
+	WorldTimeManager.set_fast_speed()
+
+# --- FUNÇÕES DO MENU ---
+func _on_tutorial_button_pressed():
+	GameManager.restart_tutorial()
+
+func _on_settings_button_pressed():
+	GameManager.show_settings_menu()
+	
+func _update_time_control_buttons():
+	var is_paused = (WorldTimeManager.process_mode == Node.PROCESS_MODE_DISABLED)
+	var is_fast = WorldTimeManager.time_scale > 1.0
+	play_button.disabled = not (is_paused or is_fast)
+	pause_button.disabled = is_paused
+	speedup_button.disabled = is_fast
+
+func _on_any_button_mouse_entered(button: TextureButton):
+	hovered_button = button
+	_update_cursor_state()
+
+func _on_any_button_mouse_exited(button: TextureButton):
+	if hovered_button == button:
+		hovered_button = null
+	_update_cursor_state()
