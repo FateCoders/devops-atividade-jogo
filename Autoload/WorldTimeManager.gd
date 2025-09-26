@@ -7,7 +7,7 @@ signal day_passed(new_day: int)
 signal time_scale_changed
 
 # --- CONFIGURAÇÕES DE TEMPO ---
-@export var day_length_in_seconds: float = 60.0
+@export var day_length_in_seconds: float = 300.0
 @export var day_starts_at: float = 6.0    # 06:00
 @export var evening_starts_at: float = 17.0 # 17:00
 @export var night_starts_at: float = 20.0  # 20:00
@@ -87,7 +87,7 @@ func set_normal_speed():
 		print("WorldTimeManager: time_scale resetado para 1.0")
 
 func set_fast_speed():
-	if time_scale != 3.0:
-		time_scale = 3.0
+	if time_scale != 4.0:
+		time_scale = 4.0
 		emit_signal("time_scale_changed")
-		print("WorldTimeManager: time_scale definido para RÁPIDO (3.0)")
+		print("WorldTimeManager: time_scale definido para RÁPIDO (4.0)")

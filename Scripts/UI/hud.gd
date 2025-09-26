@@ -408,8 +408,6 @@ func _on_any_build_button_pressed(scene: PackedScene):
 	temp_instance.queue_free() 
 
 	main_panel_container.visible = false
-	
-	GameManager.pause_game()
 	is_in_placement_mode = true
 	scene_to_place = scene
 	placement_preview = scene.instantiate()
@@ -428,8 +426,6 @@ func _exit_placement_mode():
 		placement_preview.queue_free()
 
 	main_panel_container.visible = true
-
-	GameManager.resume_game()
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
 	is_in_placement_mode = false
@@ -626,9 +622,9 @@ func _update_npc_inspector_panel():
 	else:
 		npc_state_label.text = "Estado: Desconhecido"
 
-
 func _toggle_main_panel(panel_to_toggle: Control):
 	var is_closing_action = panel_to_toggle.visible
+	var was_build_menu_open = button_builds.visible
 
 	for panel in main_ui_panels:
 		var data = main_ui_panels[panel]
@@ -638,11 +634,19 @@ func _toggle_main_panel(panel_to_toggle: Control):
 	_clear_tabs()
 	construction_title.visible = false
 
+	if was_build_menu_open:
+		GameManager.resume_game()
+
+	# 4. Lógica para ABRIR um painel e PAUSAR.
 	if not is_closing_action:
+
 		var data = main_ui_panels[panel_to_toggle]
 		panel_to_toggle.visible = true
 		data.icon_node.visible = false
 		data.button.texture_normal = CLOSE_TEXTURE
+
+		if panel_to_toggle == button_builds:
+			GameManager.pause_game()
 
 		call_deferred("_update_tabs_for_panel", panel_to_toggle)
 
@@ -651,7 +655,7 @@ func _toggle_main_panel(panel_to_toggle: Control):
 		elif panel_to_toggle == button_builds:
 			construction_title.visible = true
 
-	if not is_closing_action:
+	if not is_closing_action and panel_to_toggle == button_builds:
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
