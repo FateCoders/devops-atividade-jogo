@@ -1,7 +1,7 @@
-# AchievementItem.gd
 extends Button
 
-const ICON_LOCKED = preload("res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png")
+const ICON_UNLOCKED = preload("res://Assets/Sprites/Exported/HUD/Icons/star-on-icon.png")
+const ICON_LOCKED = preload("res://Assets/Sprites/Exported/HUD/Icons/star-off-icon.png")
 
 @onready var custom_tooltip = $CustomTooltip
 @onready var tooltip_timer = $TooltipTimer
@@ -20,14 +20,13 @@ func set_data(data: Dictionary):
 	var tooltip_data = data.get("tooltip_data", {})
 	
 	if data.get("unlocked", false):
-		icon = load(tooltip_data.get("icon"))
+		icon = load(tooltip_data.get("icon", ICON_UNLOCKED.resource_path))
 		disabled = false
 	else:
 		icon = ICON_LOCKED
 		disabled = true
 
 # --- Lógica do Tooltip ---
-
 func _on_mouse_entered():
 	tooltip_timer.start()
 

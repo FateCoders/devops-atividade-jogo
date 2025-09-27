@@ -13,7 +13,7 @@ signal time_scale_changed
 @export var night_starts_at: float = 20.0  # 20:00
 
 # --- NOVO: CONDIÇÃO DE VITÓRIA ---
-@export var victory_day: int = 3
+@export var victory_day: int = 1
 
 # --- VARIÁVEIS DE ESTADO ---
 # ADICIONADO: Contador de dias
