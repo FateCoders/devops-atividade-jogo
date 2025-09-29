@@ -1,24 +1,44 @@
 # InventoryItem.gd
-extends HBoxContainer
+extends NinePatchRect
 
 @onready var icon: TextureRect = $Icon
-@onready var name_label: Label = $NameLabel
-@onready var amount_label: Label = $AmountLabel
+@onready var quantity_label: Label = $QuantityLabel
 
-# Dicionário para mapear o nome do recurso ao seu ícone
-const RESOURCE_ICONS = {
-	"dinheiro": preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png"),
-	"madeira": preload("res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png"),
-	"alimentos": preload("res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png"),
-	"remedios": preload("res://Assets/Sprites/Exported/HUD/Icons/health-icon.png"),
-	"ferramentas": preload("res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png")
+const ENABLED_COLOR = Color(1, 1, 1, 1)
+const DISABLED_COLOR = Color(0.4, 0.4, 0.4, 0.6) 
+
+const RESOURCE_DATA = {
+	"madeira": {
+		"display_name": "Madeira",
+		"icon": preload("res://Assets/Sprites/Exported/HUD/Icons/log-icon.png")
+	},
+	"alimentos": {
+		"display_name": "Alimentos",
+		"icon": preload("res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png")
+	},
+	"remedios": {
+		"display_name": "Remédios",
+		"icon": preload("res://Assets/Sprites/Exported/Plantation/beans.png")
+	},
+	"ferramentas": {
+		"display_name": "Ferramentas",
+		"icon": preload("res://Assets/Sprites/Exported/HUD/Icons/tools-icon.png")
+	},
+	"default": {
+		"display_name": "Sururu",
+		"icon": preload("res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png")
+	},
 }
 
-# Função para receber os dados e configurar a aparência
 func set_data(resource_name: String, amount: int):
-	name_label.text = resource_name.capitalize()
-	amount_label.text = str(amount)
-
-	# Define o ícone correto
-	if RESOURCE_ICONS.has(resource_name):
-		icon.texture = RESOURCE_ICONS[resource_name]
+	var data = RESOURCE_DATA[resource_name] if RESOURCE_DATA.has(resource_name) else RESOURCE_DATA["default"]
+	icon.texture = data.icon
+	quantity_label.text = "x" + str(amount)
+	self.tooltip_text = data.display_name + " x" + str(amount)
+	
+	if amount == 0:
+		icon.modulate = DISABLED_COLOR
+		quantity_label.modulate = DISABLED_COLOR
+	else:
+		icon.modulate = ENABLED_COLOR
+		quantity_label.modulate = ENABLED_COLOR

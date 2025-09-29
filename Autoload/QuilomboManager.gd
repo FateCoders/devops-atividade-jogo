@@ -40,6 +40,12 @@ func register_building(building_node):
 	
 	if building_node.has_signal("vacancy_opened"):
 		building_node.vacancy_opened.connect(_on_vacancy_opened)
+	
+	var hud = get_tree().get_first_node_in_group("hud_main")
+	if is_instance_valid(hud):
+		building_node.building_hovered.connect(hud.report_building_hover)
+		building_node.building_unhovered.connect(hud.report_building_unhover)
+		building_node.building_clicked.connect(hud.show_building_inspector)
 
 # ADICIONADO: Função para remover uma construção do censo.
 func unregister_building(building_node):

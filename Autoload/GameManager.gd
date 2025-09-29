@@ -8,6 +8,10 @@ const LIBERTOS_TO_WIN: int = 4  # ← NOVO: Quantidade de libertos necessária p
 @export var defeat_screen_scene: PackedScene = preload("res://Scenes/UI/defeatScreen.tscn")
 
 signal victory_achieved
+signal game_paused
+signal game_resumed
+
+# ADICIONADO: Sinal para que outros scripts possam anunciar o fim do jogo.
 signal game_over(reason)
 
 var _is_game_over: bool = false 
@@ -162,12 +166,34 @@ func check_tutorial_progress(built_structure_scene: PackedScene):
 # ===========================
 #  CONTROLE DE JOGO
 # ===========================
+func restart_tutorial():
+	if _is_game_over: return
+	
+	print("[GameManager] Reiniciando o tutorial.")
+	tutorial_active = true
+	current_tutorial_step = -1 
+	advance_tutorial() 
+
 func pause_game():
-	if not _is_game_over:
-		get_tree().paused = true
+	if _is_game_over: return
+	emit_signal("game_paused")
+	# REMOVIDO: get_tree().paused = true
+
+	print("[GameManager] Pausando o processamento dos personagens.")
+	for npc in get_tree().get_nodes_in_group("personagens"):
+		npc.process_mode = Node.PROCESS_MODE_DISABLED
+
+	WorldTimeManager.process_mode = Node.PROCESS_MODE_DISABLED
+
 
 func resume_game():
-	get_tree().paused = false
+	# REMOVIDO: get_tree().paused = false
+	emit_signal("game_resumed")
+	print("[GameManager] Retomando o processamento dos personagens.")
+	for npc in get_tree().get_nodes_in_group("personagens"):
+		npc.process_mode = Node.PROCESS_MODE_INHERIT
+		
+	WorldTimeManager.process_mode = Node.PROCESS_MODE_INHERIT
 
 func pause_camera():
 	is_camera_paused = true
@@ -187,3 +213,11 @@ func is_game_paused() -> bool:
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("ui_cancel") and not hud_node.dialog_screen.visible:
 		toggle_pause()
+
+func show_settings_menu():
+	var pause_menu = get_tree().root.get_node_or_null("world/pause_menu")
+	
+	if is_instance_valid(pause_menu) and pause_menu.has_method("open_menu"):
+		pause_menu.open_menu()
+	else:
+		printerr("GameManager não conseguiu encontrar o nó do Menu de Pausa ou a função 'open_menu'. Verifique o nome e o caminho do nó.")
