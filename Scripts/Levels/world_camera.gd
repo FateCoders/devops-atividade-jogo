@@ -5,13 +5,13 @@ extends Camera2D
 @export var mouse_speed_multiplier: int = 8
 
 @export_category("Zoom")
-@export var zoom_speed: float = 0.05
-@export var min_zoom: float = 0.01
+@export var zoom_speed: float = 0.15 
+@export var min_zoom: float = 0.1
 @export var max_zoom: float = 3
 @export var initial_zoom: float = 0.3
 
 @export_category("Limites do Mundo")
-@export var world_limits: Rect2 = Rect2(-6500, -6000, 14500, 13000)
+@export var world_limits: Rect2 = Rect2(-7840, -8479.5, 16000, 15999.5)
 
 var dragging: bool = false
 var last_mouse_position: Vector2
@@ -24,24 +24,32 @@ func _unhandled_input(event: InputEvent) -> void:
 	if GameManager.is_camera_paused:
 		return
 
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom += Vector2(zoom_speed, zoom_speed)
-			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				zoom -= Vector2(zoom_speed, zoom_speed)
-		zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+	if event is InputEventMouseButton and event.is_pressed():
+		# Roda para CIMA = Zoom Out (Afastar)
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			zoom *= (1.0 + zoom_speed) # Multiplica para aumentar o valor do zoom
+			zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
 
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			dragging = event.is_pressed()
+		# Roda para BAIXO = Zoom In (Aproximar)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			zoom /= (1.0 + zoom_speed) # Divide para diminuir o valor do zoom
+			zoom = zoom.clamp(Vector2(min_zoom, min_zoom), Vector2(max_zoom, max_zoom))
+
+		# Inicia o arrasto com o botão esquerdo
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = true
 			last_mouse_position = get_viewport().get_mouse_position()
 
+	# Pára de arrastar ao soltar o botão esquerdo
+	if event is InputEventMouseButton and not event.is_pressed():
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = false
+			
+	# Movimento da câmera enquanto arrasta
 	if event is InputEventMouseMotion and dragging:
-		var mouse_delta = event.relative
-		position -= mouse_delta * zoom * mouse_speed_multiplier
+		position -= event.relative * zoom * mouse_speed_multiplier
 	
 
-# --- FUNÇÃO _PROCESS CORRIGIDA ---
 func _process(delta: float) -> void:
 	if GameManager.is_camera_paused:
 		return
@@ -55,22 +63,17 @@ func _process(delta: float) -> void:
 		var viewport_rect = get_viewport_rect()
 		var viewport_half_size = viewport_rect.size * zoom / 2.0
 		
-		# Calcula os limites mínimo e máximo da posição da câmera
 		var min_pos_x = world_limits.position.x + viewport_half_size.x
 		var max_pos_x = world_limits.end.x - viewport_half_size.x
 		
 		var min_pos_y = world_limits.position.y + viewport_half_size.y
 		var max_pos_y = world_limits.end.y - viewport_half_size.y
 		
-		# VERIFICAÇÃO: Se a visão é mais larga que o mundo, o min se torna > max.
-		# Nesse caso, travamos a câmera no centro do mundo no eixo X.
 		if min_pos_x > max_pos_x:
 			position.x = world_limits.get_center().x
 		else:
-			# Se não, aplicamos o limite normalmente.
 			position.x = clamp(position.x, min_pos_x, max_pos_x)
 
-		# Repetimos a mesma lógica para o eixo Y.
 		if min_pos_y > max_pos_y:
 			position.y = world_limits.get_center().y
 		else:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coel3k3u4hyyj"
-path="res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"
+uid="uid://cl20l2e2emi0i"
+path="res://.godot/imported/leader_portrait.png-05fd9e9ec7e28c54aac10cebc73bed43.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat-outline-top.png"
-dest_files=["res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"]
+source_file="res://Assets/Sprites/Exported/Citizens/static/leader_portrait.png"
+dest_files=["res://.godot/imported/leader_portrait.png-05fd9e9ec7e28c54aac10cebc73bed43.ctex"]
 
 [params]
 
