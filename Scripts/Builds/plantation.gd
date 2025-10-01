@@ -169,6 +169,3 @@ func _on_interaction_area_input_event(viewport, event, shape_idx):
 
 func _on_interaction_area_mouse_entered():
 	emit_signal("building_hovered", self)
-
-func _on_interaction_area_mouse_exited():
-	emit_signal("building_unhovered", self)

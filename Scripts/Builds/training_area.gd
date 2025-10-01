@@ -127,25 +127,12 @@ func get_status_info() -> Dictionary:
 func _on_interaction_area_mouse_entered() -> void:
 	var info = get_status_info()
 	status_bubble.show_info(info)
+	emit_signal("building_hovered", self)
 
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
-func add_worker(npc: NPC):
-	if not workers.has(npc):
-		workers.append(npc)
-		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
-
-func remove_worker(npc_leaving: NPC):
-	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
-	if workers.has(npc_leaving):
-		# 2. Remove o NPC da lista de trabalhadores
-		workers.erase(npc_leaving)
-		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
-		
-		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
-		emit_signal("vacancy_opened", required_profession)
-
+	emit_signal("building_unhovered", self)
 
 func highlight_on():
 	if is_instance_valid(main_sprite):
@@ -158,9 +145,3 @@ func highlight_off():
 func _on_interaction_area_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		emit_signal("building_clicked", self)
-
-func _on_interaction_area_mouse_entered():
-	emit_signal("building_hovered", self)
-
-func _on_interaction_area_mouse_exited():
-	emit_signal("building_unhovered", self)

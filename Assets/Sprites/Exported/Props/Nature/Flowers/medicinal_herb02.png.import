@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coel3k3u4hyyj"
-path="res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"
+uid="uid://cvl4b4sf10n6m"
+path="res://.godot/imported/medicinal_herb02.png-ad1f73ca1f6dcf821ab4c97aa5f4b6ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat-outline-top.png"
-dest_files=["res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"]
+source_file="res://Assets/Sprites/Exported/Props/Nature/Flowers/medicinal_herb02.png"
+dest_files=["res://.godot/imported/medicinal_herb02.png-ad1f73ca1f6dcf821ab4c97aa5f4b6ef.ctex"]
 
 [params]
 

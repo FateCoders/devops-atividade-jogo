@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
 [ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_fqivn"]
 [ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_mqf2c"]
-[ext_resource type="Theme" uid="uid://gxuf8hob5imi" path="res://Resources/Themes/abas_theme.tres" id="2_njpji"]
+[ext_resource type="Theme" uid="uid://dc3qj4t1tvir5" path="res://Resources/Themes/abas_theme.tres" id="2_njpji"]
 [ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="3_81d8i"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_fdl0h"]
 [ext_resource type="PackedScene" uid="uid://r2i6y2oouxw" path="res://Scenes/UI/styledButton.tscn" id="3_yxyk2"]
@@ -202,11 +202,6 @@ layout_mode = 2
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
-
-[node name="BuildTinyHouseButton" parent="MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/Col1/BuildOptions" instance=ExtResource("3_yxyk2")]
-layout_mode = 2
-button_text = "Casa"
-button_icon = ExtResource("5_yxyk2")
 
 [node name="BuildHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
@@ -725,6 +720,11 @@ theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
 theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
 
+[node name="MainContainer_ButtonsPanel_SectionsPanel_ButtonBuildsOptions_Col1_BuildOptions#BuildTinyHouseButton" parent="." instance=ExtResource("3_yxyk2")]
+layout_mode = 2
+button_text = "Casa"
+button_icon = ExtResource("5_yxyk2")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -920,5 +920,5 @@ button_icon = null
 [connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
-[connection signal="pressed" from="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="hide_building_inspector"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/PanelContainer/Button" to="." method="_on_close_button_pressed"]

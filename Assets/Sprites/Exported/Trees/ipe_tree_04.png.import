@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coel3k3u4hyyj"
-path="res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"
+uid="uid://q8lq3ehegop"
+path="res://.godot/imported/ipe_tree_04.png-5e46db215d6ddf5f18a2b8657da33545.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat-outline-top.png"
-dest_files=["res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"]
+source_file="res://Assets/Sprites/Exported/Trees/ipe_tree_04.png"
+dest_files=["res://.godot/imported/ipe_tree_04.png-5e46db215d6ddf5f18a2b8657da33545.ctex"]
 
 [params]
 

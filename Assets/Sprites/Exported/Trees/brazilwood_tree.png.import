@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coel3k3u4hyyj"
-path="res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"
+uid="uid://dnah4x7maoc4j"
+path="res://.godot/imported/brazilwood_tree.png-fa9831ab64a16dbf93eb6286603cde1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat-outline-top.png"
-dest_files=["res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"]
+source_file="res://Assets/Sprites/Exported/Trees/brazilwood_tree.png"
+dest_files=["res://.godot/imported/brazilwood_tree.png-fa9831ab64a16dbf93eb6286603cde1a.ctex"]
 
 [params]
 

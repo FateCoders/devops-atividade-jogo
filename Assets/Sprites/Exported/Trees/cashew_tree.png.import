@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coel3k3u4hyyj"
-path="res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"
+uid="uid://cyb8o6s3hunc0"
+path="res://.godot/imported/cashew_tree.png-ca7ea12132a2da5d7e3d36e3c06dc9a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass/grass-flat-outline-top.png"
-dest_files=["res://.godot/imported/grass-flat-outline-top.png-63b5a76816900adafa351a453358f6e0.ctex"]
+source_file="res://Assets/Sprites/Exported/Trees/cashew_tree.png"
+dest_files=["res://.godot/imported/cashew_tree.png-ca7ea12132a2da5d7e3d36e3c06dc9a0.ctex"]
 
 [params]
 
