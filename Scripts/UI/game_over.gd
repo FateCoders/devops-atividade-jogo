@@ -1,8 +1,8 @@
 # DefeatScreen.gd
 extends CanvasLayer
 
-@onready var reason_label: Label = $VBoxContainer/ScrollContainer/ReasonLabel
-@onready var restart_button: Button = $VBoxContainer/quit_button
+@onready var reason_label: Label = $VBoxContainer/Panel/ReasonLabel
+@onready var restart_button: Button = $VBoxContainer/Panel/quit_button
 
 func _ready():
 	restart_button.pressed.connect(_on_restart_button_pressed)

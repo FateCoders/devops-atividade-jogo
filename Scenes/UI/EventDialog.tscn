@@ -1,6 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://bpj6hsaurwpqq"]
+[gd_scene load_steps=15 format=3 uid="uid://bw7sk53wwud46"]
 
-[ext_resource type="Script" uid="uid://dopuggnkcf0dx" path="res://Scripts/UI/event_dialog.gd" id="1_xusqx"]
+[ext_resource type="Script" path="res://Scripts/UI/event_dialog.gd" id="1_xusqx"]
 [ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="2_hl1om"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="3_dvr84"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="4_0mjiy"]

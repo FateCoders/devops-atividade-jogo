@@ -40,11 +40,11 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lx0wd"]
-size = Vector2(119, 53)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oac84"]
+size = Vector2(113, 55)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_y3i7a"]
-size = Vector2(58.3874, 60)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ccet"]
+size = Vector2(55.14365, 61)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
 z_index = 1
@@ -53,28 +53,31 @@ script = ExtResource("1_5ktjt")
 interaction_cursor = ExtResource("2_iwwc5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(8, -107)
+position = Vector2(8, -101)
 sprite_frames = SubResource("SpriteFrames_lx0wd")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 show_behind_parent = true
-position = Vector2(6.5, -30.5)
-shape = SubResource("RectangleShape2D_lx0wd")
+position = Vector2(5.5, -23.5)
+shape = SubResource("RectangleShape2D_oac84")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
 [node name="WorkTurnTimer" type="Timer" parent="."]
 
 [node name="InteractionArea" type="Area2D" parent="."]
+position = Vector2(0, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(6, -30)
+position = Vector2(5.4999995, -29.5)
 scale = Vector2(2.158, 1)
-shape = SubResource("RectangleShape2D_y3i7a")
+shape = SubResource("RectangleShape2D_3ccet")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
 [node name="StatusBubbleAnchor" parent="." instance=ExtResource("5_oac84")]
+visible = false
 
+[connection signal="input_event" from="InteractionArea" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="InteractionArea" to="." method="_on_area_2d_mouse_exited"]

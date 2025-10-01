@@ -12,44 +12,113 @@ const InfirmaryScene = preload("res://Scenes/UI/Assets/Sprites/Builds/infirmary.
 const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainingArea.tscn")
 const ChurchScene = preload("res://Scenes/UI/Assets/Sprites/Builds/church.tscn")
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
+const QuilomboListScene = preload("res://Scenes/UI/QuilomboListUI.tscn")
+const EscamboScene = preload("res://Scenes/UI/EscamboUI.tscn")
+
+const BonfireScene = preload("res://Scenes/UI/Assets/Sprites/Builds/bonfire.tscn") 
 
 var is_in_placement_mode: bool = false
 var scene_to_place: PackedScene = null
 var placement_preview = null 
 var notification_tween: Tween
+var build_buttons: Dictionary = {}
+var hover_candidates: Array[NPC] = []
+var currently_highlighted_npc: NPC = null
+var main_ui_panels: Dictionary = {}
+var inventory_rows: Array = [] 
+var hovered_button: TextureButton = null
 
-@onready var health_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
-@onready var hunger_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
-@onready var security_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
-@onready var relations_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
-@onready var money_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
-@onready var population_label = $MainContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
-@onready var health_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
-@onready var hunger_preview_bar = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
-@onready var security_preview_bar = $MainContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
-@onready var relations_preview_bar = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
-@onready var health_icon = $MainContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
-@onready var hunger_icon = $MainContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
-@onready var relations_icon = $MainContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
+@onready var health_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer
+@onready var hunger_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer
+@onready var security_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer
+@onready var relations_container = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer
 
-@onready var status_panel = $MainContainer/StatusPanel
-@onready var build_button = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
-@onready var build_button_icon = $MainContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
-@onready var button_builds = $MainContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
+@onready var health_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/ProgressBar
+@onready var hunger_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/ProgressBar
+@onready var security_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/ProgressBar
+@onready var relations_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/ProgressBar
+
+@onready var money_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
+@onready var population_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
+@onready var hunger_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
+
+@onready var health_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
+@onready var hunger_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/Control/PreviewBar
+@onready var security_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer/Control/PreviewBar
+@onready var relations_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/Control/PreviewBar
+
+@onready var health_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/HealthIcon
+@onready var hunger_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerIcon
+@onready var relations_icon = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/RelationsContainer/RelationsIcon
+
+@onready var status_panel = $MainContainer/HBoxContainer/StatusPanel
+
+@onready var main_panel_container = $MainContainer/MainPanelContainer
+@onready var tabs_container = $MainContainer/MainPanelContainer/VBoxContainer/TabsContainer
+
+@onready var construcoes_sub_panel = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel
+@onready var decoracoes_sub_panel = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/DecoracoesSubPanel
+
+@onready var build_button = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton
+@onready var build_button_icon = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/BuildButton/TextureRect
+@onready var button_builds = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions
+
+@onready var button_inventory = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton
+@onready var inventory_button_icon = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/InventoryButton/TextureRect
+@onready var button_inventorys = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions
+@onready var list_container = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/ScrollContainer/ItemList
+
+@onready var inventory_row_1 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer
+@onready var inventory_row_2 = $MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonInventoryOptions/HBoxContainer2
+
+@onready var menu_button = $VBoxContainer/ButtonsPanel/SectionsPanel/ButtonOptions/MenuButton
+@onready var menu_sub_panel = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel
+
+@onready var play_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/PlayButton
+@onready var pause_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/PauseButton
+@onready var speedup_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/SpeedUpButton
+@onready var tutorial_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/TutorialButton
+@onready var settings_button = $VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel/SettingsButton
 
 @onready var notification_container: VBoxContainer = $NotificationContainer
 @onready var notification_label: Label = $NotificationContainer/PanelContainer/NotificationLabel
 @onready var timer_bar: ColorRect = $NotificationContainer/TimerBar
 @onready var notification_timer: Timer = $NotificationTimer
 @onready var construction_title = $BuildTitleLabel
-@onready var day_label = $DayContainer/DayLabel
+@onready var day_label = $VBoxContainer/DateTimeContainer/DayContainer/DayLabel
+@onready var clock_label = $VBoxContainer/DateTimeContainer/ClockContainer/ClockLabel
+
+@onready var dialog_screen = $DialogScreen
+@onready var profession_screen = $ProfessionAssignmentScreen
+
+@onready var npc_inspector_panel = $MainContainer/HBoxContainer/NPCInspectorPanel
+@onready var npc_sprite = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/NPCSprite
+@onready var npc_name_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCNameLabel
+@onready var npc_profession_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCProfessionLabel
+@onready var npc_workplace_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/NPCWorkplaceLabel
+@onready var npc_state_label = $MainContainer/HBoxContainer/NPCInspectorPanel/VBoxContainer/NPCStateLabel
+
+var currently_highlighted_building = null
+@onready var building_inspector_panel = $MainContainer/HBoxContainer/BuildingInspectorPanel
+@onready var building_name_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/BuildingNameLabel
+@onready var capacity_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/CapacityLabe
+@onready var hours_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/HoursLabel
+@onready var occupant_container = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/OccupantContainer
 
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
+const INVENTORY_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
+const MENU_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/configuration-button-01.png")
+
 const CLOSE_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/close-button.png")
 const BUILD_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/build_cursor-menor.png")
+const INVENTORY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/invetory-icon.png")
 const CURSOR_HOTSPOT = Vector2(16, 16)
 const DEFAULT_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/default_cursor-menor.png")
 const DEFAULT_CURSOR_HOTSPOT = Vector2(4, 4)
+const INTERACTION_CURSOR = preload("res://Assets/Sprites/Exported/HUD/Cursors/pointer_cursor-menor.png") 
+const INTERACTION_CURSOR_HOTSPOT = Vector2(4, 4)
+const BLOCKED_CURSOR = preload("res:///Assets/Sprites/Exported/HUD/Cursors/blocked-cursor-menor.png") 
+const BLOCKED_CURSOR_HOTSPOT = Vector2(16, 16)
 const LOW_RELATIONS_COLOR = Color("#ff163f")
 const DEFAULT_RELATIONS_COLOR = Color("#309cff")
 const HEALTH_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/health-icon.png")
@@ -60,10 +129,41 @@ const RELATIONS_ICON_NORMAL = preload("res://Assets/Sprites/Exported/HUD/Icons/p
 const RELATIONS_ICON_LOW = preload("res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png")
 const MONEY_ICON = preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png")
 
+const Z_INDEX_NORMAL = 0
+const Z_INDEX_ACTIVE = 1
+
+const STATUS_DATA = {
+	NPC.State.PASSEANDO: {"text": "Passeando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_CASA: {"text": "Indo para casa.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.TRABALHANDO: {"text": "Trabalhando...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.OCIOSO: {"text": "Descansando.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.EM_CASA: {"text": "Dormindo...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+
+	NPC.State.SAINDO_DE_CASA: {"text": "Saindo de casa...", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.INDO_PARA_O_TRABALHO: {"text": "A caminho do trabalho.", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.REAGINDO_AO_JOGADOR: {"text": "Interagindo!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESABRIGADO: {"text": "Desabrigado!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+	NPC.State.DESEMPREGADO: {"text": "Sem local para trabalhar!", "icon": "res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png"},
+}
+
+const WORKPLACE_NAMES = {
+	PlantationScene.resource_path: "Plantação",
+	InfirmaryScene.resource_path: "Enfermaria",
+	TrainingAreaScene.resource_path: "Área de Treinamento",
+	ChurchScene.resource_path: "Centro Espiritual",
+	LeadersHouseScene.resource_path: "Casa do Líder"
+}
+
+var InventoryItemScene = preload("res://Scenes/UI/InventoryItem.tscn")
+var currently_inspected_npc: NPC = null
+
 func _ready():
 	StatusManager.status_updated.connect(_on_status_updated)
 	QuilomboManager.npc_count_changed.connect(_on_npc_count_changed)
 	WorldTimeManager.day_passed.connect(_on_day_passed)
+	GameManager.game_paused.connect(_update_time_control_buttons)
+	GameManager.game_resumed.connect(_update_time_control_buttons)
+	WorldTimeManager.time_scale_changed.connect(_update_time_control_buttons)
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
 	notification_container.modulate.a = 0.0
 	construction_title.visible = false 
@@ -76,27 +176,90 @@ func _ready():
 		"BuildPlantetionButton": PlantationScene,
 		"BuildInfirmaryButton": InfirmaryScene,
 		"BuildTrainingAreaButton": TrainingAreaScene,
-		"BuildChurchButton": ChurchScene
+		"BuildChurchButton": ChurchScene,
+		
+		"BuildBonfireButton": BonfireScene,
 	}
+	
+	GameManager.tutorial_step_changed.connect(update_build_buttons_for_tutorial)
 
-	var build_buttons = button_builds.find_children("*", "styledButton")
-	for button in build_buttons:
+	var found_buttons_array = button_builds.find_children("*", "styledButton")
+	for button in found_buttons_array:
 		if button.name in button_scene_map:
 			var scene = button_scene_map[button.name]
 			button.pressed.connect(_on_any_build_button_pressed.bind(scene))
+			build_buttons[scene.resource_path] = button
 			var temp_instance = scene.instantiate()
+
 			var structure_cost: Dictionary = {}
-			if "cost" in temp_instance: structure_cost = temp_instance.cost
+			if "cost" in temp_instance:
+				structure_cost = temp_instance.cost
+
+			button.display_costs(structure_cost)
 			temp_instance.queue_free()
-			if structure_cost.has("dinheiro"):
-				var cost_amount = structure_cost["dinheiro"]
-				button.set_cost_value(cost_amount)
-				button.cost_icon.texture = MONEY_ICON
-				button.set_cost_visible(true)
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
+	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
+
+	main_ui_panels = {
+		button_builds: {
+			"button": build_button,
+			"icon_node": build_button_icon,
+			"base_texture": BUILD_TEXTURE,
+			"tabs": [
+				{
+					"label": "Construções",
+					"sub_panel": construcoes_sub_panel
+				},
+				 {
+				   "label": "Decorações",
+				   "sub_panel": decoracoes_sub_panel
+				 }
+			]
+		},
+		button_inventorys: {
+			"button": button_inventory,
+			"icon_node": inventory_button_icon,
+			"base_texture": INVENTORY_TEXTURE,
+			"tabs": [
+				{
+					"label": "Meus Recursos",
+					"sub_panel": button_inventorys 
+				}
+			]
+		}
+	}
+	
+	inventory_rows = [
+		{
+			"container": inventory_row_1,
+			"resources": ["madeira", "ferramentas"]
+		},
+		{
+			"container": inventory_row_2,
+			"resources": ["alimentos", "remedios"]
+		}
+	]
+	
+	menu_button.pressed.connect(_on_menu_button_pressed)
+	menu_sub_panel.visible 
+	
+	play_button.pressed.connect(_on_play_button_pressed)
+	pause_button.pressed.connect(_on_pause_button_pressed)
+	speedup_button.pressed.connect(_on_speedup_button_pressed)
+	tutorial_button.pressed.connect(_on_tutorial_button_pressed)
+	settings_button.pressed.connect(_on_settings_button_pressed)
+	_update_time_control_buttons()
+	
+	var menu_buttons = [play_button, pause_button, speedup_button, tutorial_button, settings_button, build_button, button_inventory, menu_button]
+	for button in menu_buttons:
+		button.mouse_entered.connect(_on_any_button_mouse_entered.bind(button))
+		button.mouse_exited.connect(_on_any_button_mouse_exited.bind(button))
 
 func _process(delta: float):
+	if is_instance_valid(clock_label):
+		clock_label.text = WorldTimeManager.get_formatted_time()
+
 	_update_cursor_state()
 
 	if not is_in_placement_mode or not is_instance_valid(placement_preview):
@@ -119,27 +282,78 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
 				var build_pos = placement_preview.global_position
-				QuilomboManager.build_structure(scene_to_place, build_pos)
+				
+				if scene_to_place == HouseScene:
+					QuilomboManager.build_house(scene_to_place, build_pos)
+				else:
+					QuilomboManager.build_structure(scene_to_place, build_pos)
+				
 				_exit_placement_mode()
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			_exit_placement_mode()
+
+func update_build_buttons_for_tutorial(step_data: Dictionary):
+	var enabled_builds = step_data.get("enabled_builds", [])
+	if enabled_builds.is_empty():
+		for button in build_buttons.values():
+			if is_instance_valid(button):
+				button.visible = true
+		return
+	
+	for button in build_buttons.values():
+		if is_instance_valid(button):
+			button.visible = false
+	
+	for scene in enabled_builds:
+		var scene_path = scene.resource_path
+		if build_buttons.has(scene_path):
+			var button_to_show = build_buttons[scene_path]
+			if is_instance_valid(button_to_show):
+				button_to_show.visible = true
+
+func show_tutorial_dialog(data: Dictionary) -> DialogScreen:
+	dialog_screen.setup_dialog(data)
+	dialog_screen.show()
+	return dialog_screen
 
 func _on_status_updated():
 	health_bar.value = StatusManager.saude
 	hunger_bar.value = StatusManager.fome
 	security_bar.value = StatusManager.seguranca
 	relations_bar.value = StatusManager.relacoes
-	money_label.text = str(StatusManager.dinheiro)
+
+	money_label.text = str(StatusManager.get_resource("dinheiro"))
 	population_label.text = str(QuilomboManager.all_npcs.size())
+	
+	var estado_fome = "Normal"
+	if StatusManager.fome == 100:
+		hunger_label.text = "Fome (Cheio)"
+		estado_fome = "Cheio"
+	elif StatusManager.fome < 50 and StatusManager.fome > 0:
+		hunger_label.text = "Fome (Faminto)"
+		estado_fome = "Faminto"
+	elif StatusManager.fome == 0:
+		hunger_label.text = "Fome (Fadiga)"
+		estado_fome = "Fadiga"
+	else:
+		hunger_label.text = "Fome (Normal)"
+		estado_fome = "Normal"
+
 	health_icon.texture = HEALTH_ICON_LOW if StatusManager.saude < 50 else HEALTH_ICON_NORMAL
 	hunger_icon.texture = HUNGER_ICON_LOW if StatusManager.fome < 50 else HUNGER_ICON_NORMAL
 	relations_icon.texture = RELATIONS_ICON_LOW if StatusManager.relacoes < 50 else RELATIONS_ICON_NORMAL
+
 	var base_color = LOW_RELATIONS_COLOR if StatusManager.relacoes < 50 else DEFAULT_RELATIONS_COLOR
 	_set_bar_color(relations_bar, base_color)
 	var preview_color = base_color
 	preview_color.a = 127 / 255.0
 	_set_bar_color(relations_preview_bar, preview_color)
 	clear_preview()
+	
+	health_container.tooltip_text = "Saúde: %d/100" % StatusManager.saude
+	hunger_container.tooltip_text = "Fome: %d/100 (%s)" % [StatusManager.fome, estado_fome]
+	security_container.tooltip_text = "Segurança: %d/100" % StatusManager.seguranca
+	relations_container.tooltip_text = "Relações: %d/100" % StatusManager.relacoes
 
 func show_preview(bonuses: Dictionary):
 	clear_preview()
@@ -163,29 +377,18 @@ func _on_npc_count_changed(new_count: int):
 	population_label.text = str(new_count)
 
 func _on_button_pressed():
-	button_builds.visible = !button_builds.visible
-	construction_title.visible = button_builds.visible
-	
-	get_tree().paused = button_builds.visible
-
-	if button_builds.visible:
-		build_button_icon.visible = false
-		build_button.texture_normal = CLOSE_TEXTURE
-		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
-	else:
-		build_button_icon.visible = true
-		build_button.texture_normal = BUILD_TEXTURE
-		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
-
-		if is_in_placement_mode:
-			_exit_placement_mode()
+	_toggle_main_panel(button_builds)
 
 func _on_any_build_button_pressed(scene: PackedScene):
+	QuilomboManager._debug_print_all_npc_status("Clique no Botão de Construir")
+
 	if is_in_placement_mode:
 		_exit_placement_mode()
 		return
 
 	var temp_instance = scene.instantiate()
+	
+	# Checagem de limite de construção (já estava correta)
 	var max_allowed = temp_instance.get("max_instances")
 	if max_allowed != null and max_allowed > 0:
 		var current_count = QuilomboManager.get_build_count_for_type(scene.resource_path)
@@ -194,24 +397,39 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			temp_instance.queue_free()
 			return
 
-	var npcs_needed = temp_instance.get("npc_count")
+	# --- INÍCIO DA NOVA LÓGICA DE VERIFICAÇÃO ---
+	var npcs_needed = temp_instance.npc_count if "npc_count" in temp_instance else 0
 	var build_cost = temp_instance.get("cost")
-	temp_instance.queue_free()
-	if npcs_needed == null: npcs_needed = 0
+	
+	# 1. Primeiro, verificamos os recursos (dinheiro, etc.)
+	if build_cost and not StatusManager.has_enough_resources(build_cost):
+		show_notification("Recursos insuficientes para construir!")
+		temp_instance.queue_free()
+		return
+
+	# 2. Agora, a verificação inteligente de trabalhadores e casas
 	if npcs_needed > 0:
-		var available_space = QuilomboManager.get_available_housing_space()
-		if available_space < npcs_needed:
-			show_notification("Casas insuficientes para novos moradores!")
+		var required_profession = temp_instance.required_profession if "required_profession" in temp_instance else NPC.Profession.NENHUMA
+		
+		# Quantos trabalhadores qualificados já temos desempregados?
+		var available_workers = QuilomboManager.count_unemployed_by_profession(required_profession)
+		
+		# Quantos novos trabalhadores precisarão ser gerados?
+		var new_workers_to_spawn = npcs_needed - available_workers
+		if new_workers_to_spawn < 0:
+			new_workers_to_spawn = 0 # Não podemos gerar um número negativo
+		
+		# Quantas vagas em casas precisamos para esses NOVOS trabalhadores?
+		var available_housing = QuilomboManager.get_available_housing_space()
+		
+		if available_housing < new_workers_to_spawn:
+			show_notification("Casas insuficientes para os novos moradores!")
+			temp_instance.queue_free()
 			return
+	
+	temp_instance.queue_free() 
 
-	if build_cost:
-		if not StatusManager.has_enough_resources(build_cost):
-			show_notification("Recursos insuficientes para construir!")
-			return
-
-	button_builds.visible = false
-	construction_title.visible = false
-
+	main_panel_container.visible = false
 	is_in_placement_mode = true
 	scene_to_place = scene
 	placement_preview = scene.instantiate()
@@ -229,9 +447,7 @@ func _exit_placement_mode():
 	if is_instance_valid(placement_preview):
 		placement_preview.queue_free()
 
-	button_builds.visible = true
-	construction_title.visible = true
-
+	main_panel_container.visible = true
 	Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 
 	is_in_placement_mode = false
@@ -274,9 +490,14 @@ func _on_notification_timer_timeout():
 	notification_tween.tween_property(notification_container, "modulate:a", 0.0, 0.5)
 
 func _update_cursor_state():
-	if is_in_placement_mode:
-		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
-	elif button_builds.visible:
+	if is_instance_valid(hovered_button):
+		if hovered_button.disabled:
+			Input.set_custom_mouse_cursor(BLOCKED_CURSOR, Input.CURSOR_ARROW, BLOCKED_CURSOR_HOTSPOT)
+		else:
+			Input.set_custom_mouse_cursor(INTERACTION_CURSOR, Input.CURSOR_ARROW, INTERACTION_CURSOR_HOTSPOT)
+		return
+
+	if is_in_placement_mode or button_builds.visible:
 		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
 	else:
 		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
@@ -284,3 +505,333 @@ func _update_cursor_state():
 func _on_day_passed(new_day: int):
 	if day_label:
 		day_label.text = "Dia %02d" % new_day
+
+func _on_fugitives_awaiting_assignment(npcs: Array):
+	profession_screen.show_panel(npcs)
+
+func show_quilombo_list():
+	var old_list = find_child("QuilomboListUI", true, false)
+	if old_list:
+		old_list.queue_free()
+
+	var list_ui = QuilomboListScene.instantiate()
+	list_ui.name = "QuilomboListUI" 
+	add_child(list_ui)
+	
+func show_escambo_ui(quilombo_id: String):
+	var escambo_ui = EscamboScene.instantiate()
+	add_child(escambo_ui)
+	escambo_ui.start_trade(quilombo_id)
+
+func _on_inventory_button_pressed() -> void:
+	_toggle_main_panel(button_inventorys)
+
+	if button_inventorys.visible:
+		_populate_inventory_list()
+
+	inventory_button_icon.visible = !button_inventorys.visible
+	if button_inventorys.visible:
+		button_inventory.texture_normal = CLOSE_TEXTURE
+	else:
+		button_inventory.texture_normal = INVENTORY_TEXTURE
+
+func _populate_inventory_list():
+	for row_data in inventory_rows:
+		var container = row_data.container
+		for child in container.get_children():
+			child.queue_free()
+
+	for row_data in inventory_rows:
+		var container = row_data.container
+		var resources_in_row = row_data.resources
+
+		for resource_name in resources_in_row:
+			var amount = StatusManager.get_resource(resource_name)
+			var item = InventoryItemScene.instantiate()
+			container.add_child(item)
+			item.set_data(resource_name, amount)
+
+func show_npc_inspector(npc_ref: NPC):
+	if not is_instance_valid(npc_ref):
+		hide_npc_inspector()
+		return
+
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
+
+	currently_inspected_npc = npc_ref
+	currently_inspected_npc.state_changed.connect(_on_inspected_npc_state_changed)
+
+	_update_npc_inspector_panel()
+	npc_inspector_panel.show()
+
+func report_npc_hover(npc: NPC):
+	if not hover_candidates.has(npc):
+		hover_candidates.append(npc)
+	_update_highlight()
+	
+func report_npc_unhover(npc: NPC):
+	if hover_candidates.has(npc):
+		hover_candidates.erase(npc)
+	_update_highlight()
+	
+func _update_highlight():
+	var topmost_npc: NPC = null
+
+	if not hover_candidates.is_empty():
+		hover_candidates.sort_custom(func(a, b): return a.global_position.y < b.global_position.y)
+		topmost_npc = hover_candidates.back()
+
+	if topmost_npc != currently_highlighted_npc:
+		if is_instance_valid(currently_highlighted_npc):
+			currently_highlighted_npc.highlight_off()
+
+		if is_instance_valid(topmost_npc):
+			topmost_npc.highlight_on()
+
+		currently_highlighted_npc = topmost_npc
+
+func _on_close_button_pressed():
+	hide_npc_inspector()
+
+func hide_npc_inspector():
+	if is_instance_valid(currently_inspected_npc):
+		if currently_inspected_npc.state_changed.is_connected(_on_inspected_npc_state_changed):
+			currently_inspected_npc.state_changed.disconnect(_on_inspected_npc_state_changed)
+	
+	currently_inspected_npc = null
+
+	if is_instance_valid(npc_inspector_panel):
+		npc_inspector_panel.hide()
+	
+	if is_instance_valid(currently_highlighted_npc):
+		currently_highlighted_npc.highlight_off()
+		currently_highlighted_npc = null
+	
+	hover_candidates.clear()
+	
+func _on_inspected_npc_state_changed(npc_ref: NPC):
+	if npc_inspector_panel.visible and npc_ref == currently_inspected_npc:
+		print("HUD: Recebido update de estado de %s. Atualizando painel." % npc_ref.npc_name)
+		_update_npc_inspector_panel()
+
+func _update_npc_inspector_panel():
+	if not is_instance_valid(currently_inspected_npc):
+		hide_npc_inspector()
+		return
+
+	var npc_ref = currently_inspected_npc
+
+	npc_sprite.texture = npc_ref.get_idle_sprite_texture()
+	npc_name_label.text = npc_ref.npc_name
+	
+	var profession_key = npc_ref.profession
+	var profession_name = NPC.PROFESSION_NAMES.get(profession_key, "Desconhecida")
+	npc_profession_label.text = "Profissão: %s" % profession_name
+	
+	if is_instance_valid(npc_ref.work_node):
+		var workplace_path = npc_ref.work_node.scene_file_path
+		var workplace_name = WORKPLACE_NAMES.get(workplace_path, "Local Desconhecido")
+		npc_workplace_label.text = "Local de Trabalho: %s" % workplace_name
+	else:
+		npc_workplace_label.text = "Local de Trabalho: Desempregado"
+	
+	var state_key = npc_ref.current_state
+	if STATUS_DATA.has(state_key):
+		var state_text = STATUS_DATA[state_key].text
+		npc_state_label.text = "Estado: %s" % state_text
+	else:
+		npc_state_label.text = "Estado: Desconhecido"
+
+func _toggle_main_panel(panel_to_toggle: Control):
+	var is_closing_action = panel_to_toggle.visible
+	var was_build_menu_open = button_builds.visible
+
+	for panel in main_ui_panels:
+		var data = main_ui_panels[panel]
+		panel.visible = false
+		data.icon_node.visible = true
+		data.button.texture_normal = data.base_texture
+	_clear_tabs()
+	construction_title.visible = false
+
+	if was_build_menu_open:
+		GameManager.resume_game()
+
+	# 4. Lógica para ABRIR um painel e PAUSAR.
+	if not is_closing_action:
+
+		var data = main_ui_panels[panel_to_toggle]
+		panel_to_toggle.visible = true
+		data.icon_node.visible = false
+		data.button.texture_normal = CLOSE_TEXTURE
+
+		if panel_to_toggle == button_builds:
+			GameManager.pause_game()
+
+		call_deferred("_update_tabs_for_panel", panel_to_toggle)
+
+		if panel_to_toggle == button_inventorys:
+			_populate_inventory_list()
+		elif panel_to_toggle == button_builds:
+			construction_title.visible = true
+
+	if not is_closing_action and panel_to_toggle == button_builds:
+		Input.set_custom_mouse_cursor(BUILD_CURSOR, Input.CURSOR_ARROW, CURSOR_HOTSPOT)
+	else:
+		Input.set_custom_mouse_cursor(DEFAULT_CURSOR, Input.CURSOR_ARROW, DEFAULT_CURSOR_HOTSPOT)
+
+func _update_tabs_for_panel(panel_node):
+	_clear_tabs()
+
+	var panel_data = main_ui_panels[panel_node]
+	var tabs_data = panel_data.get("tabs", [])
+	if tabs_data.is_empty():
+		return
+
+	var all_sub_panels_in_section = []
+	for tab_info in tabs_data:
+		all_sub_panels_in_section.append(tab_info.sub_panel)
+
+	var tab_button_group = ButtonGroup.new()
+
+	for tab_info in tabs_data:
+		var tab_button = Button.new()
+		tab_button.text = tab_info.label
+		tab_button.toggle_mode = true
+		tab_button.button_group = tab_button_group
+		tabs_container.add_child(tab_button)
+		tab_button.pressed.connect(_on_tab_button_pressed.bind(tab_button, tab_info.sub_panel, all_sub_panels_in_section))
+
+	if not tabs_data.is_empty():
+		var first_tab_button = tabs_container.get_child(0) as Button
+		var first_sub_panel = tabs_data[0].sub_panel
+
+		first_tab_button.button_pressed = true
+		first_tab_button.z_index = Z_INDEX_ACTIVE
+
+		for panel in all_sub_panels_in_section:
+			if is_instance_valid(panel):
+				panel.visible = false
+
+		if is_instance_valid(first_sub_panel):
+			first_sub_panel.visible = true
+
+func _clear_tabs():
+	for child in tabs_container.get_children():
+		tabs_container.remove_child(child)
+		child.queue_free()
+
+func _on_tab_button_pressed(button_pressed: Button, sub_panel_to_show, all_sub_panels):
+	for tab in tabs_container.get_children():
+		if tab is Button:
+			tab.z_index = Z_INDEX_NORMAL
+
+	if is_instance_valid(button_pressed):
+		button_pressed.z_index = Z_INDEX_ACTIVE
+
+	for panel in all_sub_panels:
+		if is_instance_valid(panel):
+			panel.visible = false
+
+	if is_instance_valid(sub_panel_to_show):
+		sub_panel_to_show.visible = true
+
+func _on_menu_button_pressed():
+	menu_sub_panel.visible = not menu_sub_panel.visible
+
+	if menu_sub_panel.visible:
+		menu_button.texture_normal = CLOSE_TEXTURE
+	else:
+		menu_button.texture_normal = MENU_TEXTURE
+
+# --- FUNÇÕES DE CONTROLE DE TEMPO ---
+func _on_play_button_pressed():
+	GameManager.resume_game()
+	WorldTimeManager.set_normal_speed()
+	_update_time_control_buttons()
+
+func _on_pause_button_pressed():
+	GameManager.pause_game()
+	_update_time_control_buttons()
+
+func _on_speedup_button_pressed():
+	var is_paused = (WorldTimeManager.process_mode == Node.PROCESS_MODE_DISABLED)
+
+	if is_paused:
+		GameManager.resume_game()
+
+	WorldTimeManager.set_fast_speed()
+
+# --- FUNÇÕES DO MENU ---
+func _on_tutorial_button_pressed():
+	GameManager.restart_tutorial()
+
+func _on_settings_button_pressed():
+	GameManager.show_settings_menu()
+	
+func _update_time_control_buttons():
+	var is_paused = (WorldTimeManager.process_mode == Node.PROCESS_MODE_DISABLED)
+	var is_fast = WorldTimeManager.time_scale > 1.0
+	play_button.disabled = not (is_paused or is_fast)
+	pause_button.disabled = is_paused
+	speedup_button.disabled = is_fast
+
+func _on_any_button_mouse_entered(button: TextureButton):
+	hovered_button = button
+	_update_cursor_state()
+
+func _on_any_button_mouse_exited(button: TextureButton):
+	if hovered_button == button:
+		hovered_button = null
+	_update_cursor_state()
+
+func hide_building_inspector() -> void:
+	if is_instance_valid(building_inspector_panel):
+		building_inspector_panel.hide()
+
+func report_building_hover(building):
+	if currently_highlighted_building != building:
+		if is_instance_valid(currently_highlighted_building):
+			currently_highlighted_building.highlight_off()
+		
+		building.highlight_on()
+		currently_highlighted_building = building
+
+func report_building_unhover(building):
+	if currently_highlighted_building == building:
+		building.highlight_off()
+		currently_highlighted_building = null
+
+func show_building_inspector(building):
+	hide_npc_inspector()
+
+	building_name_label.text = building.building_name if "building_name" in building else "Nome Indefinido"
+	var capacity = building.max_capacity if "max_capacity" in building else 0
+	var occupants = []
+	if "workers" in building and not building.workers.is_empty():
+		occupants = building.workers
+	elif "residents" in building:
+		occupants = building.residents
+		
+	capacity_label.text = "Ocupação: %d / %d" % [occupants.size(), capacity]
+
+	if "work_starts_at" in building:
+		hours_label.text = "Funciona: %02d:00 - %02d:00" % [building.work_starts_at, building.work_ends_at]
+		hours_label.visible = true
+	else:
+		hours_label.visible = false
+
+	for child in occupant_container.get_children():
+		child.queue_free()
+
+	for npc in occupants:
+		var sprite = TextureRect.new()
+		sprite.texture = npc.get_idle_sprite_texture()
+		sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		sprite.custom_minimum_size = Vector2(48, 48)
+		occupant_container.add_child(sprite)
+	
+	building_inspector_panel.show()

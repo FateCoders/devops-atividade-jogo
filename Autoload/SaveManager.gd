@@ -12,7 +12,9 @@ func save_game():
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		game_data["player_data"] = player.get_save_data()
-	
+
+		game_data["quilombos_manager_data"] = QuilombosManager.get_save_data()
+
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if not file:
 		printerr("Erro ao tentar abrir o arquivo de save para escrita!")
@@ -52,10 +54,9 @@ func load_game():
 	var player = get_tree().get_first_node_in_group("player")
 	if player and game_data.has("player_data"):
 		player.load_data(game_data["player_data"])
-
-	# Você pode aplicar outros dados aqui...
-	# if game_data.has("inventory_data"):
-	#	 Inventory.load_data(game_data["inventory_data"])
+		
+	if game_data.has("quilombos_manager_data"):
+		QuilombosManager.load_data(game_data["quilombos_manager_data"])
 
 	print("Jogo carregado com sucesso!")
 	return true

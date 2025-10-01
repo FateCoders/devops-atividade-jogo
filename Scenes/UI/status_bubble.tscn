@@ -1,9 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://bm7553cnw05kc"]
+[gd_scene load_steps=7 format=3 uid="uid://bm7553cnw05kc"]
 
 [ext_resource type="Script" uid="uid://b0vb36drd13rr" path="res://Scripts/UI/statusBubble.gd" id="1_vaxuf"]
-[ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_78qeo"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_78qeo"]
 [ext_resource type="Texture2D" uid="uid://cg1cx1s7uvn5p" path="res://Assets/Sprites/Exported/HUD/Cursors/dialogue_cursor-menor.png" id="3_gjnvj"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="4_78qeo"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_78qeo"]
+texture = ExtResource("2_78qeo")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_gjnvj"]
 font = ExtResource("4_78qeo")
@@ -11,13 +18,6 @@ font_size = 25
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
-
-[sub_resource type="Gradient" id="Gradient_vaxuf"]
-offsets = PackedFloat32Array(0, 0.0194805)
-colors = PackedColorArray(0, 0, 0, 0.372549, 0.894118, 0.784314, 0.552941, 0.239216)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_78qeo"]
-gradient = SubResource("Gradient_vaxuf")
 
 [node name="StatusBubbleAnchor" type="Node2D"]
 
@@ -30,39 +30,28 @@ offset_bottom = -58.32
 scale = Vector2(1.16334, 1.35974)
 script = ExtResource("1_vaxuf")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="StatusBubble"]
+[node name="NinePatchRect" type="PanelContainer" parent="StatusBubble"]
 layout_mode = 0
 offset_right = 357.0
-offset_bottom = 64.0
+offset_bottom = 90.0
 scale = Vector2(2.02488, 2.02488)
-texture = ExtResource("2_78qeo")
+theme_override_styles/panel = SubResource("StyleBoxTexture_78qeo")
 
-[node name="StatusIcon" type="TextureRect" parent="StatusBubble/NinePatchRect"]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 22.0
-offset_top = 13.0
-offset_right = 60.0
-offset_bottom = 51.0
-grow_vertical = 2
-scale = Vector2(0.848764, 0.997907)
+[node name="HBoxContainer" type="HBoxContainer" parent="StatusBubble/NinePatchRect"]
+layout_mode = 2
+
+[node name="StatusIcon" type="TextureRect" parent="StatusBubble/NinePatchRect/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
 texture = ExtResource("3_gjnvj")
+stretch_mode = 5
 
-[node name="StatusLabel" type="Label" parent="StatusBubble/NinePatchRect"]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 78.0
-offset_top = 20.0
-offset_right = 313.0
-offset_bottom = 46.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Control" type="Control" parent="StatusBubble/NinePatchRect/HBoxContainer"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="StatusBubble/NinePatchRect/HBoxContainer"]
+layout_mode = 2
 text = "Indo para casa..."
 label_settings = SubResource("LabelSettings_gjnvj")
-
-[node name="PointLight2D" type="PointLight2D" parent="StatusBubble/NinePatchRect"]
-position = Vector2(178.5, 30.5)
-scale = Vector2(5.14063, 0.573908)
-energy = 2.0
-blend_mode = 2
-texture = SubResource("GradientTexture2D_78qeo")
+vertical_alignment = 1

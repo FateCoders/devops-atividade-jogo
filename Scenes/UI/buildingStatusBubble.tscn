@@ -1,7 +1,7 @@
-[gd_scene load_steps=16 format=4 uid="uid://c4lab8c15srn6"]
+[gd_scene load_steps=14 format=4 uid="uid://c4lab8c15srn6"]
 
 [ext_resource type="Script" uid="uid://doeait0xor3k0" path="res://Scripts/UI/construction_bubble.gd" id="1_8ug0a"]
-[ext_resource type="Texture2D" uid="uid://m0pirrtxq60q" path="res://Assets/Sprites/Exported/HUD/Frames/default-frame.png" id="2_g4s78"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_kacko"]
 
 [sub_resource type="Image" id="Image_kacko"]
 data = {
@@ -594,15 +594,9 @@ outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[sub_resource type="Gradient" id="Gradient_vaxuf"]
-offsets = PackedFloat32Array(0, 0.0194805)
-colors = PackedColorArray(0, 0, 0, 0.372549, 0.894118, 0.784314, 0.552941, 0.239216)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_78qeo"]
-gradient = SubResource("Gradient_vaxuf")
-
 [node name="buildingStatusBubble" type="Control"]
 visible = false
+z_index = 3
 layout_mode = 3
 anchor_right = 0.28
 anchor_bottom = 0.081
@@ -612,11 +606,16 @@ scale = Vector2(1.16334, 1.35974)
 script = ExtResource("1_8ug0a")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(300, 120)
 layout_mode = 0
-offset_right = 499.0
-offset_bottom = 126.0
+offset_right = 300.0
+offset_bottom = 120.0
 scale = Vector2(2.02488, 2.02488)
-texture = ExtResource("2_g4s78")
+texture = ExtResource("2_kacko")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect"]
 layout_mode = 1
@@ -644,10 +643,3 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Informação padrão"
 label_settings = SubResource("LabelSettings_24oto")
-
-[node name="PointLight2D" type="PointLight2D" parent="NinePatchRect"]
-position = Vector2(245.476, 61.3807)
-scale = Vector2(7.22673, 1.83869)
-energy = 2.0
-blend_mode = 2
-texture = SubResource("GradientTexture2D_78qeo")

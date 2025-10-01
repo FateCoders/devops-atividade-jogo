@@ -11,22 +11,19 @@ extends Camera2D
 @export var initial_zoom: float = 0.3
 
 @export_category("Limites do Mundo")
-## Defina o retângulo dos limites do mundo manualmente.
-## X e Y são a posição do canto superior esquerdo.
-## W (Width) e H (Height) são a largura e altura do seu mapa.
-@export var world_limits: Rect2 = Rect2(0, 0, 2000, 1200)
+@export var world_limits: Rect2 = Rect2(-6500, -6000, 14500, 13000)
 
-# Variáveis para controle do "arrastar com mouse"
 var dragging: bool = false
 var last_mouse_position: Vector2
 
 func _ready() -> void:
-	# Apenas define o zoom inicial.
 	zoom = Vector2(initial_zoom, initial_zoom)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# A lógica de zoom e arraste com o mouse permanece a mesma
+	if GameManager.is_camera_paused:
+		return
+
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -46,6 +43,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # --- FUNÇÃO _PROCESS CORRIGIDA ---
 func _process(delta: float) -> void:
+	if GameManager.is_camera_paused:
+		return
+
 	# Movimento com teclado
 	var direction = Input.get_vector("ui_a", "ui_d", "ui_w", "ui_s")
 	position += direction * pan_speed * delta

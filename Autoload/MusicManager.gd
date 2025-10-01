@@ -5,6 +5,8 @@ extends Node
 @export var menu_music: AudioStream
 @export var day_music: AudioStream
 @export var night_music: AudioStream
+@export var decision_music: AudioStream
+@export var action_music: AudioStream
 
 # --- NOVA CATEGORIA PARA SONS AMBIENTES ---
 @export_category("Sons Ambientes da Noite")
@@ -99,11 +101,15 @@ func _on_ambient_timer_timeout():
 # --- O resto do seu código (play_music, _on_world_period_changed, etc.) ---
 func play_menu_music():
 	_fade_to_music(menu_music)
+	
 func play_game_music():
 	if WorldTimeManager.is_day() or WorldTimeManager.is_evening():
 		_fade_to_music(day_music)
 	else:
 		_fade_to_music(night_music)
+		
+func play_decision_music():
+	_fade_to_music(decision_music)
 		
 func stop_music():
 	_fade_to_music(null)
