@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=13 format=3 uid="uid://c6cvb7ix3k63a"]
+[gd_resource type="TileSet" load_steps=15 format=3 uid="uid://c6cvb7ix3k63a"]
 
 [ext_resource type="Texture2D" uid="uid://2axpyf3eged" path="res://Assets/Sprites/Exported/Tilesets/Water/water-animation-tileset.png" id="1_nw7by"]
 [ext_resource type="Texture2D" uid="uid://dnsnel4rbkkf1" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Sand/sand01-tileset.png" id="2_nw7by"]
@@ -6,6 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://dptnb18fbbgm" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass+Sand/grass-sand-tileset.png" id="4_xlulc"]
 [ext_resource type="Texture2D" uid="uid://c0e4nab6d6gs5" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Roads/road01.png" id="5_turqm"]
 [ext_resource type="Texture2D" uid="uid://06deobxs37jb" path="res://Assets/Sprites/Exported/Tilesets/Terrain/Roads/road02.png" id="6_w3skh"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xlulc"]
+load_path = "res://.godot/imported/road03.png-05c767c9375a34033d99c452bf8042a6.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_turqm"]
+texture = SubResource("CompressedTexture2D_xlulc")
+texture_region_size = Vector2i(160, 160)
+0:0/0 = 0
+0:0/0/modulate = Color(1.5664034, 1.469972, 1.4217563, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xmpc5"]
 texture = ExtResource("2_nw7by")
@@ -157,6 +166,7 @@ texture_region_size = Vector2i(160, 160)
 texture = ExtResource("6_w3skh")
 texture_region_size = Vector2i(160, 160)
 0:0/0 = 0
+0:0/0/modulate = Color(2.1713488, 1.5235183, 0.45781574, 0.537)
 
 [resource]
 tile_size = Vector2i(160, 160)
@@ -177,3 +187,4 @@ sources/4 = SubResource("TileSetAtlasSource_xlulc")
 sources/6 = SubResource("TileSetAtlasSource_8fk7g")
 sources/7 = SubResource("TileSetAtlasSource_k224m")
 sources/8 = SubResource("TileSetAtlasSource_13g4a")
+sources/0 = SubResource("TileSetAtlasSource_turqm")
