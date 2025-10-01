@@ -2,11 +2,13 @@ extends Node
 
 signal status_updated
 
-var dinheiro = 500
-var remedios = 500
-var ferramentas = 500
-var madeira = 500
-var alimentos = 500
+var recursos = {
+	"dinheiro": 500,
+	"madeira": 20,
+	"remedios": 90,
+	"ferramentas": 30,
+	"alimentos": 200
+}
 
 var saude = 100
 var fome = 100
@@ -19,24 +21,13 @@ func _ready():
 	emit_signal("status_updated")
 
 func mudar_status(nome_status, valor):
-	match nome_status:
-		"dinheiro":
-			dinheiro += valor
-		"saude":
-			saude = clamp(saude + valor, 0, 100)
-		"fome":
-			fome = clamp(fome + valor, 0, 100)
-		"seguranca":
-			seguranca = clamp(seguranca + valor, 0, 100)
-		"relacoes":
-			relacoes = clamp(relacoes + valor, 0, 100)
+	var current_value = get(nome_status)
+	if current_value is int or current_value is float:
+		set(nome_status, clamp(current_value + valor, 0, 100))
+		emit_signal("status_updated")
+		_check_defeat_conditions()
+		print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
 
-	emit_signal("status_updated")
-	
-	_check_defeat_conditions()
-
-	print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
-	
 func _check_defeat_conditions():
 	if saude <= 0 and fome <= 0:
 		GameManager.game_over.emit("O quilombo sucumbiu à fome e às doenças.")
@@ -44,18 +35,19 @@ func _check_defeat_conditions():
 func get_status_value(nome_status):
 	return get(nome_status)
 
-func mudar_dinheiro(valor):
-	dinheiro += valor
-	emit_signal("status_updated")
+func mudar_recurso(nome_recurso: String, valor: int):
+	if recursos.has(nome_recurso):
+		recursos[nome_recurso] += valor
+		emit_signal("status_updated")
+	else:
+		printerr("Tentativa de alterar recurso inexistente: %s" % nome_recurso)
 
-# ADICIONADO: Nova função para verificar se temos recursos suficientes.
 func has_enough_resources(costs: Dictionary) -> bool:
 	for resource in costs.keys():
 		var required_amount = costs[resource]
+		var current_amount = recursos.get(resource, 0)
 		
-		var current_amount = get(resource)
-		
-		if current_amount == null or current_amount < required_amount:
+		if current_amount < required_amount:
 			print("Recurso insuficiente: %s. Necessário: %d, Possui: %d" % [resource, required_amount, current_amount])
 			return false
 	return true
@@ -67,8 +59,7 @@ func spend_resources(costs: Dictionary):
 
 	for resource in costs.keys():
 		var amount_to_spend = costs[resource]
-		var current_value = get(resource)
-		set(resource, current_value - amount_to_spend)
+		recursos[resource] -= amount_to_spend
 		print("Gasto: %d de %s." % [amount_to_spend, resource])
 	
 	emit_signal("status_updated")
@@ -89,16 +80,10 @@ func _recalculate_status():
 			current_health_debuff += debuff.value
 
 	print("Debuff de saúde total atual: %d" % current_health_debuff)
-	
-func get_all_resources() -> Dictionary:
-	return {
-		"dinheiro": dinheiro,
-		"madeira": madeira,
-		"alimentos": alimentos,	
-		"remedios": remedios,
-		"ferramentas": ferramentas
-	}
-	
+
+func get_resource(resource_name: String) -> int:
+	return recursos.get(resource_name, 0)
+
 func execute_trade(items_given: Dictionary, items_received: Dictionary):
 	# Remove os itens que o jogador deu
 	for resource in items_given:

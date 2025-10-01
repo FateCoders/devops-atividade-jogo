@@ -1,9 +1,16 @@
-# styledButton.gd
 @tool
 class_name styledButton
 extends PanelContainer
 
 signal pressed
+
+const RESOURCE_ICONS = {
+	"dinheiro": preload("res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png"),
+	"madeira": preload("res://Assets/Sprites/Exported/HUD/Icons/log-icon.png"),
+	"ferramentas": preload("res://Assets/Sprites/Exported/HUD/Icons/tools-icon.png"),
+	"alimentos": preload("res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png"),
+	"remedios": preload("res://Assets/Sprites/Exported/Plantation/beans.png")
+}
 
 @export var button_text: String = "Button Text":
 	set(value):
@@ -21,9 +28,8 @@ signal pressed
 			icon_sprite.texture = button_icon
 			icon_sprite.visible = (button_icon != null)
 
-@onready var cost_label = $HBoxContainer/CostLabel
-@onready var cost_icon = $HBoxContainer/CostIcon
-@onready var cost_spacer = $HBoxContainer/Spacer
+@onready var costs_container = $HBoxContainer/CostsContainer
+@onready var cost_template = $HBoxContainer/CostsContainer/CostTemplate
 @onready var internal_button = $Button
 
 @export var disabled: bool = false:
@@ -31,27 +37,38 @@ signal pressed
 		disabled = value
 		if is_instance_valid(internal_button):
 			internal_button.disabled = value
-		
-		# Efeito visual opcional: deixa o botão cinza quando desabilitado
 		if disabled:
-			self.modulate = Color(1, 1, 1, 0.5) # Cinza e um pouco transparente
+			self.modulate = Color(1, 1, 1, 0.5)
 		else:
 			self.modulate = Color.WHITE
 
 func _ready():
 	internal_button.pressed.connect(_on_internal_button_pressed)
-
 	self.button_text = button_text
 	self.button_icon = button_icon
-	set_cost_visible(false)
+	display_costs({})
 
 func _on_internal_button_pressed():
 	pressed.emit()
 
-func set_cost_visible(is_visible: bool):
-	cost_spacer.visible = is_visible
-	cost_label.visible = is_visible
-	cost_icon.visible = is_visible
+func display_costs(costs: Dictionary):
+	for child in costs_container.get_children():
+		if child != cost_template:
+			child.queue_free()
 
-func set_cost_value(amount: int):
-	cost_label.text = str(amount)
+	if costs.is_empty():
+		return
+
+	for resource_name in costs:
+		var amount = costs[resource_name]
+		
+		# Certifica que o nome do recurso existe no nosso dicionário de ícones
+		if not RESOURCE_ICONS.has(resource_name):
+			printerr("Ícone para o recurso '%s' não encontrado!" % resource_name)
+			continue
+
+		var new_cost_display = cost_template.duplicate()
+		new_cost_display.get_node("Icon").texture = RESOURCE_ICONS[resource_name]
+		new_cost_display.get_node("Amount").text = "x" + str(amount)
+		costs_container.add_child(new_cost_display)
+		new_cost_display.visible = true
