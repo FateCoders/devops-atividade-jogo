@@ -47,7 +47,6 @@ size = Vector2(113, 55)
 size = Vector2(55.14365, 61)
 
 [node name="Personagem_2D" type="CharacterBody2D" groups=["personagens", "player"]]
-z_index = 1
 collision_layer = 2
 script = ExtResource("1_awjts")
 interaction_cursor = ExtResource("2_k12tx")
