@@ -145,3 +145,10 @@ func highlight_off():
 func _on_interaction_area_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		emit_signal("building_clicked", self)
+
+func get_arrival_position() -> Vector2:
+	var spot = available_work_spots.pick_random()
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	return spot.global_position

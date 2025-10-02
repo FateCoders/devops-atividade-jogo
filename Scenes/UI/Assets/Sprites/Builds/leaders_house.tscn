@@ -19,6 +19,10 @@ size = Vector2(1214.8818, 1033.7153)
 position = Vector2(0, -331.99997)
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_fbne4")
+building_name = null
+max_capacity = null
+max_instances = null
+npc_count = null
 
 [node name="Sprite" type="Node2D" parent="."]
 

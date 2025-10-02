@@ -127,6 +127,13 @@ func set_production_type(new_type: ProductionType):
 		
 	print("Plantação '%s' foi configurada para produzir %s." % [self.name, ProductionType.keys()[new_type]])
 
+func get_arrival_position() -> Vector2:
+	var spot = available_work_spots.pick_random()
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	return spot.global_position
+
 # ADICIONADO: Uma função para que o NPC "devolva" o local quando terminar.
 func release_work_spot(spot: Marker2D):
 	if is_instance_valid(spot) and not available_work_spots.has(spot):
