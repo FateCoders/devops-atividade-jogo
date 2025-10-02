@@ -139,6 +139,9 @@ func _ready():
 	nav_agent.velocity_computed.connect(on_velocity_computed)
 	WorldTimeManager.day_passed.connect(_on_day_passed)
 
+	if not WorldTimeManager.time_scale_changed.is_connected(_on_time_scale_changed):
+		WorldTimeManager.time_scale_changed.connect(_on_time_scale_changed)
+	
 func _on_day_passed(day_number):
 	if current_state == State.DESABRIGADO:
 		days_homeless += 1
@@ -153,7 +156,6 @@ func _flee_quilombo():
 
 func on_velocity_computed(safe_velocity: Vector2):
 	velocity = safe_velocity
-	WorldTimeManager.time_scale_changed.connect(_on_time_scale_changed)
 	_original_move_speed = move_speed
 	_on_time_scale_changed()
 
