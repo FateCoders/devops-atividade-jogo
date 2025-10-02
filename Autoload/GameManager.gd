@@ -105,13 +105,10 @@ func _trigger_victory(victory_type: String = "survival"): # "survival" é o padr
 	print("VITÓRIA! O jogador venceu por: ", victory_type)
 	pause_game()
 	
-	if victory_screen_scene:
-		var victory_screen = victory_screen_scene.instantiate()
-		add_child(victory_screen)
-		if victory_screen.has_method("set_victory_type"):
-			victory_screen.set_victory_type(victory_type)
-	else:
-		printerr("A cena da tela de vitória não foi definida no GameManager!")
+	var victory_screen = victory_screen_scene.instantiate()
+	add_child(victory_screen)
+	if victory_screen.has_method("set_victory_type"):
+		victory_screen.set_victory_type(victory_type)
 
 # ADICIONADO: Função central que lida com a derrota.
 func trigger_defeat(reason: String):
