@@ -21,6 +21,7 @@ font = ExtResource("3_jxrow")
 font_size = 35
 
 [node name="defeatScreen" type="CanvasLayer"]
+process_mode = 3
 layer = 100
 script = ExtResource("1_dxg4r")
 

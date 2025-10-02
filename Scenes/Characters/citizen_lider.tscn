@@ -1,23 +1,23 @@
-[gd_scene load_steps=10 format=3 uid="uid://bx5sd7qqtkm6h"]
+[gd_scene load_steps=10 format=3 uid="uid://0l2onxwp75fg"]
 
-[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_dc5lp"]
-[ext_resource type="Texture2D" uid="uid://crnfcn6p3r3ig" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01-sprite-sheet.png" id="2_dc5lp"]
-[ext_resource type="Texture2D" uid="uid://cds8xfyncoqg4" path="res://Assets/Sprites/Exported/Citizens/static/citizen_01.png" id="2_y3i7a"]
-[ext_resource type="PackedScene" uid="uid://bm7553cnw05kc" path="res://Scenes/UI/status_bubble.tscn" id="4_k0ytg"]
+[ext_resource type="Script" uid="uid://cu3uspatqnlet" path="res://Scripts/Characters/personagem_2d.gd" id="1_eebcp"]
+[ext_resource type="Texture2D" uid="uid://clavtfu4fvghc" path="res://Assets/Sprites/Exported/Citizens/static/citizen_leader.png" id="2_eebcp"]
+[ext_resource type="Texture2D" uid="uid://58mgr1m5oxt6" path="res://Assets/Sprites/Exported/Citizens/static/citizen_lider-sprite-sheet.png" id="3_hhv7h"]
+[ext_resource type="PackedScene" uid="uid://bm7553cnw05kc" path="res://Scenes/UI/status_bubble.tscn" id="4_fho51"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s88kv"]
-atlas = ExtResource("2_dc5lp")
-region = Rect2(0, 0, 168, 220)
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ksq5"]
+atlas = ExtResource("3_hhv7h")
+region = Rect2(0, 0, 170, 220)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_k0ytg"]
-atlas = ExtResource("2_dc5lp")
-region = Rect2(168, 0, 168, 220)
+[sub_resource type="AtlasTexture" id="AtlasTexture_fho51"]
+atlas = ExtResource("3_hhv7h")
+region = Rect2(170, 0, 170, 220)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lx0wd"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_y3i7a")
+"texture": ExtResource("2_eebcp")
 }],
 "loop": true,
 "name": &"idle",
@@ -25,10 +25,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_s88kv")
+"texture": SubResource("AtlasTexture_8ksq5")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_k0ytg")
+"texture": SubResource("AtlasTexture_fho51")
 }],
 "loop": true,
 "name": &"walk",
@@ -45,7 +45,7 @@ size = Vector2(55.14365, 61)
 z_index = 1
 y_sort_enabled = true
 collision_layer = 2
-script = ExtResource("1_dc5lp")
+script = ExtResource("1_eebcp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -101)
@@ -77,7 +77,7 @@ scale = Vector2(2.158, 1)
 shape = SubResource("RectangleShape2D_y3i7a")
 debug_color = Color(0, 0.632905, 0.446382, 0.42)
 
-[node name="StatusBubbleAnchor" parent="." instance=ExtResource("4_k0ytg")]
+[node name="StatusBubbleAnchor" parent="." instance=ExtResource("4_fho51")]
 visible = false
 
 [connection signal="input_event" from="InteractionArea" to="." method="_on_area_2d_input_event"]

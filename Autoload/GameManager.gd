@@ -1,6 +1,8 @@
 # GameManager.gd
 extends Node
 
+enum LeaderType { PACIFISTA, AGRICULTOR, GUERREIRO, LIVRE }
+
 const DAYS_TO_WIN: int = 30
 var npcs_liberados: int = 0
 const NPCS_PARA_VITORIA: int = 20
@@ -23,6 +25,7 @@ var is_camera_paused: bool = false
 var tutorial_active: bool = true
 var current_tutorial_step: int = -1 
 var hud_node = null
+var chosen_leader_type: LeaderType = LeaderType.LIVRE 
 
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")

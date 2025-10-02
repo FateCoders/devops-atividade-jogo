@@ -7,6 +7,8 @@ class_name MainMenu
 ## O "ponto quente" do cursor (onde o clique acontece). (0,0) é o canto superior esquerdo.
 @export var cursor_hotspot: Vector2 = Vector2.ZERO
 
+@onready var leader_selection_modal = $LeaderSelectionModal
+
 func _ready() -> void:	if interaction_cursor:
 	if not SaveManager.save_exists():
 		var continue_button = $VBoxContainer/ButtonsContainer/Continue
@@ -27,7 +29,7 @@ func _process(delta: float) -> void:
 func _on_button_pressed(button: Button) -> void:
 	match button.name:
 		"NewGame":
-			get_tree().change_scene_to_file("res://Scenes/World/world.tscn")
+			leader_selection_modal.show()
 			
 		"Continue":
 			if SaveManager.load_game():
@@ -37,3 +39,22 @@ func _on_button_pressed(button: Button) -> void:
 				
 		"Quit":
 			get_tree().quit()
+
+func _on_pacifista_button_pressed():
+	GameManager.chosen_leader_type = GameManager.LeaderType.PACIFISTA
+	start_game()
+
+func _on_agricultor_button_pressed():
+	GameManager.chosen_leader_type = GameManager.LeaderType.AGRICULTOR
+	start_game()
+
+func _on_guerreiro_button_pressed():
+	GameManager.chosen_leader_type = GameManager.LeaderType.GUERREIRO
+	start_game()
+
+func _on_livre_button_pressed():
+	GameManager.chosen_leader_type = GameManager.LeaderType.LIVRE
+	start_game()
+
+func start_game():
+	get_tree().change_scene_to_file("res://Scenes/World/world.tscn")

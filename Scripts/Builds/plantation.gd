@@ -128,9 +128,11 @@ func set_production_type(new_type: ProductionType):
 	print("Plantação '%s' foi configurada para produzir %s." % [self.name, ProductionType.keys()[new_type]])
 
 func get_arrival_position() -> Vector2:
+	if available_work_spots.is_empty():
+		printerr("AVISO: '%s' não tem locais de trabalho disponíveis para enviar um NPC." % self.name)
+		return self.global_position
 	var spot = available_work_spots.pick_random()
 	available_work_spots.erase(spot)
-	
 	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
 	return spot.global_position
 

@@ -168,34 +168,30 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 # Em QuilomboManager.gd
 
 func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
-	#print("--> Gerando %d novos NPCs para '%s'" % [amount_to_spawn, workplace_node.name])
 	var required_profession = workplace_node.required_profession
-
 	var npc_scenes = workplace_node.get("possible_npc_scenes")
 
 	if not npc_scenes or npc_scenes.is_empty():
-		#printerr("--> ERRO: '%s' deveria gerar NPCs, mas a lista 'possible_npc_scenes' não foi definida ou está vazia!" % workplace_node.name)
+		printerr("--> ERRO: '%s' deveria gerar NPCs, mas a lista 'possible_npc_scenes' não foi definida ou está vazia!" % workplace_node.name)
 		return
 
 	var current_scene = get_tree().current_scene
-	
 	var y_sort_layer = current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		#printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
 		y_sort_layer = current_scene
 	
 	var nav_map = get_tree().root.get_world_2d().navigation_map
-	
 	var base_spawn_pos = workplace_node.global_position + Vector2(0, 65)
-	
 	var total_formation_width = (amount_to_spawn - 1) * NPC_SPAWN_SPACING
 	var start_offset_x = -total_formation_width / 2.0
-	
+	var npc_script = load("res://Scripts/Characters/personagem_2d.gd")
+
 	for i in amount_to_spawn:
 		var random_npc_scene = npc_scenes.pick_random()
 		var npc = random_npc_scene.instantiate()
-		npc.npc_name = NameGenerator.get_random_name()
 
+		npc.set_script(npc_script)
+		npc.npc_name = NameGenerator.get_random_name()
 		y_sort_layer.add_child(npc)
 		
 		var current_offset_x = start_offset_x + (i * NPC_SPAWN_SPACING)
@@ -205,8 +201,6 @@ func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 		npc.global_position = safe_pos
 		npc.profession = required_profession
 		
-		#print("--> Novo NPC #%d (usando '%s') gerado em %s" % [i + 1, random_npc_scene.resource_path.get_file(), safe_pos])
-
 		npc.work_node = workplace_node
 
 		var house = _find_house_with_space()
@@ -235,8 +229,6 @@ func _find_house_with_space() -> House:
 	return null
 
 func spawn_new_fugitives(amount: int):
-	#print("Acolhendo %d novos fugitivos no quilombo..." % amount)
-	
 	const FUGITIVE_NPC_SCENES = [
 		preload("res://Scenes/Characters/citizen_09.tscn"),
 		preload("res://Scenes/Characters/citizen_08.tscn"),
@@ -250,25 +242,24 @@ func spawn_new_fugitives(amount: int):
 	]
 	
 	if FUGITIVE_NPC_SCENES.is_empty():
-		#printerr("Nenhuma cena de NPC foi definida na lista para gerar fugitivos.")
 		return
 		
 	var new_fugitives: Array[NPC] = []
-
 	var current_scene = get_tree().current_scene
-	
 	var y_sort_layer = current_scene.find_child("YSortLayer")
 	if not is_instance_valid(y_sort_layer):
-		#printerr("ERRO: Nó 'YSortLayer' não encontrado! Adicionando NPCs à cena principal como fallback.")
 		y_sort_layer = current_scene
 	
-	var arrival_point = Vector2(0, 200) 
+	var arrival_point = Vector2(0, 200)
 	var total_formation_width = (amount - 1) * NPC_SPAWN_SPACING
 	var start_offset_x = -total_formation_width / 2.0
+	var npc_script = load("res://Scripts/Characters/personagem_2d.gd")
 
 	for i in amount:
 		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
 		var npc = random_npc_scene.instantiate()
+
+		npc.set_script(npc_script)
 		npc.npc_name = NameGenerator.get_random_name()
 		y_sort_layer.add_child(npc)
 		
@@ -280,7 +271,7 @@ func spawn_new_fugitives(amount: int):
 		var house = _find_house_with_space()
 
 		if house:
-			npc.assign_house(house) 
+			npc.assign_house(house)
 		
 		register_npc(npc)
 		new_fugitives.append(npc)
@@ -392,3 +383,19 @@ func remove_random_npc():
 		npc_to_remove.queue_free()
 	
 	print("NPC '%s' removido aleatoriamente." % npc_to_remove.npc_name)
+	
+
+func unregister_npc(npc_to_remove: NPC):
+	if not is_instance_valid(npc_to_remove):
+		return
+
+	print("Removendo '%s' do quilombo." % npc_to_remove.name)
+
+	StatusManager.remove_persistent_debuff("homeless_health_%d" % npc_to_remove.get_instance_id())
+	StatusManager.remove_persistent_debuff("homeless_relations_%d" % npc_to_remove.get_instance_id())
+
+	if all_npcs.has(npc_to_remove):
+		all_npcs.erase(npc_to_remove)
+		npc_count_changed.emit(all_npcs.size())
+
+	npc_to_remove.queue_free()

@@ -1,0 +1,33 @@
+[gd_scene load_steps=8 format=3 uid="uid://dfl517gm3tfkx"]
+
+[ext_resource type="Script" uid="uid://cbrh1y50wc08f" path="res://Scenes/UI/leader_choice_button.gd" id="1_6yjpa"]
+[ext_resource type="Texture2D" uid="uid://ro4qklqoo80q" path="res://Assets/Sprites/Exported/Buttons/button-base-1.png" id="1_o188m"]
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_pvxdl"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pvxdl"]
+texture = ExtResource("1_o188m")
+texture_margin_left = 8.0
+texture_margin_top = 4.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pvxdl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vuvfl"]
+
+[sub_resource type="Theme" id="Theme_pvxdl"]
+Button/colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/fonts/font = ExtResource("3_pvxdl")
+Button/styles/focus = SubResource("StyleBoxEmpty_pvxdl")
+Button/styles/hover_pressed = SubResource("StyleBoxEmpty_vuvfl")
+
+[node name="LeaderChoiceButton" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxTexture_pvxdl")
+script = ExtResource("1_6yjpa")
+
+[node name="ClickButton" type="Button" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_pvxdl")
+flat = true

@@ -11,6 +11,10 @@ var recursos = {
 	"libertos": 0,
 }
 
+var base_saude = 100
+var base_fome = 100
+var base_seguranca = 10
+var base_relacoes = 10
 
 var saude = 100
 var fome = 100
@@ -20,15 +24,20 @@ var relacoes = 10
 var persistent_debuffs = {}
 
 func _ready():
-	emit_signal("status_updated")
+	_recalculate_status()
 
 func mudar_status(nome_status, valor):
-	var current_value = get(nome_status)
-	if current_value is int or current_value is float:
-		set(nome_status, clamp(current_value + valor, 0, 100))
-		emit_signal("status_updated")
-		_check_defeat_conditions()
-		print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
+	if nome_status == "relacoes" and valor > 0 and GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
+		valor = int(valor * 1.25)
+		print("Bônus do líder Pacifista: ganho de relações aumentado!")
+
+	var base_variable_name = "base_" + nome_status
+	var current_base_value = get(base_variable_name)
+	
+	if current_base_value is int or current_base_value is float:
+		set(base_variable_name, clamp(current_base_value + valor, 0, 100))
+		_recalculate_status()
+		print("Status base alterado: ", nome_status, ", Novo valor base: ", get(base_variable_name))
 
 func _check_defeat_conditions():
 	if saude <= 0 and fome <= 0:
@@ -76,12 +85,27 @@ func remove_persistent_debuff(source_id):
 		_recalculate_status()
 
 func _recalculate_status():
-	var current_health_debuff = 0
-	for debuff in persistent_debuffs.values():
-		if debuff.type == "saude":
-			current_health_debuff += debuff.value
+	var total_debuffs = {
+		"saude": 0,
+		"fome": 0,
+		"seguranca": 0,
+		"relacoes": 0
+	}
 
-	print("Debuff de saúde total atual: %d" % current_health_debuff)
+	for debuff in persistent_debuffs.values():
+		if total_debuffs.has(debuff.type):
+			total_debuffs[debuff.type] += debuff.value
+
+	saude = clamp(base_saude + total_debuffs.saude, 0, 100)
+	fome = clamp(base_fome + total_debuffs.fome, 0, 100)
+	seguranca = clamp(base_seguranca + total_debuffs.seguranca, 0, 100)
+	relacoes = clamp(base_relacoes + total_debuffs.relacoes, 0, 100)
+	
+	print("Debuffs totais recalculados: ", total_debuffs)
+	print("Valores efetivos atualizados -> Saúde: %d, Relações: %d" % [saude, relacoes])
+
+	emit_signal("status_updated")
+	_check_defeat_conditions()
 
 func get_resource(resource_name: String) -> int:
 	return recursos.get(resource_name, 0)

@@ -24,15 +24,15 @@ enum State {
 	INDO_PARA_O_TRABALHO,
 	TRABALHANDO,
 	REAGINDO_AO_JOGADOR,
-	DESABRIGADO, 
-	DESEMPREGADO 
+	DESABRIGADO,
+	DESEMPREGADO
 }
 
 enum Profession {
 	NENHUMA,
 	ENFERMEIRO,
 	RELIGIOSO,
-	AGRICULTOR, 
+	AGRICULTOR,
 	GUERREIRO
 }
 
@@ -46,9 +46,9 @@ const PROFESSION_NAMES = {
 
 @export_category("Comportamento Geral")
 @export var npc_name: String = "Morador"
-@export var profession: Profession = Profession.NENHUMA 
+@export var profession: Profession = Profession.NENHUMA
 @export var move_speed: float = 200.0
-@export var wander_range: float = 20.0
+@export var wander_range: float = 250.0
 
 @export_category("Dança")
 @export var dance_animation_speed: float = 0.7
@@ -80,10 +80,9 @@ var work_node: Node:
 		if is_instance_valid(work_node) and work_node.has_method("add_worker"):
 			work_node.add_worker(self)
 var assigned_work_spot: Marker2D = null
-var house: House = null  # Referência à casa atual do NPC
+var house: House = null # Referência à casa atual do NPC
 
 # Estado atual do NPC
-# MODIFICADO: O estado inicial agora é definido dinamicamente na função _ready
 var current_state: State
 var _state_before_interaction: State
 
@@ -110,14 +109,13 @@ var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 var hud_node: Hud = null
 
 var _original_move_speed: float
+var days_homeless: int = 0
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
 func _ready():
-	
 	status_bubble.hide()
 	
-	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_noise.seed = randi()
 	_noise.frequency = 2.0
 	work_turn_timer.timeout.connect(_on_work_turn_timer_timeout)
@@ -134,16 +132,30 @@ func _ready():
 	add_child(_repath_timer)
 	_repath_timer.start()
 
-	# MODIFICADO: Em vez de chamar _update_schedule, chamamos nossa nova função de inicialização.
 	await get_tree().physics_frame
 	_initialize_state_and_position()
 	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
 	
 	nav_agent.velocity_computed.connect(on_velocity_computed)
+	WorldTimeManager.day_passed.connect(_on_day_passed)
+
+	if not WorldTimeManager.time_scale_changed.is_connected(_on_time_scale_changed):
+		WorldTimeManager.time_scale_changed.connect(_on_time_scale_changed)
+	
+func _on_day_passed(day_number):
+	if current_state == State.DESABRIGADO:
+		days_homeless += 1
+		print("'%s' está desabrigado por %d dias." % [npc_name, days_homeless])
+		if days_homeless >= 5:
+			_flee_quilombo()
+
+func _flee_quilombo():
+	print("'%s' está desabrigado há muito tempo e decidiu fugir!" % npc_name)
+	StatusManager.mudar_status("relacoes", -5)
+	QuilomboManager.unregister_npc(self)
 
 func on_velocity_computed(safe_velocity: Vector2):
 	velocity = safe_velocity
-	WorldTimeManager.time_scale_changed.connect(_on_time_scale_changed)
 	_original_move_speed = move_speed
 	_on_time_scale_changed()
 
@@ -160,7 +172,6 @@ func _initialize_state_and_position():
 	else:
 		global_position = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
 		
-		# Verificação de trabalho
 		if is_instance_valid(work_node):
 			var work_starts = work_node.work_starts_at
 			var work_ends = work_node.work_ends_at
@@ -169,7 +180,6 @@ func _initialize_state_and_position():
 			else:
 				_change_state(State.SAINDO_DE_CASA)
 		else:
-			# Tem casa, mas não tem trabalho? Fica Desempregado.
 			print("'%s' tem casa mas não tem trabalho. Estado inicial: DESEMPREGADO." % name)
 			_change_state(State.DESEMPREGADO)
 
@@ -177,24 +187,15 @@ func _initialize_state_and_position():
 # LOOP PRINCIPAL
 #-----------------------------------------------------------------------------
 func _physics_process(delta):
-	# O resto do código permanece o mesmo...
-		# Se o NPC deve estar parado por algum motivo, zera a velocidade.
 	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		_handle_idle_states(delta)
-		# Zera a velocidade do agente também para que ele não tente desviar.
 		nav_agent.set_velocity(Vector2.ZERO)
 	else:
-		# Se a navegação ainda não terminou...
 		if not nav_agent.is_navigation_finished():
-			# 1. Calcula a direção para o próximo ponto do caminho.
 			var next_path_position = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_path_position)
-			
-			# 2. INFORMA ao agente qual é a nossa velocidade desejada.
-			# O agente então calculará a velocidade segura e a enviará pelo sinal.
 			nav_agent.set_velocity(direction * move_speed)
 		else:
-			# Chegou ao destino final, para o agente e o corpo.
 			nav_agent.set_velocity(Vector2.ZERO)
 			velocity = Vector2.ZERO
 			_on_target_reached()
@@ -204,7 +205,6 @@ func _physics_process(delta):
 	_handle_npc_collision(delta)
 
 func _handle_npc_collision(delta: float):
-	# Se o NPC está parado por vontade própria, não faz nada.
 	if velocity.is_zero_approx():
 		_stuck_on_npc = null
 		_stuck_on_npc_timer = 0.0
@@ -212,7 +212,6 @@ func _handle_npc_collision(delta: float):
 
 	var collision = get_last_slide_collision()
 	
-	# Se não houve colisão, ou se o que colidimos não for um NPC, resetamos.
 	if not collision or not collision.get_collider() is NPC:
 		_stuck_on_npc = null
 		_stuck_on_npc_timer = 0.0
@@ -220,31 +219,19 @@ func _handle_npc_collision(delta: float):
 	
 	var other_npc: NPC = collision.get_collider()
 
-	# Se estamos colidindo com o mesmo NPC de antes, incrementamos o timer.
 	if other_npc == _stuck_on_npc:
 		_stuck_on_npc_timer += delta
 	else:
-		# Se é um novo NPC, começamos a contar do zero.
 		_stuck_on_npc = other_npc
 		_stuck_on_npc_timer = 0.0
 	
-	# Se o tempo de colisão exceder o limite, pedimos para o outro NPC ceder.
 	if _stuck_on_npc_timer >= STUCK_ON_NPC_YIELD_TIME:
 		print("'%s' está preso em '%s' por %.1f segundos. Pedindo passagem..." % [self.name, other_npc.name, _stuck_on_npc_timer])
-		# Chamamos a função no OUTRO NPC.
 		other_npc.request_to_yield_path()
-		# Resetamos o timer para não ficar pedindo toda hora.
 		_stuck_on_npc_timer = 0.0
 
-
-## PARTE 2: Lógica do NPC que está PARADO (o obstáculo).
-## Esta função é chamada por OUTRO NPC que quer passar.
 func request_to_yield_path():
-	# MODIFICADO: A nova regra é muito mais flexível.
-	# Um NPC só vai recusar o pedido se ele estiver se movendo para algum lugar.
-	# Se ele estiver parado (trabalhando, ocioso, etc), ele vai ceder a passagem.
 	if is_yielding or State.EM_CASA:
-		# Se já estou cedendo OU se minha velocidade não é zero, eu recuso.
 		return
 	
 	print("--> '%s' ACEITOU o pedido e está cedendo a passagem!" % self.name)
@@ -257,9 +244,6 @@ func request_to_yield_path():
 		collision_shape.disabled = false
 	)
 
-# ... (O restante do seu script a partir daqui não precisa de alterações)
-# Cole o resto do seu código (a partir de _handle_idle_states) aqui.
-# A única mudança necessária foi no início do script.
 #-----------------------------------------------------------------------------
 # LÓGICA DE ESTADOS
 #-----------------------------------------------------------------------------
@@ -271,43 +255,30 @@ func _update_schedule():
 	if current_state == State.REAGINDO_AO_JOGADOR:
 		return
 
-	# --- LÓGICA DE ESTADO CORRIGIDA ---
-	
-	# PRIORIDADE 1: Verificar se tem casa. Se não tiver, é DESABRIGADO.
 	if not is_instance_valid(house_node):
-		# Garante que o estado seja e permaneça DESABRIGADO.
 		_change_state(State.DESABRIGADO)
-		return # Um NPC desabrigado não tem rotina, então paramos aqui.
+		return
 
-	# PRIORIDADE 2: Verificar se tem trabalho. Se tiver casa mas não tiver trabalho, é DESEMPREGADO.
 	if not is_instance_valid(work_node):
-		# Se ele não estiver já em um estado "sem trabalho", muda para DESEMPREGADO.
 		if current_state not in [State.DESEMPREGADO, State.OCIOSO, State.PASSEANDO, State.SAINDO_DE_CASA, State.EM_CASA]:
 			_change_state(State.DESEMPREGADO)
-		return # Um NPC desempregado não tem rotina de trabalho, então paramos aqui.
-
-	# PRIORIDADE 3: Se chegamos até aqui, o NPC TEM CASA E TEM TRABALHO.
-	# Agora sim, podemos executar a lógica de horários.
+		return
 	
 	var current_hour = WorldTimeManager.get_current_hour()
 
-	# Lógica noturna
 	if WorldTimeManager.is_night():
 		if current_state not in [State.EM_CASA, State.INDO_PARA_CASA]:
 			_change_state(State.INDO_PARA_CASA)
 		return
 
-	# Lógica de horário de trabalho
 	var work_starts = work_node.work_starts_at
 	var work_ends = work_node.work_ends_at
 
 	if current_hour >= work_starts and current_hour < work_ends:
-		# Se é horário de trabalho e ele não está trabalhando ou indo para lá
 		if current_state not in [State.TRABALHANDO, State.INDO_PARA_O_TRABALHO]:
 			_change_state(State.INDO_PARA_O_TRABALHO)
 		return
 
-	# Lógica de fim de expediente / manhã antes do trabalho
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
@@ -325,22 +296,25 @@ func _change_state(new_state: State):
 	var old_state = current_state
 
 	if old_state == State.TRABALHANDO:
-		StatusManager.mudar_status('dinheiro', 10)
+		var money_gain = 10
+		if GameManager.chosen_leader_type == GameManager.LeaderType.AGRICULTOR:
+			if is_instance_valid(work_node) and work_node is Plantation:
+				money_gain = int(money_gain * 1.5)
+				print("'%s' (Agricultor) ganhou um bônus de dinheiro na plantação!" % npc_name)
+		StatusManager.mudar_recurso('dinheiro', money_gain)
 
 	if old_state == State.DESABRIGADO:
-		StatusManager.remove_persistent_debuff(self.get_instance_id())
+		StatusManager.remove_persistent_debuff("homeless_health_%d" % get_instance_id())
+		StatusManager.remove_persistent_debuff("homeless_relations_%d" % get_instance_id())
 	
 	if old_state == State.DESEMPREGADO:
 		StatusManager.remove_persistent_debuff(self.get_instance_id())
 
-	
 	current_state = new_state
-	
 	emit_signal("state_changed", self)
 
 	if new_state != State.TRABALHANDO:
 		work_turn_timer.stop()
-		#animated_sprite.position = Vector2.ZERO
 
 	_cancel_idle_timer()
 
@@ -354,7 +328,6 @@ func _change_state(new_state: State):
 				var base_exit_point = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
 				var random_offset = Vector2(randf_range(-40.0, 40.0), randf_range(-10.0, 10.0))
 				nav_agent.target_position = base_exit_point + random_offset
-
 		State.INDO_PARA_CASA:
 			if is_instance_valid(house_node):
 				collision_shape.disabled = false
@@ -362,62 +335,53 @@ func _change_state(new_state: State):
 				var door_position = house_node.get_door_position()
 				var random_offset = Vector2(randf_range(-25.0, 25.0), 0)
 				nav_agent.target_position = door_position + random_offset
-
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
 				show()
 				nav_agent.target_position = work_node.get_arrival_position()
-				
 			else:
 				print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
 				_change_state(State.OCIOSO)
-
 		State.PASSEANDO:
 			collision_shape.disabled = false
-			
-			var decision = randf()
-			
-			if decision < 0.33: 
-				var interest_points = get_tree().get_nodes_in_group("locais_de_interesse")
-				if not interest_points.is_empty():
+			var interest_points = get_tree().get_nodes_in_group("locais_de_interesse")
+			var visited_point = false
+			if not interest_points.is_empty():
+				if randf() < 0.5:
 					var destination_node = interest_points.pick_random()
-					
 					if destination_node.has_method("claim_available_work_spot"):
 						var spot = destination_node.claim_available_work_spot()
 						if is_instance_valid(spot):
 							nav_agent.target_position = spot.global_position
 							print("'%s' decidiu visitar '%s'." % [name, destination_node.name])
-							
-							assigned_work_spot = spot 
-							return
-				
-			print("'%s' decidiu passear aleatoriamente." % name)
-			_set_new_random_destination()
-
+							assigned_work_spot = spot
+							visited_point = true
+			if not visited_point:
+				print("'%s' decidiu passear aleatoriamente." % name)
+				_set_new_random_destination()
 		State.TRABALHANDO:
 			if collision_shape:
 				collision_shape.disabled = false
 			animated_sprite.play("walk")
 			_on_work_turn_timer_timeout()
-
 		State.OCIOSO:
 			if collision_shape:
 				collision_shape.disabled = false
 			_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
 			_idle_timer.timeout.connect(_on_idle_timeout)
-
 		State.EM_CASA:
 			velocity = Vector2.ZERO
 			collision_shape.disabled = true
 			hide()
-
 		State.DESABRIGADO:
+			StatusManager.add_persistent_debuff("homeless_health_%d" % get_instance_id(), "saude", -5)
+			StatusManager.add_persistent_debuff("homeless_relations_%d" % get_instance_id(), "relacoes", -5)
+			# As linhas abaixo foram movidas do if gigante para cá
 			velocity = Vector2.ZERO
 			show()
 			if collision_shape:
 				collision_shape.disabled = false
 			print("'%s' está no estado DESABRIGADO." % name)
-
 		State.DESEMPREGADO:
 			show()
 			if collision_shape:
@@ -425,12 +389,10 @@ func _change_state(new_state: State):
 			print("'%s' está desempregado e vai passear." % name)
 			_set_new_random_destination()
 
-	if current_state == State.DESABRIGADO:
-		StatusManager.add_persistent_debuff(self.get_instance_id(), "saude", -5)
+	# Este if era redundante, a lógica foi movida para dentro do 'match'
+	#if current_state == State.DESABRIGADO:
+	#	StatusManager.add_persistent_debuff(self.get_instance_id(), "saude", -5)
 	
-	if current_state == State.DESEMPREGADO:
-		pass
-
 func _on_target_reached():
 	match current_state:
 		State.DESEMPREGADO:
@@ -439,21 +401,12 @@ func _on_target_reached():
 			if is_instance_valid(assigned_work_spot):
 				var location_node = assigned_work_spot.get_owner()
 				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
-					print("'%s' está liberando seu local de visita." % name)
 					location_node.release_work_spot(assigned_work_spot)
 					assigned_work_spot = null
-			
 			_change_state(State.OCIOSO)
 		State.INDO_PARA_O_TRABALHO:
 			_change_state(State.TRABALHANDO)
-		State.PASSEANDO:
-			if is_instance_valid(assigned_work_spot):
-				var location_node = assigned_work_spot.get_owner()
-				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
-					location_node.release_work_spot(assigned_work_spot)
-					assigned_work_spot = null
-			
-			_change_state(State.OCIOSO)
+
 #=============================================================================
 # FUNÇÕES DE INTERAÇÃO COM A CASA
 #=============================================================================
@@ -473,13 +426,10 @@ func enter_house():
 func _on_repath_timer_timeout():
 	if not nav_agent.is_navigation_finished() and current_state not in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
 		nav_agent.target_position = nav_agent.get_final_position()
-		
+
 func _check_if_stuck(delta) -> bool:
-	# Adicionado print para depurar o estado da flag _is_unstucking
-	# print("Checando se está preso... _is_unstucking = ", _is_unstucking) 
-	
 	if _is_unstucking or velocity.is_zero_approx():
-		_stuck_time = 0.0 
+		_stuck_time = 0.0
 		return false
 
 	if global_position.distance_to(_stuck_check_position) < 1.0:
@@ -489,7 +439,6 @@ func _check_if_stuck(delta) -> bool:
 		_stuck_check_position = global_position
 
 	if _stuck_time > STUCK_THRESHOLD:
-		# MODIFICADO: Apenas chama _perform_unstuck se já não estiver em andamento.
 		if not _is_unstucking:
 			_perform_unstuck()
 		return true
@@ -497,21 +446,16 @@ func _check_if_stuck(delta) -> bool:
 	return false
 
 func _perform_unstuck():
-	if _is_unstucking or State in [State.EM_CASA, State.SAINDO_DE_CASA]: return
+	if _is_unstucking or current_state in [State.EM_CASA, State.SAINDO_DE_CASA]: return
 	
 	collision_shape.disabled = true
-	
 	_is_unstucking = true
 	print("'%s' está preso! Iniciando procedimento para destravar." % self.name)
 	_stuck_time = 0.0
 
 	_on_repath_timer_timeout()
 
-	# MODIFICADO: Lógica de teleporte inteligente.
-	# 1. Calcula uma "posição de fuga" aleatória a até 50 pixels de distância.
 	var escape_target = global_position + Vector2(randf_range(-200, 200), randf_range(-200, 200))
-	
-	# 2. Encontra o ponto de navegação seguro mais próximo DESSE NOVO ALVO.
 	var nav_map = get_world_2d().navigation_map
 	var safe_pos = NavigationServer2D.map_get_closest_point(nav_map, escape_target)
 	
@@ -530,19 +474,10 @@ func _perform_unstuck():
 func _on_area_2d_mouse_entered():
 	if is_instance_valid(hud_node):
 		hud_node.report_npc_hover(self)
-	#if current_state in [State.EM_CASA, State.INDO_PARA_CASA]:
-		#return
-	
-	#status_bubble.update_status(self)
-	#if interaction_cursor:
-		#Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
-	#_state_before_interaction = current_state
 
 func _on_area_2d_mouse_exited():
 	if is_instance_valid(hud_node):
 		hud_node.report_npc_unhover(self)
-	#status_bubble.hide()
-	#Input.set_custom_mouse_cursor(null)
 
 func _on_work_turn_timer_timeout():
 	var random_direction = randi() % 2
@@ -550,11 +485,8 @@ func _on_work_turn_timer_timeout():
 	work_turn_timer.start()
 	
 func _on_area_2d_input_event(viewport, event, shape_idx):
-	print("Evento de input detectado no NPC!")
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		print("É um clique do botão esquerdo do mouse!")
 		emit_signal("npc_clicked", self)
-		print("Sinal 'npc_clicked' emitido!")
 
 func _update_animation():
 	if not is_instance_valid(animated_sprite):
@@ -572,12 +504,16 @@ func _update_animation():
 # FUNÇÕES DE MOVIMENTAÇÃO ALEATÓRIA
 #-----------------------------------------------------------------------------
 func _set_new_random_destination():
-	if not is_instance_valid(house_node):
-		return
-	var wander_base_pos = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
-	var random_offset = Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
-	var destination = wander_base_pos + random_offset
-	nav_agent.target_position = destination
+	var nav_map_rid = get_world_2d().navigation_map
+	var random_point = NavigationServer2D.map_get_random_point(nav_map_rid, 1, true)
+	
+	if random_point != Vector2.ZERO:
+		nav_agent.target_position = random_point
+	else:
+		if is_instance_valid(house_node):
+			var wander_base_pos = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
+			var random_offset = Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
+			nav_agent.target_position = wander_base_pos + random_offset
 
 func _on_idle_timeout():
 	if current_state == State.OCIOSO:
@@ -589,29 +525,21 @@ func _cancel_idle_timer():
 
 # --- NPC PEDINDO PARA SAIR ---
 func request_exit_house():
-	if house: # referência para a casa atual do NPC
-		house.request_exit(self) # adiciona o NPC à fila de saída
-
+	if house:
+		house.request_exit(self)
 
 # --- NPC RECEBE AUTORIZAÇÃO PARA SAIR ---
 func start_exit():
 	current_state = State.SAINDO_DE_CASA
-	
 	if house:
 		nav_agent.target_position = house.get_door_position()
-	
 	print("%s está saindo da casa..." % name)
-
 
 func exit_house_complete():
 	current_state = State.PASSEANDO
-	
-	# Informa à casa que terminou de sair para liberar o próximo
 	if house:
 		house.notify_exit_done()
-	
 	print("%s terminou de sair da casa." % name)
-
 
 #-----------------------------------------------------------------------------
 # FUNÇÕES DE SAVE/LOAD

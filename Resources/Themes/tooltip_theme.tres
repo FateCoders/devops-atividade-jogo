@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://ck82iwtlx4dyc"]
+
+[ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="1_wkxgq"]
+[ext_resource type="Texture2D" uid="uid://db0d636h7u75s" path="res://Assets/Sprites/Exported/HUD/Frames/small-frame.png" id="2_bsqc2"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wkxgq"]
+texture = ExtResource("2_bsqc2")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[resource]
+Label/colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+Label/fonts/font = ExtResource("1_wkxgq")
+TooltipPanel/styles/panel = SubResource("StyleBoxTexture_wkxgq")
