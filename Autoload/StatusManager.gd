@@ -11,6 +11,10 @@ var recursos = {
 	"libertos": 0,
 }
 
+var base_saude = 100
+var base_fome = 100
+var base_seguranca = 10
+var base_relacoes = 10
 
 var saude = 100
 var fome = 100
@@ -20,19 +24,20 @@ var relacoes = 10
 var persistent_debuffs = {}
 
 func _ready():
-	emit_signal("status_updated")
+	_recalculate_status()
 
 func mudar_status(nome_status, valor):
 	if nome_status == "relacoes" and valor > 0 and GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
-		valor = int(valor * 1.25) 
+		valor = int(valor * 1.25)
 		print("Bônus do líder Pacifista: ganho de relações aumentado!")
 
-	var current_value = get(nome_status)
-	if current_value is int or current_value is float:
-		set(nome_status, clamp(current_value + valor, 0, 100))
-		emit_signal("status_updated")
-		_check_defeat_conditions()
-		print("Status alterado: ", nome_status, ", Novo valor: ", get(nome_status))
+	var base_variable_name = "base_" + nome_status
+	var current_base_value = get(base_variable_name)
+	
+	if current_base_value is int or current_base_value is float:
+		set(base_variable_name, clamp(current_base_value + valor, 0, 100))
+		_recalculate_status()
+		print("Status base alterado: ", nome_status, ", Novo valor base: ", get(base_variable_name))
 
 func _check_defeat_conditions():
 	if saude <= 0 and fome <= 0:
@@ -91,18 +96,16 @@ func _recalculate_status():
 		if total_debuffs.has(debuff.type):
 			total_debuffs[debuff.type] += debuff.value
 
-	# Aplica os debuffs aos status base (essa parte é conceitual,
-	# você precisaria de uma lógica de 'status base' vs 'status atual',
-	# por enquanto vamos apenas aplicar a mudança e emitir o sinal).
-	# Exemplo simples de aplicação:
-	for status_type in total_debuffs:
-		# Esta linha é um exemplo, a lógica real pode precisar ser mais complexa
-		# dependendo de como você quer que os debuffs interajam com os status.
-		# Por enquanto, vamos assumir que o debuff é um modificador constante.
-		pass # A lógica de aplicação real dependeria de como você gerencia os status base.
-
+	saude = clamp(base_saude + total_debuffs.saude, 0, 100)
+	fome = clamp(base_fome + total_debuffs.fome, 0, 100)
+	seguranca = clamp(base_seguranca + total_debuffs.seguranca, 0, 100)
+	relacoes = clamp(base_relacoes + total_debuffs.relacoes, 0, 100)
+	
 	print("Debuffs totais recalculados: ", total_debuffs)
+	print("Valores efetivos atualizados -> Saúde: %d, Relações: %d" % [saude, relacoes])
+
 	emit_signal("status_updated")
+	_check_defeat_conditions()
 
 func get_resource(resource_name: String) -> int:
 	return recursos.get(resource_name, 0)
