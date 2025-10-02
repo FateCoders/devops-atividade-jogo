@@ -11,7 +11,7 @@ var achievements = {
 			 o quilombo por 20 dias desafiadores.",
 			# ADICIONADO: Descrição de objetivo
 			"locked_tooltip": "Sobreviva por 20 dias.",
-			"icon": "res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png"
+			"icon": "res://Assets/Sprites/Exported/HUD/Icons/star-on-icon.png"
 		}
 	},
 	"liberate_10_npcs": {

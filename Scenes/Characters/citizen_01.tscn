@@ -45,6 +45,7 @@ size = Vector2(55.14365, 61)
 z_index = 1
 y_sort_enabled = true
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_dc5lp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -64,7 +65,6 @@ avoidance_enabled = true
 radius = 160.0
 time_horizon_agents = 2.0
 time_horizon_obstacles = 2.0
-debug_enabled = true
 
 [node name="WorkTurnTimer" type="Timer" parent="."]
 

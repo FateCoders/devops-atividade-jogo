@@ -95,6 +95,7 @@ ui_enter={
 
 2d_physics/layer_1="ambiente"
 2d_physics/layer_2="npcs"
+2d_physics/layer_3="buildings"
 
 [run]
 

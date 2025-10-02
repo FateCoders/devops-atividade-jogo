@@ -37,11 +37,6 @@ const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainin
 
 
 var tutorial_data = [
-	{ # Etapa 0: Casa do Líder
-		"dialog": {0: {"title": "Líder", "dialog": "Bem-vindo ao nosso refúgio. Para começarmos a nos organizar, por favor, construa uma Casa do Líder."}},
-		"required_build": LeadersHouseScene,
-		"enabled_builds": [LeadersHouseScene]
-	},
 	{ # Etapa 1: Casa
 		"dialog": {0: {"title": "Líder", "dialog": "Excelente! Agora, precisamos de um lugar para nossos irmãos descansarem. Construa uma Casa para abrigá-los."}},
 		"required_build": HouseScene,
@@ -104,17 +99,21 @@ func _on_new_day_started(day_number: int):
 		# Agora chama a função com o tipo correto.
 		_trigger_victory("survival")
 		
-func _trigger_victory(victory_type: String = "survival"): # "survival" é o padrão
-	if _is_game_over: return
+func _trigger_victory(victory_type: String = "survival"):
+	if _is_game_over: 
+		return
 	_is_game_over = true
 	
 	print("VITÓRIA! O jogador venceu por: ", victory_type)
-	pause_game()
-	
+
 	var victory_screen = victory_screen_scene.instantiate()
-	add_child(victory_screen)
-	if victory_screen.has_method("set_victory_type"):
-		victory_screen.set_victory_type(victory_type)
+	get_tree().root.add_child(victory_screen)
+
+	emit_signal("victory_achieved")
+	pause_game()
+
+
+
 
 # ADICIONADO: Função central que lida com a derrota.
 func trigger_defeat(reason: String):
@@ -169,6 +168,8 @@ func advance_tutorial():
 
 # Chamada pelo QuilomboManager sempre que uma construção é finalizada
 func check_tutorial_progress(built_structure_scene: PackedScene):
+	print(built_structure_scene)
+	
 	if not tutorial_active:
 		return
 	

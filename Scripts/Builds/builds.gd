@@ -10,7 +10,9 @@ class_name Bonfire
 
 var noise = FastNoiseLite.new()
 var time_passed: float = 0.0
-
+signal building_hovered(building_ref)
+signal building_unhovered(building_ref)
+signal building_clicked(building_ref)
 
 func _ready() -> void:
 	animated_sprite.play("lit")

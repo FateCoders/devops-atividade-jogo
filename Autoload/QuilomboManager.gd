@@ -27,9 +27,14 @@ func register_npc(npc: NPC):
 		all_npcs.append(npc)
 		npc_count_changed.emit(all_npcs.size())
 
+		# 🔑 Checa conquista aqui
+		if all_npcs.size() >= 10:
+			AchievementsManager.check_and_unlock("liberate_10_npcs")
+
 		var hud = get_tree().get_first_node_in_group("hud_main")
 		if is_instance_valid(hud):
 			npc.npc_clicked.connect(hud.show_npc_inspector)
+
 
 func register_building(building_node):
 	var type = building_node.scene_file_path
@@ -96,6 +101,7 @@ func build_structure(structure_scene: PackedScene, build_position: Vector2):
 	#print("--> Construído '%s' em %s" % [new_structure.name, build_position])
 	
 	register_building(new_structure)
+	print(new_structure)
 	GameManager.check_tutorial_progress(structure_scene)
 	
 	if new_structure is Plantation:
@@ -135,6 +141,10 @@ func build_house(house_scene: PackedScene, build_position: Vector2):
 	var new_house = house_scene.instantiate()
 	y_sort_layer.add_child(new_house)
 	new_house.global_position = build_position
+	
+	register_building(new_house)
+	GameManager.check_tutorial_progress(house_scene) # Passa a CENA, não a instância new_house
+
 	#print("--> Construída casa '%s' em %s" % [new_house.name, build_position])
 
 	# --- INÍCIO DA DEPURAÇÃO ---

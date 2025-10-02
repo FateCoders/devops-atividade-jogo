@@ -476,7 +476,6 @@ func _check_valid_placement() -> bool:
 func _disable_physics(node: Node):
 	if node is CollisionObject2D:
 		node.collision_layer = 0
-		node.collision_mask = 0
 	if node is NavigationObstacle2D:
 		node.avoidance_enabled = false
 	for child in node.get_children():

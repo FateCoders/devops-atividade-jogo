@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=66 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -37,6 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://cn87mw0baye6f" path="res://Assets/Sprites/Exported/Buttons/configuration-button-02.png" id="18_f13sg"]
 [ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="19_3omb4"]
 [ext_resource type="StyleBox" uid="uid://cmepvnwjree6h" path="res://Scenes/UI/Assets/Styles/previewbar_security.tres" id="20_0hfmd"]
+[ext_resource type="Texture2D" uid="uid://c225wcbm7gxvi" path="res://Assets/Sprites/Exported/Citizens/static/leader_portrait.png" id="20_mugiv"]
 [ext_resource type="StyleBox" uid="uid://dsndh5oc5yn30" path="res://Scenes/UI/Assets/Styles/previewbar_relations.tres" id="22_pc4p0"]
 [ext_resource type="Texture2D" uid="uid://b2y8ura4iqj73" path="res://Assets/Sprites/Exported/Buttons/configuration-button-01.png" id="22_xp6xv"]
 [ext_resource type="Texture2D" uid="uid://cjjfcc1o24jil" path="res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png" id="24_3omb4"]
@@ -401,7 +402,7 @@ layout_mode = 2
 [node name="BuildSprite" type="TextureRect" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-texture = ExtResource("3_81d8i")
+texture = ExtResource("20_mugiv")
 expand_mode = 2
 stretch_mode = 5
 
@@ -822,6 +823,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="SpeedUpButton" type="TextureButton" parent="VBoxContainer/ButtonsPanel/SectionsPanel/MenuSubPanel"]
+visible = false
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_vertical = 4
