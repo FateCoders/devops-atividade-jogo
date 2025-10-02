@@ -1,6 +1,8 @@
 # GameManager.gd
 extends Node
 
+enum LeaderType { PACIFISTA, DEFENSIVO, GUERREIRO, LIVRE }
+
 const DAYS_TO_WIN: int = 30
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")
 @export var defeat_screen_scene: PackedScene = preload("res://Scenes/UI/defeatScreen.tscn")
@@ -20,6 +22,7 @@ var is_camera_paused: bool = false
 var tutorial_active: bool = true
 var current_tutorial_step: int = -1 
 var hud_node = null
+var chosen_leader_type: LeaderType = LeaderType.LIVRE 
 
 const LeadersHouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn")
 const HouseScene = preload("res://Scenes/UI/Assets/Sprites/Builds/tall_house.tscn")

@@ -3,6 +3,7 @@ extends Node
 
 # Sinal que será emitido quando o jogador fizer uma escolha em um evento.
 signal event_choice_made(event_id, choice_id)
+signal leader_died
 
 @export var daily_event_chance: float = 100.0
 
