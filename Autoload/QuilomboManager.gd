@@ -194,6 +194,12 @@ func _spawn_npcs_for_workplace(workplace_node, amount_to_spawn: int):
 	for i in amount_to_spawn:
 		var random_npc_scene = npc_scenes.pick_random()
 		var npc = random_npc_scene.instantiate()
+		
+		if not npc is NPC:
+			printerr("ERRO CRÍTICO DE SPAWN: A cena '%s' definida na lista 'possible_npc_scenes' da construção '%s' não tem o script NPC (personagem_2d.gd) anexado ao seu nó raiz." % [random_npc_scene.resource_path, workplace_node.name])
+			npc.queue_free() # Remove a instância quebrada para não poluir a cena.
+			continue # Pula para o próximo NPC que precisa ser gerado.
+		
 		npc.npc_name = NameGenerator.get_random_name()
 
 		y_sort_layer.add_child(npc)
@@ -269,6 +275,12 @@ func spawn_new_fugitives(amount: int):
 	for i in amount:
 		var random_npc_scene = FUGITIVE_NPC_SCENES.pick_random()
 		var npc = random_npc_scene.instantiate()
+		
+		if not npc is NPC:
+			printerr("ERRO CRÍTICO DE SPAWN: A cena de fugitivo '%s' não tem o script NPC (personagem_2d.gd) anexado ao seu nó raiz." % random_npc_scene.resource_path)
+			npc.queue_free() # Remove a instância quebrada.
+			continue # Pula para o próximo fugitivo.
+		
 		npc.npc_name = NameGenerator.get_random_name()
 		y_sort_layer.add_child(npc)
 		
