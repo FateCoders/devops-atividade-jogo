@@ -108,6 +108,10 @@ var currently_highlighted_building = null
 @onready var hours_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/HoursLabel
 @onready var occupant_container = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/VBoxContainer/OccupantContainer
 
+@onready var building_sprite_display = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer/BuildingSprite
+@onready var upkeep_label = $MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/UpkeepLabel
+const OccupantRowScene = preload("res://Scenes/UI/OccupantRow.tscn")
+
 const BUILD_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const INVENTORY_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/button-base.png")
 const MENU_TEXTURE = preload("res://Assets/Sprites/Exported/Buttons/configuration-button-01.png")
@@ -826,33 +830,71 @@ func report_building_unhover(building):
 func show_building_inspector(building):
 	hide_npc_inspector()
 
-	building_name_label.text = building.building_name if "building_name" in building else "Nome Indefinido"
-	var capacity = building.max_capacity if "max_capacity" in building else 0
+	# --- LIMPAR DADOS ANTIGOS ---
+	building_sprite_display.texture = null
+	upkeep_label.text = ""
+	for child in occupant_container.get_children():
+		child.queue_free()
+
+	# --- PREENCHER NOME ---
+	if "building_name" in building:
+		building_name_label.text = building.building_name
+	else:
+		building_name_label.text = "Construção"
+
+	# --- INÍCIO DA CORREÇÃO: LÓGICA INTELIGENTE PARA PEGAR O SPRITE ---
+	if "main_sprite" in building and is_instance_valid(building.main_sprite) and building.main_sprite is Sprite2D:
+		# Caso 1: A construção tem um Sprite2D normal
+		building_sprite_display.texture = building.main_sprite.texture
+	elif "animated_sprite" in building and is_instance_valid(building.animated_sprite) and building.animated_sprite is AnimatedSprite2D:
+		# Caso 2: A construção tem um AnimatedSprite2D (como a fogueira)
+		var anim_sprite = building.animated_sprite
+		if is_instance_valid(anim_sprite.sprite_frames):
+			# Pega o primeiro frame da animação atual como imagem representativa
+			var anim_name = anim_sprite.animation
+			if anim_sprite.sprite_frames.has_animation(anim_name) and anim_sprite.sprite_frames.get_frame_count(anim_name) > 0:
+				building_sprite_display.texture = anim_sprite.sprite_frames.get_frame_texture(anim_name, 0)
+	# --- FIM DA CORREÇÃO ---
+
+	# --- PREENCHER OCUPANTES E CAPACIDADE ---
 	var occupants = []
 	if "workers" in building and not building.workers.is_empty():
 		occupants = building.workers
 	elif "residents" in building:
 		occupants = building.residents
-		
+	
+	var capacity = 0
+	if "capacity" in building:
+		capacity = building.capacity
+	elif "max_capacity" in building:
+		capacity = building.max_capacity
+
+	if building.scene_file_path == TinyHouseScene.resource_path:
+		capacity = 3
+
 	capacity_label.text = "Ocupação: %d / %d" % [occupants.size(), capacity]
 
+	for npc in occupants:
+		var occupant_row = OccupantRowScene.instantiate()
+		occupant_container.add_child(occupant_row)
+		occupant_row.set_npc_info(npc)
+
+	# --- PREENCHER HORÁRIO (se for local de trabalho) ---
 	if "work_starts_at" in building:
 		hours_label.text = "Funciona: %02d:00 - %02d:00" % [building.work_starts_at, building.work_ends_at]
 		hours_label.visible = true
 	else:
 		hours_label.visible = false
 
-	for child in occupant_container.get_children():
-		child.queue_free()
+	# --- PREENCHER CUSTO DE MANUTENÇÃO (se houver) ---
+	if "upkeep_resource" in building and building.upkeep_amount > 0:
+		var resource_name = building.upkeep_resource.capitalize()
+		var amount = building.upkeep_amount
+		upkeep_label.text = "Manutenção: %d de %s por dia" % [amount, resource_name]
+		upkeep_label.visible = true
+	else:
+		upkeep_label.visible = false
 
-	for npc in occupants:
-		var sprite = TextureRect.new()
-		sprite.texture = npc.get_idle_sprite_texture()
-		sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		sprite.custom_minimum_size = Vector2(48, 48)
-		occupant_container.add_child(sprite)
-	
 	building_inspector_panel.show()
 
 func _get_modified_cost(scene: PackedScene) -> Dictionary:
