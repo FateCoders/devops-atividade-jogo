@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bargyer4itscg"
-path="res://.godot/imported/banana_tree.png-1cc94986a05158a409576697260af33e.ctex"
+uid="uid://c225wcbm7gxvi"
+path="res://.godot/imported/leader_portrait.png-05fd9e9ec7e28c54aac10cebc73bed43.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Brute/Trees/banana_tree.png"
-dest_files=["res://.godot/imported/banana_tree.png-1cc94986a05158a409576697260af33e.ctex"]
+source_file="res://Assets/Sprites/Exported/Citizens/static/leader_portrait.png"
+dest_files=["res://.godot/imported/leader_portrait.png-05fd9e9ec7e28c54aac10cebc73bed43.ctex"]
 
 [params]
 

@@ -37,6 +37,7 @@ func _ready():
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
 	interaction_area.mouse_exited.connect(_on_interaction_area_mouse_exited)
 
+
 func confirm_construction():
 	pass
 
@@ -135,4 +136,8 @@ func _on_interaction_area_mouse_exited():
 
 
 func _on_zona_de_entrada_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	pass # Replace with function body.
+
+
+func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	pass # Replace with function body.
