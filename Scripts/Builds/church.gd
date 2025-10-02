@@ -67,6 +67,13 @@ func claim_available_work_spot() -> Marker2D:
 	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
 	return spot
 
+func get_arrival_position() -> Vector2:
+	var spot = available_work_spots.pick_random()
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	return spot.global_position
+
 # ADICIONADO: Função para que NPCs devolvam um local.
 func release_work_spot(spot: Marker2D):
 	if is_instance_valid(spot) and not available_work_spots.has(spot):

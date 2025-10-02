@@ -46,15 +46,6 @@ z_index = 1
 y_sort_enabled = true
 collision_layer = 2
 script = ExtResource("1_dc5lp")
-npc_name = null
-profession = null
-move_speed = null
-wander_range = null
-dance_animation_speed = null
-shake_intensity = null
-min_turn_time = null
-max_turn_time = null
-cursor_hotspot = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -101)

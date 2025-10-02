@@ -7,6 +7,8 @@ signal building_hovered(building_ref)
 signal building_unhovered(building_ref)
 signal building_clicked(building_ref)
 
+const LIDER_SCENE = preload("res://Scenes/Characters/citizen_lider.tscn")
+
 @export var building_name: String = "Casa do Líder"
 @export var max_capacity: int = 0
 
@@ -22,6 +24,7 @@ const OUTLINE_MATERIAL = preload("res://Resources/Shaders/outline_material.tres"
 
 func _ready():
 	print("Casa do Líder construída.")
+	spawn_leader()
 
 	interaction_area.input_event.connect(_on_interaction_area_input_event)
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
@@ -69,3 +72,23 @@ func _on_interaction_area_mouse_entered():
 
 func _on_interaction_area_mouse_exited():
 	emit_signal("building_unhovered", self)
+	
+func spawn_leader():
+	if get_tree().get_first_node_in_group("leader"):
+		return
+
+	print("Construindo a casa do líder e spawnando o líder.")
+	var leader_instance = LIDER_SCENE.instantiate()
+	
+	leader_instance.add_to_group("leader")
+	leader_instance.global_position = self.global_position + Vector2(0, 80)
+
+	var npc_container = get_tree().get_first_node_in_group("npc_container")
+	
+	if npc_container:
+		npc_container.add_child(leader_instance)
+	else:
+		print("AVISO: Nó com o grupo 'npc_container' não encontrado. Adicionando líder à raiz da cena.")
+		get_tree().current_scene.add_child(leader_instance)
+
+	leader_instance.assign_house(self)

@@ -42,6 +42,7 @@ var hovered_button: TextureButton = null
 
 @onready var money_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/MoneyContainer/MoneyLabel
 @onready var population_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/PopulationContainer/PopulationLabel
+@onready var libertos_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/LibertosContainer/LibertosLabel
 @onready var hunger_label = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HungerContainer/HungerLabel
 
 @onready var health_preview_bar = $MainContainer/HBoxContainer/StatusPanel/VBoxContainer/HealthContainer/Control/PreviewBar
@@ -165,6 +166,7 @@ func _ready():
 	WorldTimeManager.day_passed.connect(_on_day_passed)
 	GameManager.game_paused.connect(_update_time_control_buttons)
 	GameManager.game_resumed.connect(_update_time_control_buttons)
+	GameManager.libertos_count_changed.connect(_on_libertos_count_changed)
 	WorldTimeManager.time_scale_changed.connect(_update_time_control_buttons)
 	notification_timer.timeout.connect(_on_notification_timer_timeout)
 	notification_container.modulate.a = 0.0
@@ -192,15 +194,10 @@ func _ready():
 			var scene = button_scene_map[button.name]
 			button.pressed.connect(_on_any_build_button_pressed.bind(scene))
 			build_buttons[scene.resource_path] = button
-			var temp_instance = scene.instantiate()
-
-			var structure_cost: Dictionary = {}
-			if "cost" in temp_instance:
-				structure_cost = temp_instance.cost
-
+			
+			var structure_cost = _get_modified_cost(scene)
 			button.display_costs(structure_cost)
-			temp_instance.queue_free()
-	
+
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
 	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)
 
@@ -320,6 +317,7 @@ func show_tutorial_dialog(data: Dictionary) -> DialogScreen:
 	return dialog_screen
 
 func _on_status_updated():
+	# --- SEU CÓDIGO EXISTENTE (CORRETO) ---
 	health_bar.value = StatusManager.saude
 	hunger_bar.value = StatusManager.fome
 	security_bar.value = StatusManager.seguranca
@@ -327,6 +325,14 @@ func _on_status_updated():
 
 	money_label.text = str(StatusManager.get_resource("dinheiro"))
 	population_label.text = str(QuilomboManager.all_npcs.size())
+	libertos_label.text = "%d/%d" % [StatusManager.get_resource("libertos"), GameManager.NPCS_PARA_VITORIA]
+
+	# --- INÍCIO DA CORREÇÃO ---
+	# Adicionamos uma verificação: se o painel do inventário estiver visível,
+	# chamamos a função para redesenhar os itens.
+	if button_inventorys.visible:
+		_populate_inventory_list()
+	# --- FIM DA CORREÇÃO ---
 	
 	var estado_fome = "Normal"
 	if StatusManager.fome == 100:
@@ -378,6 +384,12 @@ func _set_bar_color(bar: ProgressBar, new_color: Color):
 
 func _on_npc_count_changed(new_count: int):
 	population_label.text = str(new_count)
+	
+
+func _on_libertos_count_changed(new_count: int):
+	var total_for_victory = GameManager.NPCS_PARA_VITORIA  # ou onde você definiu o total necessário
+	libertos_label.text = "%d/%d" % [new_count, total_for_victory]
+
 
 func _on_button_pressed():
 	_toggle_main_panel(button_builds)
@@ -401,12 +413,13 @@ func _on_any_build_button_pressed(scene: PackedScene):
 
 	# --- INÍCIO DA NOVA LÓGICA DE VERIFICAÇÃO ---
 	var npcs_needed = temp_instance.npc_count if "npc_count" in temp_instance else 0
-	var build_cost = temp_instance.get("cost")
+	var build_cost = _get_modified_cost(scene)
 	
 	# 1. Primeiro, verificamos os recursos (dinheiro, etc.)
 	if build_cost and not StatusManager.has_enough_resources(build_cost):
 		show_notification("Recursos insuficientes para construir!")
-		temp_instance.queue_free()
+		if is_instance_valid(temp_instance):
+			temp_instance.queue_free()
 		return
 
 	# 2. Agora, a verificação inteligente de trabalhadores e casas
@@ -428,8 +441,6 @@ func _on_any_build_button_pressed(scene: PackedScene):
 			show_notification("Casas insuficientes para os novos moradores!")
 			temp_instance.queue_free()
 			return
-	
-	temp_instance.queue_free() 
 
 	main_panel_container.visible = false
 	is_in_placement_mode = true
@@ -841,3 +852,18 @@ func show_building_inspector(building):
 		occupant_container.add_child(sprite)
 	
 	building_inspector_panel.show()
+
+func _get_modified_cost(scene: PackedScene) -> Dictionary:
+	var temp_instance = scene.instantiate()
+	if not is_instance_valid(temp_instance):
+		return {}
+
+	var base_cost: Dictionary = (temp_instance.get("cost") if "cost" in temp_instance else {}).duplicate()
+
+	if GameManager.chosen_leader_type == GameManager.LeaderType.GUERREIRO:
+		if scene == HidingPlaceScene or scene == TrainingAreaScene:
+			if base_cost.has("dinheiro"):
+				base_cost["dinheiro"] = int(base_cost["dinheiro"] * 0.75)
+	
+	temp_instance.queue_free()
+	return base_cost

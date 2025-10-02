@@ -37,6 +37,7 @@ func _ready():
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
 	interaction_area.mouse_exited.connect(_on_interaction_area_mouse_exited)
 
+
 func confirm_construction():
 	pass
 

@@ -86,7 +86,6 @@ func update_functionality():
 			StatusManager.mudar_status("saude", -health_bonus)
 			print("Enfermaria '%s' parou de funcionar por falta de ferramentas/armas." % name)
 
-# ADICIONADO: Função para que NPCs reivindiquem um local.
 func claim_available_work_spot() -> Marker2D:
 	if available_work_spots.is_empty():
 		return null
@@ -97,12 +96,19 @@ func claim_available_work_spot() -> Marker2D:
 	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
 	return spot
 
-# ADICIONADO: Função para que NPCs devolvam um local.
 func release_work_spot(spot: Marker2D):
 	if is_instance_valid(spot) and not available_work_spots.has(spot):
 		available_work_spots.append(spot)
 		print("Local '%s' foi devolvido para '%s'. Locais disponíveis: %d" % [spot.name, self.name, available_work_spots.size()])
 		
+
+func get_arrival_position() -> Vector2:
+	var spot = available_work_spots.pick_random()
+	available_work_spots.erase(spot)
+	
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	return spot.global_position
+
 func get_status_info() -> Dictionary:
 	var details_text = "Enfermaria: %d/%d" % [workers.size(), npc_count]
 	if not is_functional:
@@ -117,14 +123,7 @@ func _on_interaction_area_mouse_entered() -> void:
 
 func _on_interaction_area_mouse_exited() -> void:
 	status_bubble.hide_info()
-	
-func get_arrival_position() -> Vector2:
-	# Check if the ArrivalPoint node exists to prevent errors.
-	if has_node("ArrivalPoint"):
-		return $ArrivalPoint.global_position
-	
-	# If it doesn't exist for some reason, return the building's own position as a fallback.
-	return global_position
+
 
 func highlight_on():
 	if is_instance_valid(main_sprite):

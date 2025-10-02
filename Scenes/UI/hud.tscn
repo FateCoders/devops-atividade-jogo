@@ -502,6 +502,24 @@ layout_mode = 2
 text = "População"
 label_settings = SubResource("LabelSettings_vsu76")
 
+[node name="LibertosContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(135, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="LibertosContainer" type="TextureRect" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/LibertosContainer"]
+custom_minimum_size = Vector2(30, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("16_ragyo")
+expand_mode = 5
+
+[node name="LibertosLabel" type="Label" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer/LibertosContainer"]
+layout_mode = 2
+text = "População"
+label_settings = SubResource("LabelSettings_vsu76")
+
 [node name="HealthContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer"]
 layout_mode = 2
 

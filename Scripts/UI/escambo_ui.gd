@@ -62,6 +62,8 @@ func _on_trade_offer_accepted(item_node: HBoxContainer, offer_data: Dictionary):
 			StatusManager.mudar_status("dinheiro", -price)
 			StatusManager.mudar_status(item, quantity)
 			print("Compra realizada!")
+			QuilombosManager.execute_trade(target_quilombo_id, {}, [offer_data])
+			item_node.update_after_trade()
 			QuilombosManager.change_relation(target_quilombo_id, 5) # Aumenta a relação em 5
 			QuilombosManager.set_offer_on_cooldown(target_quilombo_id, offer_data["id"])
 			item_node.update_after_trade()
