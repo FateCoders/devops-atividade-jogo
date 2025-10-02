@@ -194,12 +194,15 @@ func _ready():
 			build_buttons[scene.resource_path] = button
 			var temp_instance = scene.instantiate()
 
-			var structure_cost: Dictionary = {}
-			if "cost" in temp_instance:
-				structure_cost = temp_instance.cost
+			if is_instance_valid(temp_instance):
+				var structure_cost: Dictionary = {}
+				if "cost" in temp_instance:
+					structure_cost = temp_instance.cost
 
-			button.display_costs(structure_cost)
-			temp_instance.queue_free()
+				button.display_costs(structure_cost)
+				temp_instance.queue_free() 
+			else:
+				print("AVISO: Falha ao instanciar a cena para o botão: ", button.name)   
 	
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
 	QuilomboManager.fugitives_awaiting_assignment.connect(_on_fugitives_awaiting_assignment)

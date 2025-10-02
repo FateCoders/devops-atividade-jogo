@@ -6,6 +6,7 @@ extends Node2D
 @export var move_cursor: Texture2D
 ## O "ponto quente" do cursor (onde o clique acontece). (0,0) é o canto superior esquerdo.
 @export var cursor_hotspot: Vector2 = Vector2.ZERO
+@export var training_area_scene: PackedScene
 
 @onready var hud = $HUD/Hud
 @onready var defeat_screen = $game_over
@@ -22,6 +23,11 @@ func _ready() -> void:
 	Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	MusicManager.play_game_music()
 	GameManager.start_tutorial()
+	
+	if GameManager.chosen_leader_type == GameManager.LeaderType.GUERREIRO:
+		var training_area = training_area_scene.instantiate()
+		training_area.position = Vector2(500, 500)
+		add_child(training_area)
 
 func _process(delta: float) -> void:
 	pass

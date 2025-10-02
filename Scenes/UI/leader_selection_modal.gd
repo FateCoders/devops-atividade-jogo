@@ -1,7 +1,7 @@
 extends PanelContainer
 
 @onready var leader_choices_container = $VBoxContainer/HBoxContainer
-@onready var continue_button: Button = $VBoxContainer/ContinueButton
+@onready var continue_button: Button = $VBoxContainer/PanelContainer/ContinueButton
 
 var leader_buttons: Array[Node]
 var selected_type: GameManager.LeaderType = GameManager.LeaderType.LIVRE 

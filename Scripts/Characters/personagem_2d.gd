@@ -48,7 +48,7 @@ const PROFESSION_NAMES = {
 @export var npc_name: String = "Morador"
 @export var profession: Profession = Profession.NENHUMA 
 @export var move_speed: float = 200.0
-@export var wander_range: float = 20.0
+@export var wander_range: float = 250.0
 
 @export_category("Dança")
 @export var dance_animation_speed: float = 0.7
@@ -374,12 +374,12 @@ func _change_state(new_state: State):
 
 		State.PASSEANDO:
 			collision_shape.disabled = false
-			
-			var decision = randf()
-			
-			if decision < 0.33: 
-				var interest_points = get_tree().get_nodes_in_group("locais_de_interesse")
-				if not interest_points.is_empty():
+
+			var interest_points = get_tree().get_nodes_in_group("locais_de_interesse")
+			var visited_point = false
+
+			if not interest_points.is_empty():
+				if randf() < 0.5:
 					var destination_node = interest_points.pick_random()
 					
 					if destination_node.has_method("claim_available_work_spot"):
@@ -387,12 +387,12 @@ func _change_state(new_state: State):
 						if is_instance_valid(spot):
 							nav_agent.target_position = spot.global_position
 							print("'%s' decidiu visitar '%s'." % [name, destination_node.name])
-							
-							assigned_work_spot = spot 
-							return
-				
-			print("'%s' decidiu passear aleatoriamente." % name)
-			_set_new_random_destination()
+							assigned_work_spot = spot
+							visited_point = true
+
+			if not visited_point:
+				print("'%s' decidiu passear aleatoriamente." % name)
+				_set_new_random_destination()
 
 		State.TRABALHANDO:
 			if collision_shape:
@@ -572,12 +572,16 @@ func _update_animation():
 # FUNÇÕES DE MOVIMENTAÇÃO ALEATÓRIA
 #-----------------------------------------------------------------------------
 func _set_new_random_destination():
-	if not is_instance_valid(house_node):
-		return
-	var wander_base_pos = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
-	var random_offset = Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
-	var destination = wander_base_pos + random_offset
-	nav_agent.target_position = destination
+	var nav_map_rid = get_world_2d().navigation_map
+	var random_point = NavigationServer2D.map_get_random_point(nav_map_rid, 1, true)
+	
+	if random_point != Vector2.ZERO:
+		nav_agent.target_position = random_point
+	else:
+		if is_instance_valid(house_node):
+			var wander_base_pos = house_node.get_door_position() + Vector2(0, EXIT_DISTANCE)
+			var random_offset = Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
+			nav_agent.target_position = wander_base_pos + random_offset
 
 func _on_idle_timeout():
 	if current_state == State.OCIOSO:
