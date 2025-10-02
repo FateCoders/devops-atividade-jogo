@@ -1,109 +1,95 @@
 # EventManager.gd
 extends Node
 
-# Sinal que será emitido quando o jogador fizer uma escolha em um evento.
 signal event_choice_made(event_id, choice_id)
 signal leader_died
 
-@export var daily_event_chance: float = 100.0
+@export var event_trigger_chance: float = 30.0 
+@export var daily_event_chance: float = 30.0
+
+var event_check_timer: Timer
+var events_today: int = 0
+const MAX_EVENTS_PER_DAY: int = 2
 
 var populationIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var chickenIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var goldIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var healthIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var negativeIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var boneIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var positiveIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
-var unhealthIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
+var chickenIcon = "res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png"
+var goldIcon = "res://Assets/Sprites/Exported/HUD/Icons/gold-coin-icon.png"
+var healthIcon = "res://Assets/Sprites/Exported/HUD/Icons/health-icon.png"
+var negativeIcon = "res://Assets/Sprites/Exported/HUD/Icons/negative-relation-icon.png"
+var boneIcon = "res://Assets/Sprites/Exported/HUD/Icons/bone-icon.png"
+var positiveIcon = "res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png"
+var unhealthIcon = "res://Assets/Sprites/Exported/HUD/Icons/unhealth-icon.png"
 var defaultIcon = "res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png"
+var securityIcon = "res://Assets/Sprites/Exported/HUD/Icons/security-icon.png"
+var toolsIcon = "res://Assets/Sprites/Exported/HUD/Icons/tools-icon.png"
 
-# Dicionário para guardar todos os eventos possíveis do jogo.
+
+# --- DICIONÁRIOS DE EVENTOS ---
+
 var attack_events = {
-	"raid_for_resources": {
-		"title": "Ataque por Recursos!",
-		"description": "Um capitão-do-mato se aproxima! Ele exige uma parte de seus recursos para não atacar.\n\n- Lutar: A segurança do quilombo será testada.\n- Pagar: Evita o conflito, mas custará caro.",
+	"reinforce_watch": {
+		"title": "Ataque Iminente?",
+		"description": "Boatos dizem que capitães do mato rondam nossas terras. Devemos soar o alerta e reforçar as vigílias, mesmo que isso deixe a comunidade nervosa?",
 		"choices": {
-			"fight": { "label": "Lutar!", "tooltip": "Teste de Segurança", "icon": boneIcon },
-			"pay": { "label": "Pagar Tributo", "tooltip": "-50 Dinheiro", "icon": goldIcon }
+			"reinforce": { "label": "Reforçar Vigilância", "tooltip": "+15 Segurança, -10 Saúde, -10 Fome", "icon": securityIcon },
+			"normal_routine": { "label": "Manter a Rotina", "tooltip": "-15 Segurança, +5 Saúde", "icon": unhealthIcon }
 		}
 	},
-	"leader_assassination_attempt": {
-		"title": "Ameaça ao Líder!",
-		"description": "Um ataque surpresa focado em capturar ou matar a liderança do quilombo está em andamento!\n\n- Proteger o Líder: A segurança do quilombo será vital para a sobrevivência.\n- Tentar Negociar: Uma tentativa arriscada que pode custar caro.",
+	"traitor_discovered": {
+		"title": "Um Traidor Entre Nós",
+		"description": "Um de nossos moradores foi pego entregando informações para os colonizadores. Se o punirmos com severidade, daremos um exemplo. Se perdoarmos, podemos manter a união, ainda que arriscando nova traição.",
 		"choices": {
-			"protect": { "label": "Proteger!", "tooltip": "Teste Crítico de Segurança", "icon": unhealthIcon },
-			"negotiate": { "label": "Negociar", "tooltip": "-100 Dinheiro", "icon": goldIcon }
+			"punish": { "label": "Punir o Traidor", "tooltip": "+15 Segurança, -10 Relações", "icon": securityIcon },
+			"forgive": { "label": "Perdoar", "tooltip": "-15 Segurança, +10 Relações", "icon": positiveIcon }
+		}
+	},
+	# NOVO EVENTO ADICIONADO
+	"leader_assassination_attempt": {
+		"title": "Emboscada para o Líder!",
+		"description": "Batedores relatam uma movimentação hostil focada na captura da nossa liderança. É um ataque direto e pessoal!\n\n- Proteger o Líder: Usaremos nossa força total para defendê-lo. O resultado dependerá da nossa segurança.\n- Pagar Resgate: Uma opção covarde, mas que pode evitar o pior... a um custo altíssimo.",
+		"choices": {
+			"protect": { "label": "Proteger com a vida!", "tooltip": "Teste Crítico de Segurança!", "icon": unhealthIcon },
+			"pay_ransom": { "label": "Pagar para que recuem", "tooltip": "Muito caro: -150 Dinheiro", "icon": goldIcon }
 		}
 	}
 }
 
 var peaceful_events = {
-	"fugitives_arrive": {
-		"title": "Fugitivos na Mata",
-		"description": "Um grupo de fugitivos encontrou nosso quilombo, pedindo por abrigo.\n\n- Acolher: Adiciona 3 novos moradores ao quilombo. Eles precisarão de casas.\n- Negar Abrigo: Os fugitivos seguirão seu caminho.",
+	"expand_agriculture": {
+		"title": "Sobre a Agricultura",
+		"description": "A mandioca e o milho têm sustentado nossa gente. Se ampliarmos a plantação, teremos comida de sobra para todos e para negociar. Mas isso exigirá mais esforço da comunidade.",
 		"choices": {
-			"accept": { "label": "Acolher", "tooltip": "+3 Moradores", "icon": populationIcon },
-			"reject": { "label": "Negar Abrigo", "tooltip": "Nenhum efeito", "icon": defaultIcon }
+			"expand": { "label": "Expandir Plantações", "tooltip": "+20 Alimentos, +20 Dinheiro, -10 Saúde", "icon": chickenIcon },
+			"maintain": { "label": "Manter Produção", "tooltip": "+5 Saúde, -5 Relações", "icon": healthIcon }
 		}
 	},
-	# Adicione outros eventos pacíficos aqui no futuro...
+	"trade_decision": {
+		"title": "Decisão de Comércio",
+		"description": "Temos fardos de tabaco prontos. Poderíamos guardá-los, mas se trocarmos com nossos vizinhos, conseguiremos ferramentas que podem melhorar nossa vida.",
+		"choices": {
+			"trade": { "label": "Trocar por Ferramentas", "tooltip": "+10 Ferramentas, +10 Relações", "icon": toolsIcon },
+			"keep": { "label": "Manter o Tabaco", "tooltip": "-10 Relações, -5 Saúde", "icon": negativeIcon }
+		}
+	},
+	"hide_crops": {
+		"title": "Estratégia de Plantação",
+		"description": "Podemos esconder parte das plantações em áreas mais afastadas. Isso vai dar mais trabalho, mas não perderemos tudo se houver um ataque.",
+		"choices": {
+			"hide": { "label": "Esconder Plantações", "tooltip": "+10 Segurança, -15 Alimentos", "icon": securityIcon },
+			"keep_visible": { "label": "Manter Visíveis", "tooltip": "-10 Segurança, +15 Alimentos", "icon": chickenIcon }
+		}
+	},
+	"new_fugitives_shelter": {
+		"title": "Novos Foragidos Buscam Abrigo",
+		"description": "Um grupo de foragidos chegou pedindo proteção. Eles dizem que podem ajudar no trabalho, mas teremos mais bocas para alimentar e maior risco de sermos descobertos.",
+		"choices": {
+			"accept": { "label": "Aceitar Foragidos", "tooltip": "+3 Moradores, +10 Relações, -10 Segurança", "icon": populationIcon },
+			"refuse": { "label": "Recusar Foragidos", "tooltip": "-10 Relações", "icon": negativeIcon }
+		}
+	}
 }
 
-
-var all_events = {
-	#"fugitives_arrive": {
-		#"title": "Fugitivos na Mata",
-		#"description": "Um grupo de fugitivos encontrou nosso quilombo, pedindo por abrigo.\n\n- Acolher: Adiciona 3 novos moradores ao quilombo. Eles precisarão de casas.\n- Negar Abrigo: Os fugitivos seguirão seu caminho.",
-		#"choices": {
-			#"accept": { "label": "Acolher", "tooltip": "+3 Moradores", "icon": populationIcon },
-			#"reject": { "label": "Negar Abrigo", "tooltip": "Nenhum efeito", "icon": defaultIcon }
-		#}
-	#},
-	#"raid_for_resources": {
-		#"title": "Ataque por Recursos!",
-		#"description": "Um capitão-do-mato se aproxima! Ele exige uma parte de seus recursos para não atacar.\n\n- Lutar: A segurança do quilombo será testada.\n- Pagar: Evita o conflito, mas custará caro.",
-		#"choices": {
-			#"fight": { "label": "Lutar!", "tooltip": "Teste de Segurança", "icon": boneIcon },
-			#"pay": { "label": "Pagar Tributo", "tooltip": "-50 Dinheiro", "icon": goldIcon }
-		#}
-	#},
-	#"leader_assassination_attempt": {
-		#"title": "Ameaça ao Líder!",
-		#"description": "Um ataque surpresa focado em capturar ou matar a liderança do quilombo está em andamento!\n\n- Proteger o Líder: A segurança do quilombo será vital para a sobrevivência.\n- Tentar Negociar: Uma tentativa arriscada que pode custar caro.",
-		#"choices": {
-			#"protect": { "label": "Proteger!", "tooltip": "Teste Crítico de Segurança", "icon": unhealthIcon },
-			#"negotiate": { "label": "Negociar", "tooltip": "-100 Dinheiro", "icon": goldIcon }
-		#}
-	#}
-	
-	#"capitao_do_mato_attack": {
-		#"title": "Ataque Iminente!",
-		#"description": "Um capitão-do-mato e seus homens foram avistados se aproximando do quilombo! Eles exigem nossos recursos em troca de paz.\n\n- Lutar: Nossa segurança será testada, mas podemos proteger nossos bens.\n- Entregar Recursos: Perderemos recursos, mas evitaremos o conflito direto.",
-		#"choices": {
-			#"fight": { "label": "Lutar!", "tooltip": "-10 Segurança", "icon": boneIcon },
-			#"surrender": { "label": "Entregar Recursos", "tooltip": "-50 Dinheiro", "icon": goldIcon }
-		#}
-	#},
-	#
-	#"epidemic_spreads": {
-		#"title": "Epidemia se Espalha",
-		#"description": "Uma doença desconhecida está se espalhando pelo quilombo, enfraquecendo nossos moradores.\n\n- Usar Remédios: Se tivermos uma enfermaria e remédios, podemos conter a doença.\n- Ignorar: A saúde do quilombo vai piorar drasticamente.",
-		#"choices": {
-			#"treat": { "label": "Usar Remédios", "tooltip": "-10 Remédios, +10 Saúde", "icon": healthIcon },
-			#"ignore": { "label": "Ignorar", "tooltip": "-20 Saúde", "icon": negativeIcon }
-		#}
-	#},
-	#
-	#"village_party": {
-		#"title": "Noite de Festa",
-		#"description": "Os moradores estão com o espírito elevado e sugerem uma festa para celebrar a comunidade e aliviar o estresse.\n\n- Realizar Festa: Gastaremos alimentos, mas a alegria fortalecerá a todos.\n- Manter o Foco: Economizaremos recursos, mas perderemos a chance de melhorar o ânimo.",
-		#"choices": {
-			#"celebrate": { "label": "Realizar Festa!", "tooltip": "-20 Alimentos, +10 Saúde", "icon": chickenIcon },
-			#"focus": { "label": "Manter o Foco", "tooltip": "Nenhum efeito", "icon": defaultIcon }
-		#}
-	#}
-}
-# Pré-carrega a cena da nossa caixa de diálogo (que faremos no próximo passo).
+var all_events = {}
 const EventDialogScene = preload("res://Scenes/UI/EventDialog.tscn")
 
 func _ready():
@@ -111,103 +97,145 @@ func _ready():
 	all_events.merge(peaceful_events)
 	WorldTimeManager.day_passed.connect(_on_new_day_started)
 	event_choice_made.connect(_on_event_choice_made)
+	
+	event_check_timer = Timer.new()
+	event_check_timer.wait_time = 20.0
+	event_check_timer.autostart = true
+	event_check_timer.timeout.connect(_on_event_check_timeout)
+	add_child(event_check_timer)
 
 func _on_new_day_started(day_number):
-	print("[EventManager] Novo dia! Verificando se um evento ocorre...")
+	events_today = 0
+	print("[EventManager] Novo dia! Contador de eventos resetado.")
 	
-	# Garante que um evento não aconteça se uma caixa de diálogo já estiver aberta.
-	if get_tree().root.find_child("EventDialog", true, false) != null:
-		print("[EventManager] Evento adiado, pois uma janela já está aberta.")
+func _on_event_check_timeout():
+	print("[EventManager] Checando evento.")
+	if get_tree().paused:
+		print("[EventManager] SEM EVENTOS - JOGO PAUSADO.")
 		return
 
-	# Sorteia um número entre 0 e 100.
+	if events_today >= MAX_EVENTS_PER_DAY:
+		print("[EventManager] LIMITE DE EVENTOS NO DIA.")
+		return
+
+	if get_tree().root.find_child("EventDialog", true, false) != null:
+		print("[EventManager] HÁ UMA CAIXA DE DIALOGO A FRENTE.")
+		return
+
 	var random_chance = randf() * 100.0
 	
-	if random_chance < daily_event_chance:
+	if random_chance < event_trigger_chance:
 		var event_id: String
 
 		if GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
-			if randf() < 0.1: 
+			if randf() < 0.1:
 				event_id = attack_events.keys().pick_random()
-				print("[EventManager] Pacifista teve azar e recebeu um evento de ataque!")
 			else:
 				event_id = peaceful_events.keys().pick_random()
 		else:
 			event_id = all_events.keys().pick_random()
 
 		if not event_id.is_empty():
+			events_today += 1
+			print("[EventManager] Evento #%d do dia disparado!" % events_today)
 			trigger_event(event_id)
-		else:
-			print("[EventManager] Nenhum evento adequado para sortear.")
-	else:
-		print("[EventManager] Nenhum evento hoje.")
+	else: 
+		print("[EventManager] Chance nao disparada")
 
-# Função principal que inicia um evento.
 func trigger_event(event_id: String):
 	if not all_events.has(event_id):
 		printerr("Tentativa de iniciar um evento desconhecido: ", event_id)
 		return
 		
 	GameManager.pause_game()
-
-	print("Disparando evento: ", event_id)
-	
 	MusicManager.play_decision_music()
 	
 	var event_data = all_events[event_id]
-	
-	# Cria a caixa de diálogo e passa os dados do evento para ela.
 	var dialog = EventDialogScene.instantiate()
 	get_tree().root.add_child(dialog)
 	dialog.start_event(event_id, event_data)
 
-# Função que processa a escolha do jogador.
 func _on_event_choice_made(event_id, choice_id):
 	GameManager.resume_game()
 	MusicManager.play_game_music()
 	
 	print("Jogador escolheu '%s' para o evento '%s'" % [choice_id, event_id])
 	
-	# Evento de Fugitivos (já existente)
-	if event_id == "fugitives_arrive":
-		if choice_id == "accept":
-			QuilomboManager.spawn_new_fugitives(3)
-	
-	# ADICIONADO: Consequências do Evento de Ataque
-	elif event_id == "capitao_do_mato_attack":
-		if choice_id == "fight":
-			StatusManager.mudar_status("seguranca", -10)
-			# (No futuro, aqui poderia chamar uma cena de batalha)
-		elif choice_id == "surrender":
-			StatusManager.mudar_status("dinheiro", -50)
-			
-	if StatusManager.seguranca <= 0 or StatusManager.saude <= 0:
-			GameManager.game_over.emit("O quilombo foi destruído em um ataque.")
-
-	# ADICIONADO: Consequências do Evento de Epidemia
-	elif event_id == "epidemic_spreads":
-		if choice_id == "treat":
-			# Verifica se o jogador tem os recursos para tratar
-			if StatusManager.dinheiro >= 10:
-				#StatusManager.mudar_status("remedios", -10)
-				StatusManager.mudar_status("dinheiro", -10)
-				StatusManager.mudar_status("saude", 10)
-			else:
-				# Penalidade por não ter remédios
-				get_tree().root.get_node("GameUI").show_notification("Faltam remédios! A saúde piorou.")
+	match event_id:
+		"expand_agriculture":
+			if choice_id == "expand":
+				StatusManager.mudar_recurso("alimentos", 20)
+				StatusManager.mudar_recurso("dinheiro", 20)
 				StatusManager.mudar_status("saude", -10)
-		elif choice_id == "ignore":
-			StatusManager.mudar_status("saude", -20)
+			elif choice_id == "maintain":
+				StatusManager.mudar_status("saude", 5)
+				StatusManager.mudar_status("relacoes", -5)
 
-	# ADICIONADO: Consequências do Evento de Festa
-	elif event_id == "village_party":
-		if choice_id == "celebrate":
-			if StatusManager.dinheiro >= 20:
-				# StatusManager.mudar_status("alimentos", -20)
-				StatusManager.mudar_status("dinheiro", -20)
-				StatusManager.mudar_status("saude", 10)
-			else:
-				get_tree().root.get_node("GameUI").show_notification("Faltam alimentos para a festa!")
-		elif choice_id == "focus":
-			# Nenhuma consequência
-			pass
+		"trade_decision":
+			if choice_id == "trade":
+				StatusManager.mudar_recurso("ferramentas", 10)
+				StatusManager.mudar_status("relacoes", 10)
+			elif choice_id == "keep":
+				StatusManager.mudar_status("relacoes", -10)
+				StatusManager.mudar_status("saude", -5)
+
+		"reinforce_watch":
+			if choice_id == "reinforce":
+				StatusManager.mudar_status("seguranca", 15)
+				StatusManager.mudar_status("saude", -10)
+				StatusManager.mudar_status("fome", -10)
+			elif choice_id == "normal_routine":
+				StatusManager.mudar_status("saude", 5)
+				StatusManager.mudar_status("fome", 5)
+				StatusManager.mudar_status("seguranca", -15)
+
+		"hide_crops":
+			if choice_id == "hide":
+				StatusManager.mudar_status("seguranca", 10)
+				StatusManager.mudar_recurso("alimentos", -15)
+			elif choice_id == "keep_visible":
+				StatusManager.mudar_status("seguranca", -10)
+				StatusManager.mudar_recurso("alimentos", 15)
+
+		"traitor_discovered":
+			if choice_id == "punish":
+				StatusManager.mudar_status("seguranca", 15)
+				StatusManager.mudar_status("relacoes", -10)
+				StatusManager.mudar_status("saude", -5)
+				StatusManager.mudar_recurso("libertos", 1)
+				QuilomboManager.remove_random_npc()
+			elif choice_id == "forgive":
+				StatusManager.mudar_status("seguranca", -15)
+				StatusManager.mudar_status("relacoes", 10)
+
+		"new_fugitives_shelter":
+			if choice_id == "accept":
+				QuilomboManager.spawn_new_fugitives(3)
+				StatusManager.mudar_status("relacoes", 10)
+				StatusManager.mudar_status("seguranca", -10)
+			elif choice_id == "refuse":
+				StatusManager.mudar_status("relacoes", -10)
+		
+		# CONSEQUÊNCIAS DO NOVO EVENTO
+		"leader_assassination_attempt":
+			if choice_id == "protect":
+				# Se a segurança for menor que 50, o líder morre.
+				if StatusManager.seguranca < 50:
+					var hud = get_tree().root.get_node("GameUI")
+					if is_instance_valid(hud):
+						hud.show_notification("Nossa defesa não foi forte o suficiente! O líder caiu.")
+					
+					var leader_node = get_tree().get_first_node_in_group("leader")
+					if is_instance_valid(leader_node):
+						leader_node.die() # Chama a função que encerra o jogo
+				else:
+					# Se a segurança for alta, o líder sobrevive mas há perdas.
+					var hud = get_tree().root.get_node("GameUI")
+					if is_instance_valid(hud):
+						hud.show_notification("O líder foi protegido, mas o quilombo sofreu no ataque!")
+					StatusManager.mudar_recurso("dinheiro", -50)
+					StatusManager.mudar_recurso("alimentos", -30)
+					StatusManager.mudar_status("seguranca", -10) # A segurança diminui após um grande ataque
+			
+			elif choice_id == "pay_ransom":
+				StatusManager.mudar_recurso("dinheiro", -150)

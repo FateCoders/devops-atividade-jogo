@@ -3,23 +3,23 @@ extends Node
 signal status_updated
 
 var recursos = {
-	"dinheiro": 50000,
-	"madeira": 20,
-	"remedios": 90,
-	"ferramentas": 30,
-	"alimentos": 200,
+	"dinheiro": 1000,
+	"madeira": 0,
+	"remedios": 0,
+	"ferramentas": 0,
+	"alimentos": 100,
 	"libertos": 0,
 }
 
 var base_saude = 100
 var base_fome = 100
-var base_seguranca = 10
-var base_relacoes = 10
+var base_seguranca = 25
+var base_relacoes = 50
 
 var saude = 100
 var fome = 100
-var seguranca = 10
-var relacoes = 10
+var seguranca = 25
+var relacoes = 50
 
 var persistent_debuffs = {}
 
@@ -111,12 +111,8 @@ func get_resource(resource_name: String) -> int:
 	return recursos.get(resource_name, 0)
 
 func execute_trade(items_given: Dictionary, items_received: Dictionary):
-	# Remove os itens que o jogador deu
 	for resource in items_given:
-		set(resource, get(resource) - items_given[resource])
-	
-	# Adiciona os itens que o jogador recebeu
-	for resource in items_received:
-		set(resource, get(resource) + items_received[resource])
+		mudar_recurso(resource, -items_given[resource])
 
-	emit_signal("status_updated")
+	for resource in items_received:
+		mudar_recurso(resource, items_received[resource])
