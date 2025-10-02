@@ -21,6 +21,10 @@ func _ready():
 	emit_signal("status_updated")
 
 func mudar_status(nome_status, valor):
+	if nome_status == "relacoes" and valor > 0 and GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
+		valor = int(valor * 1.25) 
+		print("Bônus do líder Pacifista: ganho de relações aumentado!")
+
 	var current_value = get(nome_status)
 	if current_value is int or current_value is float:
 		set(nome_status, clamp(current_value + valor, 0, 100))

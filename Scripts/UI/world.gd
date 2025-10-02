@@ -23,11 +23,6 @@ func _ready() -> void:
 	Input.set_custom_mouse_cursor(interaction_cursor, Input.CURSOR_ARROW, cursor_hotspot)
 	MusicManager.play_game_music()
 	GameManager.start_tutorial()
-	
-	if GameManager.chosen_leader_type == GameManager.LeaderType.GUERREIRO:
-		var training_area = training_area_scene.instantiate()
-		training_area.position = Vector2(500, 500)
-		add_child(training_area)
 
 func _process(delta: float) -> void:
 	pass

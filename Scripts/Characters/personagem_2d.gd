@@ -325,7 +325,14 @@ func _change_state(new_state: State):
 	var old_state = current_state
 
 	if old_state == State.TRABALHANDO:
-		StatusManager.mudar_status('dinheiro', 10)
+		var money_gain = 10
+
+		if GameManager.chosen_leader_type == GameManager.LeaderType.AGRICULTOR:
+			if is_instance_valid(work_node) and work_node is Plantation:
+				money_gain = int(money_gain * 1.5)
+				print("'%s' (Agricultor) ganhou um bônus de dinheiro na plantação!" % npc_name)
+
+		StatusManager.mudar_status('dinheiro', money_gain)
 
 	if old_state == State.DESABRIGADO:
 		StatusManager.remove_persistent_debuff(self.get_instance_id())

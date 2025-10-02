@@ -1,7 +1,7 @@
 # GameManager.gd
 extends Node
 
-enum LeaderType { PACIFISTA, DEFENSIVO, GUERREIRO, LIVRE }
+enum LeaderType { PACIFISTA, AGRICULTOR, GUERREIRO, LIVRE }
 
 const DAYS_TO_WIN: int = 30
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")

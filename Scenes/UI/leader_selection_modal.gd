@@ -16,13 +16,13 @@ func _ready():
 
 		match button.leader_type:
 			GameManager.LeaderType.PACIFISTA:
-				button.set_text("Pacifista", "Tem mais facilidade em construir relações.")
-			GameManager.LeaderType.DEFENSIVO:
-				button.set_text("Defensivo", "Esconderijos são mais baratos.")
+				button.set_text("Pacifista", "Tem facilidade em criar relações e\n menos chances de ataques no quilombo.")
 			GameManager.LeaderType.GUERREIRO:
-				button.set_text("Guerreiro", "Ganha uma área de treinamento no início do jogo.")
+				button.set_text("Guerreiro", "Esconderijos e Áreas de\n Treinamento são mais baratas.")
+			GameManager.LeaderType.AGRICULTOR:
+				button.set_text("Agricultor", "Ganha mais dinheiro em turnos\n de trabalho com plantações.")
 			GameManager.LeaderType.LIVRE:
-				button.set_text("Livre", "Não possui benefícios.")
+				button.set_text("Livre", "Não possui benefícios.\n Jogue livremente.")
 
 	_on_leader_type_chosen(selected_type)
 

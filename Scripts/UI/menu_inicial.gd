@@ -44,8 +44,8 @@ func _on_pacifista_button_pressed():
 	GameManager.chosen_leader_type = GameManager.LeaderType.PACIFISTA
 	start_game()
 
-func _on_defensivo_button_pressed():
-	GameManager.chosen_leader_type = GameManager.LeaderType.DEFENSIVO
+func _on_agricultor_button_pressed():
+	GameManager.chosen_leader_type = GameManager.LeaderType.AGRICULTOR
 	start_game()
 
 func _on_guerreiro_button_pressed():

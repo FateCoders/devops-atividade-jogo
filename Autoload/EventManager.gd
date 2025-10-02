@@ -18,7 +18,26 @@ var unhealthIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
 var defaultIcon = "res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png"
 
 # Dicionário para guardar todos os eventos possíveis do jogo.
-var all_events = {
+var attack_events = {
+	"raid_for_resources": {
+		"title": "Ataque por Recursos!",
+		"description": "Um capitão-do-mato se aproxima! Ele exige uma parte de seus recursos para não atacar.\n\n- Lutar: A segurança do quilombo será testada.\n- Pagar: Evita o conflito, mas custará caro.",
+		"choices": {
+			"fight": { "label": "Lutar!", "tooltip": "Teste de Segurança", "icon": boneIcon },
+			"pay": { "label": "Pagar Tributo", "tooltip": "-50 Dinheiro", "icon": goldIcon }
+		}
+	},
+	"leader_assassination_attempt": {
+		"title": "Ameaça ao Líder!",
+		"description": "Um ataque surpresa focado em capturar ou matar a liderança do quilombo está em andamento!\n\n- Proteger o Líder: A segurança do quilombo será vital para a sobrevivência.\n- Tentar Negociar: Uma tentativa arriscada que pode custar caro.",
+		"choices": {
+			"protect": { "label": "Proteger!", "tooltip": "Teste Crítico de Segurança", "icon": unhealthIcon },
+			"negotiate": { "label": "Negociar", "tooltip": "-100 Dinheiro", "icon": goldIcon }
+		}
+	}
+}
+
+var peaceful_events = {
 	"fugitives_arrive": {
 		"title": "Fugitivos na Mata",
 		"description": "Um grupo de fugitivos encontrou nosso quilombo, pedindo por abrigo.\n\n- Acolher: Adiciona 3 novos moradores ao quilombo. Eles precisarão de casas.\n- Negar Abrigo: Os fugitivos seguirão seu caminho.",
@@ -27,6 +46,35 @@ var all_events = {
 			"reject": { "label": "Negar Abrigo", "tooltip": "Nenhum efeito", "icon": defaultIcon }
 		}
 	},
+	# Adicione outros eventos pacíficos aqui no futuro...
+}
+
+
+var all_events = {
+	#"fugitives_arrive": {
+		#"title": "Fugitivos na Mata",
+		#"description": "Um grupo de fugitivos encontrou nosso quilombo, pedindo por abrigo.\n\n- Acolher: Adiciona 3 novos moradores ao quilombo. Eles precisarão de casas.\n- Negar Abrigo: Os fugitivos seguirão seu caminho.",
+		#"choices": {
+			#"accept": { "label": "Acolher", "tooltip": "+3 Moradores", "icon": populationIcon },
+			#"reject": { "label": "Negar Abrigo", "tooltip": "Nenhum efeito", "icon": defaultIcon }
+		#}
+	#},
+	#"raid_for_resources": {
+		#"title": "Ataque por Recursos!",
+		#"description": "Um capitão-do-mato se aproxima! Ele exige uma parte de seus recursos para não atacar.\n\n- Lutar: A segurança do quilombo será testada.\n- Pagar: Evita o conflito, mas custará caro.",
+		#"choices": {
+			#"fight": { "label": "Lutar!", "tooltip": "Teste de Segurança", "icon": boneIcon },
+			#"pay": { "label": "Pagar Tributo", "tooltip": "-50 Dinheiro", "icon": goldIcon }
+		#}
+	#},
+	#"leader_assassination_attempt": {
+		#"title": "Ameaça ao Líder!",
+		#"description": "Um ataque surpresa focado em capturar ou matar a liderança do quilombo está em andamento!\n\n- Proteger o Líder: A segurança do quilombo será vital para a sobrevivência.\n- Tentar Negociar: Uma tentativa arriscada que pode custar caro.",
+		#"choices": {
+			#"protect": { "label": "Proteger!", "tooltip": "Teste Crítico de Segurança", "icon": unhealthIcon },
+			#"negotiate": { "label": "Negociar", "tooltip": "-100 Dinheiro", "icon": goldIcon }
+		#}
+	#}
 	
 	#"capitao_do_mato_attack": {
 		#"title": "Ataque Iminente!",
@@ -59,9 +107,9 @@ var all_events = {
 const EventDialogScene = preload("res://Scenes/UI/EventDialog.tscn")
 
 func _ready():
+	all_events.merge(attack_events)
+	all_events.merge(peaceful_events)
 	WorldTimeManager.day_passed.connect(_on_new_day_started)
-	
-	# Conecta este manager ao seu próprio sinal para processar as escolhas.
 	event_choice_made.connect(_on_event_choice_made)
 
 func _on_new_day_started(day_number):
@@ -73,13 +121,24 @@ func _on_new_day_started(day_number):
 		return
 
 	# Sorteia um número entre 0 e 100.
-	var random_chance = randf() * 30.0
+	var random_chance = randf() * 100.0
 	
-	# Se o número sorteado for menor que a nossa chance, um evento acontece.
 	if random_chance < daily_event_chance:
-		# Pega a lista de todos os eventos possíveis e sorteia um.
-		var event_id = all_events.keys().pick_random()
-		trigger_event(event_id)
+		var event_id: String
+
+		if GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
+			if randf() < 0.1: 
+				event_id = attack_events.keys().pick_random()
+				print("[EventManager] Pacifista teve azar e recebeu um evento de ataque!")
+			else:
+				event_id = peaceful_events.keys().pick_random()
+		else:
+			event_id = all_events.keys().pick_random()
+
+		if not event_id.is_empty():
+			trigger_event(event_id)
+		else:
+			print("[EventManager] Nenhum evento adequado para sortear.")
 	else:
 		print("[EventManager] Nenhum evento hoje.")
 
