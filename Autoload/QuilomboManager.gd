@@ -368,3 +368,27 @@ func _on_vacancy_opened(profession: NPC.Profession):
 			return
 			
 	#print("--> Nenhum desempregado qualificado encontrado no momento.")
+func remove_random_npc():
+	if all_npcs.is_empty():
+		print("Nenhum NPC para remover.")
+		return
+	
+	# Escolhe um NPC aleatório
+	var npc_to_remove = all_npcs.pick_random()
+	
+	# Remove da lista
+	all_npcs.erase(npc_to_remove)
+	npc_count_changed.emit(all_npcs.size())
+	
+	# Limpa referências de casa e trabalho
+	if is_instance_valid(npc_to_remove.house):
+		npc_to_remove.house.residents.erase(npc_to_remove)
+	if is_instance_valid(npc_to_remove.work_node):
+		if npc_to_remove.work_node.has_method("remove_worker"):
+			npc_to_remove.work_node.remove_worker(npc_to_remove)
+	
+	# Remove da cena
+	if is_instance_valid(npc_to_remove):
+		npc_to_remove.queue_free()
+	
+	print("NPC '%s' removido aleatoriamente." % npc_to_remove.npc_name)
