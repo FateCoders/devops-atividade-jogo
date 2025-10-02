@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dfl517gm3tfkx"]
+[gd_scene load_steps=9 format=3 uid="uid://dfl517gm3tfkx"]
 
-[ext_resource type="Script" uid="uid://cbrh1y50wc08f" path="res://Scenes/UI/leader_choice_button.gd" id="1_6yjpa"]
+[ext_resource type="Script" path="res://Scenes/UI/leader_choice_button.gd" id="1_6yjpa"]
 [ext_resource type="Texture2D" uid="uid://ro4qklqoo80q" path="res://Assets/Sprites/Exported/Buttons/button-base-1.png" id="1_o188m"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_pvxdl"]
 
@@ -22,6 +22,8 @@ Button/fonts/font = ExtResource("3_pvxdl")
 Button/styles/focus = SubResource("StyleBoxEmpty_pvxdl")
 Button/styles/hover_pressed = SubResource("StyleBoxEmpty_vuvfl")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pvxdl"]
+
 [node name="LeaderChoiceButton" type="PanelContainer"]
 theme_override_styles/panel = SubResource("StyleBoxTexture_pvxdl")
 script = ExtResource("1_6yjpa")
@@ -30,4 +32,5 @@ script = ExtResource("1_6yjpa")
 layout_mode = 2
 size_flags_vertical = 3
 theme = SubResource("Theme_pvxdl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pvxdl")
 flat = true
