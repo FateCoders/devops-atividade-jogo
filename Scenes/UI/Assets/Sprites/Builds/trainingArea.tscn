@@ -30,15 +30,15 @@ region_enabled = true
 region_rect = Rect2(-0.0013656616, 0.03926277, 1119.988, 800.1488)
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(438, 39)
+position = Vector2(-355, -406)
 gizmo_extents = 130.0
 
 [node name="WorkSport2" type="Marker2D" parent="."]
-position = Vector2(-68, 30)
+position = Vector2(357, -820)
 gizmo_extents = 130.0
 
 [node name="WorkSport3" type="Marker2D" parent="."]
-position = Vector2(418, -208)
+position = Vector2(-53, 32)
 gizmo_extents = 130.0
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("8_1oydu")]

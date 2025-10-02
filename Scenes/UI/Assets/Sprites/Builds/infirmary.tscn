@@ -124,6 +124,21 @@ position = Vector2(957.7842, -43.95958)
 scale = Vector2(0.9999999, 0.9999999)
 gizmo_extents = 130.0
 
+[node name="WorkSpot2" type="Marker2D" parent="."]
+position = Vector2(-106.56848, -731.3263)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="WorkSpot3" type="Marker2D" parent="."]
+position = Vector2(-1028.3857, 97.24366)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="WorkSpot4" type="Marker2D" parent="."]
+position = Vector2(-18.649414, 791.2709)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
 [node name="ArrivalPoint" type="Marker2D" parent="."]
 position = Vector2(957.7842, -43.95958)
 scale = Vector2(0.9999999, 0.9999999)
