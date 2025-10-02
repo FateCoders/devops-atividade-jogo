@@ -392,3 +392,19 @@ func remove_random_npc():
 		npc_to_remove.queue_free()
 	
 	print("NPC '%s' removido aleatoriamente." % npc_to_remove.npc_name)
+	
+
+func unregister_npc(npc_to_remove: NPC):
+	if not is_instance_valid(npc_to_remove):
+		return
+
+	print("Removendo '%s' do quilombo." % npc_to_remove.name)
+
+	StatusManager.remove_persistent_debuff("homeless_health_%d" % npc_to_remove.get_instance_id())
+	StatusManager.remove_persistent_debuff("homeless_relations_%d" % npc_to_remove.get_instance_id())
+
+	if all_npcs.has(npc_to_remove):
+		all_npcs.erase(npc_to_remove)
+		npc_count_changed.emit(all_npcs.size())
+
+	npc_to_remove.queue_free()

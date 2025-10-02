@@ -80,12 +80,29 @@ func remove_persistent_debuff(source_id):
 		_recalculate_status()
 
 func _recalculate_status():
-	var current_health_debuff = 0
-	for debuff in persistent_debuffs.values():
-		if debuff.type == "saude":
-			current_health_debuff += debuff.value
+	var total_debuffs = {
+		"saude": 0,
+		"fome": 0,
+		"seguranca": 0,
+		"relacoes": 0
+	}
 
-	print("Debuff de saúde total atual: %d" % current_health_debuff)
+	for debuff in persistent_debuffs.values():
+		if total_debuffs.has(debuff.type):
+			total_debuffs[debuff.type] += debuff.value
+
+	# Aplica os debuffs aos status base (essa parte é conceitual,
+	# você precisaria de uma lógica de 'status base' vs 'status atual',
+	# por enquanto vamos apenas aplicar a mudança e emitir o sinal).
+	# Exemplo simples de aplicação:
+	for status_type in total_debuffs:
+		# Esta linha é um exemplo, a lógica real pode precisar ser mais complexa
+		# dependendo de como você quer que os debuffs interajam com os status.
+		# Por enquanto, vamos assumir que o debuff é um modificador constante.
+		pass # A lógica de aplicação real dependeria de como você gerencia os status base.
+
+	print("Debuffs totais recalculados: ", total_debuffs)
+	emit_signal("status_updated")
 
 func get_resource(resource_name: String) -> int:
 	return recursos.get(resource_name, 0)

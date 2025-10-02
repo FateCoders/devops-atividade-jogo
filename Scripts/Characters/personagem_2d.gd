@@ -110,6 +110,7 @@ var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 var hud_node: Hud = null
 
 var _original_move_speed: float
+var days_homeless: int = 0
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
@@ -140,6 +141,19 @@ func _ready():
 	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
 	
 	nav_agent.velocity_computed.connect(on_velocity_computed)
+	WorldTimeManager.day_passed.connect(_on_day_passed)
+
+func _on_day_passed(day_number):
+	if current_state == State.DESABRIGADO:
+		days_homeless += 1
+		print("'%s' está desabrigado por %d dias." % [npc_name, days_homeless])
+		if days_homeless >= 5:
+			_flee_quilombo()
+			
+func _flee_quilombo():
+	print("'%s' está desabrigado há muito tempo e decidiu fugir!" % npc_name)
+	StatusManager.mudar_status("relacoes", -5)
+	QuilomboManager.unregister_npc(self)
 
 func on_velocity_computed(safe_velocity: Vector2):
 	velocity = safe_velocity
@@ -335,7 +349,8 @@ func _change_state(new_state: State):
 		StatusManager.mudar_status('dinheiro', money_gain)
 
 	if old_state == State.DESABRIGADO:
-		StatusManager.remove_persistent_debuff(self.get_instance_id())
+		StatusManager.remove_persistent_debuff("homeless_health_%d" % get_instance_id())
+		StatusManager.remove_persistent_debuff("homeless_relations_%d" % get_instance_id())
 	
 	if old_state == State.DESEMPREGADO:
 		StatusManager.remove_persistent_debuff(self.get_instance_id())
@@ -419,11 +434,8 @@ func _change_state(new_state: State):
 			hide()
 
 		State.DESABRIGADO:
-			velocity = Vector2.ZERO
-			show()
-			if collision_shape:
-				collision_shape.disabled = false
-			print("'%s' está no estado DESABRIGADO." % name)
+			StatusManager.add_persistent_debuff("homeless_health_%d" % get_instance_id(), "saude", -5)
+			StatusManager.add_persistent_debuff("homeless_relations_%d" % get_instance_id(), "relacoes", -5)
 
 		State.DESEMPREGADO:
 			show()
