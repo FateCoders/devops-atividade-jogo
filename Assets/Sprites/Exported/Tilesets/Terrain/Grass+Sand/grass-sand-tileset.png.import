@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkbmh4s8hj7a"
-path="res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"
+uid="uid://dptnb18fbbgm"
+path="res://.godot/imported/grass-sand-tileset.png-a252be27e770f281ed2824df1a1ce211.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/HUD/Icons/security-icon.png"
-dest_files=["res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"]
+source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Grass+Sand/grass-sand-tileset.png"
+dest_files=["res://.godot/imported/grass-sand-tileset.png-a252be27e770f281ed2824df1a1ce211.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://ixvmmog1grra"]
+[gd_scene load_steps=65 format=3 uid="uid://ixvmmog1grra"]
 
 [ext_resource type="Script" uid="uid://f52y6dfy6vhs" path="res://Scripts/UI/hud.gd" id="1_sprlj"]
 [ext_resource type="Texture2D" uid="uid://cxpw6mfq7arj3" path="res://Assets/Sprites/Exported/Buttons/button-base.png" id="2_7wqu8"]
@@ -37,11 +37,10 @@
 [ext_resource type="Texture2D" uid="uid://cn87mw0baye6f" path="res://Assets/Sprites/Exported/Buttons/configuration-button-02.png" id="18_f13sg"]
 [ext_resource type="Texture2D" uid="uid://s5yvvdkcwath" path="res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png" id="19_3omb4"]
 [ext_resource type="StyleBox" uid="uid://cmepvnwjree6h" path="res://Scenes/UI/Assets/Styles/previewbar_security.tres" id="20_0hfmd"]
-[ext_resource type="Texture2D" uid="uid://c225wcbm7gxvi" path="res://Assets/Sprites/Exported/Citizens/static/leader_portrait.png" id="20_mugiv"]
 [ext_resource type="StyleBox" uid="uid://dsndh5oc5yn30" path="res://Scenes/UI/Assets/Styles/previewbar_relations.tres" id="22_pc4p0"]
 [ext_resource type="Texture2D" uid="uid://b2y8ura4iqj73" path="res://Assets/Sprites/Exported/Buttons/configuration-button-01.png" id="22_xp6xv"]
 [ext_resource type="Texture2D" uid="uid://cjjfcc1o24jil" path="res://Assets/Sprites/Exported/HUD/Icons/positive-relation-icon.png" id="24_3omb4"]
-[ext_resource type="Texture2D" uid="uid://c6sfm5cyoylb6" path="res://Assets/Sprites/Exported/HUD/Icons/sururu-icon.png" id="24_yxyk2"]
+[ext_resource type="Texture2D" uid="uid://bkbmh4s8hj7a" path="res://Assets/Sprites/Exported/HUD/Icons/security-icon.png" id="30_b4m6i"]
 [ext_resource type="FontFile" uid="uid://ddp0621kxsr4l" path="res://Scenes/UI/Assets/Fonts/EquipmentPro.ttf" id="31_q8e8b"]
 [ext_resource type="PackedScene" uid="uid://boh7y5cx37ols" path="res://Scenes/UI/dialog.tscn" id="32_f1jpe"]
 [ext_resource type="Script" uid="uid://gndv8vb6nf0d" path="res://Scripts/UI/profession_assignment_screen.gd" id="33_mgdch"]
@@ -388,7 +387,6 @@ text = "aaaaaaaaa"
 
 [node name="BuildingInspectorPanel" type="PanelContainer" parent="MainContainer/HBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_wae4w")
@@ -398,11 +396,13 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="BuildSprite" type="TextureRect" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+[node name="BuildingSprite" type="TextureRect" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-texture = ExtResource("20_mugiv")
+texture = ExtResource("7_0hfmd")
 expand_mode = 2
 stretch_mode = 5
 
@@ -438,7 +438,7 @@ layout_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_81d8i")
 
@@ -446,7 +446,15 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_81d8i")
 layout_mode = 2
 flat = true
 
+[node name="UpkeepLabel" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
+theme_override_fonts/font = ExtResource("3_fdl0h")
+theme_override_font_sizes/font_size = 20
+text = "Outras informações"
+
 [node name="NPCStateLabel" type="Label" parent="MainContainer/HBoxContainer/BuildingInspectorPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.38039216, 0.28235295, 0.24705882, 1)
 theme_override_fonts/font = ExtResource("3_fdl0h")
@@ -486,7 +494,7 @@ text = "Dinheiro"
 label_settings = SubResource("LabelSettings_vsu76")
 
 [node name="PopulationContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(135, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
@@ -504,7 +512,7 @@ text = "População"
 label_settings = SubResource("LabelSettings_vsu76")
 
 [node name="LibertosContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(135, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
@@ -652,7 +660,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("24_yxyk2")
+texture = ExtResource("30_b4m6i")
 expand_mode = 2
 
 [node name="Control" type="Control" parent="MainContainer/HBoxContainer/StatusPanel/VBoxContainer/SecurityContainer"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkbmh4s8hj7a"
-path="res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"
+uid="uid://dmfwbkwj6rur2"
+path="res://.godot/imported/trees-tileset-wrap.png-e2fcc09f3d4eb1c3f445d44bccbd961f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/HUD/Icons/security-icon.png"
-dest_files=["res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"]
+source_file="res://Assets/Sprites/Exported/Trees/trees-tileset-wrap.png"
+dest_files=["res://.godot/imported/trees-tileset-wrap.png-e2fcc09f3d4eb1c3f445d44bccbd961f.ctex"]
 
 [params]
 

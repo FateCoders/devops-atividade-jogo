@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://okl36dc1ytch"]
+
+[ext_resource type="Script" uid="uid://dh3j6uvnar7vs" path="res://Scripts/UI/occupant_row.gd" id="1_1phng"]
+
+[node name="OccupantRow" type="HBoxContainer"]
+script = ExtResource("1_1phng")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+visible = false
+layout_mode = 2

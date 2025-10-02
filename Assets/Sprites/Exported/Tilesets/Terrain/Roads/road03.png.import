@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkbmh4s8hj7a"
-path="res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"
+uid="uid://dpfhdhawi0w8q"
+path="res://.godot/imported/road03.png-05c767c9375a34033d99c452bf8042a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Exported/HUD/Icons/security-icon.png"
-dest_files=["res://.godot/imported/security-icon.png-2896c06a90309050bde8be07a1fde21e.ctex"]
+source_file="res://Assets/Sprites/Exported/Tilesets/Terrain/Roads/road03.png"
+dest_files=["res://.godot/imported/road03.png-05c767c9375a34033d99c452bf8042a6.ctex"]
 
 [params]
 
