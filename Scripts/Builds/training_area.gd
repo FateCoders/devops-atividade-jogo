@@ -19,7 +19,7 @@ signal vacancy_opened(profession: NPC.Profession)
 
 @export_category("Horário de Trabalho")
 @export var work_starts_at: float = 7.0
-@export var work_ends_at: float = 12.0
+@export var work_ends_at: float = 20.0
 
 @export var security_bonus: int = 15
 @export var relations_bonus: int = 5
@@ -55,6 +55,8 @@ func _ready():
 	interaction_area.input_event.connect(_on_interaction_area_input_event)
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
 	interaction_area.mouse_exited.connect(_on_interaction_area_mouse_exited)
+	
+	confirm_construction()
 
 
 func confirm_construction():
@@ -147,8 +149,4 @@ func _on_interaction_area_input_event(viewport, event, shape_idx):
 		emit_signal("building_clicked", self)
 
 func get_arrival_position() -> Vector2:
-	var spot = available_work_spots.pick_random()
-	available_work_spots.erase(spot)
-	
-	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
-	return spot.global_position
+	return global_position

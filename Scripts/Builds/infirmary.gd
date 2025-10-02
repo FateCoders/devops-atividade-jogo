@@ -106,7 +106,7 @@ func get_arrival_position() -> Vector2:
 	var spot = available_work_spots.pick_random()
 	available_work_spots.erase(spot)
 	
-	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, self.name, available_work_spots.size()])
+	print("Local '%s' foi reivindicado em '%s'. Locais restantes: %d" % [spot.name, available_work_spots.size()])
 	return spot.global_position
 
 func get_status_info() -> Dictionary:

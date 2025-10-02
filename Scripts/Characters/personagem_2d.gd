@@ -25,7 +25,10 @@ enum State {
 	TRABALHANDO,
 	REAGINDO_AO_JOGADOR,
 	DESABRIGADO, 
-	DESEMPREGADO 
+	DESEMPREGADO,
+	TRAINING,
+	MOVING_TO_PATROL,
+	PATROLLING_IDLE
 }
 
 enum Profession {
@@ -43,6 +46,10 @@ const PROFESSION_NAMES = {
 	Profession.AGRICULTOR: "Agricultor(a)",
 	Profession.GUERREIRO: "Guerreiro(a)"
 }
+
+var patrol_points: Array[Marker2D] = []
+var current_patrol_point_index: int = -1
+var patrol_idle_timer: SceneTreeTimer
 
 @export_category("Comportamento Geral")
 @export var npc_name: String = "Morador"
@@ -116,6 +123,12 @@ var _original_move_speed: float
 func _ready():
 	
 	status_bubble.hide()
+	
+	var world_node = get_tree().get_first_node_in_group("world_node")
+	if world_node and world_node.has_node("PatrolPoints"):
+		for point in world_node.get_node("PatrolPoints").get_children():
+			if point is Marker2D:
+				patrol_points.append(point)
 	
 	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_noise.seed = randi()
@@ -294,7 +307,10 @@ func _update_schedule():
 	# Lógica noturna
 	if WorldTimeManager.is_night():
 		if current_state not in [State.EM_CASA, State.INDO_PARA_CASA]:
-			_change_state(State.INDO_PARA_CASA)
+			if work_node is TrainingArea and current_state in [State.MOVING_TO_PATROL, State.PATROLLING_IDLE]:
+				pass
+			else:
+				_change_state(State.INDO_PARA_CASA)
 		return
 
 	# Lógica de horário de trabalho
@@ -366,7 +382,10 @@ func _change_state(new_state: State):
 		State.INDO_PARA_O_TRABALHO:
 			if is_instance_valid(work_node):
 				show()
-				nav_agent.target_position = work_node.get_arrival_position()
+				if work_node is TrainingArea:
+					_change_state(State.MOVING_TO_PATROL)
+				else:
+					nav_agent.target_position = work_node.get_arrival_position()
 				
 			else:
 				print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
@@ -424,6 +443,13 @@ func _change_state(new_state: State):
 				collision_shape.disabled = false
 			print("'%s' está desempregado e vai passear." % name)
 			_set_new_random_destination()
+		
+		State.MOVING_TO_PATROL:
+			move_to_next_patrol_point()
+
+		State.PATROLLING_IDLE:
+			patrol_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
+			patrol_idle_timer.timeout.connect(func(): _change_state(State.MOVING_TO_PATROL))
 
 	if current_state == State.DESABRIGADO:
 		StatusManager.add_persistent_debuff(self.get_instance_id(), "saude", -5)
@@ -446,6 +472,8 @@ func _on_target_reached():
 			_change_state(State.OCIOSO)
 		State.INDO_PARA_O_TRABALHO:
 			_change_state(State.TRABALHANDO)
+		State.MOVING_TO_PATROL:
+			_change_state(State.PATROLLING_IDLE)
 		State.PASSEANDO:
 			if is_instance_valid(assigned_work_spot):
 				var location_node = assigned_work_spot.get_owner()
@@ -454,6 +482,15 @@ func _on_target_reached():
 					assigned_work_spot = null
 			
 			_change_state(State.OCIOSO)
+			
+func move_to_next_patrol_point():
+	if patrol_points.is_empty():
+		_change_state(State.OCIOSO)
+		return
+
+	current_patrol_point_index = (current_patrol_point_index + 1) % patrol_points.size()
+	var next_patrol_point = patrol_points[current_patrol_point_index]
+	nav_agent.target_position = next_patrol_point.global_position
 #=============================================================================
 # FUNÇÕES DE INTERAÇÃO COM A CASA
 #=============================================================================
