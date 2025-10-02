@@ -164,6 +164,8 @@ func advance_tutorial():
 
 # Chamada pelo QuilomboManager sempre que uma construção é finalizada
 func check_tutorial_progress(built_structure_scene: PackedScene):
+	print(built_structure_scene)
+	
 	if not tutorial_active:
 		return
 	
