@@ -317,6 +317,7 @@ func show_tutorial_dialog(data: Dictionary) -> DialogScreen:
 	return dialog_screen
 
 func _on_status_updated():
+	# --- SEU CÓDIGO EXISTENTE (CORRETO) ---
 	health_bar.value = StatusManager.saude
 	hunger_bar.value = StatusManager.fome
 	security_bar.value = StatusManager.seguranca
@@ -326,7 +327,12 @@ func _on_status_updated():
 	population_label.text = str(QuilomboManager.all_npcs.size())
 	libertos_label.text = "%d/%d" % [StatusManager.get_resource("libertos"), GameManager.NPCS_PARA_VITORIA]
 
-	
+	# --- INÍCIO DA CORREÇÃO ---
+	# Adicionamos uma verificação: se o painel do inventário estiver visível,
+	# chamamos a função para redesenhar os itens.
+	if button_inventorys.visible:
+		_populate_inventory_list()
+	# --- FIM DA CORREÇÃO ---
 	
 	var estado_fome = "Normal"
 	if StatusManager.fome == 100:

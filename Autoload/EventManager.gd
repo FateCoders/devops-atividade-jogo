@@ -4,7 +4,12 @@ extends Node
 signal event_choice_made(event_id, choice_id)
 signal leader_died
 
+@export var event_trigger_chance: float = 30.0 
 @export var daily_event_chance: float = 30.0
+
+var event_check_timer: Timer
+var events_today: int = 0
+const MAX_EVENTS_PER_DAY: int = 2
 
 var populationIcon = "res://Assets/Sprites/Exported/HUD/Icons/population-icon.png"
 var chickenIcon = "res://Assets/Sprites/Exported/HUD/Icons/chicken-icon.png"
@@ -92,14 +97,34 @@ func _ready():
 	all_events.merge(peaceful_events)
 	WorldTimeManager.day_passed.connect(_on_new_day_started)
 	event_choice_made.connect(_on_event_choice_made)
+	
+	event_check_timer = Timer.new()
+	event_check_timer.wait_time = 20.0
+	event_check_timer.autostart = true
+	event_check_timer.timeout.connect(_on_event_check_timeout)
+	add_child(event_check_timer)
 
 func _on_new_day_started(day_number):
+	events_today = 0
+	print("[EventManager] Novo dia! Contador de eventos resetado.")
+	
+func _on_event_check_timeout():
+	print("[EventManager] Checando evento.")
+	if get_tree().paused:
+		print("[EventManager] SEM EVENTOS - JOGO PAUSADO.")
+		return
+
+	if events_today >= MAX_EVENTS_PER_DAY:
+		print("[EventManager] LIMITE DE EVENTOS NO DIA.")
+		return
+
 	if get_tree().root.find_child("EventDialog", true, false) != null:
+		print("[EventManager] HÁ UMA CAIXA DE DIALOGO A FRENTE.")
 		return
 
 	var random_chance = randf() * 100.0
 	
-	if random_chance < daily_event_chance:
+	if random_chance < event_trigger_chance:
 		var event_id: String
 
 		if GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:
@@ -111,7 +136,11 @@ func _on_new_day_started(day_number):
 			event_id = all_events.keys().pick_random()
 
 		if not event_id.is_empty():
+			events_today += 1
+			print("[EventManager] Evento #%d do dia disparado!" % events_today)
 			trigger_event(event_id)
+	else: 
+		print("[EventManager] Chance nao disparada")
 
 func trigger_event(event_id: String):
 	if not all_events.has(event_id):
