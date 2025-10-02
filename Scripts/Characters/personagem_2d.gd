@@ -26,9 +26,8 @@ enum State {
 	REAGINDO_AO_JOGADOR,
 	DESABRIGADO, 
 	DESEMPREGADO,
-	TRAINING,
 	MOVING_TO_PATROL,
-	PATROLLING_IDLE
+	PATROLLING_IDLE 
 }
 
 enum Profession {
@@ -49,7 +48,7 @@ const PROFESSION_NAMES = {
 
 var patrol_points: Array[Marker2D] = []
 var current_patrol_point_index: int = -1
-var patrol_idle_timer: SceneTreeTimer
+var _patrol_idle_timer: SceneTreeTimer
 
 @export_category("Comportamento Geral")
 @export var npc_name: String = "Morador"
@@ -117,6 +116,8 @@ var _stuck_on_npc_timer: float = 0.0 # Há quanto tempo estamos presos nele?
 var hud_node: Hud = null
 
 var _original_move_speed: float
+
+var is_patrolling: bool = false
 #-----------------------------------------------------------------------------
 # INICIALIZAÇÃO
 #-----------------------------------------------------------------------------
@@ -153,6 +154,8 @@ func _ready():
 	hud_node = get_tree().get_first_node_in_group("hud_main") as Hud
 	
 	nav_agent.velocity_computed.connect(on_velocity_computed)
+	
+	nav_agent.target_reached.connect(_on_target_reached)
 
 func on_velocity_computed(safe_velocity: Vector2):
 	velocity = safe_velocity
@@ -190,27 +193,12 @@ func _initialize_state_and_position():
 # LOOP PRINCIPAL
 #-----------------------------------------------------------------------------
 func _physics_process(delta):
-	# O resto do código permanece o mesmo...
-		# Se o NPC deve estar parado por algum motivo, zera a velocidade.
-	if current_state in [State.OCIOSO, State.EM_CASA, State.TRABALHANDO, State.REAGINDO_AO_JOGADOR]:
-		_handle_idle_states(delta)
-		# Zera a velocidade do agente também para que ele não tente desviar.
-		nav_agent.set_velocity(Vector2.ZERO)
+	if nav_agent.is_navigation_finished():
+		velocity = Vector2.ZERO
 	else:
-		# Se a navegação ainda não terminou...
-		if not nav_agent.is_navigation_finished():
-			# 1. Calcula a direção para o próximo ponto do caminho.
-			var next_path_position = nav_agent.get_next_path_position()
-			var direction = global_position.direction_to(next_path_position)
-			
-			# 2. INFORMA ao agente qual é a nossa velocidade desejada.
-			# O agente então calculará a velocidade segura e a enviará pelo sinal.
-			nav_agent.set_velocity(direction * move_speed)
-		else:
-			# Chegou ao destino final, para o agente e o corpo.
-			nav_agent.set_velocity(Vector2.ZERO)
-			velocity = Vector2.ZERO
-			_on_target_reached()
+		var next_path_position = nav_agent.get_next_path_position()
+		var direction = global_position.direction_to(next_path_position)
+		nav_agent.set_velocity(direction * move_speed)
 
 	move_and_slide()
 	_update_animation()
@@ -281,49 +269,41 @@ func _handle_idle_states(delta):
 	velocity = Vector2.ZERO
 
 func _update_schedule():
+	if current_state in [State.MOVING_TO_PATROL, State.PATROLLING_IDLE]:
+		return
+	
 	if current_state == State.REAGINDO_AO_JOGADOR:
 		return
 
-	# --- LÓGICA DE ESTADO CORRIGIDA ---
-	
-	# PRIORIDADE 1: Verificar se tem casa. Se não tiver, é DESABRIGADO.
 	if not is_instance_valid(house_node):
 		# Garante que o estado seja e permaneça DESABRIGADO.
 		_change_state(State.DESABRIGADO)
 		return # Um NPC desabrigado não tem rotina, então paramos aqui.
 
-	# PRIORIDADE 2: Verificar se tem trabalho. Se tiver casa mas não tiver trabalho, é DESEMPREGADO.
 	if not is_instance_valid(work_node):
 		# Se ele não estiver já em um estado "sem trabalho", muda para DESEMPREGADO.
 		if current_state not in [State.DESEMPREGADO, State.OCIOSO, State.PASSEANDO, State.SAINDO_DE_CASA, State.EM_CASA]:
 			_change_state(State.DESEMPREGADO)
 		return # Um NPC desempregado não tem rotina de trabalho, então paramos aqui.
-
-	# PRIORIDADE 3: Se chegamos até aqui, o NPC TEM CASA E TEM TRABALHO.
-	# Agora sim, podemos executar a lógica de horários.
 	
 	var current_hour = WorldTimeManager.get_current_hour()
 
-	# Lógica noturna
 	if WorldTimeManager.is_night():
 		if current_state not in [State.EM_CASA, State.INDO_PARA_CASA]:
-			if work_node is TrainingArea and current_state in [State.MOVING_TO_PATROL, State.PATROLLING_IDLE]:
+			if work_node is TrainingArea:
 				pass
 			else:
 				_change_state(State.INDO_PARA_CASA)
 		return
 
-	# Lógica de horário de trabalho
 	var work_starts = work_node.work_starts_at
 	var work_ends = work_node.work_ends_at
 
 	if current_hour >= work_starts and current_hour < work_ends:
-		# Se é horário de trabalho e ele não está trabalhando ou indo para lá
 		if current_state not in [State.TRABALHANDO, State.INDO_PARA_O_TRABALHO]:
 			_change_state(State.INDO_PARA_O_TRABALHO)
 		return
 
-	# Lógica de fim de expediente / manhã antes do trabalho
 	if current_state == State.EM_CASA:
 		_change_state(State.SAINDO_DE_CASA)
 	elif current_state == State.TRABALHANDO:
@@ -342,6 +322,8 @@ func _change_state(new_state: State):
 
 	if old_state == State.TRABALHANDO:
 		StatusManager.mudar_status('dinheiro', 10)
+		
+	_cancel_idle_timer()
 
 	if old_state == State.DESABRIGADO:
 		StatusManager.remove_persistent_debuff(self.get_instance_id())
@@ -380,16 +362,9 @@ func _change_state(new_state: State):
 				nav_agent.target_position = door_position + random_offset
 
 		State.INDO_PARA_O_TRABALHO:
-			if is_instance_valid(work_node):
-				show()
-				if work_node is TrainingArea:
-					_change_state(State.MOVING_TO_PATROL)
-				else:
-					nav_agent.target_position = work_node.get_arrival_position()
-				
-			else:
-				print("'%s' não encontrou local de trabalho, ficará ocioso." % self.name)
-				_change_state(State.OCIOSO)
+			show()
+			collision_shape.disabled = false
+			nav_agent.target_position = work_node.global_position
 
 		State.PASSEANDO:
 			collision_shape.disabled = false
@@ -414,11 +389,25 @@ func _change_state(new_state: State):
 			_set_new_random_destination()
 
 		State.TRABALHANDO:
-			if collision_shape:
-				collision_shape.disabled = false
-			animated_sprite.play("walk")
-			_on_work_turn_timer_timeout()
+			if work_node is TrainingArea:
+				_change_state(State.MOVING_TO_PATROL)
+			else:
+				animated_sprite.play("idle")
 
+		State.MOVING_TO_PATROL:
+			if patrol_points.is_empty():
+				_change_state(State.OCIOSO) # Fica ocioso se não houver pontos de patrulha
+				return
+			# Pega o próximo ponto e define como alvo
+			current_patrol_point_index = (current_patrol_point_index + 1) % patrol_points.size()
+			var next_patrol_point = patrol_points[current_patrol_point_index]
+			nav_agent.target_position = next_patrol_point.global_position
+
+		State.PATROLLING_IDLE:
+			# Inicia um timer. Quando acabar, volta a se mover para o próximo ponto.
+			_patrol_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
+			_patrol_idle_timer.timeout.connect(func(): _change_state(State.MOVING_TO_PATROL))
+			
 		State.OCIOSO:
 			if collision_shape:
 				collision_shape.disabled = false
@@ -443,13 +432,6 @@ func _change_state(new_state: State):
 				collision_shape.disabled = false
 			print("'%s' está desempregado e vai passear." % name)
 			_set_new_random_destination()
-		
-		State.MOVING_TO_PATROL:
-			move_to_next_patrol_point()
-
-		State.PATROLLING_IDLE:
-			patrol_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
-			patrol_idle_timer.timeout.connect(func(): _change_state(State.MOVING_TO_PATROL))
 
 	if current_state == State.DESABRIGADO:
 		StatusManager.add_persistent_debuff(self.get_instance_id(), "saude", -5)
@@ -457,31 +439,70 @@ func _change_state(new_state: State):
 	if current_state == State.DESEMPREGADO:
 		pass
 
+func _start_patrol_loop():
+	if is_patrolling: return # Já está patrulhando
+	print("'%s' iniciando ciclo de patrulha." % name)
+	is_patrolling = true
+	_continue_patrol_loop()
+	
+func _continue_patrol_loop():
+	# Se a flag foi desativada, o ciclo para.
+	if not is_patrolling or patrol_points.is_empty():
+		return
+
+	current_patrol_point_index = (current_patrol_point_index + 1) % patrol_points.size()
+	var next_point = patrol_points[current_patrol_point_index]
+	
+	print("'%s' indo para o ponto de patrulha %d" % [name, current_patrol_point_index])
+	nav_agent.target_position = next_point.global_position
+	
+func _stop_patrol_loop():
+	if not is_patrolling: return
+	print("'%s' encerrando ciclo de patrulha." % name)
+	is_patrolling = false
+	# Cancela qualquer timer de espera para não chamar a próxima patrulha
+	if _patrol_idle_timer and not _patrol_idle_timer.is_queued_for_deletion():
+		# Desconectar o sinal é a forma mais segura de cancelar o timer
+		if _patrol_idle_timer.is_connected("timeout", _continue_patrol_loop):
+			_patrol_idle_timer.disconnect("timeout", _continue_patrol_loop)
+		_patrol_idle_timer = null
+
 func _on_target_reached():
 	match current_state:
-		State.DESEMPREGADO:
-			_change_state(State.OCIOSO)
-		State.PASSEANDO:
+		State.PASSEANDO, State.DESEMPREGADO:
 			if is_instance_valid(assigned_work_spot):
 				var location_node = assigned_work_spot.get_owner()
 				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
-					print("'%s' está liberando seu local de visita." % name)
 					location_node.release_work_spot(assigned_work_spot)
 					assigned_work_spot = null
-			
 			_change_state(State.OCIOSO)
-		State.INDO_PARA_O_TRABALHO:
-			_change_state(State.TRABALHANDO)
+
+		State.SAINDO_DE_CASA:
+			_change_state(State.OCIOSO)
+
+		State.INDO_PARA_CASA:
+			enter_house()
+		
 		State.MOVING_TO_PATROL:
+			print("'%s' chegou ao ponto de patrulha %d." % [name, current_patrol_point_index])
 			_change_state(State.PATROLLING_IDLE)
-		State.PASSEANDO:
-			if is_instance_valid(assigned_work_spot):
-				var location_node = assigned_work_spot.get_owner()
-				if is_instance_valid(location_node) and location_node.has_method("release_work_spot"):
-					location_node.release_work_spot(assigned_work_spot)
-					assigned_work_spot = null
-			
-			_change_state(State.OCIOSO)
+
+		State.INDO_PARA_O_TRABALHO:
+			# Chegou no local de trabalho, agora muda para TRABALHANDO
+			_change_state(State.TRABALHANDO)
+			# Se o trabalho for patrulha, inicia o ciclo
+			if work_node is TrainingArea:
+				_start_patrol_loop()
+			# Se for outro trabalho, ele vai simplesmente ficar parado aqui.
+
+		State.TRABALHANDO:
+			# Este bloco só é relevante se o NPC estiver patrulhando.
+			if is_patrolling:
+				# Chegou a um ponto de patrulha.
+				print("'%s' chegou ao ponto %d. Esperando..." % [name, current_patrol_point_index])
+				# Inicia o timer para esperar antes de ir para o próximo ponto.
+				_patrol_idle_timer = get_tree().create_timer(randf_range(2.0, 5.0))
+				_patrol_idle_timer.timeout.connect(_continue_patrol_loop)
 			
 func move_to_next_patrol_point():
 	if patrol_points.is_empty():
