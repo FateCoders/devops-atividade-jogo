@@ -3,7 +3,7 @@ extends Node
 
 enum LeaderType { PACIFISTA, AGRICULTOR, GUERREIRO, LIVRE }
 
-const DAYS_TO_WIN: int = 30
+const DAYS_TO_WIN: int = 1
 var npcs_liberados: int = 0
 const NPCS_PARA_VITORIA: int = 20
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")
@@ -104,17 +104,21 @@ func _on_new_day_started(day_number: int):
 		# Agora chama a função com o tipo correto.
 		_trigger_victory("survival")
 		
-func _trigger_victory(victory_type: String = "survival"): # "survival" é o padrão
-	if _is_game_over: return
+func _trigger_victory(victory_type: String = "survival"):
+	if _is_game_over: 
+		return
 	_is_game_over = true
 	
 	print("VITÓRIA! O jogador venceu por: ", victory_type)
-	pause_game()
-	
+
 	var victory_screen = victory_screen_scene.instantiate()
-	add_child(victory_screen)
-	if victory_screen.has_method("set_victory_type"):
-		victory_screen.set_victory_type(victory_type)
+	get_tree().root.add_child(victory_screen)
+
+	emit_signal("victory_achieved")
+	pause_game()
+
+
+
 
 # ADICIONADO: Função central que lida com a derrota.
 func trigger_defeat(reason: String):
