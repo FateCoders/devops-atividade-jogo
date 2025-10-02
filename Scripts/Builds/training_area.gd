@@ -24,6 +24,10 @@ signal vacancy_opened(profession: NPC.Profession)
 @export var security_bonus: int = 15
 @export var relations_bonus: int = 5
 
+var is_functional: bool = false
+@export var upkeep_resource: String = "ferramentas" # Recurso de manutenção
+@export var upkeep_amount: int = 2 # Custo por dia para funcionar
+
 # ADICIONADO: Variáveis para gerenciar os locais de trabalho.
 var all_work_spots: Array[Marker2D] = []
 var available_work_spots: Array[Marker2D] = []
@@ -45,6 +49,8 @@ func _ready():
 			all_work_spots.append(child)
 	available_work_spots = all_work_spots.duplicate()
 	print("Área de Treinamento '%s' pronta. Bônus aplicados." % self.name)
+	
+	add_to_group("functional_buildings")
 
 	interaction_area.input_event.connect(_on_interaction_area_input_event)
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
@@ -56,6 +62,8 @@ func confirm_construction():
 	StatusManager.mudar_status("seguranca", security_bonus)
 	StatusManager.mudar_status("relacoes", relations_bonus)
 	print("Área de Treinamento '%s' CONFIRMADA. Bônus aplicados." % self.name)
+	
+	update_functionality()
 
 # ADICIONADO: A função _notification para lidar com eventos do nó.
 #func _notification(what):
@@ -65,6 +73,33 @@ func confirm_construction():
 #		StatusManager.mudar_status("seguranca", -security_bonus)
 #		StatusManager.mudar_status("relacoes", -relations_bonus)
 #		print("Área de Treinamento '%s' destruída. Bônus removidos." % self.name)
+
+func add_worker(npc: NPC):
+	if not workers.has(npc):
+		workers.append(npc)
+		print("'%s' começou a trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+
+func remove_worker(npc: NPC):
+	if workers.has(npc):
+		workers.erase(npc)
+		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+		emit_signal("vacancy_opened", required_profession)
+
+func update_functionality():
+	var required_resources = {upkeep_resource: upkeep_amount}
+	if StatusManager.has_enough_resources(required_resources):
+		StatusManager.spend_resources(required_resources)
+		if not is_functional:
+			is_functional = true
+			StatusManager.mudar_status("seguranca", security_bonus)
+			StatusManager.mudar_status("relacoes", relations_bonus)
+			print("Área de Treinamento '%s' agora está funcional." % name)
+	else:
+		if is_functional:
+			is_functional = false
+			StatusManager.mudar_status("seguranca", -security_bonus)
+			StatusManager.mudar_status("relacoes", -relations_bonus)
+			print("Área de Treinamento '%s' parou de funcionar por falta de ferramentas/armas." % name)
 
 # ADICIONADO: Função para que NPCs reivindiquem um local.
 func claim_available_work_spot() -> Marker2D:
@@ -84,28 +119,20 @@ func release_work_spot(spot: Marker2D):
 		print("Local '%s' foi devolvido para '%s'. Locais disponíveis: %d" % [spot.name, self.name, available_work_spots.size()])
 
 func get_status_info() -> Dictionary:
-	var workers = [] # Substitua por sua variável de trabalhadores
-	var info = {
-		"name": "Área de treinamento", # Você pode exportar uma variável para nomes customizados se quiser
-		"details": "Área de segurança",
-	}
-	return info
+	var details_text = "Guerreiros: %d/%d" % [workers.size(), npc_count]
+	if not is_functional:
+		details_text += "\n(Faltam Ferramentas!)"
+	return { "name": "Área de Treinamento", "details": details_text }
 
-func add_worker(npc: NPC):
-	if not workers.has(npc):
-		workers.append(npc)
-		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
+func _on_interaction_area_mouse_entered() -> void:
+	var info = get_status_info()
+	status_bubble.show_info(info)
+	emit_signal("building_hovered", self)
 
-func remove_worker(npc_leaving: NPC):
-	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
-	if workers.has(npc_leaving):
-		# 2. Remove o NPC da lista de trabalhadores
-		workers.erase(npc_leaving)
-		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
-		
-		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
-		emit_signal("vacancy_opened", required_profession)
 
+func _on_interaction_area_mouse_exited() -> void:
+	status_bubble.hide_info()
+	emit_signal("building_unhovered", self)
 
 func highlight_on():
 	if is_instance_valid(main_sprite):
@@ -118,9 +145,3 @@ func highlight_off():
 func _on_interaction_area_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		emit_signal("building_clicked", self)
-
-func _on_interaction_area_mouse_entered():
-	emit_signal("building_hovered", self)
-
-func _on_interaction_area_mouse_exited():
-	emit_signal("building_unhovered", self)

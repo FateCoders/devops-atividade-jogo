@@ -136,3 +136,7 @@ func _on_interaction_area_mouse_exited():
 
 func _on_zona_de_entrada_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	pass # Replace with function body.
+
+
+func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	pass # Replace with function body.

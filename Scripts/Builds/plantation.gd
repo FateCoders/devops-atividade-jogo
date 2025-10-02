@@ -2,6 +2,9 @@
 extends Node2D
 class_name Plantation
 
+enum ProductionType { ALIMENTOS, REMEDIOS }
+@export var production_type: ProductionType = ProductionType.ALIMENTOS
+@export var daily_yield: int = 10
 # --- SINAIS PARA O HUD ---
 signal building_hovered(building_ref)
 signal building_unhovered(building_ref)
@@ -22,6 +25,10 @@ signal vacancy_opened(profession: NPC.Profession)
 @export var work_starts_at: float = 8.0  # 8 AM
 @export var work_ends_at: float = 17.0 # 5 PM
 
+var is_functional: bool = false
+@export var upkeep_resource: String = "ferramentas"
+@export var upkeep_amount: int = 1
+
 @export var cost: Dictionary = {
 	"dinheiro": 20,
 }
@@ -32,41 +39,93 @@ const OUTLINE_MATERIAL = preload("res://Resources/Shaders/outline_material.tres"
 
 @onready var status_bubble = $buildingStatusBubble
 
+@onready var FoodPlantationBack = $FoodPlantationLayers/RowBack
+@onready var FoodPlantationMiddle = $FoodPlantationLayers/RowMiddle
+@onready var FoodPlantationFront = $FoodPlantationLayers/RowFront
+
+@onready var MedicinePlantationBack = $MedicinePlantationLayers2/RowBack
+@onready var MedicinePlantationMiddle = $MedicinePlantationLayers2/RowMiddle
+@onready var MedicinePlantationFront = $MedicinePlantationLayers2/RowFront
+
+
 var workers: Array[Node] = []
 var all_work_spots: Array[Marker2D] = []
-# ADICIONADO: Uma lista separada apenas para os locais que estão livres.
 var available_work_spots: Array[Marker2D] = []
 
 func _ready():
 	print("Plantação '%s' pronta." % self.name)
-	# Pega todos os work_spots da cena.
 	for child in get_children():
 		if child is Marker2D:
 			all_work_spots.append(child)
 	
-	# Inicializa a lista de locais disponíveis como uma cópia de todos os locais.
 	available_work_spots = all_work_spots.duplicate()
 	
+	add_to_group("functional_buildings")
 	interaction_area.input_event.connect(_on_interaction_area_input_event)
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
 	interaction_area.mouse_exited.connect(_on_interaction_area_mouse_exited)
 
 func confirm_construction():
-	pass
+	update_functionality()
+	
+func update_functionality():
+	var required_resources = {upkeep_resource: upkeep_amount}
+	if StatusManager.has_enough_resources(required_resources):
+		StatusManager.spend_resources(required_resources)
+		if not is_functional:
+			is_functional = true
+			print("Plantação '%s' agora está funcional." % name)
+		
+		_produce_resources()
+	else:
+		if is_functional:
+			is_functional = false
+			print("Plantação '%s' parou de funcionar por falta de ferramentas." % name)
 
-# MODIFICADO: Esta função agora "reserva" um local e o retorna.
 func claim_available_work_spot() -> Marker2D:
-	# Se não houver locais disponíveis, retorna nulo.
 	if available_work_spots.is_empty():
 		return null
 	
-	# Pega um local aleatório da lista de DISPONÍVEIS.
 	var spot = available_work_spots.pick_random()
-	# Remove o local escolhido da lista de disponíveis para que ninguém mais o pegue.
 	available_work_spots.erase(spot)
 	
 	print("Local '%s' foi reivindicado. Locais restantes: %d" % [spot.name, available_work_spots.size()])
+	
 	return spot
+	
+func _produce_resources():
+	if workers.is_empty():
+		return
+
+	var resource_to_produce: String
+	
+	match production_type:
+		ProductionType.ALIMENTOS:
+			resource_to_produce = "alimentos"
+		ProductionType.REMEDIOS:
+			resource_to_produce = "remedios"
+	
+	var amount_produced = daily_yield * workers.size()
+	
+	StatusManager.mudar_status(resource_to_produce, amount_produced)
+	print("Plantação '%s' produziu %d de %s." % [name, amount_produced, resource_to_produce])
+
+func set_production_type(new_type: ProductionType):
+	production_type = new_type
+	
+	if new_type == ProductionType.ALIMENTOS:
+		FoodPlantationBack.visible = true
+		FoodPlantationMiddle.visible = true
+		FoodPlantationFront.visible = true
+	else:
+		FoodPlantationBack.visible = false
+		FoodPlantationMiddle.visible = false
+		FoodPlantationFront.visible = false
+		MedicinePlantationBack.visible = true
+		MedicinePlantationMiddle.visible = true
+		MedicinePlantationFront.visible = true
+		
+	print("Plantação '%s' foi configurada para produzir %s." % [self.name, ProductionType.keys()[new_type]])
 
 # ADICIONADO: Uma função para que o NPC "devolva" o local quando terminar.
 func release_work_spot(spot: Marker2D):
@@ -77,30 +136,29 @@ func release_work_spot(spot: Marker2D):
 func add_worker(npc: NPC):
 	if not workers.has(npc):
 		workers.append(npc)
-		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
+		print("'%s' começou a trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
 
-func remove_worker(npc_leaving: NPC):
-	# 1. Verifica se o NPC realmente trabalha aqui antes de tentar remover
-	if workers.has(npc_leaving):
-		# 2. Remove o NPC da lista de trabalhadores
-		workers.erase(npc_leaving)
-		print("'%s' deixou o trabalho em '%s'. Vaga aberta!" % [npc_leaving.name, self.name])
-		
-		# 3. Emite o sinal para o QuilomboManager saber que há uma vaga!
+func remove_worker(npc: NPC):
+	if workers.has(npc):
+		workers.erase(npc)
+		print("'%s' parou de trabalhar em '%s'. Trabalhadores atuais: %d" % [npc.name, self.name, workers.size()])
+		print("'%s' foi adicionado como trabalhador em '%s'. Total: %d" % [npc.name, self.name, workers.size()])
+	
 		emit_signal("vacancy_opened", required_profession)
 
 func get_status_info() -> Dictionary:
-	var workers = [] # Substitua por sua variável de trabalhadores
-	var info = {
-		"name": "Plantação", # Você pode exportar uma variável para nomes customizados se quiser
-		"details": "Área de plantação",
-	}
-	return info
+	var details_text = "Trabalhadores: %d/%d" % [workers.size(), npc_count]
+	
+	if not is_functional:
+		details_text += "\n(Faltam Ferramentas!)"
+	return { "name": "Plantação", "details": details_text }
 
 func highlight_on():
 	if is_instance_valid(main_sprite):
 		main_sprite.material = OUTLINE_MATERIAL
 
+func _on_interaction_area_mouse_exited() -> void:
+	status_bubble.hide_info()
 func highlight_off():
 	if is_instance_valid(main_sprite):
 		main_sprite.material = null
@@ -111,6 +169,3 @@ func _on_interaction_area_input_event(viewport, event, shape_idx):
 
 func _on_interaction_area_mouse_entered():
 	emit_signal("building_hovered", self)
-
-func _on_interaction_area_mouse_exited():
-	emit_signal("building_unhovered", self)
