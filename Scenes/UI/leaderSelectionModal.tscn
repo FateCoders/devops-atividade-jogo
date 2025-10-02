@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bive6x44takvk"]
 
-[ext_resource type="Script" uid="uid://upc1n7jqfype" path="res://Scenes/UI/leader_selection_modal.gd" id="1_1og8o"]
+[ext_resource type="Script" path="res://Scenes/UI/leader_selection_modal.gd" id="1_1og8o"]
 [ext_resource type="Texture2D" uid="uid://b72l5pxysyurb" path="res://Assets/Sprites/Exported/Tilesets/HUD/hud-sheet.png" id="1_81gsu"]
 [ext_resource type="PackedScene" uid="uid://dfl517gm3tfkx" path="res://Scenes/UI/leaderChoiceButton.tscn" id="2_rliqu"]
 [ext_resource type="FontFile" uid="uid://dcabkpfkiyymj" path="res://Scenes/UI/Assets/Fonts/Vinque Rg.otf" id="3_2058l"]

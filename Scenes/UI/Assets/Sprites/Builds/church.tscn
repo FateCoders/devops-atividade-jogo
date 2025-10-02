@@ -27,9 +27,22 @@ size = Vector2(519.5001, 654.5001)
 [node name="Church" type="StaticBody2D" groups=["locais_de_interesse"]]
 position = Vector2(0, -859)
 scale = Vector2(2, 2)
+collision_layer = 4
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_mpu7n")
 possible_npc_scenes = Array[PackedScene]([ExtResource("2_ylega"), ExtResource("3_62n5i"), ExtResource("4_g5ly8"), ExtResource("5_d83im"), ExtResource("6_n5o80"), ExtResource("7_pdh31"), ExtResource("8_ct3db"), ExtResource("2_khm82"), ExtResource("10_tppwy")])
+
+[node name="WorkSpot2" type="Marker2D" parent="."]
+position = Vector2(-312.5, 221.5)
+gizmo_extents = 130.0
+
+[node name="WorkSpot3" type="Marker2D" parent="."]
+position = Vector2(388, 212.5)
+gizmo_extents = 130.0
+
+[node name="WorkSpot4" type="Marker2D" parent="."]
+position = Vector2(4.5, -187.5)
+gizmo_extents = 130.0
 
 [node name="Sprite" type="Node2D" parent="."]
 
@@ -63,7 +76,7 @@ scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_otsq3")
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
-position = Vector2(-6.66053, 729.994)
+position = Vector2(0, 530)
 gizmo_extents = 130.0
 
 [node name="buildingStatusBubble" parent="." instance=ExtResource("4_khm82")]

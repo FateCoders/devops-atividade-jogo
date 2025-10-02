@@ -37,6 +37,7 @@ size = Vector2(1428.0188, 1056.3606)
 y_sort_enabled = true
 position = Vector2(0, -406.99994)
 scale = Vector2(0.750691, 0.750691)
+collision_layer = 4
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_ll14k")
 possible_npc_scenes = Array[PackedScene]([ExtResource("2_iglc1"), ExtResource("3_fu0fx"), ExtResource("4_pbv06"), ExtResource("5_g8ixv"), ExtResource("6_addcw"), ExtResource("7_udsbu"), ExtResource("8_uk6ac"), ExtResource("9_fb5ar"), ExtResource("2_7ix0y")])
@@ -120,6 +121,21 @@ vertices = PackedVector2Array(-234.45062, -305.05225, -226.45801, 310.3807, 334.
 
 [node name="WorkSpot1" type="Marker2D" parent="."]
 position = Vector2(957.7842, -43.95958)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="WorkSpot2" type="Marker2D" parent="."]
+position = Vector2(-106.56848, -731.3263)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="WorkSpot3" type="Marker2D" parent="."]
+position = Vector2(-1028.3857, 97.24366)
+scale = Vector2(0.9999999, 0.9999999)
+gizmo_extents = 130.0
+
+[node name="WorkSpot4" type="Marker2D" parent="."]
+position = Vector2(-18.649414, 791.2709)
 scale = Vector2(0.9999999, 0.9999999)
 gizmo_extents = 130.0
 

@@ -49,6 +49,7 @@ size = Vector2(66.26506, 79)
 z_index = 1
 y_sort_enabled = true
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_0ao5h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -83,7 +84,6 @@ radius = 160.0
 time_horizon_agents = 2.0
 time_horizon_obstacles = 2.0
 max_speed = 200.0
-debug_enabled = true
 
 [connection signal="input_event" from="InteractionArea" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="InteractionArea" to="." method="_on_area_2d_mouse_entered"]

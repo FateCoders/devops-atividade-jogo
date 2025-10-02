@@ -17,12 +17,13 @@ size = Vector2(1214.8818, 1033.7153)
 
 [node name="LeadersHouse" type="StaticBody2D"]
 position = Vector2(0, -331.99997)
+collision_layer = 4
+collision_mask = 5
 physics_material_override = SubResource("PhysicsMaterial_ooq57")
 script = ExtResource("1_fbne4")
-building_name = null
-max_capacity = null
-max_instances = null
-npc_count = null
+building_name = "LeaderHouse"
+max_capacity = 1
+npc_count = 1
 
 [node name="Sprite" type="Node2D" parent="."]
 
