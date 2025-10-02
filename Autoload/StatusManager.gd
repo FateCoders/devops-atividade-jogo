@@ -3,12 +3,14 @@ extends Node
 signal status_updated
 
 var recursos = {
-	"dinheiro": 500,
+	"dinheiro": 50000,
 	"madeira": 20,
 	"remedios": 90,
 	"ferramentas": 30,
-	"alimentos": 200
+	"alimentos": 200,
+	"libertos": 0,
 }
+
 
 var saude = 100
 var fome = 100

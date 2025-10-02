@@ -4,6 +4,8 @@ extends Node
 enum LeaderType { PACIFISTA, AGRICULTOR, GUERREIRO, LIVRE }
 
 const DAYS_TO_WIN: int = 30
+var npcs_liberados: int = 0
+const NPCS_PARA_VITORIA: int = 20
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")
 @export var defeat_screen_scene: PackedScene = preload("res://Scenes/UI/defeatScreen.tscn")
 
@@ -11,6 +13,7 @@ const DAYS_TO_WIN: int = 30
 signal victory_achieved
 signal game_paused
 signal game_resumed
+signal libertos_count_changed(new_count: int)
 
 # ADICIONADO: Sinal para que outros scripts possam anunciar o fim do jogo.
 signal game_over(reason)
@@ -237,3 +240,12 @@ func show_settings_menu():
 		pause_menu.open_menu()
 	else:
 		printerr("GameManager não conseguiu encontrar o nó do Menu de Pausa ou a função 'open_menu'. Verifique o nome e o caminho do nó.")
+
+func liberar_npc():
+	npcs_liberados += 1
+	print("Libertos: ",npcs_liberados)
+	StatusManager.mudar_recurso("libertos", 1)
+	QuilomboManager.remove_random_npc()
+	if npcs_liberados >= NPCS_PARA_VITORIA:
+		
+		_trigger_victory("liberdade")

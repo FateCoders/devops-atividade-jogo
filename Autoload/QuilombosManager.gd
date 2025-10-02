@@ -19,6 +19,11 @@ const INITIAL_QUILOMBOS_DATA = {
 				"id": "buy_tools_palmares", "type": "buy", "item": "ferramentas",
 				"quantity": 5, "price": 40, "description": "Comprar 5 Ferramentas por 40 Dinheiro",
 				"available_on_day": 1
+			},
+			{
+				"id": "buy_freedom_palmares", "type": "buy", "item": "alforria",
+				"quantity": 1, "price": 1000, "description": "Comprar 1 Alforria por 100 Dinheiro",
+				"available_on_day": 1
 			}
 		]
 	},
@@ -130,7 +135,16 @@ func change_relation(quilombo_id: String, amount: int):
 		check_alliance_victory()
 
 func execute_trade(quilombo_id, items_given_by_them, items_received_by_them):
+	# Aumenta relação como antes
+	print("Executando trade:", quilombo_id, items_received_by_them)
 	change_relation(quilombo_id, 5)
+	
+	# Procura se o item recebido foi uma alforria (libertação)
+	for item in items_received_by_them:
+		if item["item"] == "alforria" or item["id"].find("freedom") != -1:
+			# Chama a função de libertar NPC
+			GameManager.liberar_npc()
+			print("NPC libertado via compra de alforria!")
 
 func set_offer_on_cooldown(quilombo_id: String, offer_id: String, cooldown_days: int = 5):
 	if not current_quilombos_data.has(quilombo_id):
