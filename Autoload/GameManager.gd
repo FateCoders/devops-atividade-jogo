@@ -3,7 +3,7 @@ extends Node
 
 enum LeaderType { PACIFISTA, AGRICULTOR, GUERREIRO, LIVRE }
 
-const DAYS_TO_WIN: int = 1
+const DAYS_TO_WIN: int = 30
 var npcs_liberados: int = 0
 const NPCS_PARA_VITORIA: int = 20
 @export var victory_screen_scene: PackedScene = preload("res://Scenes/UI/victory.tscn")
