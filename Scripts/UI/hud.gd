@@ -271,13 +271,16 @@ func _process(delta: float):
 	else:
 		placement_preview.modulate = Color(1, 0.5, 0.5, 0.7)
 		
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.is_pressed() and not event.is_echo():
-		if event.keycode == KEY_SPACE:
-			self.visible = not self.visible
-			get_viewport().set_input_as_handled()
-			return
+func _input(event: InputEvent):
+	# Verifica se a tecla Espaço foi pressionada
+	if event.is_action_pressed("ui_accept") and not event.is_echo():
+		# Inverte a visibilidade do HUD (se está visível, fica invisível, e vice-versa)
+		self.visible = not self.visible
+		# Marca o evento como "manuseado" para que nada mais no jogo responda a este clique
+		get_viewport().set_input_as_handled()
 
+func _unhandled_input(event: InputEvent) -> void:
+	# A função agora lida apenas com os cliques do mouse durante o modo de construção
 	if is_in_placement_mode:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 			if _check_valid_placement():
