@@ -203,6 +203,11 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
+[node name="BuildTinyHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
+layout_mode = 2
+button_text = "Casa"
+button_icon = ExtResource("5_yxyk2")
+
 [node name="BuildHouseButton" parent="MainContainer/MainPanelContainer/VBoxContainer/ButtonsPanel/SectionsPanel/ButtonBuildsOptions/ConstrucoesSubPanel/BuildOptions" instance=ExtResource("3_yxyk2")]
 layout_mode = 2
 button_text = "Casa Grande"
@@ -719,11 +724,6 @@ theme_override_fonts/font = ExtResource("3_fdl0h")
 theme_override_styles/background = SubResource("StyleBoxEmpty_pc4p0")
 theme_override_styles/fill = ExtResource("7_7wqu8")
 value = 100.0
-
-[node name="MainContainer_ButtonsPanel_SectionsPanel_ButtonBuildsOptions_Col1_BuildOptions#BuildTinyHouseButton" parent="." instance=ExtResource("3_yxyk2")]
-layout_mode = 2
-button_text = "Casa"
-button_icon = ExtResource("5_yxyk2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
