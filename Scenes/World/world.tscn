@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://bofjyi7d5qug8"]
+[gd_scene load_steps=29 format=4 uid="uid://bofjyi7d5qug8"]
 
 [ext_resource type="Script" uid="uid://cghxvxhbj6tn3" path="res://Scripts/UI/world.gd" id="1_dr8i3"]
 [ext_resource type="TileSet" uid="uid://c6cvb7ix3k63a" path="res://Scenes/World/game_tile_set.tres" id="1_t1gg8"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://bpnly331fjf71" path="res://Scenes/UI/victory.tscn" id="13_vbhkl"]
 [ext_resource type="PackedScene" uid="uid://r81tceg8r6oj" path="res://Scenes/UI/defeatScreen.tscn" id="14_dbvd7"]
 [ext_resource type="PackedScene" uid="uid://d27ue4fejbls5" path="res://Scenes/UI/pause_menu.tscn" id="16_dr8i3"]
+[ext_resource type="PackedScene" uid="uid://30xlfh0om2p2" path="res://Scenes/UI/Assets/Sprites/Builds/leaders_house.tscn" id="19_7c7np"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7c7np"]
 texture = ExtResource("4_dr8i3")
@@ -304,6 +305,9 @@ y_sort_enabled = true
 [node name="Plantacao_Fundo" type="Node2D" parent="YSortLayer"]
 
 [node name="Plantacao_Frente" type="Node2D" parent="YSortLayer"]
+
+[node name="LeadersHouse" parent="YSortLayer" instance=ExtResource("19_7c7np")]
+position = Vector2(2948, -168.99997)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

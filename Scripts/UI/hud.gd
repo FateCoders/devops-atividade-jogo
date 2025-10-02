@@ -326,8 +326,6 @@ func _on_status_updated():
 	population_label.text = str(QuilomboManager.all_npcs.size())
 	libertos_label.text = "%d/%d" % [StatusManager.get_resource("libertos"), GameManager.NPCS_PARA_VITORIA]
 
-	
-	
 	var estado_fome = "Normal"
 	if StatusManager.fome == 100:
 		hunger_label.text = "Fome (Cheio)"
@@ -470,7 +468,6 @@ func _check_valid_placement() -> bool:
 func _disable_physics(node: Node):
 	if node is CollisionObject2D:
 		node.collision_layer = 0
-		node.collision_mask = 0
 	if node is NavigationObstacle2D:
 		node.avoidance_enabled = false
 	for child in node.get_children():

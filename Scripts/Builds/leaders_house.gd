@@ -14,7 +14,6 @@ const LIDER_SCENE = preload("res://Scenes/Characters/citizen_lider.tscn")
 
 @export var max_instances: int = 1
 
-# A Casa do Líder é única e não gera NPCs aleatórios.
 @export var npc_count: int = 0
 
 const OUTLINE_MATERIAL = preload("res://Resources/Shaders/outline_material.tres")
@@ -25,6 +24,8 @@ const OUTLINE_MATERIAL = preload("res://Resources/Shaders/outline_material.tres"
 func _ready():
 	print("Casa do Líder construída.")
 	spawn_leader()
+	
+	QuilomboManager.register_building(self)
 
 	interaction_area.input_event.connect(_on_interaction_area_input_event)
 	interaction_area.mouse_entered.connect(_on_interaction_area_mouse_entered)
@@ -42,7 +43,7 @@ func get_status_info() -> Dictionary:
 	var workers = [] # Substitua por sua variável de trabalhadores
 	var info = {
 		"name": "Casa do Líder", # Você pode exportar uma variável para nomes customizados se quiser
-		"details": "Centro do Quilombp",
+		"details": "Centro do Quilombo",
 	}
 	return info
 
@@ -90,5 +91,3 @@ func spawn_leader():
 	else:
 		print("AVISO: Nó com o grupo 'npc_container' não encontrado. Adicionando líder à raiz da cena.")
 		get_tree().current_scene.add_child(leader_instance)
-
-	leader_instance.assign_house(self)

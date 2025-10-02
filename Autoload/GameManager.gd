@@ -37,11 +37,6 @@ const TrainingAreaScene = preload("res://Scenes/UI/Assets/Sprites/Builds/trainin
 
 
 var tutorial_data = [
-	{ # Etapa 0: Casa do Líder
-		"dialog": {0: {"title": "Líder", "dialog": "Bem-vindo ao nosso refúgio. Para começarmos a nos organizar, por favor, construa uma Casa do Líder."}},
-		"required_build": LeadersHouseScene,
-		"enabled_builds": [LeadersHouseScene]
-	},
 	{ # Etapa 1: Casa
 		"dialog": {0: {"title": "Líder", "dialog": "Excelente! Agora, precisamos de um lugar para nossos irmãos descansarem. Construa uma Casa para abrigá-los."}},
 		"required_build": HouseScene,

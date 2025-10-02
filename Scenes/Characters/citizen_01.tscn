@@ -45,6 +45,7 @@ size = Vector2(55.14365, 61)
 z_index = 1
 y_sort_enabled = true
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_dc5lp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
