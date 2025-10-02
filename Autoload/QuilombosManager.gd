@@ -21,8 +21,8 @@ const INITIAL_QUILOMBOS_DATA = {
 				"available_on_day": 1
 			},
 			{
-				"id": "buy_freedom_palmares", "type": "buy", "item": "ferramentas",
-				"quantity": 1, "price": 100, "description": "Comprar 1 Alforria por 100 Dinheiro",
+				"id": "buy_freedom_palmares", "type": "buy", "item": "alforria",
+				"quantity": 1, "price": 1000, "description": "Comprar 1 Alforria por 100 Dinheiro",
 				"available_on_day": 1
 			}
 		]
