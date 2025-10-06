@@ -555,11 +555,13 @@ func _on_inventory_button_pressed() -> void:
 		button_inventory.texture_normal = INVENTORY_TEXTURE
 
 func _populate_inventory_list():
+	# Limpa a lista antiga
 	for row_data in inventory_rows:
 		var container = row_data.container
 		for child in container.get_children():
 			child.queue_free()
 
+	# Popula a lista com os itens atualizados
 	for row_data in inventory_rows:
 		var container = row_data.container
 		var resources_in_row = row_data.resources
@@ -569,6 +571,9 @@ func _populate_inventory_list():
 			var item = InventoryItemScene.instantiate()
 			container.add_child(item)
 			item.set_data(resource_name, amount)
+			
+			# NOVO: Conecta o sinal 'item_clicked' do item à nova função do HUD
+			item.item_clicked.connect(_on_inventory_item_used)
 
 func show_npc_inspector(npc_ref: NPC):
 	if not is_instance_valid(npc_ref):
@@ -911,3 +916,17 @@ func _get_modified_cost(scene: PackedScene) -> Dictionary:
 	
 	temp_instance.queue_free()
 	return base_cost
+
+func _on_inventory_item_used(resource_name: String):
+	if resource_name == "alimentos":
+		# Verifica se tem comida e se a fome não está no máximo
+		if StatusManager.get_resource("alimentos") > 0:
+			if StatusManager.fome < 100:
+				# Gasta 10 de comida para ganhar 20 de fome
+				StatusManager.mudar_recurso("alimentos", -5)
+				StatusManager.mudar_status("fome", 5)
+				show_notification("Você comeu e recuperou um pouco da saciedade.")
+			else:
+				show_notification("Sua barra de fome já está cheia!")
+		else:
+			show_notification("Você não tem alimentos para consumir!")

@@ -24,7 +24,12 @@ var relacoes = 50
 var persistent_debuffs = {}
 
 func _ready():
+	WorldTimeManager.day_passed.connect(_on_day_passed)
 	_recalculate_status()
+
+func _on_day_passed(day_number):
+	print("[StatusManager] Um dia passou. Diminuindo a fome.")
+	mudar_status("fome", -5)
 
 func mudar_status(nome_status, valor):
 	if nome_status == "relacoes" and valor > 0 and GameManager.chosen_leader_type == GameManager.LeaderType.PACIFISTA:

@@ -1,11 +1,16 @@
 # InventoryItem.gd
 extends NinePatchRect
 
+signal item_clicked(resource_name: String)
+
 @onready var icon: TextureRect = $Icon
 @onready var quantity_label: Label = $QuantityLabel
+@onready var click_button: Button = $Button
 
 const ENABLED_COLOR = Color(1, 1, 1, 1)
 const DISABLED_COLOR = Color(0.4, 0.4, 0.4, 0.6) 
+
+var resource_name: String
 
 const RESOURCE_DATA = {
 	"madeira": {
@@ -30,6 +35,9 @@ const RESOURCE_DATA = {
 	},
 }
 
+func _ready():
+	click_button.pressed.connect(_on_click)
+
 func set_data(resource_name: String, amount: int):
 	var data = RESOURCE_DATA[resource_name] if RESOURCE_DATA.has(resource_name) else RESOURCE_DATA["default"]
 	icon.texture = data.icon
@@ -42,3 +50,7 @@ func set_data(resource_name: String, amount: int):
 	else:
 		icon.modulate = ENABLED_COLOR
 		quantity_label.modulate = ENABLED_COLOR
+
+func _on_click():
+	# Emite o sinal avisando qual recurso foi clicado
+	emit_signal("item_clicked", resource_name)
